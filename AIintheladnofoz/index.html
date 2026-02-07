@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in the Land of Oz | Oswego CSTEP</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@1,600;1,800&display=swap');
+        
+        :root { color-scheme: dark; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background: radial-gradient(circle at top right, #062d24, #010c09, #021210);
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        .oz-font { font-family: 'Crimson Pro', serif; font-style: italic; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-transition {
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes pulse-emerald {
+            0%, 100% { filter: drop-shadow(0 0 12px #10b981) brightness(1.1); }
+            50% { filter: drop-shadow(0 0 35px #34d399) brightness(1.4); }
+        }
+        
+        .emerald-crystal { animation: pulse-emerald 3s infinite ease-in-out; }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .option-card {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(2, 6, 23, 0.4);
+        }
+        .option-card:hover {
+            transform: translateX(10px);
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(52, 211, 153, 0.5);
+            color: #ecfdf5;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #010805; }
+        ::-webkit-scrollbar-thumb { background: #064e3b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('home');
+            const [scrolled, setScrolled] = useState(false);
+            const [insightIndex, setInsightIndex] = useState(0);
+            const [quizStep, setQuizStep] = useState(0);
+            const [scores, setScores] = useState({ scarecrow: 0, tinman: 0, lion: 0, wizard: 0 });
+            const [result, setResult] = useState(null);
+
+            const FACULTY_PROFILE = "https://writing.charlotte.edu/people/justin-cary/";
+            const PADLET_URL = "https://padlet.com/embed/rar3n8qpq4z4kmti";
+
+            const wizardInsights = [
+                {
+                    title: "Inverting Bloom's Taxonomy",
+                    subtitle: "The Wizard's Flip",
+                    items: [
+                        { num: "01", label: "Evaluation First", desc: "Judging the illusion before it consumes the craft. Students evaluate AI output as a primary step." },
+                        { num: "02", label: "Synthesis", desc: "Mixing the alchemical properties of AI suggestions with the unique human voice." },
+                        { num: "03", label: "Human Agency", desc: "The ultimate power: reclaiming the heart and mind behind the final written code." }
+                    ]
+                },
+                {
+                    title: "The Cost of the Shortcut",
+                    subtitle: "Cognitive Debt (Kosmyna et al.)",
+                    items: [
+                        { num: "01", label: "Short-term Gain", desc: "Using AI for rapid output provides immediate relief but delays deep understanding." },
+                        { num: "02", label: "Interest Accrual", desc: "Bypassing the struggle of writing leads to 'cognitive debt'—a deficit in critical thinking skills." },
+                        { num: "03", label: "The Repayment", desc: "True mastery requires returning to the 'struggle' to ensure the user, not the machine, holds the knowledge." }
+                    ]
+                }
+            ];
+
+            const questions = [
+                {
+                    text: "When you think about AI in your classroom, what is your primary focus?",
+                    options: [
+                        { label: "Rethinking how we learn and process information.", type: "scarecrow" },
+                        { label: "Preserving the human connection and student voice.", type: "tinman" },
+                        { label: "Standing firm on ethical values and academic integrity.", type: "lion" },
+                        { label: "Mastering the tool to empower student success.", type: "wizard" }
+                    ]
+                },
+                {
+                    text: "Which of these 'perils' worries you the most?",
+                    options: [
+                        { label: "The loss of critical thinking and 'cognitive debt'.", type: "scarecrow" },
+                        { label: "The erosion of empathy and personal expression.", type: "tinman" },
+                        { label: "Students losing their sense of agency and values.", type: "lion" },
+                        { label: "Technological illiteracy creating new inequalities.", type: "wizard" }
+                    ]
+                },
+                {
+                    text: "What do you hope your students gain most from this session?",
+                    options: [
+                        { label: "A new mental framework for using AI tools.", type: "scarecrow" },
+                        { label: "A sense of how to stay 'human' in a digital world.", type: "tinman" },
+                        { label: "The bravery to use AI ethically and transparently.", type: "lion" },
+                        { label: "Practical mastery of AI to drive their own futures.", type: "wizard" }
+                    ]
+                }
+            ];
+
+            const personas = [
+                {
+                    id: 'scarecrow',
+                    name: "The Scarecrow",
+                    title: "Pedagogical Intellectual",
+                    icon: "brain",
+                    emoji: "🧠",
+                    iconColor: "text-emerald-300",
+                    desc: "Seeking 'a brain' through intellectual curiosity to reimagine teaching and learning.",
+                    color: "border-emerald-500/30 bg-emerald-900/10 hover:shadow-emerald-900/30",
+                    gemLink: "https://gemini.google.com/gem/6d973c393c8b?usp=sharing",
+                    prompts: [
+                        "How can I rethink my assignment to value the process of thinking over the final product?",
+                        "What mental frameworks should students have to evaluate AI-generated logic?"
+                    ]
+                },
+                {
+                    id: 'tinman',
+                    name: "The Tin Woodman",
+                    title: "The Ethical Heart",
+                    icon: "heart",
+                    emoji: "❤️",
+                    iconColor: "text-rose-300",
+                    desc: "Focusing on empathy, purpose, and the human 'why' behind our educational goals.",
+                    color: "border-rose-500/30 bg-rose-900/10 hover:shadow-rose-900/30",
+                    gemLink: "https://gemini.google.com/u/1/gem/95f5621e7b51",
+                    prompts: [
+                        "In a world of AI, what is the uniquely human part of this assignment that AI can't replace?",
+                        "How can I use AI to foster more empathy and connection in my classroom?"
+                    ]
+                },
+                {
+                    id: 'lion',
+                    name: "The Cowardly Lion",
+                    title: "The Courage to Question",
+                    icon: "shield-alert",
+                    emoji: "🦁",
+                    iconColor: "text-amber-300",
+                    desc: "The bravery needed to align our work with values and protect the human experience.",
+                    color: "border-amber-500/30 bg-amber-900/10 hover:shadow-amber-900/30",
+                    gemLink: "https://gemini.google.com/gem/530b58c72c09?usp=sharing",
+                    prompts: [
+                        "Where should I draw the line with AI to protect my students' intellectual agency?",
+                        "How do I stand firm on my values when technological pressure feels overwhelming?"
+                    ]
+                },
+                {
+                    id: 'wizard',
+                    name: "The Wizard of Oz",
+                    title: "Vision & Agency",
+                    icon: "sparkles",
+                    emoji: "🪄",
+                    iconColor: "text-purple-300",
+                    desc: "Mastering the tool's power while seeing through the illusions to guide us forward.",
+                    color: "border-purple-500/30 bg-purple-900/10 hover:shadow-purple-900/30",
+                    gemLink: "https://gemini.google.com/u/1/gem/b6dcc458ac1f",
+                    prompts: [
+                        "How can I pull back the curtain on how these models actually work for my students?",
+                        "What is the most effective way to wield this tool without losing my own voice?"
+                    ]
+                }
+            ];
+
+            const randomizeInsight = useCallback(() => {
+                setInsightIndex(prev => {
+                    let next = Math.floor(Math.random() * wizardInsights.length);
+                    if (next === prev) next = (prev + 1) % wizardInsights.length;
+                    return next;
+                });
+            }, [wizardInsights.length]);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 20);
+                window.addEventListener('scroll', handleScroll);
+                if (window.lucide) window.lucide.createIcons();
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            useEffect(() => {
+                if (window.lucide) window.lucide.createIcons();
+            }, [activeTab, insightIndex]);
+
+            const handleAnswer = (type) => {
+                const newScores = { ...scores, [type]: scores[type] + 1 };
+                setScores(newScores);
+                if (quizStep < questions.length - 1) {
+                    setQuizStep(quizStep + 1);
+                } else {
+                    const topType = Object.keys(newScores).reduce((a, b) => newScores[a] > newScores[b] ? a : b);
+                    setResult(topType);
+                }
+            };
+
+            const renderHome = () => {
+                const currentPersona = result ? personas.find(p => p.id === result) : null;
+                
+                return (
+                    <div key="home-view" className="space-y-16 md:space-y-24 page-transition">
+                        <section className="text-center space-y-8 pt-6 pb-10">
+                            <div className="inline-flex items-center space-x-2 px-6 py-2 rounded-full bg-emerald-800/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-widest shadow-[0_10px_30px_rgba(16,185,129,0.15)]">
+                                <i data-lucide="sparkles" className="w-4 h-4"></i>
+                                <span>Oswego | CSTEP • Feb 6, 2026</span>
+                            </div>
+                            <h1 className="text-6xl md:text-9xl font-black text-white tracking-tighter leading-none drop-shadow-2xl">
+                                AI IN THE <br/>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-b from-emerald-200 to-emerald-600">
+                                    LAND OF OZ
+                                </span>
+                            </h1>
+                            <p className="oz-font text-2xl md:text-3xl text-emerald-50/70 max-w-2xl mx-auto leading-relaxed px-4">
+                                "You've always had the power, my dear, you just had to learn it for yourself."
+                            </p>
+                        </section>
+
+                        <section className="grid lg:grid-cols-2 gap-12 items-start mx-4">
+                            <div className="space-y-8 lg:sticky lg:top-48 p-4">
+                                <div className="inline-block px-4 py-1 rounded-lg bg-emerald-500/10 border border-emerald-400/30 text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em]">The Identification</div>
+                                <h2 className="text-4xl font-black text-white leading-tight">Who Are You on the <span className="text-emerald-400">Yellow Brick Road?</span></h2>
+                                <p className="text-slate-200/80 text-lg leading-relaxed font-medium">
+                                    Before we pull back the curtain, we must find our place in the loop. Use the Wizard's Console to discover which identity you should inhabit for today's exploration.
+                                </p>
+                            </div>
+
+                            <div className="relative p-8 md:p-10 bg-slate-900/40 backdrop-blur-xl rounded-[3rem] border-2 border-emerald-500/20 shadow-[0_40px_100px_rgba(0,0,0,0.6)] overflow-hidden">
+                                {!result ? (
+                                    <div className="space-y-8 relative z-10">
+                                        <div className="flex justify-between items-center border-b border-emerald-500/10 pb-4">
+                                            <span className="text-emerald-400 font-black uppercase tracking-widest text-[10px]">Identification Scan: {quizStep + 1}/3</span>
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-white leading-snug">{questions[quizStep].text}</h3>
+                                        <div className="grid gap-4">
+                                            {questions[quizStep].options.map((opt, i) => (
+                                                <button key={i} onClick={() => handleAnswer(opt.type)} className="option-card w-full text-left p-5 rounded-2xl border border-emerald-500/10 text-slate-200 text-sm font-semibold hover:text-white">
+                                                    {opt.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-8 text-center py-6 page-transition relative z-10">
+                                        <div className="inline-flex items-center justify-center w-32 h-32 bg-emerald-500/10 rounded-full border-2 border-emerald-500/40 emerald-crystal mb-4">
+                                            <span className="text-6xl" role="img" aria-label={currentPersona.name}>
+                                                {currentPersona.emoji}
+                                            </span>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <h3 className="text-5xl font-black text-white tracking-tighter">{currentPersona.name}</h3>
+                                            <p className="text-emerald-400 text-xs font-black uppercase tracking-[0.3em]">{currentPersona.title}</p>
+                                        </div>
+                                        <button onClick={() => setActiveTab('journey')} className="w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl">
+                                            Meet Your Companion
+                                        </button>
+                                        <button onClick={() => { setResult(null); setQuizStep(0); setScores({ scarecrow: 0, tinman: 0, lion: 0, wizard: 0 }); }} className="text-emerald-500/50 hover:text-emerald-500 text-[10px] font-black uppercase tracking-widest transition-colors">
+                                            Restart Scan
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                    </div>
+                );
+            };
+
+            const renderJourney = () => (
+                <div key="journey-view" className="space-y-24 page-transition px-4">
+                    <section className="space-y-12">
+                        <div className="text-center space-y-4">
+                            <h2 className="text-5xl font-black text-white tracking-tight">The Council of Oz</h2>
+                            <p className="oz-font text-2xl text-emerald-100/70 max-w-xl mx-auto">Invoke an identity to begin your inquiry through a specific lens.</p>
+                        </div>
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {personas.map(p => (
+                                <div key={p.id} className={`group p-8 rounded-[2.5rem] border ${p.color} glass-panel transition-all flex flex-col items-center text-center space-y-6 hover:scale-[1.02]`}>
+                                    <div className="p-6 bg-slate-900/60 rounded-3xl border border-emerald-500/10">
+                                        <i data-lucide={p.icon} className={`w-12 h-12 ${p.iconColor}`}></i>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-2xl font-black text-white">{p.name}</h3>
+                                        <p className="text-emerald-400 text-[10px] font-black uppercase tracking-widest">{p.title}</p>
+                                    </div>
+                                    <p className="text-slate-300 text-sm leading-relaxed font-medium">{p.desc}</p>
+                                    
+                                    <div className="w-full text-left bg-black/30 p-5 rounded-2xl border border-white/5 space-y-3">
+                                        <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Sample Inquiries:</span>
+                                        {p.prompts.map((prompt, i) => (
+                                            <p key={i} className="text-xs italic text-slate-400 leading-snug">"{prompt}"</p>
+                                        ))}
+                                    </div>
+
+                                    <a href={p.gemLink} target="_blank" className="w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center space-x-2 shadow-lg shadow-emerald-900/20">
+                                        <span>Invoke Identity</span>
+                                        <i data-lucide="sparkles" className="w-3 h-3"></i>
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="max-w-4xl mx-auto space-y-8">
+                        <div className="flex flex-col md:flex-row justify-between items-end border-b border-emerald-500/20 pb-6 gap-4">
+                            <div>
+                                <h3 className="text-3xl font-black text-white tracking-tighter">The Wizard's Transmutations</h3>
+                                <p className="text-emerald-500/70 font-bold text-xs uppercase tracking-widest">Manual Magical Shifts</p>
+                            </div>
+                            <button 
+                                onClick={randomizeInsight}
+                                className="px-6 py-3 rounded-xl border border-emerald-400 bg-emerald-500/10 text-emerald-300 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-emerald-500 hover:text-black transition-all flex items-center space-x-2 active:scale-95 shadow-lg shadow-emerald-950/40"
+                            >
+                                <i data-lucide="refresh-cw" className="w-3 h-3"></i>
+                                <span>Cast New Spell</span>
+                            </button>
+                        </div>
+
+                        <div className="glass-panel p-10 rounded-[3rem] border-emerald-500/20 page-transition relative overflow-hidden" key={insightIndex}>
+                            <div className="absolute top-[-20px] right-[-20px] opacity-[0.03] scale-150">
+                                <i data-lucide="sparkles" className="w-64 h-64 text-emerald-400"></i>
+                            </div>
+
+                            <div className="mb-10 relative z-10">
+                                <div className="inline-flex items-center space-x-2 mb-2">
+                                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full emerald-crystal"></div>
+                                    <span className="text-emerald-400 font-black text-[10px] uppercase tracking-[0.4em]">{wizardInsights[insightIndex].subtitle}</span>
+                                </div>
+                                <h4 className="text-4xl font-black text-white leading-none">{wizardInsights[insightIndex].title}</h4>
+                            </div>
+                            <div className="grid sm:grid-cols-3 gap-8 relative z-10">
+                                {wizardInsights[insightIndex].items.map((item, idx) => (
+                                    <div key={idx} className="space-y-4 group">
+                                        <div className="text-3xl font-black text-emerald-500/10 group-hover:text-emerald-500/30 transition-colors">{item.num}</div>
+                                        <h5 className="text-lg font-black text-emerald-300">{item.label}</h5>
+                                        <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+
+            const renderWall = () => (
+                <div key="wall-view" className="space-y-12 page-transition px-4 max-w-6xl mx-auto">
+                    <div className="text-center space-y-4">
+                        <h2 className="text-5xl font-black text-white tracking-tight leading-none uppercase tracking-tighter">The Yellow Brick Wall</h2>
+                        <p className="oz-font text-2xl text-emerald-100/70">Collaborative insights from the journey.</p>
+                    </div>
+                    <div className="glass-panel p-2 rounded-[2.5rem] border-emerald-500/20 overflow-hidden shadow-2xl">
+                        <iframe src={PADLET_URL} frameBorder="0" className="w-full h-[600px] md:h-[700px] block bg-white rounded-[2rem]"></iframe>
+                    </div>
+                </div>
+            );
+
+            const renderResources = () => (
+                <div key="resources-view" className="space-y-16 max-w-6xl mx-auto page-transition px-4 pb-20">
+                    <div className="text-center space-y-4">
+                        <h2 className="text-5xl font-black text-white tracking-tight">The Great Archives</h2>
+                        <p className="oz-font text-2xl text-emerald-100/70">Deep dives into Literacy, Agency, and Pedagogy.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="glass-panel p-10 rounded-[3rem] border-emerald-500/20 space-y-6">
+                            <div className="inline-block p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+                                <i data-lucide="user-check" className="w-8 h-8 text-emerald-400"></i>
+                            </div>
+                            <h3 className="text-3xl font-black text-white">Centering Human Agency</h3>
+                            <p className="text-slate-300 font-medium">The CHAIS Framework argues that literacy is the capacity to maintain control over technological tools.</p>
+                            <ul className="space-y-4">
+                                <li className="flex gap-4 items-start">
+                                    <span className="text-emerald-400 font-black">01</span>
+                                    <p className="text-sm text-slate-400"><strong className="text-slate-200">Conceptual Mastery:</strong> Understanding the "statistical parlor trick" behind LLMs.</p>
+                                </li>
+                                <li className="flex gap-4 items-start">
+                                    <span className="text-emerald-400 font-black">02</span>
+                                    <p className="text-sm text-slate-400"><strong className="text-slate-200">Ethical Control:</strong> Choosing *when* not to use AI is as critical as knowing *how*.</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div className="glass-panel p-10 rounded-[3rem] border-rose-500/20 space-y-6">
+                            <div className="inline-block p-4 bg-rose-500/10 rounded-2xl border border-rose-500/20">
+                                <i data-lucide="brain-circuit" className="w-8 h-8 text-rose-400"></i>
+                            </div>
+                            <h3 className="text-3xl font-black text-white">The Peril of Cognitive Debt</h3>
+                            <p className="text-slate-300 font-medium">Over-reliance on AI leads to a deficit in the "productive struggle" required for long-term skill acquisition.</p>
+                            <div className="bg-slate-900/60 p-6 rounded-2xl border border-rose-500/10 italic text-sm text-rose-100/70">
+                                "The shortcut of today is the skill-gap of tomorrow."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="min-h-screen">
+                    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+                        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-emerald-500/10 blur-[160px] rounded-full"></div>
+                    </div>
+
+                    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-slate-900/80 backdrop-blur-2xl py-4 border-b border-emerald-500/20' : 'bg-transparent py-10'}`}>
+                        <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
+                            <div className="flex items-center space-x-4 cursor-pointer group" onClick={() => setActiveTab('home')}>
+                                <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center">
+                                    <i data-lucide="castle" className="w-6 h-6 text-black"></i>
+                                </div>
+                                <div>
+                                    <span className="block text-[10px] font-black text-emerald-400 uppercase tracking-[0.4em] leading-none">UNC Charlotte & OSWEGO SUNY Present</span>
+                                    <span className="block text-2xl font-black text-white uppercase tracking-tighter">Oz.AI</span>
+                                </div>
+                            </div>
+                            <div className="hidden md:flex bg-slate-800/60 p-1.5 rounded-full border border-emerald-500/10">
+                                {[
+                                    { id: 'home', label: 'THE ROAD' },
+                                    { id: 'journey', label: 'THE COUNCIL' },
+                                    { id: 'wall', label: 'THE WALL' },
+                                    { id: 'resources', label: 'THE ARCHIVES' }
+                                ].map(item => (
+                                    <button key={item.id} onClick={() => setActiveTab(item.id)} className={`px-6 py-3 rounded-full transition-all text-[10px] font-black tracking-widest ${activeTab === item.id ? 'bg-emerald-500 text-black' : 'text-slate-300 hover:text-emerald-400'}`}>
+                                        {item.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </nav>
+
+                    <main className="relative z-10 pt-48 pb-32 max-w-7xl mx-auto min-h-[75vh]">
+                        {activeTab === 'home' && renderHome()}
+                        {activeTab === 'journey' && renderJourney()}
+                        {activeTab === 'wall' && renderWall()}
+                        {activeTab === 'resources' && renderResources()}
+                    </main>
+
+                    <footer className="relative z-10 border-t border-emerald-500/10 bg-slate-950/60 backdrop-blur-xl py-24 px-8 mt-20">
+                        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16">
+                            <div className="text-center md:text-left space-y-6">
+                                <div className="flex items-center justify-center md:justify-start space-x-6">
+                                    <div className="w-20 h-20 bg-emerald-500/5 border-2 border-emerald-400/30 rounded-3xl flex items-center justify-center">
+                                        <i data-lucide="feather" className="w-10 h-10 text-emerald-400"></i>
+                                    </div>
+                                    <div className="text-left">
+                                        <h4 className="text-3xl font-black text-white">Justin Cary</h4>
+                                        <p className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] max-w-xs md:max-w-md">
+                                            Program Director | Human-Centered AI Concentration | IDST | CHESS
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href={FACULTY_PROFILE} target="_blank" className="px-12 py-6 bg-emerald-600/10 rounded-[2rem] border-2 border-emerald-500/20 hover:border-emerald-400 text-emerald-50 font-black tracking-widest text-sm uppercase transition-all hover:scale-105 active:scale-95">There's No Place Like Home</a>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
