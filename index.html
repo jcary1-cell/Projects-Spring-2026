@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLM Open Kitchen | Faculty Workshop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;700&family=Six+Caps&display=swap');
+
+        :root {
+            --slate-deep: #0f172a;
+            --slate-accent: #334155;
+            --uncc-green: #00703C;
+            --kitchen-gold: #d97706;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8fafc;
+            color: var(--slate-deep);
+            background-image: 
+                radial-gradient(#e2e8f0 0.8px, transparent 0.8px);
+            background-size: 30px 30px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Six Caps', sans-serif;
+            letter-spacing: 6px;
+        }
+
+        h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+        }
+
+        .stainless-header {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border-bottom: 8px solid #94a3b8;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .step-number {
+            color: rgba(255, 255, 255, 0.2); 
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .marble-counter {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .marble-counter::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 5px;
+            background: var(--uncc-green);
+        }
+
+        .prep-item:hover {
+            border-color: var(--uncc-green);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-ticket {
+            background: #fffef2;
+            border-left: 5px solid var(--kitchen-gold);
+            padding: 1.25rem;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.05);
+            min-height: 150px;
+            color: var(--slate-deep);
+        }
+
+        .tag-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: var(--kitchen-gold);
+            text-transform: uppercase;
+        }
+
+        .chef-note {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.35rem;
+            line-height: 1.4;
+            color: #1e293b;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.75rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .kitchen-clipboard {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            padding: 3rem;
+            border-radius: 4px;
+            position: relative;
+            border-top: 50px solid #475569;
+        }
+
+        .prompt-btn {
+            background: var(--slate-deep);
+            color: white;
+            padding: 1.25rem 1.5rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .prompt-btn:hover {
+            background: var(--uncc-green);
+        }
+
+        .house-recipe-btn {
+            background: var(--kitchen-gold);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+        }
+
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--slate-deep);
+        }
+
+        /* Recipe Card Styling */
+        .recipe-card {
+            background: white;
+            border: 1px dashed #cbd5e1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            color: var(--slate-deep);
+            text-align: left;
+            transition: all 0.3s;
+        }
+        .recipe-card:hover {
+            border-style: solid;
+            border-color: var(--kitchen-gold);
+        }
+        .recipe-step-badge {
+            background: var(--kitchen-gold);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="p-0 m-0">
+
+    <!-- Sound Control UI -->
+    <div id="sound-toggle" class="audio-control" onclick="toggleAudio()">
+        <i id="audio-icon" class="fas fa-volume-mute"></i>
+        <span id="audio-status">ENABLE KITCHEN SOUNDS</span>
+    </div>
+
+    <!-- HEADER SECTION -->
+    <header class="stainless-header text-white pt-20 pb-48 px-6 text-center">
+        <div class="max-w-5xl mx-auto">
+            <div class="inline-block border-2 border-white/40 px-6 py-2 mb-8 text-xs tracking-[.4em] uppercase font-bold text-white">
+                NotebookLM Workshop Part 2 | CTL
+            </div>
+            <h1 class="text-8xl md:text-9xl mb-4 text-white">NotebookLM</h1>
+            <h2 class="text-3xl md:text-5xl italic text-slate-200 mb-12">The Open Kitchen</h2>
+            
+            <div class="mb-12">
+                <a href="https://notebooklm.google.com/notebook/a6b10afb-1304-4d53-bc21-0ff5d336ed0f?authuser=1" target="_blank" class="house-recipe-btn" onclick="playEffect('ding')">
+                    <i class="fas fa-utensils"></i>
+                    Open the House Recipe: Master Notebook
+                </a>
+                <p class="text-[10px] uppercase tracking-[.3em] mt-4 text-slate-400">Official CTL Workshop Workspace</p>
+            </div>
+
+            <div class="mt-8 flex flex-wrap justify-center gap-10 text-xs uppercase tracking-[.2em] font-bold text-slate-300">
+                <span><i class="fas fa-check-circle mr-2 text-green-400"></i> Fresh Sources</span>
+                <span><i class="fas fa-check-circle mr-2 text-green-400"></i> No Hallucinations</span>
+                <span><i class="fas fa-check-circle mr-2 text-green-400"></i> High Rigor</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto -mt-24 px-6">
+        
+        <!-- STEP 1: THE PREP TABLE -->
+        <section class="mb-24">
+            <div class="flex items-center gap-6 mb-10">
+                <span class="step-number text-white/40">01</span>
+                <div>
+                    <h2 class="text-4xl md:text-5xl text-white">Prep Your Mise en Place</h2>
+                    <p class="text-sm font-bold text-white/70 uppercase tracking-widest mt-1">Source Selection & Inventory</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="prep-item marble-counter p-8 text-center" onclick="showIngredient('Technical PDFs', 'The protein of your study. High-density information requiring careful reduction and analysis.')">
+                    <i class="fas fa-file-invoice text-3xl mb-5 text-slate-600"></i>
+                    <p class="font-bold text-xs uppercase tracking-wider">Research PDFs</p>
+                </div>
+                <div class="prep-item marble-counter p-8 text-center" onclick="showIngredient('Live Transcripts', 'Fast-moving ingredients. Great for capturing the heat of a live lecture or video transcript.')">
+                    <i class="fas fa-bolt text-3xl mb-5 text-slate-600"></i>
+                    <p class="font-bold text-xs uppercase tracking-wider">YouTube/Audio</p>
+                </div>
+                <div class="prep-item marble-counter p-8 text-center" onclick="showIngredient('Web URLs', 'The aromatic zest. Use these to bring in real-world application and current news flavor.')">
+                    <i class="fas fa-globe text-3xl mb-5 text-slate-600"></i>
+                    <p class="font-bold text-xs uppercase tracking-wider">News/Links</p>
+                </div>
+                <div class="prep-item marble-counter p-8 text-center" onclick="showIngredient('Field Notes', 'The base stock. Your unique reflections and observations that guide the flavor of the AI output.')">
+                    <i class="fas fa-pen-fancy text-3xl mb-5 text-slate-600"></i>
+                    <p class="font-bold text-xs uppercase tracking-wider">Your Notes</p>
+                </div>
+                <div class="prep-item marble-counter p-8 text-center" onclick="showIngredient('Raw Data', 'Unprocessed elements. CSVs or spreadsheets that NotebookLM can help clarify and summarize.')">
+                    <i class="fas fa-table text-3xl mb-5 text-slate-600"></i>
+                    <p class="font-bold text-xs uppercase tracking-wider">Data/Sheets</p>
+                </div>
+                <div class="prep-item marble-counter p-8 text-center" onclick="showIngredient('The Archive', 'Bulk storage. Entire folders of previous coursework used as foundational context.')">
+                    <i class="fas fa-box-open text-3xl mb-5 text-slate-600"></i>
+                    <p class="font-bold text-xs uppercase tracking-wider">Google Drive</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- STEP 2: COOKING STATIONS -->
+        <section class="mb-24">
+            <div class="flex items-center gap-6 mb-12">
+                <span class="step-number">02</span>
+                <div>
+                    <h2 class="text-4xl md:text-5xl text-slate-900">The Cooking Stations</h2>
+                    <p class="text-sm font-bold text-slate-500 uppercase tracking-widest mt-1">Active Learning & Synthesis Techniques</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Writing Station -->
+                <div class="flex flex-col gap-6">
+                    <h3 class="text-3xl border-b-2 border-slate-900 pb-2">The Roast <span class="text-sm italic opacity-70 block uppercase font-sans font-bold tracking-tighter mt-1">Critical Writing</span></h3>
+                    <div class="order-ticket">
+                        <p class="tag-label mb-2">STATION: WRITING</p>
+                        <p class="text-sm font-semibold leading-relaxed">"Identify the logical leaps in this draft that aren't supported by the uploaded sources."</p>
+                    </div>
+                    <div class="order-ticket">
+                        <p class="tag-label mb-2">METHOD: SCHOLARLY AUDIT</p>
+                        <p class="text-xs font-bold text-slate-600 mb-2">How to cook:</p>
+                        <p class="text-sm italic">Request an audit comparing your draft to specific source authors to check for structural integrity.</p>
+                    </div>
+                </div>
+
+                <!-- Synthesis Station -->
+                <div class="flex flex-col gap-6">
+                    <h3 class="text-3xl border-b-2 border-slate-900 pb-2">The Reduction <span class="text-sm italic opacity-70 block uppercase font-sans font-bold tracking-tighter mt-1">Idea Synthesis</span></h3>
+                    <div class="order-ticket">
+                        <p class="tag-label mb-2">STATION: SYNTHESIS</p>
+                        <p class="text-sm font-semibold leading-relaxed">"Cross-reference the theoretical framework in Source A with the case study in Source B."</p>
+                    </div>
+                    <div class="order-ticket">
+                        <p class="tag-label mb-2">METHOD: MATRIX GEN</p>
+                        <p class="text-xs font-bold text-slate-600 mb-2">How to cook:</p>
+                        <p class="text-sm italic">Generate a matrix comparing methodology across 5+ source ingredients to find commonalities.</p>
+                    </div>
+                </div>
+
+                <!-- Multi-Modal Station -->
+                <div class="flex flex-col gap-6">
+                    <h3 class="text-3xl border-b-2 border-slate-900 pb-2">The Emulsion <span class="text-sm italic opacity-70 block uppercase font-sans font-bold tracking-tighter mt-1">Multi-Modal</span></h3>
+                    <div class="order-ticket">
+                        <p class="tag-label mb-2">STATION: MULTI-MODAL</p>
+                        <p class="text-sm font-semibold leading-relaxed">"In the Audio Overview, what nuance did the AI hosts miss regarding the core conflict?"</p>
+                    </div>
+                    <div class="order-ticket">
+                        <p class="tag-label mb-2">METHOD: RHETORICAL BREAKDOWN</p>
+                        <p class="text-xs font-bold text-slate-600 mb-2">How to cook:</p>
+                        <p class="text-sm italic">Paste a lecture URL and ask for a visual-to-text rhetorical breakdown using other PDFs as ground truth.</p>
+                    </div>
+                </div>
+
+                <!-- Reflection Station -->
+                <div class="flex flex-col gap-6">
+                    <h3 class="text-3xl border-b-2 border-slate-900 pb-2">The Deglaze <span class="text-sm italic opacity-70 block uppercase font-sans font-bold tracking-tighter mt-1">Critical Reflection</span></h3>
+                    <div class="order-ticket">
+                        <p class="tag-label mb-2">STATION: REFLECTION</p>
+                        <p class="text-sm font-semibold leading-relaxed">"Review my journals. Where am I showing a fixed mindset relative to the course readings?"</p>
+                    </div>
+                    <div class="order-ticket">
+                        <p class="tag-label mb-2">METHOD: SCHEMA MAPPING</p>
+                        <p class="text-xs font-bold text-slate-600 mb-2">How to cook:</p>
+                        <p class="text-sm italic">Map personal experience notes directly to theoretical frameworks found in course content.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHEF DE CUISINE -->
+        <section class="mb-24 bg-white border border-slate-200 p-12 md:p-16 shadow-2xl flex flex-col md:flex-row gap-12 items-center">
+            <div class="md:w-1/3 text-center md:border-r md:border-slate-100 md:pr-12">
+                <div class="w-28 h-28 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-4xl font-serif">MK</div>
+                <h3 class="text-3xl mb-1 text-slate-900">Michelle Kassorla</h3>
+                <p class="text-xs uppercase font-bold tracking-[.2em] text-slate-500">Chef de Cuisine (AI Pedagogy)</p>
+                <div class="mt-8">
+                    <a href="https://michellekassorla.substack.com/p/using-notebooklm-to-boost-college" target="_blank" class="text-sm font-bold border-b-2 border-slate-900 hover:text-green-700 hover:border-green-700 transition-all">READ THE MANIFESTO</a>
+                </div>
+            </div>
+            <div class="md:w-2/3">
+                <h2 class="text-5xl mb-8 text-slate-900">The "Master Chef" Philosophy</h2>
+                <div class="space-y-6">
+                    <p class="chef-note">"NotebookLM isn't a shortcut; it's a high-precision tool that allows students to manage heavy cognitive loads."</p>
+                    <p class="chef-note">"By grounding AI in specific sources, we force students back into the text, rather than away from it."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE MENU (EXPANDED) -->
+        <section class="mb-24 bg-slate-900 text-white p-8 md:p-20 rounded-sm shadow-inner overflow-hidden relative">
+            <div class="absolute top-0 right-0 p-10 opacity-10 pointer-events-none">
+                <i class="fas fa-utensils text-[20rem]"></i>
+            </div>
+            
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <h2 class="text-6xl md:text-8xl mb-4 italic text-slate-300">Tonight's Specials</h2>
+                <p class="text-sm font-bold uppercase tracking-[.3em] mb-16 opacity-60">Architecting Your Own Learning Recipes</p>
+                
+                <!-- PROMPT PICKER -->
+                <div class="mb-24 text-center">
+                    <h3 class="text-xl uppercase tracking-widest font-bold text-kitchen-gold mb-8">Option A: Quick Orders (Copy & Paste)</h3>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="copyPrompt('Synthesize the core conflicts between these sources into a debate script for two experts.')" class="prompt-btn text-xs">
+                            <i class="fas fa-copy mr-2"></i> The Debate Fusion
+                        </button>
+                        <button onclick="copyPrompt('Analyze the Audio Overview. List three technical terms it explained well and three it ignored.')" class="prompt-btn text-xs">
+                            <i class="fas fa-copy mr-2"></i> The Audio Audit
+                        </button>
+                        <button onclick="copyPrompt('Connect Source A with my personal notes in Source B. Where do I apply this theory incorrectly?')" class="prompt-btn text-xs">
+                            <i class="fas fa-copy mr-2"></i> The Mirror Prompt
+                        </button>
+                        <button onclick="copyPrompt('Generate five Socratic questions that would challenge a student who only read the summaries.')" class="prompt-btn text-xs">
+                            <i class="fas fa-copy mr-2"></i> The Rigor Test
+                        </button>
+                    </div>
+                    <div id="copy-toast" class="mt-4 text-green-400 font-bold opacity-0 transition-opacity uppercase text-[10px] tracking-widest h-4">Order Received! (Prompt Copied)</div>
+                </div>
+
+                <!-- RECIPE BUILDER -->
+                <div>
+                    <h3 class="text-xl uppercase tracking-widest font-bold text-kitchen-gold mb-4">Option B: Build Your Own Recipe</h3>
+                    <p class="text-slate-400 text-sm mb-12 max-w-lg mx-auto">Don't just prompt. Construct. Use these cards to help your students understand how to "cook" their data.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Step 1 Card -->
+                        <div class="recipe-card" onclick="playEffect('clink')">
+                            <span class="recipe-step-badge">STEP 1: THE BASE</span>
+                            <h4 class="font-bold uppercase text-xs mb-3 tracking-wider">Select Ingredients</h4>
+                            <p class="text-sm text-slate-600 mb-4">Which sources contain the truth? (Choose 2-3 specific PDFs or notes to pin).</p>
+                            <ul class="text-[10px] space-y-2 text-slate-400 font-bold uppercase">
+                                <li><i class="fas fa-circle text-[4px] mr-2 align-middle"></i> Primary Research</li>
+                                <li><i class="fas fa-circle text-[4px] mr-2 align-middle"></i> Your Annotations</li>
+                                <li><i class="fas fa-circle text-[4px] mr-2 align-middle"></i> Video Transcript</li>
+                            </ul>
+                        </div>
+
+                        <!-- Step 2 Card -->
+                        <div class="recipe-card" onclick="playEffect('clink')">
+                            <span class="recipe-step-badge">STEP 2: THE TECHNIQUE</span>
+                            <h4 class="font-bold uppercase text-xs mb-3 tracking-wider">Apply Method</h4>
+                            <p class="text-sm text-slate-600 mb-4">What should the heat do? (Synthesis, Critique, Reduction, or Expansion).</p>
+                            <ul class="text-[10px] space-y-2 text-slate-400 font-bold uppercase">
+                                <li><i class="fas fa-circle text-[4px] mr-2 align-middle"></i> Compare/Contrast</li>
+                                <li><i class="fas fa-circle text-[4px] mr-2 align-middle"></i> Find the Bias</li>
+                                <li><i class="fas fa-circle text-[4px] mr-2 align-middle"></i> Explain to Novice</li>
+                            </ul>
+                        </div>
+
+                        <!-- Step 3 Card -->
+                        <div class="recipe-card" onclick="playEffect('clink')">
+                            <span class="recipe-step-badge">STEP 3: PLATING</span>
+                            <h4 class="font-bold uppercase text-xs mb-3 tracking-wider">Design Output</h4>
+                            <p class="text-sm text-slate-600 mb-4">How should it be served? (A study guide, a script, a table, or a critique).</p>
+                            <ul class="text-[10px] space-y-2 text-slate-400 font-bold uppercase">
+                                <li><i class="fas fa-circle text-[4px] mr-2 align-middle"></i> Markdown Table</li>
+                                <li><i class="fas fa-circle text-[4px] mr-2 align-middle"></i> FAQ List</li>
+                                <li><i class="fas fa-circle text-[4px] mr-2 align-middle"></i> Audio Discussion</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-16 p-8 border border-white/10 rounded">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Master Chef Tip</p>
+                        <p class="text-lg italic text-slate-300">"The best recipes come from the **'Pinned Sources'** feature. If you don't pin your ingredients, the AI uses the whole pantry—and you lose the local flavor of specific evidence."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-20 px-6 text-slate-500">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+            <div class="text-center md:text-left">
+                <p class="font-bold text-slate-900 text-lg">NotebookLM Open Kitchen</p>
+                <p class="text-sm font-medium">UNC Charlotte Faculty Development Workshop</p>
+            </div>
+            <div class="text-right opacity-60">
+                <p class="text-xs font-bold italic">Curated by the AI Lab Team</p>
+                <p class="text-xs">Inspired by M. Kassorla</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL -->
+    <div id="ingredient-modal" class="modal" onclick="closeModal()">
+        <div class="kitchen-clipboard" onclick="event.stopPropagation()">
+            <h3 id="modal-title" class="text-5xl mb-6 text-slate-900"></h3>
+            <p id="modal-body" class="text-xl text-slate-700 mb-10 italic font-serif leading-relaxed"></p>
+            <button onclick="closeModal()" class="w-full prompt-btn py-5">Return to Station</button>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synth Logic
+        let audioCtx = null;
+        let isAudioEnabled = false;
+        let sizzleNode = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function toggleAudio() {
+            initAudio();
+            const icon = document.getElementById('audio-icon');
+            const status = document.getElementById('audio-status');
+            
+            if (!isAudioEnabled) {
+                isAudioEnabled = true;
+                icon.className = 'fas fa-volume-up';
+                status.innerText = 'KITCHEN SOUNDS ON';
+                startSizzle();
+                playEffect('ding');
+            } else {
+                isAudioEnabled = false;
+                icon.className = 'fas fa-volume-mute';
+                status.innerText = 'KITCHEN SOUNDS OFF';
+                stopSizzle();
+            }
+        }
+
+        function startSizzle() {
+            if (!isAudioEnabled) return;
+            const bufferSize = 2 * audioCtx.sampleRate;
+            const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+
+            sizzleNode = audioCtx.createBufferSource();
+            sizzleNode.buffer = noiseBuffer;
+            sizzleNode.loop = true;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.value = 1000;
+
+            const gain = audioCtx.createGain();
+            gain.gain.value = 0.02;
+
+            sizzleNode.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            sizzleNode.start();
+        }
+
+        function stopSizzle() {
+            if (sizzleNode) {
+                sizzleNode.stop();
+                sizzleNode = null;
+            }
+        }
+
+        function playEffect(type) {
+            if (!isAudioEnabled) return;
+            initAudio();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'ding') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.5);
+            } else if (type === 'clink') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            }
+        }
+
+        function showIngredient(title, body) {
+            playEffect('clink');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = body;
+            document.getElementById('ingredient-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            playEffect('clink');
+            document.getElementById('ingredient-modal').style.display = 'none';
+        }
+
+        function copyPrompt(text) {
+            playEffect('ding');
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            const toast = document.getElementById('copy-toast');
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2500);
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('ingredient-modal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
