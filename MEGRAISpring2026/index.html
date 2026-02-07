@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Literacy in Mechanical Engineering | Human Agency Framework</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --accent: #2dd4bf;
+            --accent-glow: rgba(45, 212, 191, 0.3);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: #334155;
+            --danger: #f87171;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+
+        /* NAVIGATION */
+        nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-family: 'Urbanist', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .nav-links {
+                display: flex;
+                gap: 2rem;
+            }
+            .nav-links a {
+                color: var(--text-dim);
+                text-decoration: none;
+                font-size: 0.9rem;
+                font-weight: 500;
+                transition: color 0.2s;
+            }
+            .nav-links a:hover {
+                color: var(--accent);
+            }
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 100px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3, h4 {
+            font-family: 'Urbanist', sans-serif;
+            margin-top: 0;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); margin-bottom: 1.5rem; }
+        h2 { font-size: 2.5rem; margin-bottom: 2rem; }
+        h3 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--accent); }
+
+        .lead { font-size: 1.25rem; color: var(--text-dim); margin-bottom: 2rem; max-width: 700px; }
+        
+        .accent-bar {
+            height: 4px;
+            width: 60px;
+            background: var(--accent);
+            margin-bottom: 2rem;
+            border-radius: 2px;
+        }
+
+        /* GRID SYSTEM */
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
+        .grid-4 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+        @media (min-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .grid-4 { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        /* CARDS & BOXES */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 20px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            background: rgba(45, 212, 191, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .agency-hero {
+            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+            padding: 4rem;
+            border-radius: 32px;
+            border: 1px solid var(--border);
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .agency-quote {
+            font-size: 1.8rem;
+            font-family: 'Urbanist', sans-serif;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        /* UTILITIES */
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        .tag-accent { background: var(--accent-glow); color: var(--accent); }
+        .tag-danger { background: rgba(248, 113, 113, 0.1); color: var(--danger); }
+
+        .img-container {
+            background: #1e293b;
+            border-radius: 24px;
+            aspect-ratio: 4/3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .img-container svg {
+            width: 80%;
+            height: 80%;
+        }
+
+        .footer {
+            background: #020617;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: var(--bg-dark);
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+        }
+
+        .formula {
+            font-family: 'Fira Code', monospace;
+            background: #020617;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#" class="nav-brand">MEGR // AI LITERACY</a>
+    <div class="nav-links">
+        <a href="#hero">Start</a>
+        <a href="#foundations">Foundations</a>
+        <a href="#literacy">Literacy</a>
+        <a href="#agency">Agency</a>
+        <a href="#writing">Writing</a>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section id="hero">
+    <div class="container">
+        <div class="grid-2">
+            <div>
+                <div class="tag tag-accent">Module Overview</div>
+                <h1>Generative AI for Engineers</h1>
+                <p class="lead">Exploring the technical, ethical, and practical dimensions of AI through the lens of Mechanical Engineering and human choice.</p>
+                <a href="#foundations" class="btn-primary">Explore Foundations <i class="fa-solid fa-arrow-down"></i></a>
+            </div>
+            <div class="img-container">
+                <!-- Technical Blueprint SVG Illustration -->
+                <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="300" fill="#1e293b"/>
+                    <path d="M0 50H400M0 100H400M0 150H400M0 200H400M0 250H400" stroke="#334155" stroke-width="1"/>
+                    <path d="M50 0V300M100 0V300M150 0V300M200 0V300M250 0V300M300 0V300M350 0V300" stroke="#334155" stroke-width="1"/>
+                    <circle cx="200" cy="150" r="80" stroke="#2dd4bf" stroke-width="2" stroke-dasharray="10 5"/>
+                    <path d="M120 150L200 70L280 150L200 230L120 150Z" stroke="#3b82f6" stroke-width="3"/>
+                    <circle cx="200" cy="150" r="4" fill="#2dd4bf"/>
+                    <path d="M200 150L260 90" stroke="#2dd4bf" stroke-width="1.5"/>
+                    <text x="270" y="85" fill="#2dd4bf" font-family="monospace" font-size="10">R=80mm</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOUNDATIONS SECTION -->
+<section id="foundations">
+    <div class="container">
+        <div class="accent-bar"></div>
+        <h2>Technical Foundations</h2>
+        <div class="grid-2">
+            <div class="card">
+                <h3>The GPT Logic</h3>
+                <p>Generative Pre-trained Transformers (GPT) are not knowledge engines; they are statistical prediction models. They predict the next most likely token in a sequence based on vast training data.</p>
+                <div class="formula">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mi>P</mi><mo>(</mo><msub><mi>w</mi><mi>n</mi></msub><mo>|</mo><msub><mi>w</mi><mn>1</mn></msub><mo>,</mo><mo>...</mo><mo>,</mo><msub><mi>w</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub><mo>)</mo>
+                    </math>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">For an engineer, this means recognizing that AI hallucinations are simply statistically likely but physically impossible predictions.</p>
+            </div>
+            <div class="card">
+                <h3>Discriminative vs. Generative</h3>
+                <p>While discriminative AI classifies data (e.g., Identifying stress fractures in a CAD model), generative AI produces new data (e.g., Drafting the executive summary of a laboratory report).</p>
+                <ul style="color: var(--text-dim); margin-top: 1rem; padding-left: 20px;">
+                    <li>Discriminative: Recognition and Sorting</li>
+                    <li>Generative: Creation and Synthesis</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- THE FOUR PILLARS SECTION -->
+<section id="literacy">
+    <div class="container">
+        <div class="accent-bar"></div>
+        <h2>The Four Pillars of AI Literacy</h2>
+        <p class="lead">True professional literacy requires more than just knowing how to prompt. It requires a comprehensive understanding of the sociotechnical ecosystem.</p>
+        
+        <div class="grid-4">
+            <div class="card">
+                <div class="icon-circle"><i class="fa-solid fa-microchip"></i></div>
+                <h4>Technical</h4>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">Understanding model architecture, training data limits, and the statistical nature of outputs.</p>
+            </div>
+            <div class="card">
+                <div class="icon-circle"><i class="fa-solid fa-keyboard"></i></div>
+                <h4>Practical</h4>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">Competence in using tools to generate engineering artifacts while maintaining data integrity.</p>
+            </div>
+            <div class="card">
+                <div class="icon-circle"><i class="fa-solid fa-scale-balanced"></i></div>
+                <h4>Ethical</h4>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">Responsibility for bias, data privacy, environmental impact, and professional stewardship.</p>
+            </div>
+            <div class="card">
+                <div class="icon-circle"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <h4>Critical</h4>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">Questioning the broader impacts of automation on the engineering profession and society.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HUMAN AGENCY SECTION -->
+<section id="agency">
+    <div class="container">
+        <div class="agency-hero">
+            <div class="tag tag-accent">Core Principle</div>
+            <div class="agency-quote">"Agency is the empowered capacity for intentional, critical, and responsible choice."</div>
+            <p style="color: var(--text-dim); max-width: 800px; margin: 0 auto;">Framework by Tadimalla, Cary, Hull, Register, Heafner, Maxwell, and Pugalee (2025)</p>
+            <p style="margin-top: 2rem;">As a mechanical engineer, AI is a collaborator, not a replacement. Human agency means you decide when to use a tool, how to verify its output, and when to reject its suggestions entirely based on physical laws and ethical obligations.</p>
+        </div>
+    </div>
+</section>
+
+<!-- WRITING & SCAFFOLDING SECTION -->
+<section id="writing">
+    <div class="container">
+        <div class="accent-bar"></div>
+        <h2>Scaffolding vs. Offloading</h2>
+        <div class="grid-2">
+            <div>
+                <h3>Technical Writing Strategy</h3>
+                <p>We use Generative AI as a scaffold—a temporary support that helps you learn the structure of technical memos, professional verbs, and report conventions.</p>
+                <div class="card" style="margin-top: 1.5rem; border-left: 4px solid var(--accent);">
+                    <p><strong>Professional Tip:</strong> Use AI to suggest an outline for your lab report based on your raw data. Then, populate the outline yourself to ensure the engineering analysis is sound.</p>
+                </div>
+            </div>
+            <div class="img-container">
+                <!-- Scaffolding SVG Illustration -->
+                <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="300" fill="#1e293b"/>
+                    <!-- Background Grid -->
+                    <path d="M50 250H350" stroke="#334155" stroke-width="2"/>
+                    <!-- Scaffold structure -->
+                    <path d="M100 250V100M300 250V100M100 150H300M100 200H300" stroke="#3b82f6" stroke-width="2" opacity="0.4"/>
+                    <!-- Building/Bridge being supported -->
+                    <path d="M120 220H280V180H120V220Z" fill="#2dd4bf" fill-opacity="0.2" stroke="#2dd4bf" stroke-width="2"/>
+                    <path d="M120 180L200 130L280 180" stroke="#2dd4bf" stroke-width="2"/>
+                    <!-- Labels -->
+                    <text x="200" y="275" fill="#94a3b8" font-size="12" text-anchor="middle">Foundation of Knowledge</text>
+                    <text x="310" y="150" fill="#3b82f6" font-size="10">AI Scaffold</text>
+                    <text x="200" y="170" fill="#2dd4bf" font-size="10" text-anchor="middle">Student Voice</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER / REFERENCES -->
+<footer class="footer">
+    <div class="container">
+        <div style="border-bottom: 1px solid var(--border); padding-bottom: 2rem; margin-bottom: 2rem;">
+            <h3>Academic Reference</h3>
+            <p style="color: var(--text-main);">Tadimalla, S. Y., Cary, J., Hull, G., Register, J., Heafner, T., Maxwell, D., & Pugalee, D. (2025). <em>Comprehensive AI Literacy: The Case for Centering Human Agency</em>. UNC Charlotte.</p>
+            <a href="https://drive.google.com/file/d/1g97rzyyuEqt05gi8s4HukAYFZJfACM6h/view" target="_blank" class="btn-primary" style="background: transparent; border: 1px solid var(--accent); color: var(--accent);">
+                <i class="fa-solid fa-file-pdf"></i> View Source Paper
+            </a>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <p style="font-size: 0.9rem; color: var(--text-dim); font-weight: 500;">Generative AI module | MEGR Spring 2026</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
