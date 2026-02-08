@@ -1,0 +1,329 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  BookOpen, 
+  Cpu, 
+  MessageSquare, 
+  ShieldCheck, 
+  Send, 
+  ChevronRight, 
+  RotateCcw, 
+  Sparkles,
+  Info
+} from 'lucide-react';
+
+const App = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [userInput, setUserInput] = useState("");
+  const [megaPrompt, setMegaPrompt] = useState({ ethos: '', logos: '', pathos: '' });
+  const [isTyping, setIsTyping] = useState(false);
+
+  // Scholars data for context
+  const scholars = {
+    tenen: { name: "Dennis Yi Tenen", concept: "The Mathematics of Language", quote: "Language is a pattern-matching system, not a truth-telling one." },
+    mollick: { name: "Ethan Mollick", concept: "Co-Intelligence", quote: "Treat the AI as a smart but fallible intern." },
+    li: { name: "Fei-Fei Li", concept: "Human-Centered AI", quote: "AI must enhance human dignity, not replace it." }
+  };
+
+  const steps = [
+    { id: 'tenen', title: 'Lab 1: Vectorization', icon: <Cpu size={20} />, scholar: scholars.tenen },
+    { id: 'socratic', title: 'Lab 2: Socratic Elenchus', icon: <MessageSquare size={20} />, scholar: scholars.mollick },
+    { id: 'rhetoric', title: 'Lab 3: The Mega-Prompt', icon: <Sparkles size={20} />, scholar: scholars.mollick },
+    { id: 'ethics', title: 'Lab 4: The Guardrails', icon: <ShieldCheck size={20} />, scholar: scholars.li }
+  ];
+
+  // Simulation of Socratic AI interaction
+  const handleSocraticChat = async () => {
+    if (!userInput.trim()) return;
+    
+    const newMsg = { role: 'user', content: userInput };
+    setChatHistory([...chatHistory, newMsg]);
+    setUserInput("");
+    setIsTyping(true);
+
+    // Simulated "Stubborn" Socratic Response
+    setTimeout(() => {
+      const responses = [
+        "That is a broad claim. By what criteria are you defining the 'value' in that sentence?",
+        "If we accept your premise, does it not follow that the opposite must also be true in certain contexts?",
+        "Interesting. How would Tenen's 'mathematical probability' explain that specific word choice you just used?",
+        "Let's look deeper. Provide a counter-example to your last statement."
+      ];
+      const aiMsg = { 
+        role: 'assistant', 
+        content: responses[Math.floor(Math.random() * responses.length)] 
+      };
+      setChatHistory(prev => [...prev, aiMsg]);
+      setIsTyping(false);
+    }, 1000);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans p-4 md:p-8">
+      {/* Header */}
+      <header className="max-w-6xl mx-auto mb-12 border-b border-slate-800 pb-6">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+          The New Rhetorics of Prompt Writing
+        </h1>
+        <p className="text-slate-400 mt-2 italic">Interactive Lab: AI Application and Impact Across Disciplines</p>
+      </header>
+
+      <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        {/* Sidebar Navigation */}
+        <nav className="lg:col-span-1 space-y-2">
+          {steps.map((step, index) => (
+            <button
+              key={step.id}
+              onClick={() => setActiveStep(index)}
+              className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all duration-200 ${
+                activeStep === index 
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' 
+                : 'bg-slate-900 text-slate-400 hover:bg-slate-800'
+              }`}
+            >
+              {step.icon}
+              <span className="font-medium">{step.title}</span>
+            </button>
+          ))}
+          
+          <div className="mt-8 p-4 bg-slate-900/50 rounded-xl border border-slate-800">
+            <h3 className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-3 flex items-center gap-2">
+              <Info size={14} /> Active Scholar
+            </h3>
+            <p className="text-sm font-semibold text-blue-400">{steps[activeStep].scholar.name}</p>
+            <p className="text-xs text-slate-400 mt-1 italic">"{steps[activeStep].scholar.quote}"</p>
+          </div>
+        </nav>
+
+        {/* Lab Content Area */}
+        <section className="lg:col-span-3 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col min-h-[600px]">
+          
+          {/* Step 1: Tenen / Vectorization */}
+          {activeStep === 0 && (
+            <div className="p-8 animate-in fade-in slide-in-from-bottom-4">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <Cpu className="text-blue-400" /> Vectorizing Language
+              </h2>
+              <p className="text-slate-300 mb-6">
+                Dennis Yi Tenen suggests that we shouldn't ask AI to "think," but to map vectors. 
+                Instead of "Explain Justice," try to provide a mathematical boundary.
+              </p>
+              
+              <div className="space-y-6">
+                <div className="bg-slate-950 p-4 rounded-lg border border-slate-800">
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Traditional Prompt</label>
+                  <code className="text-emerald-400">"Explain the concept of justice."</code>
+                </div>
+                
+                <div className="flex justify-center py-4 text-slate-600 italic text-sm italic">
+                  <span>Transformation Logic: [Static Definition] ➔ [Vector Mapping]</span>
+                </div>
+
+                <div className="bg-slate-800 p-6 rounded-xl border-l-4 border-blue-500">
+                  <label className="block text-sm font-bold text-blue-400 mb-2 underline decoration-blue-500/30">Vectorized Rhetoric Challenge</label>
+                  <p className="text-sm text-slate-300 mb-4">
+                    Rewrite the prompt below to force the AI to compare "Justice" between two specific linguistic datasets (e.g., 18th-century legal texts vs. 21st-century social media).
+                  </p>
+                  <textarea 
+                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-200 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Ask the AI to vectorize justice between..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 2: Socratic Method */}
+          {activeStep === 1 && (
+            <div className="flex flex-col h-full animate-in fade-in">
+              <div className="p-6 border-b border-slate-800">
+                <h2 className="text-2xl font-bold flex items-center gap-2">
+                  <MessageSquare className="text-emerald-400" /> The Socratic Elenchus
+                </h2>
+                <p className="text-sm text-slate-400 mt-1">Challenge the AI's first draft. Use logic to corner the "probability engine."</p>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto p-6 space-y-4 max-h-[400px]">
+                {chatHistory.length === 0 && (
+                  <div className="text-center py-12 text-slate-500">
+                    <BookOpen className="mx-auto mb-4 opacity-20" size={48} />
+                    <p>Enter a complex claim to begin the dialogue.</p>
+                  </div>
+                )}
+                {chatHistory.map((msg, i) => (
+                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[80%] p-3 rounded-2xl ${
+                      msg.role === 'user' 
+                      ? 'bg-blue-600 text-white rounded-tr-none' 
+                      : 'bg-slate-800 text-slate-200 rounded-tl-none border border-slate-700'
+                    }`}>
+                      <p className="text-sm">{msg.content}</p>
+                    </div>
+                  </div>
+                ))}
+                {isTyping && <div className="text-xs text-slate-500 animate-pulse">AI is contemplating its refutation...</div>}
+              </div>
+
+              <div className="p-4 bg-slate-950 border-t border-slate-800">
+                <div className="flex gap-2">
+                  <input 
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSocraticChat()}
+                    placeholder="Enter your claim or rebuttal..."
+                    className="flex-1 bg-slate-900 border border-slate-700 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button 
+                    onClick={handleSocraticChat}
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded-full transition-colors"
+                  >
+                    <Send size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Mega-Prompt Constructor */}
+          {activeStep === 2 && (
+            <div className="p-8 animate-in fade-in">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <Sparkles className="text-purple-400" /> The Mega-Prompt Constructor
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-500 uppercase">Ethos (Persona)</label>
+                  <textarea 
+                    value={megaPrompt.ethos}
+                    onChange={(e) => setMegaPrompt({...megaPrompt, ethos: e.target.value})}
+                    placeholder="Who is the AI? (e.g., A skeptical Victorian archivist)"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm h-32 focus:ring-2 focus:ring-purple-500 outline-none"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-500 uppercase">Logos (Logic)</label>
+                  <textarea 
+                    value={megaPrompt.logos}
+                    onChange={(e) => setMegaPrompt({...megaPrompt, logos: e.target.value})}
+                    placeholder="What are the constraints? (e.g., Use no adverbs, max 200 words)"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm h-32 focus:ring-2 focus:ring-purple-500 outline-none"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-500 uppercase">Pathos (Emotion)</label>
+                  <textarea 
+                    value={megaPrompt.pathos}
+                    onChange={(e) => setMegaPrompt({...megaPrompt, pathos: e.target.value})}
+                    placeholder="Desired audience impact? (e.g., Evoke a sense of urgent nostalgia)"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm h-32 focus:ring-2 focus:ring-purple-500 outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-8 p-6 bg-purple-900/10 border border-purple-500/30 rounded-2xl relative">
+                <label className="absolute -top-3 left-6 bg-slate-900 px-2 text-xs font-bold text-purple-400 uppercase tracking-tighter">Live Output Preview</label>
+                <div className="text-slate-300 font-mono text-sm leading-relaxed">
+                  {megaPrompt.ethos || megaPrompt.logos || megaPrompt.pathos ? (
+                    <>
+                      <span className="text-purple-400">Act as:</span> {megaPrompt.ethos} <br/>
+                      <span className="text-purple-400">Constraints:</span> {megaPrompt.logos} <br/>
+                      <span className="text-purple-400">Objective:</span> {megaPrompt.pathos}
+                    </>
+                  ) : (
+                    <span className="text-slate-600">Start typing above to see your rhetoric form...</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 4: Ethical Guardrails */}
+          {activeStep === 3 && (
+            <div className="p-8 animate-in fade-in h-full flex flex-col">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <ShieldCheck className="text-red-400" /> Fei-Fei Li’s Human-Centered Guardrails
+              </h2>
+              <div className="flex-1 space-y-8">
+                <div className="bg-red-900/10 border border-red-900/30 p-6 rounded-2xl">
+                  <h3 className="font-bold text-red-400 mb-2">The Bias Audit</h3>
+                  <p className="text-sm text-slate-300">
+                    Dennis Tenen reminds us that probability is based on *past data*. If you run your Mega-Prompt 100 times, whose voice is the statistical "average" that gets repeated?
+                  </p>
+                  <ul className="mt-4 space-y-2 text-xs text-slate-400 list-disc list-inside">
+                    <li>Is the persona biased toward Western academic styles?</li>
+                    <li>Does the "Pathos" assume a specific cultural background?</li>
+                    <li>How can you architect the prompt to disrupt these defaults?</li>
+                  </ul>
+                </div>
+
+                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                  <label className="block text-sm font-bold text-slate-200 mb-3 underline decoration-emerald-500">The Redesign Injection</label>
+                  <p className="text-xs text-slate-500 mb-4 italic">Add a final instruction to your prompt that ensures the output upholds human dignity or diverse perspectives.</p>
+                  <textarea 
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm text-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none"
+                    placeholder="e.g., 'Ensure the response incorporates at least one perspective from Global South scholarship...'"
+                    rows={4}
+                  />
+                </div>
+              </div>
+              
+              <button 
+                onClick={() => {
+                  alert("Assignment Ready for Submission! Copy your logs and prompts to the shared repository.");
+                }}
+                className="mt-6 w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.01]"
+              >
+                Finalize and Generate Submission Log <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
+          
+          {/* Footer Navigation */}
+          <div className="mt-auto bg-slate-950 p-4 border-t border-slate-800 flex justify-between items-center">
+            <span className="text-xs text-slate-500 uppercase font-bold tracking-widest">
+              Step {activeStep + 1} of {steps.length}
+            </span>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => setActiveStep(Math.max(0, activeStep - 1))}
+                disabled={activeStep === 0}
+                className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white disabled:opacity-20"
+              >
+                Previous
+              </button>
+              <button 
+                onClick={() => setActiveStep(Math.min(steps.length - 1, activeStep + 1))}
+                disabled={activeStep === steps.length - 1}
+                className="bg-slate-800 px-6 py-2 rounded-lg text-xs font-bold hover:bg-slate-700 transition-colors"
+              >
+                Next Step
+              </button>
+            </div>
+          </div>
+
+        </section>
+      </main>
+
+      {/* Global Reset */}
+      <div className="max-w-6xl mx-auto mt-8 flex justify-end">
+        <button 
+          onClick={() => {
+            if(window.confirm("Clear all progress?")) {
+              setChatHistory([]);
+              setMegaPrompt({ ethos: '', logos: '', pathos: '' });
+              setActiveStep(0);
+            }
+          }}
+          className="flex items-center gap-2 text-xs text-slate-600 hover:text-red-400 transition-colors"
+        >
+          <RotateCcw size={14} /> Reset Lab Environment
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default App;
