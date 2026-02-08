@@ -85,6 +85,8 @@ const App = () => {
   const copyToClipboard = (text) => {
     const textArea = document.createElement("textarea");
     textArea.value = text;
+    textArea.style.position = "absolute";
+    textArea.style.left = "-9999px";
     document.body.appendChild(textArea);
     textArea.select();
     try {
@@ -111,7 +113,7 @@ const App = () => {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">AI Rhetoric Lab</h1>
           <p className="text-slate-400 text-sm mt-1">Critical AI Scholarship Interactive</p>
         </div>
-        <div className="text-[10px] font-mono text-blue-500 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">v1.3.0-standalone</div>
+        <div className="text-[10px] font-mono text-blue-500 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">v1.4.0-gh-stable</div>
       </header>
 
       <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -224,7 +226,7 @@ const App = () => {
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl animate-in fade-in duration-200">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-bold">{modalContent.title}</h3>
               <button onClick={() => setShowModal(false)} className="text-slate-500 hover:text-white"><Icons.X /></button>
