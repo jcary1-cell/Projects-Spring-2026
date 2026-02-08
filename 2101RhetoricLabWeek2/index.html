@@ -1,0 +1,505 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  BookOpen, 
+  Cpu, 
+  MessageSquare, 
+  ShieldCheck, 
+  Send, 
+  ChevronRight, 
+  RotateCcw, 
+  Sparkles,
+  Info,
+  X,
+  FileText,
+  ClipboardCheck,
+  Check
+} from 'lucide-react';
+
+const App = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [userInput, setUserInput] = useState("");
+  const [vectorInput, setVectorInput] = useState("");
+  const [guardrailInput, setGuardrailInput] = useState("");
+  const [megaPrompt, setMegaPrompt] = useState({ ethos: '', logos: '', pathos: '' });
+  const [isTyping, setIsTyping] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: '', body: '', isReport: false });
+  const [copied, setCopied] = useState(false);
+
+  // Scholars data for context
+  const scholars = {
+    tenen: { name: "Dennis Yi Tenen", concept: "The Mathematics of Language", quote: "Language is a pattern-matching system, not a truth-telling one." },
+    mollick: { name: "Ethan Mollick", concept: "Co-Intelligence", quote: "Treat the AI as a smart but fallible intern." },
+    li: { name: "Fei-Fei Li", concept: "Human-Centered AI", quote: "AI must enhance human dignity, not replace it." }
+  };
+
+  const steps = [
+    { id: 'tenen', title: 'Lab 1: Vectorization', icon: <Cpu size={20} />, scholar: scholars.tenen },
+    { id: 'socratic', title: 'Lab 2: Socratic Elenchus', icon: <MessageSquare size={20} />, scholar: scholars.mollick },
+    { id: 'rhetoric', title: 'Lab 3: The Mega-Prompt', icon: <Sparkles size={20} />, scholar: scholars.mollick },
+    { id: 'ethics', title: 'Lab 4: The Guardrails', icon: <ShieldCheck size={20} />, scholar: scholars.li }
+  ];
+
+  const triggerModal = (title, body, isReport = false) => {
+    setModalContent({ title, body, isReport });
+    setShowModal(true);
+  };
+
+  const handleSocraticChat = async () => {
+    if (!userInput.trim()) return;
+    
+    const newMsg = { role: 'user', content: userInput };
+    const updatedHistory = [...chatHistory, newMsg];
+    setChatHistory(updatedHistory);
+    setUserInput("");
+    setIsTyping(true);
+
+    setTimeout(() => {
+      const responses = [
+        "That is a broad claim. By what criteria are you defining the 'value' in that sentence?",
+        "If we accept your premise, does it not follow that the opposite must also be true in certain contexts?",
+        "Interesting. How would Tenen's 'mathematical probability' explain that specific word choice you just used?",
+        "Let's look deeper. Provide a counter-example to your last statement."
+      ];
+      const aiMsg = { 
+        role: 'assistant', 
+        content: responses[Math.floor(Math.random() * responses.length)] 
+      };
+      setChatHistory(prev => [...prev, aiMsg]);
+      setIsTyping(false);
+    }, 1000);
+  };
+
+  const generateReport = () => {
+    const report = `
+RHETORIC ASSIGNMENT REPORT
+--------------------------
+1. VECTORIZATION (Tenen):
+   ${vectorInput || "No input provided"}
+
+2. SOCRATIC DIALOGUE (Mollick):
+   ${chatHistory.length > 0 ? chatHistory.map(m => `${m.role.toUpperCase()}: ${m.content}`).join('\n   ') : "No dialogue recorded"}
+
+3. MEGA-PROMPT:
+   Persona: ${megaPrompt.ethos || "N/A"}
+   Logic: ${megaPrompt.logos || "N/A"}
+   Pathos: ${megaPrompt.pathos || "N/A"}
+
+4. ETHICAL GUARDRAIL (Li):
+   ${guardrailInput || "No input provided"}
+    `.trim();
+
+    triggerModal("Assignment Prepared", report, true);
+  };
+
+  const copyToClipboard = (text) => {
+    const el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans p-4 md:p-8 selection:bg-blue-500/30">
+      {/* Custom Styles for Animations since some environments lack 'animate-in' tailwind plugins */}
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-section { animation: fadeIn 0.5s ease-out forwards; }
+      `}</style>
+
+      {/* Header */}
+      <header className="max-w-6xl mx-auto mb-10 border-b border-slate-800 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 bg-clip-text text-transparent">
+              The New Rhetorics of Prompt Writing
+            </h1>
+            <p className="text-slate-400 mt-2 font-medium tracking-tight">Interactive Lab: AI Application and Impact Across Disciplines</p>
+          </div>
+          <div className="bg-slate-900 px-4 py-2 rounded-full border border-slate-800 text-xs font-mono text-blue-400 self-start md:self-center">
+            Session: v1.1.0-stable
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        {/* Sidebar Navigation */}
+        <nav className="lg:col-span-1 space-y-3">
+          {steps.map((step, index) => (
+            <button
+              key={step.id}
+              onClick={() => setActiveStep(index)}
+              className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all duration-300 border ${
+                activeStep === index 
+                ? 'bg-blue-600 border-blue-400 text-white shadow-lg shadow-blue-900/40' 
+                : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800 hover:border-slate-700'
+              }`}
+            >
+              <div className={activeStep === index ? 'text-white' : 'text-blue-500'}>
+                {step.icon}
+              </div>
+              <span className="font-semibold text-sm">{step.title}</span>
+            </button>
+          ))}
+          
+          <div className="mt-8 p-5 bg-slate-900/80 rounded-2xl border border-slate-800 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <BookOpen size={40} />
+            </div>
+            <h3 className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-black mb-4 flex items-center gap-2">
+              <Info size={14} className="text-blue-400" /> Active Scholar
+            </h3>
+            <p className="text-sm font-bold text-blue-400 mb-1">{steps[activeStep].scholar.name}</p>
+            <p className="text-xs text-slate-300 leading-relaxed italic">"{steps[activeStep].scholar.quote}"</p>
+          </div>
+        </nav>
+
+        {/* Lab Content Area */}
+        <section className="lg:col-span-3 bg-slate-900/50 rounded-3xl border border-slate-800 shadow-2xl backdrop-blur-sm overflow-hidden flex flex-col min-h-[650px]">
+          
+          {/* Step 1: Tenen / Vectorization */}
+          {activeStep === 0 && (
+            <div className="p-8 fade-in-section">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
+                <Cpu className="text-blue-400" /> 
+                <span>Lab 1: <span className="text-slate-400 font-light">Vectorizing Language</span></span>
+              </h2>
+              <p className="text-slate-300 mb-6 leading-relaxed">
+                Dennis Yi Tenen suggests we treat language models as pattern-mapping engines. 
+                Instead of asking for a definition, provide a <strong>linguistic boundary</strong>.
+              </p>
+              
+              <div className="space-y-6">
+                <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 relative">
+                  <span className="absolute -top-3 left-4 bg-slate-950 px-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Static Input</span>
+                  <code className="text-emerald-400 block font-mono">"Explain the concept of justice."</code>
+                </div>
+                
+                <div className="flex items-center gap-4 text-slate-600 px-4">
+                  <div className="h-px flex-1 bg-slate-800"></div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest">Rhetorical Transformation</span>
+                  <div className="h-px flex-1 bg-slate-800"></div>
+                </div>
+
+                <div className="bg-slate-900 p-6 rounded-2xl border border-blue-500/20 shadow-inner">
+                  <label className="block text-sm font-bold text-blue-400 mb-3">Vectorized Prompt Exercise</label>
+                  <p className="text-sm text-slate-400 mb-4">
+                    Draft a prompt that forces the AI to contrast the "Justice" vector found in 18th-century Enlightenment texts with modern 21st-century legal documentation.
+                  </p>
+                  <textarea 
+                    value={vectorInput}
+                    onChange={(e) => setVectorInput(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-700"
+                    placeholder="Compare the semantic space of 'justice' between..."
+                    rows={4}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 2: Socratic Method */}
+          {activeStep === 1 && (
+            <div className="flex flex-col h-full fade-in-section">
+              <div className="p-6 border-b border-slate-800 bg-slate-900/80">
+                <h2 className="text-2xl font-bold flex items-center gap-3">
+                  <MessageSquare className="text-emerald-400" /> 
+                  <span>Lab 2: <span className="text-slate-400 font-light">The Silicon Socratic Method</span></span>
+                </h2>
+                <p className="text-sm text-slate-400 mt-1">Practice the "Elenchus" (refutation) by refusing the AI's first generic answer.</p>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto p-6 space-y-4 max-h-[420px] scrollbar-thin scrollbar-thumb-slate-800">
+                {chatHistory.length === 0 && (
+                  <div className="flex flex-col items-center justify-center py-12 text-slate-600 opacity-40">
+                    <BookOpen size={64} strokeWidth={1} />
+                    <p className="mt-4 font-medium italic">Dialogue not yet initiated...</p>
+                  </div>
+                )}
+                {chatHistory.map((msg, i) => (
+                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[85%] p-4 rounded-2xl shadow-sm ${
+                      msg.role === 'user' 
+                      ? 'bg-indigo-600 text-white rounded-tr-none' 
+                      : 'bg-slate-800 text-slate-200 rounded-tl-none border border-slate-700'
+                    }`}>
+                      <p className="text-sm leading-relaxed">{msg.content}</p>
+                    </div>
+                  </div>
+                ))}
+                {isTyping && (
+                  <div className="flex gap-1 items-center px-4 py-2">
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-bounce"></div>
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 bg-slate-950/80 border-t border-slate-800 backdrop-blur-md">
+                <div className="flex gap-3 max-w-4xl mx-auto">
+                  <input 
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSocraticChat()}
+                    placeholder="State a claim or challenge the AI..."
+                    className="flex-1 bg-slate-900 border border-slate-700 rounded-2xl px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-inner"
+                  />
+                  <button 
+                    onClick={handleSocraticChat}
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 rounded-2xl transition-all flex items-center gap-2 font-bold shadow-lg shadow-emerald-900/20 active:scale-95"
+                  >
+                    <Send size={16} />
+                    <span className="hidden md:block">Send</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Mega-Prompt Constructor */}
+          {activeStep === 2 && (
+            <div className="p-8 fade-in-section overflow-y-auto">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <Sparkles className="text-purple-400" /> 
+                <span>Lab 3: <span className="text-slate-400 font-light">The Mega-Prompt Constructor</span></span>
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span> Ethos (Persona)
+                  </label>
+                  <textarea 
+                    value={megaPrompt.ethos}
+                    onChange={(e) => setMegaPrompt({...megaPrompt, ethos: e.target.value})}
+                    placeholder="E.g. A forensic linguist who specializes in Victorian slang..."
+                    className="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm h-36 focus:ring-2 focus:ring-purple-500 outline-none transition-all scrollbar-hide"
+                  />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Logos (Constraints)
+                  </label>
+                  <textarea 
+                    value={megaPrompt.logos}
+                    onChange={(e) => setMegaPrompt({...megaPrompt, logos: e.target.value})}
+                    placeholder="E.g. No passive voice, strictly 150 words, use maritime metaphors..."
+                    className="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm h-36 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Pathos (Impact)
+                  </label>
+                  <textarea 
+                    value={megaPrompt.pathos}
+                    onChange={(e) => setMegaPrompt({...megaPrompt, pathos: e.target.value})}
+                    placeholder="E.g. The tone should be clinical yet eerily nostalgic..."
+                    className="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm h-36 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-slate-950 to-slate-900 p-8 rounded-3xl border border-purple-500/20 relative group shadow-2xl">
+                <div className="absolute -top-4 left-8 bg-purple-600 px-3 py-1 rounded-full text-[10px] font-black text-white uppercase tracking-widest shadow-lg">
+                  Linguistic Architecture Output
+                </div>
+                <div className="text-slate-300 font-mono text-sm leading-relaxed whitespace-pre-line">
+                  {megaPrompt.ethos || megaPrompt.logos || megaPrompt.pathos ? (
+                    <div className="space-y-4">
+                      <p><span className="text-purple-400 opacity-50 font-bold mr-2">// Persona:</span>{megaPrompt.ethos}</p>
+                      <p><span className="text-blue-400 opacity-50 font-bold mr-2">// Constraint:</span>{megaPrompt.logos}</p>
+                      <p><span className="text-emerald-400 opacity-50 font-bold mr-2">// Resonance:</span>{megaPrompt.pathos}</p>
+                    </div>
+                  ) : (
+                    <span className="text-slate-600 italic">Configure the rhetoric modules above to generate your composite prompt.</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 4: Ethical Guardrails */}
+          {activeStep === 3 && (
+            <div className="p-8 fade-in-section h-full flex flex-col">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <ShieldCheck className="text-red-400" /> 
+                <span>Lab 4: <span className="text-slate-400 font-light">Human-Centered Guardrails</span></span>
+              </h2>
+              <div className="flex-1 space-y-6">
+                <div className="bg-red-500/5 border border-red-500/10 p-6 rounded-3xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5">
+                    <ShieldCheck size={100} />
+                  </div>
+                  <h3 className="font-bold text-red-400 mb-3 flex items-center gap-2">
+                    The Bias Audit
+                  </h3>
+                  <p className="text-sm text-slate-300 leading-relaxed mb-4">
+                    Tenen warns that AI is a mirror of historical probability. If your persona relies on "Standard Academic English," whose intellectual labor is being marginalized?
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] text-slate-500">
+                    <div className="flex items-start gap-2">
+                      <div className="w-1 h-1 bg-red-500 rounded-full mt-1.5"></div>
+                      <span>Persona bias toward Western-centric archives.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <div className="w-1 h-1 bg-red-500 rounded-full mt-1.5"></div>
+                      <span>Pathos assumptions regarding emotional triggers.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-950 p-6 rounded-3xl border border-slate-800 shadow-inner">
+                  <label className="block text-sm font-bold text-slate-200 mb-4 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    The Redesign Injection
+                  </label>
+                  <textarea 
+                    value={guardrailInput}
+                    onChange={(e) => setGuardrailInput(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-2xl p-5 text-sm text-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                    placeholder="Example: 'Explicitly account for the socio-economic context of the speaker to avoid universalizing specific privileges...'"
+                    rows={5}
+                  />
+                </div>
+              </div>
+              
+              <button 
+                onClick={generateReport}
+                className="mt-8 w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl flex items-center justify-center gap-3 transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] active:scale-95"
+              >
+                <FileText size={20} />
+                Generate Assignment Submission
+              </button>
+            </div>
+          )}
+          
+          {/* Footer Navigation */}
+          <div className="mt-auto bg-slate-950/80 p-5 border-t border-slate-800/50 flex justify-between items-center backdrop-blur-sm">
+            <div className="flex items-center gap-4">
+              <div className="flex gap-1">
+                {[0,1,2,3].map(i => (
+                  <div key={i} className={`h-1 rounded-full transition-all duration-500 ${activeStep === i ? 'w-8 bg-blue-500' : 'w-2 bg-slate-800'}`}></div>
+                ))}
+              </div>
+              <span className="hidden md:block text-[10px] text-slate-500 uppercase font-black tracking-widest">
+                Progress: {Math.round(((activeStep + 1) / 4) * 100)}%
+              </span>
+            </div>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setActiveStep(Math.max(0, activeStep - 1))}
+                disabled={activeStep === 0}
+                className="px-5 py-2.5 text-xs font-bold text-slate-400 hover:text-white disabled:opacity-20 transition-colors"
+              >
+                Back
+              </button>
+              <button 
+                onClick={() => setActiveStep(Math.min(steps.length - 1, activeStep + 1))}
+                disabled={activeStep === steps.length - 1}
+                className="bg-slate-100 px-8 py-2.5 rounded-xl text-xs font-black text-slate-950 hover:bg-white transition-all shadow-lg active:scale-95"
+              >
+                Next Module
+              </button>
+            </div>
+          </div>
+
+        </section>
+      </main>
+
+      {/* Global Reset */}
+      <div className="max-w-6xl mx-auto mt-10 flex justify-end">
+        <button 
+          onClick={() => {
+            triggerModal("Reset Environment", "Are you sure you want to clear your rhetorical lab work? This cannot be undone.");
+          }}
+          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:text-red-400 transition-colors py-2 px-4 rounded-full border border-transparent hover:border-red-400/20"
+        >
+          <RotateCcw size={14} /> Clear Lab Session
+        </button>
+      </div>
+
+      {/* Custom Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-2xl w-full shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-emerald-500"></div>
+            <button 
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors"
+            >
+              <X size={20} />
+            </button>
+            <h3 className="text-xl font-bold mb-4">{modalContent.title}</h3>
+            
+            {modalContent.isReport ? (
+              <div className="flex-1 overflow-y-auto mb-6 bg-slate-950 p-4 rounded-xl font-mono text-xs text-slate-300 whitespace-pre-wrap leading-relaxed border border-slate-800">
+                {modalContent.body}
+              </div>
+            ) : (
+              <p className="text-slate-400 text-sm leading-relaxed mb-6">{modalContent.body}</p>
+            )}
+            
+            <div className="flex justify-end gap-3 shrink-0">
+              {modalContent.title === "Reset Environment" ? (
+                <>
+                  <button 
+                    onClick={() => setShowModal(false)}
+                    className="px-6 py-2 rounded-xl text-xs font-bold text-slate-400 hover:bg-slate-800"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setChatHistory([]);
+                      setMegaPrompt({ ethos: '', logos: '', pathos: '' });
+                      setVectorInput("");
+                      setGuardrailInput("");
+                      setActiveStep(0);
+                      setShowModal(false);
+                    }}
+                    className="px-6 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-500 text-white"
+                  >
+                    Reset Everything
+                  </button>
+                </>
+              ) : modalContent.isReport ? (
+                <>
+                  <button 
+                    onClick={() => copyToClipboard(modalContent.body)}
+                    className="px-8 py-3 rounded-xl text-xs font-black bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-2 transition-all active:scale-95"
+                  >
+                    {copied ? <Check size={16} /> : <ClipboardCheck size={16} />}
+                    {copied ? "Copied!" : "Copy Report"}
+                  </button>
+                  <button 
+                    onClick={() => setShowModal(false)}
+                    className="px-8 py-3 rounded-xl text-xs font-black bg-slate-800 text-white"
+                  >
+                    Close
+                  </button>
+                </>
+              ) : (
+                <button 
+                  onClick={() => setShowModal(false)}
+                  className="px-8 py-3 rounded-xl text-xs font-black bg-blue-600 hover:bg-blue-500 text-white"
+                >
+                  Got it
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
