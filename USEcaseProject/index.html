@@ -16,8 +16,6 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .article-hidden { display: none; }
-        .article-visible { display: block; }
     </style>
 </head>
 <body class="bg-slate-950 text-white selection:bg-red-600 selection:text-white">
@@ -137,14 +135,15 @@
                 color: 'orange-600',
                 role: 'Professor of Communication Studies | CHESS',
                 content: `
-                    <p class="text-xl md:text-2xl font-light italic text-orange-700 border-l-4 border-orange-500 pl-6 my-10">"Older patterns of economic, social, political and cultural biases persist into the age of AI. Human intervention must focus on the training data and design logics."</p>
                     <div class="first-letter:text-7xl first-letter:font-bold first-letter:text-orange-600 first-letter:mr-3 first-letter:float-left">Before the popularization of ChatGPT, my research on US-China AI competition led me to deep industry takes and academic texts on the ethics of control.</div>
-                    <p>Just as racial biases were deeply entrenched in search (Algorithms of Oppression) and socioeconomic biases were rampant in social welfare programs (Automating Inequality), these inequalities continue to seep into AI today.</p>
-                    <div class="bg-slate-900 text-white p-10 rounded-sm my-12">
-                        <h4 class="text-orange-400 font-bold uppercase tracking-widest text-xs mb-4">Case Study: The DALL-E Prototype</h4>
-                        <p class="italic">For our book cover on Digital Sovereignty in the BRICS Countries, we turned to DALL-E to provide a prototype. In the end, the publisher designed the final cover based on that AI-generated draft.</p>
+                    <p>When I think about the integration of AI in education and society, I'm reminded of Safiya Noble's "Algorithms of Oppression" and Virginia Eubanks' "Automating Inequality." These scholars remind us that older patterns of economic, social, political, and cultural biases persist into the age of AI.</p>
+                    <p>In my recent work, I've applied these perspectives to analyze how national strategies in AI are not just technological races but contests over differing design logics and ethical frameworks. Human intervention, therefore, must focus on a critical examination of training data and the hidden labor that sustains these systems.</p>
+                    <div class="bg-orange-50 p-10 rounded-sm my-12 border-l-4 border-orange-600">
+                        <h4 class="text-orange-900 font-bold uppercase tracking-widest text-xs mb-4 italic">The DALL-E Case Study</h4>
+                        <p class="text-orange-800">For our book cover on Digital Sovereignty in the BRICS Countries, we turned to DALL-E to provide a prototype. While it generated a visual that captured the complexity of the subject, it served as a starting point. In the end, the publisher designed the final cover based on that AI-generated draft, but the intentionality behind the final product remained human-led.</p>
                     </div>
-                    <p>Human interventions must focus on teaching students to critically examine the training data and design logics that shape future applications.</p>
+                    <h3 class="text-2xl font-bold serif mt-8">Why It Matters</h3>
+                    <p>Teaching students to critically examine the training data and design logics that shape future applications is the most important skill we can provide. We must move beyond "how to use" and toward "why it exists this way."</p>
                 `
             },
             {
@@ -153,16 +152,23 @@
                 author: 'Tiffany Morin',
                 category: 'Creative Invention',
                 color: 'red-600',
-                role: 'English Department Faculty',
+                role: 'English Department Faculty | CHESS',
                 content: `
-                    <p class="text-xl md:text-2xl font-light italic text-red-700 border-l-4 border-red-600 pl-6 my-10">"Can generative AI successfully enhance creative invention for non-creative writers without replacing the required deep analysis?"</p>
-                    <p>I redesigned the final project in my English course, “How to Be Bad: What Makes a Good Villain in Fiction.” I introduced AI as a <strong>structured brainstorming tool</strong>.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-10">
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-lg"><h4 class="text-red-600 font-bold text-xs uppercase mb-2">Psych Depth</h4><p class="text-xs italic">"Believes they are saving the world, but methods are horrific."</p></div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-lg"><h4 class="text-red-600 font-bold text-xs uppercase mb-2">Deception</h4><p class="text-xs italic">"Unassuming appearance that blends in easily."</p></div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-lg"><h4 class="text-red-600 font-bold text-xs uppercase mb-2">Ambiguity</h4><p class="text-xs italic">"Starts as a hero but loses themselves along the way."</p></div>
+                    <p class="text-xl md:text-2xl font-light italic text-red-700 border-l-4 border-red-600 pl-6 my-10">"The fear was that AI would write the villains. The reality was that AI helped students find the spark to write them themselves."</p>
+                    <p>In my English course, “How to Be Bad: What Makes a Good Villain in Fiction,” the final project originally required a complex character analysis. I realized many students struggled with the "blank page" of creative invention before they could even get to the analytical portion.</p>
+                    <p>I redesigned the project to introduce AI as a structured brainstorming tool. Students used prompts to generate "archetype sketches"—brief, often cliché-ridden descriptions of potential villains. Their task was then to take these shells and perform the deep analysis: Why is this character's motivation flawed? What societal anxiety does this villain represent?</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
+                        <div class="p-6 bg-slate-900 text-white rounded-lg">
+                            <h4 class="text-red-400 font-bold text-xs uppercase mb-3">The AI Output</h4>
+                            <p class="text-sm font-mono italic">"A mad scientist who wants to cure death because he lost his family in a fire."</p>
+                        </div>
+                        <div class="p-6 bg-red-50 border border-red-100 rounded-lg">
+                            <h4 class="text-red-900 font-bold text-xs uppercase mb-3">The Student Work</h4>
+                            <p class="text-sm">Analyzing the 'God Complex' and the ethics of grief-driven science, building a 10-page psychological profile that moved past the cliché.</p>
+                        </div>
                     </div>
-                    <p>AI didn’t do the analytical work for them. It simply helped get them started. It supports learning instead of replacing it.</p>
+                    <h3 class="text-2xl font-bold serif mt-8">Why It Matters</h3>
+                    <p>Generative AI can successfully enhance creative invention for non-creative writers without replacing the required deep analysis. It lowers the barrier to entry while raising the ceiling for analytical depth.</p>
                 `
             },
             {
@@ -171,14 +177,17 @@
                 author: 'Damien P. Williams',
                 category: 'Philosophy & Pedagogy',
                 color: 'indigo-600',
-                role: 'Assistant Professor of Philosophy and Data Science',
+                role: 'Assistant Professor of Philosophy and Data Science | CHESS',
                 content: `
-                    <p class="text-xl md:text-2xl font-light italic text-indigo-700 border-l-4 border-indigo-500 pl-6 my-10">"How can assignment frameworks be revised to demand critical engagement rather than passive contribution to systems of power and profit?"</p>
-                    <p>In many of my courses I use a version of the "Choose Your Own Adventure" (CYOA) assignment structure. I start each semester by clearly framing GPT assignments in ways which require students to critically engage with these platforms.</p>
-                    <div class="bg-indigo-50 p-8 rounded-lg border border-indigo-100 my-10">
-                        <h4 class="font-bold text-indigo-700 uppercase tracking-widest text-xs mb-4">The Ethical Shift</h4>
-                        <p class="text-sm">Instead of generating content, I ask students to find existing outputs and correct them using peer-reviewed sources. "AI" technology is neither value neutral nor inevitable.</p>
+                    <p>In many of my courses, I use a version of the "Choose Your Own Adventure" (CYOA) assignment structure. I start each semester by clearly framing GPT assignments in ways which require students to critically engage with these platforms as socio-technical systems.</p>
+                    <p>Students can choose to use AI for specific tasks, but each choice comes with a "cost" of reflection. If they use it to summarize a text, they must then provide a rigorous "fact-check" document against the original source, documenting every hallucination or omitted nuance.</p>
+                    <div class="bg-indigo-50 p-10 rounded-lg border border-indigo-100 my-10">
+                        <h4 class="font-bold text-indigo-700 uppercase tracking-widest text-xs mb-4">The Ethical Pivot</h4>
+                        <p class="mb-4">"AI" technology is neither value-neutral nor inevitable. By forcing students to document the labor and energy costs of their prompts, we transform the tool from a 'magic box' into a physical, environmental, and ethical reality.</p>
                     </div>
+                    <p>How can assignment frameworks be revised to demand critical engagement rather than passive contribution to systems of power and profit? This is the central question of my pedagogy.</p>
+                    <h3 class="text-2xl font-bold serif mt-8">Why It Matters</h3>
+                    <p>We are teaching students to be citizens of a world shaped by these tools. Critical engagement ensures they are not just users of the technology, but critics of the structures that built it.</p>
                 `
             },
             {
@@ -190,12 +199,14 @@
                 color: 'emerald-600',
                 role: 'WRDS Department | CHESS',
                 content: `
-                    <p class="text-xl md:text-2xl font-light italic text-emerald-700 border-l-4 border-emerald-500 pl-6 my-10">"Successful collaboration with AI requires embracing iteration and failure, much like mastering a complex video game."</p>
-                    <p>In First-Year Writing, students design an "AI Writing Team" with distinct personae: Kriss Crumbs the Adventurer and Willow the Wordsmith. The last and most crucial step is for students to evaluate this feedback and incorporate it into their writing process.</p>
+                    <p>Think about the first time you played Super Mario Bros. You didn't beat the game on the first try. You ran into a Goomba, fell into a pit, and missed the jump to the flagpole. But you learned. You iterated. You tried again.</p>
+                    <p>In First-Year Writing, I teach AI through this lens of "Play and Iteration." Students design an "AI Writing Team" with distinct personae. One persona, <strong>Kriss Crumbs</strong>, is an adventurer—prone to wild, creative leaps but often getting lost. Another, <strong>Willow the Wordsmith</strong>, is a meticulous editor—precise but often dry.</p>
                     <div class="py-10 text-center border-y border-slate-100 my-12">
-                        <h2 class="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter uppercase italic">"Failing is part of the game."</h2>
+                        <h2 class="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter uppercase italic">"The prompt is the first jump."</h2>
                     </div>
-                    <p>Next time you load up your favorite AI platform, remember that failure is a powerful teacher. Success is just one more castle away.</p>
+                    <p>The students prompt these personae to get feedback on their drafts. The most crucial step is the evaluation: What did Willow get wrong? Why did Kriss's suggestion fail to meet the assignment's goal? Successful collaboration with AI requires embracing iteration and failure, much like mastering a complex video game.</p>
+                    <h3 class="text-2xl font-bold serif mt-8">Why It Matters</h3>
+                    <p>When we treat AI as a game to be learned through failure, we remove the "perfection anxiety" that often leads to plagiarism. We refocus the student's energy on the process of refinement.</p>
                 `
             },
             {
@@ -204,11 +215,14 @@
                 author: 'Justin Grandinetti',
                 category: 'Critical Thinking',
                 color: 'slate-900',
-                role: 'Associate Professor',
+                role: 'Associate Professor | CHESS',
                 content: `
+                    <p>There is a persistent fear that using AI is "outsourcing thought." I argue the opposite: by using generative AI to produce an initial draft, we are automating routine labor so that we can focus on higher-level cognition.</p>
+                    <p>Think of it like a calculator for prose. A mathematician doesn't lose their understanding of calculus because they use a calculator for long division. Similarly, a writer doesn't lose their voice because they used an LLM to generate a rough outline or a list of transitional phrases.</p>
                     <p class="text-xl md:text-2xl font-light italic text-slate-600 border-l-4 border-slate-900 pl-6 my-10">"In this model, what gets outsourced is some labor, not thought. The student remains the editor, the evaluator, and the final decision-maker."</p>
-                    <p>By using generative AI to produce an initial draft, we are not relinquishing intellectual work. It is instead automation of routine so that we can focus on refining and ensuring the material aligns with our intent.</p>
-                    <p>As proof of concept, this very editorial was co-written with generative AI. I provided the structure; the AI assisted in shaping the prose. We preserve cognition, not lose it.</p>
+                    <p>As proof of concept, this very editorial was co-written with generative AI. I provided the structure and the core philosophical claims; the AI assisted in shaping the initial prose. The final version you are reading, however, underwent three rounds of my own human editing.</p>
+                    <h3 class="text-2xl font-bold serif mt-8">Why It Matters</h3>
+                    <p>Efficiency in the "small stuff" allows for more time spent on "big ideas." This is how we remain relevant in a world of high-speed content generation.</p>
                 `
             },
             {
@@ -217,13 +231,17 @@
                 author: 'Jessi Morton',
                 category: 'Efficiency & Ethics',
                 color: 'violet-600',
-                role: 'Instructional Professional',
+                role: 'Instructional Professional | CHESS',
                 content: `
-                    <p class="text-xl md:text-2xl font-light italic text-violet-700 border-l-4 border-violet-500 pl-6 my-10">"This is the story of how I befriended our robot overlords."</p>
-                    <p>I have come to consider these tools as colleagues, perhaps even comrades. Establishing my own goals for the assignment before asking ChatGPT for a grading scale helped to avoid some of ChatGPT’s more frustrating tendencies.</p>
-                    <div class="bg-violet-900 text-white p-8 rounded-xl my-10">
-                        <p class="text-lg font-light leading-relaxed italic mb-4">“You're very welcome! 😊 I'm glad I could help... Your students are lucky to have such a clear and reflective learning experience! 🚀🎨🎤📱”</p>
+                    <p>I have come to consider these tools as colleagues, perhaps even comrades. In my administrative and instructional support work, I often find myself with "blank page syndrome" for things like grading rubrics or lesson plan structures.</p>
+                    <p>Instead of viewing ChatGPT as a threat, I treated it as a junior assistant. I established my own goals for a specific assignment first, then I asked the "robot" for a grading scale. When it returned something too rigid, I spoke to it: "That's a bit too formal, can we make this more supportive for first-year students?"</p>
+                    <div class="bg-violet-900 text-white p-10 rounded-xl my-10 shadow-2xl">
+                        <p class="text-xs uppercase tracking-[0.3em] font-bold text-violet-300 mb-4">Conversation Snippet</p>
+                        <p class="text-lg font-light leading-relaxed italic mb-4">“You're very welcome! 😊 I'm glad I could help you structure that rubric. Your students are lucky to have such a clear and reflective learning experience! 🚀🎨🎤📱”</p>
                     </div>
+                    <p>Establishing this "kinship" or "co-worker" relationship helped me avoid the frustration of bad outputs. I stopped expecting magic and started expecting collaboration.</p>
+                    <h3 class="text-2xl font-bold serif mt-8">Why It Matters</h3>
+                    <p>Demystifying the "robot" into a "co-worker" makes the technology approachable and manageable. It places the human firmly in the managerial role.</p>
                 `
             },
             {
@@ -232,10 +250,17 @@
                 author: 'Tiffany Gallicano',
                 category: 'Engagement & Ethics',
                 color: 'rose-600',
-                role: 'Professor',
+                role: 'Professor | CHESS',
                 content: `
-                    <p class="text-xl md:text-2xl font-light italic text-rose-700 border-l-4 border-rose-500 pl-6 my-10">"I asked ChatGPT to create online dating ads to help students find which of four workplace cultures matched their personality best."</p>
-                    <p>I wanted to engage my students in an area of the assigned reading. When I presented the content, I disclosed my use of AI and played up the matchmaking angle. AI use should be disclosed, and I like to model how AI can be used responsibly.</p>
+                    <p>Workplace culture can be a dry topic for students. To bring it to life, I asked ChatGPT to create online dating ads to help students find which of four workplace cultures—Hierarchy, Market, Clan, or Adhocracy—matched their personality best.</p>
+                    <p>The AI generated bios for each culture: "Clan" was a bio about wanting a family-oriented partner who values long-term commitment and shared meals. "Market" was a high-energy bio focused on goals, achievement, and winning together.</p>
+                    <div class="bg-rose-50 border border-rose-100 p-8 rounded-lg my-10">
+                        <p class="text-sm font-bold uppercase tracking-widest text-rose-600 mb-2">The Matchmaker Effect</p>
+                        <p>By framing the search for a job as a "dating" exercise, engagement skyrocketed. Students weren't just reading a textbook; they were looking for their professional soulmate.</p>
+                    </div>
+                    <p>Crucially, I disclosed the use of AI immediately. I played up the matchmaking angle to show them how AI can be a tool for creative metaphor. AI use should always be disclosed, and I like to model how AI can be used responsibly and transparently.</p>
+                    <h3 class="text-2xl font-bold serif mt-8">Why It Matters</h3>
+                    <p>Transparency is the foundation of AI ethics. When we model creative, disclosed use, we teach students that AI is a supplement to their ingenuity, not a secret replacement for it.</p>
                 `
             },
             {
@@ -244,10 +269,14 @@
                 author: 'Cat Mahaffey',
                 category: 'Equity & Pedagogy',
                 color: 'teal-600',
-                role: 'Writing, Rhetoric & Digital Studies',
+                role: 'Writing, Rhetoric & Digital Studies | CHESS',
                 content: `
-                    <p class="text-xl md:text-2xl font-light italic text-teal-700 border-l-4 border-teal-500 pl-6 my-10">"Assuring students that AI is an ethical accessibility tool—liberating them to participate in discourse that was previously gated by arbitrary conformity."</p>
-                    <p>Copilot could not design the course without me, the human in the loop. The idea that AI can liberate students who struggle with 'tact' or standard academic phrasing gives me joy.</p>
+                    <p>Copilot could not design the course without me, the human in the loop. However, Copilot *could* help me translate my complex pedagogical goals into language that was more accessible to my students.</p>
+                    <p>Beyond my own use, I've seen how AI acts as a liberating accessibility tool. For students who struggle with "tact," "professional tone," or standard academic phrasing due to neurodiversity or language barriers, AI provides a bridge. It allows them to participate in discourse that was previously gated by arbitrary conformity to specific linguistic styles.</p>
+                    <p class="text-xl md:text-2xl font-light italic text-teal-700 border-l-4 border-teal-500 pl-6 my-10">"AI is an ethical accessibility tool—liberating students to participate in discourse that was previously gated by arbitrary conformity."</p>
+                    <p>When a student uses AI to help "soften" an email to a professor or "structure" a chaotic list of ideas into a coherent paragraph, they aren't cheating—they are using a tool to overcome a specific hurdle to communication.</p>
+                    <h3 class="text-2xl font-bold serif mt-8">Why It Matters</h3>
+                    <p>Inclusivity in the classroom means recognizing that 'standard' communication isn't easy for everyone. AI can be the "ramp" that allows more students to enter the building of academic conversation.</p>
                 `
             },
             {
@@ -257,14 +286,17 @@
                 author: 'Ashli Stokes',
                 category: 'Data Ethics',
                 color: 'amber-600',
-                role: 'WRDS and Communication Studies',
+                role: 'Director of the Center for the Study of the New South | CHESS',
                 content: `
-                    <p class="text-xl md:text-2xl font-light italic text-amber-700 border-l-4 border-amber-500 pl-6 my-10">"I quickly realized in a panic that I had just shared my research with an LLM that could 'memorize,' copy verbatim, and generally steal my ideas."</p>
+                    <p>I was working late, trying to prep a quiz for my forthcoming book. I thought, "I'll just let ChatGPT help." I happily uploaded <strong>AN ENTIRE CHAPTER</strong> of my unpublished research into the text field to generate questions.</p>
+                    <p>Five minutes later, the realization hit me like a physical blow: What did I just do? I had shared my original, proprietary research with an LLM that could "memorize," copy verbatim, and generally steal my ideas to train itself or answer someone else's prompt.</p>
                     <div class="bg-amber-50 border-2 border-amber-200 p-10 rounded-sm my-12 relative overflow-hidden">
-                        <h4 class="text-amber-800 font-bold uppercase tracking-widest text-xs mb-6 relative z-10 uppercase">The "Rookie Mistake"</h4>
-                        <p class="text-lg leading-relaxed relative z-10">I happily uploaded <strong>AN ENTIRE CHAPTER</strong> of my forthcoming book into the text field to create a quiz. Even worse, the realization hit me: I had no idea how AI stored data or how it uses it.</p>
+                        <h4 class="text-amber-800 font-bold uppercase tracking-widest text-xs mb-6 relative z-10">The Privacy Paradox</h4>
+                        <p class="text-lg leading-relaxed relative z-10">We tell students not to share personal info, but as faculty, we often forget that our intellectual property is our "personal info." I had no idea how the data was stored or if it could be deleted.</p>
                     </div>
-                    <p>Within and beyond UNC Charlotte, it is imperative that we develop the ability to understand, apply, and assess AI operations. Critical AI literacy—functional, rhetorical, and ethical—is no longer optional for faculty.</p>
+                    <p>This "rookie mistake" led me to a deeper mission: Critical AI Literacy. Within and beyond UNC Charlotte, it is imperative that we develop the ability to understand, apply, and assess AI operations. This literacy—functional, rhetorical, and ethical—is no longer optional for faculty.</p>
+                    <h3 class="text-2xl font-bold serif mt-8">Why It Matters</h3>
+                    <p>If the experts don't understand the privacy and IP implications of these tools, we cannot expect our students to. We must lead by becoming literate ourselves.</p>
                 `
             }
         ];
@@ -277,12 +309,14 @@
             window.addEventListener('scroll', () => {
                 const total = document.documentElement.scrollHeight - window.innerHeight;
                 const progress = (window.scrollY / total) * 100;
-                document.getElementById('scroll-indicator').style.width = progress + '%';
+                const indicator = document.getElementById('scroll-indicator');
+                if (indicator) indicator.style.width = progress + '%';
             });
         }
 
         function renderTOC() {
             const grid = document.getElementById('toc-grid');
+            grid.innerHTML = '';
             document.getElementById('entry-count').innerText = `${stories.length} ENTRIES`;
             
             stories.forEach((s, i) => {
@@ -290,7 +324,7 @@
                 btn.className = 'group flex gap-6 text-left items-start fade-in';
                 btn.onclick = () => showPage(s.id);
                 btn.innerHTML = `
-                    <span class="text-xl font-mono font-bold text-${s.color}">0${i + 1}</span>
+                    <span class="text-xl font-mono font-bold text-indigo-400">0${i + 1}</span>
                     <div class="space-y-2">
                         <h3 class="text-2xl md:text-3xl serif font-bold group-hover:text-red-500 transition-colors leading-tight">${s.title}</h3>
                         <div class="flex items-center gap-3">
@@ -306,6 +340,7 @@
 
         function renderMenu() {
             const menu = document.getElementById('menu-items');
+            menu.innerHTML = '';
             stories.forEach((s, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'group block text-left';
@@ -345,8 +380,10 @@
             const story = stories.find(s => s.id === id);
             const idx = stories.findIndex(s => s.id === id);
             
-            document.getElementById('art-category').innerText = story.category;
-            document.getElementById('art-category').className = `font-bold uppercase tracking-widest text-sm mb-4 text-${story.color}`;
+            const catElem = document.getElementById('art-category');
+            catElem.innerText = story.category;
+            catElem.className = `font-bold uppercase tracking-widest text-sm mb-4 text-red-600`;
+            
             document.getElementById('art-title').innerText = story.title;
             document.getElementById('art-subtitle').innerText = story.subtitle || '';
             document.getElementById('art-author').innerText = story.author;
@@ -354,17 +391,20 @@
             document.getElementById('art-content').innerHTML = story.content;
             
             const nextStory = stories[idx + 1];
+            const nextBtn = document.getElementById('next-btn');
+            const issueEnd = document.getElementById('issue-end');
+            
             if (nextStory) {
-                document.getElementById('next-btn').classList.remove('hidden');
-                document.getElementById('issue-end').classList.add('hidden');
+                nextBtn.classList.remove('hidden');
+                issueEnd.classList.add('hidden');
                 document.getElementById('next-title').innerText = nextStory.title;
-                document.getElementById('next-btn').onclick = () => showPage(nextStory.id);
+                nextBtn.onclick = () => showPage(nextStory.id);
             } else {
-                document.getElementById('next-btn').classList.add('hidden');
-                document.getElementById('issue-end').classList.remove('hidden');
+                nextBtn.classList.add('hidden');
+                issueEnd.classList.remove('hidden');
             }
 
-            document.getElementById('scroll-indicator').className = `h-full scroll-progress w-0 bg-${story.color}`;
+            document.getElementById('scroll-indicator').style.width = '0%';
         }
 
         function toggleMenu() {
