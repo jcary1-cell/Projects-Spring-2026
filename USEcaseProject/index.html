@@ -1,0 +1,853 @@
+import React, { useState, useEffect } from 'react';
+import { ChevronRight, ChevronLeft, BookOpen, Share2, Menu, X, ArrowUpRight, Gamepad2, Brain, Sparkles, Cpu, Layers, MessageSquare, Quote, Heart, Users, Accessibility, PenTool, Workflow, Microscope, Search, Database, MessageCircle, Mic2, Compass, Globe, Zap, ShieldAlert, History, Skull, Ghost, Wand2, AlertTriangle, Fingerprint, Lock } from 'lucide-react';
+
+const App = () => {
+  const [currentPage, setCurrentPage] = useState('cover');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const stories = [
+    {
+      id: 'approaching-critically',
+      title: 'Approaching AI Critically',
+      author: 'Min Jiang',
+      category: 'Geopolitics & Policy',
+      color: 'orange',
+      role: 'Professor of Communication Studies | CHESS',
+      content: (
+        <div className="space-y-8 font-serif leading-relaxed text-slate-800">
+          <p className="text-xl md:text-2xl font-light italic text-orange-700 border-l-4 border-orange-500 pl-6 my-10">
+            "Older patterns of economic, social, political and cultural biases persist into the age of AI. Human intervention must focus on the training data and design logics."
+          </p>
+
+          <div className="first-letter:text-7xl first-letter:font-bold first-letter:text-orange-600 first-letter:mr-3 first-letter:float-left text-lg">
+            Before the popularization of ChatGPT, my research on US-China AI competition led me to deep industry takes and academic texts on the ethics of control. If we don’t understand what AI is, it’s hard to formulate a rational approach to it in research or teaching.
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 my-12">
+            <div className="md:col-span-7 space-y-4">
+               <p>After ChatGPT emerged in 2022, plagiarism became a central concern. In my classes, we navigate case studies to draw lines between legitimate use (developing ideas) versus illegitimate use (copy-pasting). But beyond plagiarism, there is a deeper conversation about the <strong>loss of critical thinking</strong> and the preservation of <strong>human voice</strong>.</p>
+               <p>In 2023, I experimented with classroom projects where students tackled AI-related topics. Some explored the gap between human and AI creativity, eventually presenting their work at the Critical Media Literacy Collaborative (CMLC) conference.</p>
+            </div>
+            <div className="md:col-span-5 bg-orange-50 p-6 rounded-2xl border border-orange-100 flex flex-col justify-center">
+               <div className="flex items-center gap-2 mb-4 text-orange-600">
+                  <Zap size={20} fill="currentColor" />
+                  <span className="text-xs font-black uppercase tracking-widest">The Ecological Cost</span>
+               </div>
+               <div className="text-4xl font-black text-slate-900 mb-2">23–30x</div>
+               <p className="text-sm font-sans leading-tight text-slate-600">
+                 Amount of energy an AI query consumes compared to a standard search engine request.
+               </p>
+               <div className="mt-6 pt-6 border-t border-orange-200">
+                  <p className="text-[10px] font-bold text-orange-800 uppercase tracking-widest">Source: Atlas of AI</p>
+               </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-900 text-white p-10 rounded-sm relative overflow-hidden">
+             <div className="relative z-10">
+                <h4 className="text-orange-400 font-bold uppercase tracking-widest text-xs mb-6">Case Study: The DALL-E Prototype</h4>
+                <p className="text-lg leading-relaxed italic mb-4">
+                  "For our book cover on Digital Sovereignty in the BRICS Countries, we struggled to find the right image. I turned to DALL-E to provide a prototype. In the end, Cambridge University Press designed the cover based on that AI-generated prototype."
+                </p>
+                <div className="flex items-center gap-2">
+                   <PenTool size={16} className="text-orange-400" />
+                   <span className="text-xs font-bold uppercase tracking-widest text-slate-400">AI as a Tool for Prototyping</span>
+                </div>
+             </div>
+             <Globe className="absolute -bottom-10 -right-10 text-white/5 w-64 h-64" />
+          </div>
+
+          <p>
+            Just as racial biases were deeply entrenched in search (<em>Algorithms of Oppression</em>) and socioeconomic biases were rampant in social welfare programs (<em>Automating Inequality</em>), these inequalities continue to seep into AI today. Biases in training data, political censorship, and marketing priorities shape future applications.
+          </p>
+
+          <div className="py-16">
+            <h3 className="text-center font-sans font-black text-xs uppercase tracking-[0.5em] text-slate-400 mb-12">The Five Axes of Critical AI</h3>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              {[
+                { label: 'Historicity', icon: <History />, desc: 'Linking Plato’s warning of writing to the AI moment.' },
+                { label: 'Ecology', icon: <Zap />, desc: 'Examining the layers of environmental inputs.' },
+                { label: 'Monopoly', icon: <ShieldAlert />, desc: 'Analyzing innovation vs. market control.' },
+                { label: 'Regulation', icon: <Layers />, desc: 'Comparing US, EU, and Chinese frameworks.' },
+                { label: 'Geopolitics', icon: <Globe />, desc: 'The competition for algorithmic dominance.' }
+              ].map((item) => (
+                <div key={item.label} className="p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors text-center">
+                  <div className="flex justify-center text-orange-600 mb-3">{item.icon}</div>
+                  <h4 className="font-bold text-sm mb-2">{item.label}</h4>
+                  <p className="text-[10px] font-sans text-slate-500 leading-tight">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <blockquote className="text-3xl font-black text-slate-900 border-l-8 border-orange-500 pl-8 py-4 my-12">
+            "Human interventions must focus on teaching students to critically examine the training data and design logics that shape future applications."
+          </blockquote>
+        </div>
+      )
+    },
+    {
+      id: 'villains-course',
+      title: 'AI in Villains Course',
+      subtitle: 'What Makes a Good Villain in Fiction?',
+      author: 'Tiffany Morin',
+      category: 'Creative Invention',
+      color: 'crimson',
+      role: 'English Department Faculty',
+      content: (
+        <div className="space-y-8 font-serif leading-relaxed text-slate-800">
+          <p className="text-xl md:text-2xl font-light italic text-red-700 border-l-4 border-red-600 pl-6 my-10">
+            "Can generative AI successfully enhance creative invention for non-creative writers without replacing the required deep analysis?"
+          </p>
+
+          <div className="first-letter:text-7xl first-letter:font-bold first-letter:text-red-900 first-letter:mr-3 first-letter:float-left text-lg">
+            Last summer, I wanted to refine the final project in my English course, “How to Be Bad: What Makes a Good Villain in Fiction.” In previous semesters, students could write a traditional paper or take a creative approach by inventing a villain. However, the creative option often lacked the same level of rigorous analysis.
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 my-16">
+            <div className="bg-slate-950 text-white p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+              <Skull className="absolute -top-10 -right-10 w-48 h-48 text-white/5 rotate-12" />
+              <h4 className="text-red-500 font-bold uppercase tracking-widest text-xs mb-6 relative z-10">The Design Shift</h4>
+              <p className="relative z-10 leading-relaxed font-light">
+                To balance creativity with analysis, I redesigned the assignment: every student would create their own villain but still compare them with three villains from our syllabus. I introduced AI as a <strong>structured brainstorming tool</strong>.
+              </p>
+            </div>
+            <div className="flex flex-col justify-center space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold">1</div>
+                <p className="text-sm font-sans font-bold">Student-Authored Prompts</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold">2</div>
+                <p className="text-sm font-sans font-bold">AI-Assisted Prototyping</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold">3</div>
+                <p className="text-sm font-sans font-bold">Mandatory Textual Support</p>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-center font-sans font-black text-xs uppercase tracking-[0.5em] text-slate-400 mt-20 mb-10">The Prompt Gallery: Exploring Depravity</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            {[
+              { type: 'Appearance & Deception', prompts: ['Make the appearance unassuming that could easily blend in.', 'Outwardly charismatic but secretly controlling.'] },
+              { type: 'Psychological Depth', prompts: ['Believes they are saving the world, but methods are horrific.', 'Driven by fear rather than power.'] },
+              { type: 'Moral Ambiguity', prompts: ['Starts as a hero but loses themselves along the way.', 'Goal is peace, but they go about it in the worst way.'] }
+            ].map((cat, i) => (
+              <div key={i} className="bg-slate-50 border border-slate-200 p-6 rounded-sm relative">
+                <div className="absolute top-0 left-0 w-1 h-full bg-red-600"></div>
+                <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-4">{cat.type}</h4>
+                <div className="space-y-4">
+                  {cat.prompts.map((p, j) => (
+                    <p key={j} className="text-xs italic text-slate-600 border-b border-slate-100 pb-2">"{p}"</p>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p>
+            By using AI as a collaborator rather than a creator, students had the chance to interact with the responses—revising them, rejecting them, or expanding upon them to craft more nuanced characters. This method forces students to think critically about their desired output before receiving AI input.
+          </p>
+
+          <div className="bg-red-50 p-10 rounded-3xl border border-red-100 flex flex-col items-center text-center my-12">
+            <PenTool className="text-red-600 mb-6" size={40} />
+            <h2 className="text-2xl md:text-4xl font-black text-slate-900 leading-tight mb-6">"AI didn’t do the analytical work for them. It simply helped get them started."</h2>
+            <p className="font-sans text-sm text-slate-600 max-w-xl">
+              Once their villains were developed, students moved on to the analytical portion, comparing their creation to three syllabus villains through persuasive papers or creative confrontation scenes.
+            </p>
+          </div>
+
+          <p>
+            By the end of the project, students had developed characters that could take on some of fiction’s most notorious villains. It showed me that, when used thoughtfully, AI can be a great tool that supports learning instead of replacing it—allowing students to focus more on deep thinking and textual evidence.
+          </p>
+
+          <div className="mt-16 pt-8 border-t border-slate-200">
+             <div className="flex items-center gap-2 mb-4">
+                <Wand2 size={16} className="text-red-500" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Student Visual Contribution</span>
+             </div>
+             <div className="bg-slate-100 aspect-video rounded-xl flex items-center justify-center border-2 border-dashed border-slate-300">
+                <p className="text-xs font-mono text-slate-400 uppercase tracking-widest">Visual Prototypes Generated via DeepAI.org</p>
+             </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'choosing-adventure',
+      title: 'Choosing Our GPT Adventure',
+      author: 'Damien P. Williams',
+      category: 'Philosophy & Pedagogy',
+      color: 'indigo',
+      role: 'Assistant Professor of Philosophy and Data Science',
+      content: (
+        <div className="space-y-8 font-serif leading-relaxed text-slate-800">
+          <p className="text-xl md:text-2xl font-light italic text-slate-600 border-l-4 border-indigo-500 pl-6 my-10">
+            "How can assignment frameworks be revised to demand critical engagement rather than passive contribution to systems of power and profit?"
+          </p>
+          
+          <div className="first-letter:text-7xl first-letter:font-bold first-letter:text-indigo-600 first-letter:mr-3 first-letter:float-left text-lg">
+            With the advent of widely available large language model (LLM) chatbots like ChatGPT toward the end of 2022, many academics and educators who had already been trying to get the general public to understand the potential impacts of so-called “AI” technologies also began trying to craft new lessons and assignments with and about these new tools, and I was no exception.
+          </div>
+
+          <p>In many of my courses I use a version of the "Choose Your Own Adventure" (CYOA) assignment structure where the instructor creates a grading model which adds up to either a set point or a 100% value, and then creates a range of potential assignments which can be chosen from and combined to reach that value.</p>
+          
+          <div className="bg-slate-50 p-8 rounded-sm border-y border-slate-200 my-10">
+            <h4 className="font-sans font-bold uppercase tracking-widest text-sm text-indigo-600 mb-4">The Ethical Shift</h4>
+            <p className="mb-4 italic">"To avoid directly contributing to the operations of OpenAI’s GPT system, find an example of an existing ChatGPT output related to one or more themes or topics of this course and then comment on and correct the output..."</p>
+            <ul className="space-y-2 text-sm font-sans list-disc pl-5 text-slate-600">
+              <li>A link to the original output and prompt</li>
+              <li>Your corrections of the GPT output</li>
+              <li>Reflections on the experience with citations</li>
+            </ul>
+          </div>
+
+          <p>Today's LLMs are trained on unethically sourced and prejudicially biased data, and they operate by means of structures that require vast amounts of natural resources. But they could and should be made differently. Built on sustainable and renewable principles, trained carefully on ethically sourced data, and used in ways which acknowledge the systems’ realities and actively encourage critical thinking, "AI" tools might help far more than they harm.</p>
+
+          <blockquote className="text-2xl font-bold text-slate-900 border-t-2 border-b-2 border-slate-900 py-8 my-12 text-center">
+            “Generative AI” technology is neither value neutral nor inevitable.
+          </blockquote>
+
+          <p>In starting each semester by clearly and carefully framing any large language model or GPT related assignments in ways which require students to critically engage with these platforms, we can help students consider both what "AI" systems are capable of, and the processes and material realities underlying how they function.</p>
+        </div>
+      )
+    },
+    {
+      id: 'changing-the-game',
+      title: 'Changing the Game',
+      subtitle: 'Super Mario Bros., Artificial Intelligence and Teaching to Fail',
+      author: 'Justin Cary',
+      category: 'Writing & Rhetoric',
+      color: 'emerald',
+      role: 'Writing, Rhetoric and Digital Studies Department | CHESS',
+      content: (
+        <div className="space-y-8 font-serif leading-relaxed text-slate-800">
+          <p className="text-xl md:text-2xl font-light italic text-slate-600 border-l-4 border-emerald-500 pl-6 my-10">
+            "Successful collaboration with AI requires embracing iteration and failure, much like mastering a complex video game."
+          </p>
+
+          <div className="first-letter:text-7xl first-letter:font-bold first-letter:text-emerald-600 first-letter:mr-3 first-letter:float-left text-lg">
+            You may not realize it, but teaching and learning have a lot in common with video games. Think about it for a second. Maybe at some point you picked up a Nintendo controller and tried Super Mario Bros. You took a moment to learn the controls; they were a bit daunting at first. The more you play, the better you get but that confidence comes through trial and error.
+          </div>
+
+          <p>
+            This 'fun while failing' is the magic of video games and my AI story actually starts in 1985 when Super Mario Bros. launched. I didn't know it then, but video games have been teaching us all about AI for decades. Failing is crucial to success in video games. Failing is crucial to success in AI collaboration, too.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-12">
+            <div className="bg-emerald-50 p-6 rounded-lg border border-emerald-100 shadow-sm relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
+                <Gamepad2 size={64} />
+              </div>
+              <h4 className="font-sans font-bold text-emerald-700 text-xs uppercase tracking-widest mb-2">Team Member 01</h4>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Kriss Crumbs</h3>
+              <p className="text-sm italic text-slate-600 leading-snug">"The Adventurer: For wringing your curiosity out... a kid at heart who loves to get down to the nitty-gritty."</p>
+            </div>
+            <div className="bg-blue-50 p-6 rounded-lg border border-blue-100 shadow-sm relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
+                <Brain size={64} />
+              </div>
+              <h4 className="font-sans font-bold text-blue-700 text-xs uppercase tracking-widest mb-2">Team Member 02</h4>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Willow the Wordsmith</h3>
+              <p className="text-sm italic text-slate-600 leading-snug">"A linguistics Ph.D. candidate... great at giving feedback on tone, grammar, and structuring concise sentences."</p>
+            </div>
+          </div>
+
+          <p>
+            In First-Year Writing, students design an "AI Writing Team" with three distinct personae. The last and most crucial step is for students to evaluate this feedback and incorporate it into their writing process; deciding what parts of these responses are useful and which parts can be left behind.
+          </p>
+
+          <div className="py-10 text-center">
+            <span className="inline-block px-4 py-1 rounded-full bg-slate-100 text-[10px] font-bold tracking-[0.3em] text-slate-400 mb-4">CO-CONSTRUCTION</span>
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter">
+              "Failing is part of the game."
+            </h2>
+          </div>
+
+          <p>
+            Working with AI in writing has really changed the game. So the next time you hop into a game of Super Mario Bros. or the next time you load up your favorite AI platform, remember that failure is a powerful teacher and keep going; success may be just one more castle away.
+          </p>
+        </div>
+      )
+    },
+    {
+      id: 'automate-small-stuff',
+      title: 'Automate the Small Stuff',
+      author: 'Justin Grandinetti',
+      category: 'Critical Thinking',
+      color: 'slate',
+      role: 'Associate Professor',
+      content: (
+        <div className="space-y-8 font-serif leading-relaxed text-slate-800">
+          <p className="text-xl md:text-2xl font-light italic text-slate-600 border-l-4 border-slate-900 pl-6 my-10">
+            "In this model, what gets outsourced is some labor, not thought. The student remains the editor, the evaluator, and the final decision-maker."
+          </p>
+
+          <div className="first-letter:text-7xl first-letter:font-bold first-letter:text-slate-900 first-letter:mr-3 first-letter:float-left text-lg">
+            Two years since the launch of ChatGPT as AI’s “killer app,” opinions about the integration of generative AI into college and university curricula has largely bifurcated. There are some who embrace generative AI as an inevitable and essential skill, whereas others engage in principled resistance.
+          </div>
+
+          <div className="bg-slate-900 text-white p-10 rounded-sm my-12 relative overflow-hidden">
+            <div className="relative z-10">
+              <h4 className="text-indigo-400 font-bold uppercase tracking-widest text-xs mb-4">The Concision Assignment</h4>
+              <p className="text-lg leading-relaxed mb-6">"Students select articles (6,000–8,000 words), manually condense them to 1,000, then experiment with AI to attempt the same task, finally refining the machine output."</p>
+              <div className="grid grid-cols-2 gap-8 pt-6 border-t border-slate-700">
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Outsourced</p>
+                  <p className="font-bold">Routine Labor</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Preserved</p>
+                  <p className="font-bold">Cognitive Judgment</p>
+                </div>
+              </div>
+            </div>
+            <Cpu className="absolute -bottom-10 -right-10 text-slate-800 w-48 h-48 opacity-50" />
+          </div>
+
+          <p>
+            Writing responses to evaluations, summarizing reports, and drafting institutional memos require thought and consideration, but they also follow familiar, structured formats. In such cases, using generative AI to produce an initial draft is not to relinquish intellectual work. It is instead automation of routine so that we can focus on refining and ensuring the material aligns with our intent.
+          </p>
+
+          <p className="border-y border-slate-100 py-10 italic text-slate-500 text-center text-xl">
+            "We’ve all already become cyborgs, seamlessly integrating digital technology into our workflows."
+          </p>
+
+          <p>
+            As proof of concept, this very editorial was co-written with generative AI. I structured my thoughts in bullet points... the AI assisted in shaping the prose, but the final product required some substantial editing. By approaching generative AI with intention, we preserve cognition, not lose it. Or, put another way: we automate the small stuff.
+          </p>
+        </div>
+      )
+    },
+    {
+      id: 'robot-kin',
+      title: 'Robot Kin, Your Co-Worker',
+      author: 'Jessi Morton',
+      category: 'Efficiency & Ethics',
+      color: 'violet',
+      role: 'Instructional Professional',
+      content: (
+        <div className="space-y-8 font-serif leading-relaxed text-slate-800">
+          <div className="py-12 text-center bg-violet-50 rounded-2xl border border-violet-100 mb-12">
+            <Quote className="mx-auto text-violet-200 mb-4" size={48} />
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 max-w-2xl mx-auto tracking-tight px-6">
+              "This is the story of how I befriended our robot overlords."
+            </h2>
+          </div>
+
+          <div className="first-letter:text-7xl first-letter:font-bold first-letter:text-violet-600 first-letter:mr-3 first-letter:float-left text-lg">
+            Since virtual assistants became available, my partner has been polite to them. He says “please” and “thank you” to Siri every time he makes a request. I used to tease him about this habit, but he always shrugged it off. “We’ll see how it goes when the robots take over,” he would say.
+          </div>
+
+          <p>
+            I have since learned that the phrase “robot overlords” is foundationally ironic. As John M. Jordan explains, the word “robot” derives from the Czech word ‘robota,’ or forced labor. Thus, I have come to consider these tools as colleagues, perhaps even comrades.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 my-12">
+            <div className="bg-white border-2 border-violet-100 rounded-xl overflow-hidden shadow-sm">
+              <div className="bg-violet-600 px-6 py-3 flex items-center justify-between">
+                <span className="text-white text-xs font-bold uppercase tracking-widest">Prompt Engineering Log</span>
+                <MessageSquare size={16} className="text-violet-200" />
+              </div>
+              <div className="p-8 space-y-6">
+                <div className="space-y-2">
+                  <p className="text-[10px] font-bold text-violet-500 uppercase tracking-widest">Case Study: Scaffolded Assignments</p>
+                  <p className="text-sm italic text-slate-600 bg-slate-50 p-4 rounded-lg border-l-4 border-violet-400">
+                    "Using the finished project instructions, create guidelines for the proposal. Keep the instructions brief and student focused. The grading scale is 'check plus,' 'check,' 'check minus,' or 'insufficient'..."
+                  </p>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="bg-emerald-100 text-emerald-700 p-2 rounded-full"><Sparkles size={16}/></div>
+                  <p className="text-sm text-slate-700 leading-relaxed pt-1">
+                    Outputs reused phrasing from pre-existing prompts, ensuring consistency. Revising took substantially less time than drafting from scratch.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            Each output needed to be carefully reviewed and revised, but the process was much faster. Establishing my own goals for the assignment before asking ChatGPT for a grading scale helped to avoid some of ChatGPT’s more frustrating tendencies, like including “grammar” as a default rubric component.
+          </p>
+
+          <div className="p-8 bg-slate-900 text-white rounded-xl relative overflow-hidden">
+            <p className="text-sm font-mono opacity-60 mb-4 tracking-widest uppercase">System Response // 200 OK</p>
+            <p className="text-lg font-light leading-relaxed italic mb-4">
+              “You're very welcome! 😊 I'm glad I could help... Your students are lucky to have such a clear and reflective learning experience! 🚀🎨🎤📱”
+            </p>
+            <div className="flex justify-end pt-4">
+              <span className="text-[10px] font-bold tracking-widest text-violet-400">FRIENDSHIP ACQUIRED</span>
+            </div>
+          </div>
+
+          <p>
+            When I showed this last output to a colleague, he asked “Did you tell it to talk to you like that?” But I hadn’t. Somehow, I had just become friends with my robot kin, my co-worker, ChatGPT.
+          </p>
+        </div>
+      )
+    },
+    {
+      id: 'cubicles-to-cupid',
+      title: 'From Cubicles to Cupid',
+      author: 'Tiffany Gallicano',
+      category: 'Engagement & Ethics',
+      color: 'rose',
+      role: 'Professor',
+      content: (
+        <div className="space-y-8 font-serif leading-relaxed text-slate-800">
+          <p className="text-xl md:text-2xl font-light italic text-rose-600 border-l-4 border-rose-500 pl-6 my-10">
+            "I asked ChatGPT to create online dating ads to help students find which of four workplace cultures matched their personality best."
+          </p>
+
+          <div className="first-letter:text-7xl first-letter:font-bold first-letter:text-rose-600 first-letter:mr-3 first-letter:float-left text-lg">
+            I was assigned to a new prep in fall 2024, which covered territory outside of my specialization in public relations. I wanted to create a high-concept presentation that would engage my students in an area of the assigned reading.
+          </div>
+
+          <div className="my-12 flex justify-center">
+            <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-rose-100 overflow-hidden transform rotate-2 hover:rotate-0 transition-transform duration-500">
+               <div className="h-48 bg-rose-500 flex items-center justify-center relative">
+                  <Heart className="text-white animate-pulse" size={64} fill="currentColor" />
+                  <div className="absolute bottom-4 left-6">
+                    <h3 className="text-white font-black text-2xl uppercase tracking-tighter">The Soulmate Type</h3>
+                  </div>
+               </div>
+               <div className="p-8 space-y-4">
+                  <p className="text-xs font-bold uppercase tracking-widest text-rose-500">Bet-Your-Company Culture</p>
+                  <div className="space-y-3 font-sans text-sm leading-snug text-slate-600">
+                    <p>• Are you a visionary who plays the long game?</p>
+                    <p>• Are you a strategic thinker who takes calculated risks?</p>
+                    <p>• Do you enjoy the excitement of decision making when not all cards are on the table?</p>
+                  </div>
+                  <p className="text-xs italic text-slate-400 border-t pt-4">
+                    "Step into a culture where big, bold decisions shape the future. If you navigate uncertain situations with confidence, this environment is your cultural soulmate."
+                  </p>
+               </div>
+               <div className="bg-rose-50 px-8 py-4 flex justify-between items-center">
+                  <span className="text-rose-600 font-bold text-xs tracking-widest">MATCH FOUND</span>
+                  <div className="flex -space-x-2">
+                    <div className="w-8 h-8 rounded-full bg-slate-300 border-2 border-white flex items-center justify-center text-[10px] font-bold">U</div>
+                    <div className="w-8 h-8 rounded-full bg-rose-300 border-2 border-white flex items-center justify-center text-[10px] font-bold">AI</div>
+                  </div>
+               </div>
+            </div>
+          </div>
+
+          <p>
+            When I presented the content, I disclosed my use of AI for the slides and played up the matchmaking angle. I believe AI use should be disclosed, and I also like to model how AI can be used responsibly.
+          </p>
+
+          <div className="bg-slate-50 p-8 rounded-lg border-l-8 border-slate-900">
+            <h4 className="font-sans font-bold text-xs uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+              <Users size={16}/> Beyond Matchmaking
+            </h4>
+            <ul className="space-y-4 text-sm md:text-base font-sans">
+              <li className="flex gap-3">
+                <span className="text-rose-500 font-bold">01.</span>
+                <span>Generating arguments with fallacies to help students practice identification and refutation.</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-rose-500 font-bold">02.</span>
+                <span>Drafting headlines and identifying contemporary issues for blog post assignments.</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-rose-500 font-bold">03.</span>
+                <span>Generating multiple choice questions and concrete case study examples.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'collaborator-accessibility',
+      title: 'AI as Collaborator and Accessibility Tool',
+      author: 'Cat Mahaffey',
+      category: 'Equity & Pedagogy',
+      color: 'teal',
+      role: 'Writing, Rhetoric & Digital Studies',
+      content: (
+        <div className="space-y-8 font-serif leading-relaxed text-slate-800">
+          <div className="bg-teal-900 text-white p-12 rounded-[2rem] my-12 relative overflow-hidden">
+            <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
+              <div className="flex-1">
+                <h3 className="text-teal-400 font-bold uppercase tracking-widest text-xs mb-4">Collaborator Case Study</h3>
+                <h2 className="text-3xl font-black leading-tight mb-6">"Copilot is always ready to get me started when I struggle with a blank page."</h2>
+              </div>
+              <div className="w-full md:w-64 bg-teal-800/50 backdrop-blur-sm border border-teal-700 p-6 rounded-xl">
+                 <div className="space-y-4">
+                    <div className="flex justify-between items-center text-[10px] font-bold tracking-tighter uppercase text-teal-400">
+                      <span>Human Expertise</span>
+                      <span>100%</span>
+                    </div>
+                    <div className="h-1 bg-teal-950 rounded-full overflow-hidden">
+                       <div className="h-full bg-teal-400 w-full" />
+                    </div>
+                 </div>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            I collaborating with Copilot to rethink my course from the ground up. It consistently offered multiple options that helped me see possibilities I hadn’t before. But Copilot could not design the course without me, the human in the loop. 
+          </p>
+
+          <div className="py-20 border-y border-slate-100 flex flex-col items-center text-center">
+            <Accessibility size={48} className="text-teal-600 mb-6" />
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 max-w-3xl mb-8 tracking-tighter">
+              "The idea that AI can liberate such students gives me joy."
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border rounded-2xl overflow-hidden my-12 shadow-xl">
+            <div className="p-8 bg-slate-50 border-r">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4 block">The "Tact" Barrier</span>
+              <p className="font-sans text-sm text-slate-600 leading-relaxed italic">
+                "I type up an email and then I prompt AI to clean it up... tact has always been an issue for me."
+              </p>
+            </div>
+            <div className="p-8 bg-white">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-teal-600 mb-4 block">The Ethical Shift</span>
+              <p className="font-sans text-sm text-slate-900 leading-relaxed font-bold">
+                Assuring students that AI is an ethical accessibility tool—liberating them to participate in discourse that was previously gated by arbitrary conformity.
+              </p>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'what-did-i-just-do',
+      title: 'What Did I Just DO?',
+      subtitle: 'AI Literacy for Professors',
+      author: 'Ashli Stokes',
+      category: 'Data Ethics',
+      color: 'amber',
+      role: 'WRDS and Communication Studies',
+      content: (
+        <div className="space-y-8 font-serif leading-relaxed text-slate-800">
+          <p className="text-xl md:text-2xl font-light italic text-amber-700 border-l-4 border-amber-500 pl-6 my-10">
+            "I quickly realized in a panic that I had just shared my research with an LLM that could 'memorize,' copy verbatim, and generally steal my ideas."
+          </p>
+
+          <div className="first-letter:text-7xl first-letter:font-bold first-letter:text-amber-600 first-letter:mr-3 first-letter:float-left text-lg">
+            I love teaching for the Honors College. Every time I get to teach a 3700 seminar class, I enjoy spending three hours a week with a small group of very smart students. We discuss concepts in deep detail, go out into the community to conduct fieldwork, and finish it all off with fantastic team talks.
+          </div>
+
+          <div className="bg-amber-50 border-2 border-amber-200 p-10 rounded-sm my-12 relative overflow-hidden">
+            <AlertTriangle className="absolute -top-10 -right-10 w-48 h-48 text-amber-200/50 -rotate-12" />
+            <h4 className="text-amber-800 font-bold uppercase tracking-widest text-xs mb-6 relative z-10">The "Rookie Mistake"</h4>
+            <p className="text-lg leading-relaxed mb-6 relative z-10">
+              One day, I thought it would be neat to see how ChatGPT would create a reading comprehension quiz based on one of my new book’s chapters. I happily uploaded <strong>AN ENTIRE CHAPTER</strong> of my forthcoming book into the text field and waited.
+            </p>
+            <div className="flex items-center gap-4 relative z-10 bg-white/50 p-4 rounded-lg">
+               <div className="p-2 bg-red-100 text-red-600 rounded-full"><Fingerprint size={20}/></div>
+               <p className="text-xs font-sans font-bold text-amber-900 uppercase tracking-tight">Intellectual Property Risk: High</p>
+            </div>
+          </div>
+
+          <p>
+            Unfortunately, I discovered the questions did not adequately query the students about the chapter content, lacking nuance or even basic context. Even worse, the realization hit me: I had no idea how AI stored data or how it uses it. Our job as professors is to teach students to be critical thinkers, and I had just bypassed my own academic instincts.
+          </p>
+
+          <div className="py-16">
+            <h3 className="text-center font-sans font-black text-xs uppercase tracking-[0.5em] text-slate-400 mb-12">The Vee (2025) Framework for AI Literacy</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               {[
+                 { title: "Functional", icon: <Cpu />, desc: "The ability to understand and operate the basic technical mechanics of AI tools." },
+                 { title: "Rhetorical", icon: <MessageCircle />, desc: "Understanding the persuasive power and communicative outputs of machine models." },
+                 { title: "Ethical", icon: <ShieldAlert />, desc: "Assessing the risks to privacy, intellectual property, and data sovereignty." }
+               ].map((item, i) => (
+                 <div key={i} className="flex flex-col items-center text-center p-6 border border-slate-100 rounded-2xl">
+                    <div className="mb-4 text-amber-600">{item.icon}</div>
+                    <h4 className="font-bold mb-2 uppercase tracking-widest text-sm">{item.title}</h4>
+                    <p className="text-xs text-slate-500 font-sans leading-relaxed">{item.desc}</p>
+                 </div>
+               ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 my-16 items-center">
+            <div className="space-y-6">
+              <h2 className="text-4xl font-black leading-tight tracking-tighter">"That semester taught me I had a lot to learn."</h2>
+              <p className="text-slate-600">
+                Within and beyond UNC Charlotte, it is imperative that we develop the ability to understand, apply, and assess AI operations. Critical AI literacy is no longer optional for faculty—it is a baseline requirement for the modern scholar.
+              </p>
+            </div>
+            <div className="bg-slate-900 p-8 rounded-3xl text-white relative overflow-hidden">
+               <Lock className="absolute -bottom-6 -right-6 w-32 h-32 text-white/5" />
+               <h4 className="text-amber-400 font-bold uppercase tracking-widest text-[10px] mb-4">Fall 2025 Strategy</h4>
+               <ul className="space-y-4 text-sm font-sans">
+                 <li className="flex gap-2">
+                   <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
+                   <span>Model critical data handling: Never upload raw research data.</span>
+                 </li>
+                 <li className="flex gap-2">
+                   <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
+                   <span>Use AI for communicative brainstorming about region and place.</span>
+                 </li>
+                 <li className="flex gap-2">
+                   <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
+                   <span>Model responsible usage for students through explicit disclosure.</span>
+                 </li>
+               </ul>
+            </div>
+          </div>
+
+          <p className="text-center font-serif italic text-slate-400 py-12">
+            Maybe I won’t mess up this time around.
+          </p>
+        </div>
+      )
+    }
+  ];
+
+  const CoverPage = () => (
+    <div className="relative min-h-screen bg-slate-950 flex flex-col items-center overflow-x-hidden text-white p-6">
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-red-600 rounded-full blur-[120px]" />
+      </div>
+      
+      <div className="relative z-10 text-center space-y-4 max-w-4xl pt-32 pb-24">
+        <h2 className="uppercase tracking-[0.3em] text-sm font-bold text-indigo-400">Issue No. 01 • Winter 2025</h2>
+        <h1 className="text-7xl md:text-9xl font-serif font-black tracking-tighter leading-none">
+          THE AI <br />USE CASE
+        </h1>
+        <p className="text-lg md:text-2xl font-light text-slate-400 max-w-2xl mx-auto py-8">
+          A curated collection of human stories at the frontier of machine intelligence.
+        </p>
+        <button 
+          onClick={() => {
+            const el = document.getElementById('toc-section');
+            el?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="group flex items-center gap-4 mx-auto bg-white text-black px-8 py-4 rounded-full font-bold hover:bg-red-600 hover:text-white transition-all duration-500"
+        >
+          VIEW CONTENTS
+          <ChevronRight className="group-hover:translate-x-2 transition-transform" />
+        </button>
+      </div>
+
+      <div id="toc-section" className="relative z-10 w-full max-w-6xl py-24 border-t border-white/10">
+        <div className="flex items-center justify-between mb-16">
+          <h2 className="text-xs font-black uppercase tracking-[0.4em] text-slate-500 italic">Table of Contents</h2>
+          <div className="h-px flex-1 mx-8 bg-white/10" />
+          <span className="text-[10px] font-mono text-slate-600">{stories.length} ENTRIES</span>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-20">
+          {stories.map((s, idx) => (
+            <button 
+              key={s.id}
+              onClick={() => {
+                setCurrentPage(s.id);
+                window.scrollTo(0, 0);
+              }}
+              className="group flex gap-6 text-left items-start"
+            >
+              <span className={`text-xl font-mono font-bold ${
+                s.color === 'orange' ? 'text-orange-500' : 
+                s.color === 'indigo' ? 'text-indigo-500' : 
+                s.color === 'emerald' ? 'text-emerald-500' :
+                s.color === 'slate' ? 'text-slate-400' :
+                s.color === 'violet' ? 'text-violet-500' :
+                s.color === 'rose' ? 'text-rose-500' : 
+                s.color === 'crimson' ? 'text-red-600' : 
+                s.color === 'amber' ? 'text-amber-500' : 'text-teal-500'
+              }`}>0{idx + 1}</span>
+              <div className="space-y-2">
+                <h3 className="text-2xl md:text-3xl font-serif font-bold group-hover:text-red-500 transition-colors leading-tight">
+                  {s.title}
+                </h3>
+                <div className="flex items-center gap-3">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{s.author}</p>
+                  <div className="w-1 h-1 rounded-full bg-white/20" />
+                  <p className={`text-[10px] font-bold uppercase tracking-widest opacity-80 ${
+                    s.color === 'crimson' ? 'text-red-400' : 'text-indigo-400'
+                  }`}>{s.category}</p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <footer className="relative z-10 py-12 text-slate-600 text-[10px] font-bold uppercase tracking-[0.5em] text-center w-full">
+        Charlotte Writing Resources Center © 2025
+      </footer>
+    </div>
+  );
+
+  const ArticleLayout = ({ story }) => {
+    const nextStoryIndex = stories.findIndex(s => s.id === story.id) + 1;
+    const nextStory = stories[nextStoryIndex];
+    
+    const progressColor = {
+      'approaching-critically': 'bg-orange-600',
+      'villains-course': 'bg-red-600',
+      'choosing-adventure': 'bg-indigo-600',
+      'changing-the-game': 'bg-emerald-500',
+      'automate-small-stuff': 'bg-slate-900',
+      'robot-kin': 'bg-violet-600',
+      'cubicles-to-cupid': 'bg-rose-500',
+      'collaborator-accessibility': 'bg-teal-600',
+      'what-did-i-just-do': 'bg-amber-600'
+    }[story.id];
+
+    return (
+      <div className="bg-white min-h-screen">
+        <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-6 py-4">
+          <button onClick={() => setCurrentPage('cover')} className="flex items-center gap-2 text-sm font-bold tracking-tighter hover:text-red-600 transition-colors">
+            <BookOpen size={18} /> THE AI USE CASE
+          </button>
+          <div className="hidden md:block flex-1 mx-12">
+            <div className="h-1 bg-slate-100 w-full overflow-hidden rounded-full">
+              <div 
+                className={`h-full transition-all duration-150 ${progressColor}`} 
+                style={{ width: `${scrollProgress}%` }}
+              />
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <button className="p-2 hover:bg-slate-100 rounded-full"><Share2 size={20} /></button>
+            <button onClick={() => setIsMenuOpen(true)} className="p-2 hover:bg-slate-100 rounded-full"><Menu size={20} /></button>
+          </div>
+        </header>
+
+        <main className="max-w-7xl mx-auto px-6 pt-16 pb-32">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+            <div className="lg:col-span-12 mb-12">
+              <div className="flex items-center gap-4 mb-4">
+                 <p className={`
+                  ${story.id === 'approaching-critically' ? 'text-orange-600' :
+                    story.id === 'villains-course' ? 'text-red-600' :
+                    story.id === 'changing-the-game' ? 'text-emerald-600' : 
+                    story.id === 'automate-small-stuff' ? 'text-slate-900' : 
+                    story.id === 'robot-kin' ? 'text-violet-600' : 
+                    story.id === 'cubicles-to-cupid' ? 'text-rose-500' : 
+                    story.id === 'what-did-i-just-do' ? 'text-amber-600' :
+                    story.id === 'collaborator-accessibility' ? 'text-teal-600' : 'text-indigo-600'} 
+                  font-bold uppercase tracking-widest text-sm`}>
+                    {story.category}
+                 </p>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-serif font-black text-slate-900 leading-[0.9] tracking-tight mb-4">
+                {story.title}
+              </h1>
+              {story.subtitle && (
+                <p className="text-2xl md:text-3xl font-serif italic text-slate-500 mb-8">{story.subtitle}</p>
+              )}
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-900 pb-8">
+                <div className="space-y-1">
+                  <p className="text-xl font-serif font-bold italic">{story.author}</p>
+                  <p className="text-slate-500 uppercase text-xs tracking-widest font-bold max-w-md">{story.role}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-8 lg:col-start-3">
+              {story.content}
+              
+              <div className="mt-20 pt-12 border-t border-slate-200">
+                {nextStory ? (
+                  <button 
+                    onClick={() => {
+                      setCurrentPage(nextStory.id);
+                      window.scrollTo(0, 0);
+                    }}
+                    className="group flex items-center justify-between w-full text-left"
+                  >
+                    <div>
+                      <p className="text-xs uppercase font-bold text-slate-400 mb-2 tracking-widest">Next Feature</p>
+                      <p className="text-2xl font-serif text-slate-900 italic group-hover:text-red-600 transition-colors">{nextStory.title}</p>
+                    </div>
+                    <div className="p-4 rounded-full border border-slate-200 group-hover:bg-slate-900 group-hover:text-white transition-all">
+                      <ChevronRight />
+                    </div>
+                  </button>
+                ) : (
+                  <div className="w-full text-center py-12 bg-slate-50 rounded-lg border border-dashed border-slate-200">
+                    <p className="text-sm font-bold tracking-widest text-slate-400 italic">END OF CURRENT ISSUE</p>
+                    <button 
+                      onClick={() => {
+                        setCurrentPage('cover');
+                        window.scrollTo(0, 0);
+                      }}
+                      className="mt-6 text-xs font-black text-red-600 hover:underline tracking-widest"
+                    >
+                      RETURN TO COVER
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  };
+
+  const MenuOverlay = () => (
+    <div className={`fixed inset-0 z-[100] bg-slate-950 text-white transition-transform duration-700 ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <button 
+        onClick={() => setIsMenuOpen(false)}
+        className="absolute top-10 right-10 p-4 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+      >
+        <X size={32} />
+      </button>
+      <div className="h-full flex flex-col justify-center px-10 md:px-20 overflow-y-auto py-20">
+        <p className="text-sm font-bold tracking-[0.5em] mb-12 text-slate-500 uppercase">Issue Navigator</p>
+        <div className="space-y-12">
+          {stories.map((s, idx) => (
+            <button 
+              key={s.id}
+              onClick={() => {
+                setCurrentPage(s.id);
+                setIsMenuOpen(false);
+                window.scrollTo(0, 0);
+              }}
+              className="group block text-left"
+            >
+              <div className="flex items-baseline gap-6">
+                <span className="text-2xl font-mono text-slate-600">0{idx + 1}</span>
+                <div>
+                  <h3 className="text-4xl md:text-7xl font-serif font-black group-hover:italic transition-all leading-tight">
+                    {s.title}
+                  </h3>
+                  <p className="text-slate-500 font-bold uppercase tracking-widest text-xs mt-2">{s.author} — {s.category}</p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen selection:bg-red-600 selection:text-white">
+      <MenuOverlay />
+      {currentPage === 'cover' ? (
+        <CoverPage />
+      ) : (
+        <ArticleLayout story={stories.find(s => s.id === currentPage)} />
+      )}
+    </div>
+  );
+};
+
+export default App;
