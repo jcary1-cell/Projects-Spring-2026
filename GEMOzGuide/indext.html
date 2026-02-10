@@ -150,9 +150,7 @@ const App = () => {
               "{stages[currentStage].content}"
             </p>
 
-            {/* LEARNING CALLOUTS */}
             <div className="w-full max-w-2xl font-sans text-left">
-              {/* Literacy Stage */}
               {currentStage === 'literacy' && (
                 <div className="bg-blue-500/10 border border-blue-500/30 p-5 rounded-2xl flex gap-4">
                   <UserCheck className="text-blue-400 shrink-0" />
@@ -163,7 +161,6 @@ const App = () => {
                 </div>
               )}
 
-              {/* Lion Stage: Choices */}
               {currentStage === 'station1' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {stages.station1.choices.map((choice) => (
@@ -184,7 +181,6 @@ const App = () => {
                 </div>
               )}
 
-              {/* Scarecrow Stage: Friction Learning */}
               {currentStage === 'station2' && (
                 <div className="space-y-6 bg-amber-500/5 border border-amber-500/20 p-6 rounded-2xl">
                    <div className="flex items-center justify-between mb-4">
@@ -215,7 +211,6 @@ const App = () => {
                 </div>
               )}
 
-              {/* Tin Man: Agency Patterns */}
               {currentStage === 'tinman' && (
                 <div className="grid grid-cols-1 gap-3">
                   {stages.tinman.interactionTypes.map((type, i) => (
@@ -232,7 +227,6 @@ const App = () => {
                 </div>
               )}
 
-              {/* RAG Lab: Visualizing Knowledge */}
               {currentStage === 'rag_lab' && (
                 <div className="bg-emerald-500/10 border border-emerald-500/30 p-6 rounded-2xl space-y-4">
                   <div className="flex items-center gap-4">
@@ -249,7 +243,6 @@ const App = () => {
                 </div>
               )}
 
-              {/* Build Stage: The Summary */}
               {currentStage === 'build' && (
                 <div className="space-y-4 font-sans">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -272,7 +265,6 @@ const App = () => {
               )}
             </div>
 
-            {/* Navigation Button */}
             <div className="flex flex-col md:flex-row gap-4 mt-8 w-full justify-center font-sans">
               {currentStage !== 'welcome' && (
                 <button 
@@ -328,21 +320,18 @@ const App = () => {
           font-family: 'Crimson Pro', serif; 
           margin: 0;
           padding: 0;
+          background-color: #020617;
           -webkit-font-smoothing: antialiased;
         }
         
-        .font-sans { 
-          font-family: 'Inter', sans-serif; 
-        }
+        .font-sans { font-family: 'Inter', sans-serif; }
 
         @keyframes float {
           0%, 100% { transform: translateY(-5px); }
           50% { transform: translateY(5px); }
         }
         
-        .animate-float { 
-          animation: float 6s ease-in-out infinite; 
-        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
 
         input[type=range]::-webkit-slider-thumb {
           -webkit-appearance: none;
@@ -364,10 +353,7 @@ const App = () => {
           border: 3px solid #0f172a;
         }
 
-        /* Prevent text selection during rapid clicking of buttons */
-        button {
-          user-select: none;
-        }
+        button { user-select: none; }
       `}} />
     </div>
   );
