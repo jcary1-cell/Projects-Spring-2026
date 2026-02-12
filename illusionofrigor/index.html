@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Illusion of Rigor | Workshop Experience</title>
+    <title>The Illusion of Rigor: Human Action in the Age of AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --theatre-black: #0a0a0a;
             --theatre-gold: #c5a059;
             --theatre-cream: #f4f1ea;
+            --accent-soft: rgba(197, 160, 89, 0.1);
         }
         
         body {
@@ -20,251 +21,321 @@
             color: var(--theatre-cream);
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
         .serif { font-family: 'Crimson Pro', serif; }
 
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .step-number {
+            font-family: 'Crimson Pro', serif;
+            font-size: 4rem;
+            opacity: 0.2;
+            line-height: 1;
+            font-style: italic;
         }
 
-        .mirror-gradient {
-            background: linear-gradient(135deg, rgba(197, 160, 89, 0.2) 0%, rgba(10, 10, 10, 1) 100%);
+        .instruction-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 2px solid var(--theatre-gold);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
         }
 
-        .quote-line {
-            transition: all 0.5s ease;
-            cursor: pointer;
+        .instruction-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateX(5px);
         }
 
-        .quote-line:hover {
+        .facilitator-note {
+            background: var(--accent-soft);
+            border: 1px dashed var(--theatre-gold);
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
             color: var(--theatre-gold);
-            transform: translateX(10px);
         }
 
-        .section-fade {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s ease-out;
-        }
-
-        .section-fade.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        .ai-text {
-            background: linear-gradient(90deg, #666, #fff, #666);
+        .shimmer {
+            background: linear-gradient(90deg, #444, #fff, #444);
             background-size: 200% auto;
             color: transparent;
             -webkit-background-clip: text;
-            animation: shimmer 4s linear infinite;
+            animation: shine 5s linear infinite;
         }
 
-        .theatre-border {
-            border-left: 1px solid var(--theatre-gold);
-            padding-left: 2rem;
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        nav {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .script-container {
+            background: #111;
+            border: 1px solid #222;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .character-name {
+            font-weight: 700;
+            color: var(--theatre-gold);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-top: 1.5rem;
+            display: block;
+        }
+
+        .stage-direction {
+            font-style: italic;
+            color: #666;
+            margin: 1rem 0;
+            font-size: 0.95rem;
         }
     </style>
 </head>
-<body class="selection:bg-yellow-900 selection:text-white">
+<body class="selection:bg-yellow-900">
 
-    <!-- Hero Section -->
-    <header class="min-h-screen flex flex-col justify-center items-center px-6 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-20 pointer-events-none">
-            <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full blur-[120px] bg-yellow-600"></div>
-            <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full blur-[120px] bg-stone-800"></div>
+    <nav class="fixed top-0 w-full z-50 py-4 px-6 flex justify-between items-center">
+        <span class="serif italic text-xl tracking-tighter">The Illusion of Rigor</span>
+        <div class="hidden md:flex space-x-8 text-[10px] uppercase tracking-[0.3em] font-bold">
+            <a href="#script" class="hover:text-yellow-600 transition-colors">The Script</a>
+            <a href="#step1" class="hover:text-yellow-600 transition-colors">01. Observe</a>
+            <a href="#step2" class="hover:text-yellow-600 transition-colors">02. Analyze</a>
+            <a href="#step3" class="hover:text-yellow-600 transition-colors">03. Design</a>
+            <a href="#step4" class="hover:text-yellow-600 transition-colors">04. Commit</a>
         </div>
-        
-        <div class="z-10 text-center max-w-4xl">
-            <span class="text-xs uppercase tracking-[0.5em] text-stone-500 mb-6 block">An Interactive Experiential Workshop</span>
-            <h1 class="serif text-6xl md:text-8xl font-light mb-8 leading-tight italic">
-                The Illusion <span class="text-stone-500 font-extralight">of</span> Rigor
+    </nav>
+
+    <!-- Hero / Introduction -->
+    <header class="min-h-screen flex flex-col justify-center px-6 md:px-24 border-b border-stone-800">
+        <div class="max-w-4xl">
+            <h1 class="serif text-5xl md:text-7xl font-light mb-6 leading-tight">
+                The Illusion of Rigor:<br><span class="italic text-stone-500">Human Action in the Age of AI</span>
             </h1>
-            <p class="text-lg md:text-xl text-stone-400 font-light max-w-2xl mx-auto leading-relaxed">
-                Human Action in the Age of AI: Reclaiming intentionality through the mirror of nature.
+            <p class="text-xl text-stone-400 font-light max-w-2xl leading-relaxed mb-8">
+                A workshop for educators and thinkers to move beyond "high-volume output" toward authentic, intentional rigor.
             </p>
-            <div class="mt-12">
-                <a href="#prologue" class="px-8 py-3 border border-stone-700 hover:border-white transition-colors duration-500 text-sm uppercase tracking-widest">Enter the Theatre</a>
+            <div class="facilitator-note inline-block">
+                <strong>Facilitator Note:</strong> This session is experiential. We begin with a performance of Hamlet’s advice to the players.
             </div>
         </div>
     </header>
 
-    <!-- 1. The Prologue: Hamlet's Mirror -->
-    <section id="prologue" class="py-24 px-6 md:px-24 glass-panel border-y border-stone-800">
-        <div class="grid md:grid-cols-2 gap-16 items-start">
+    <!-- THE SCRIPT -->
+    <section id="script" class="py-24 px-6 md:px-24 bg-stone-900/30">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="serif text-3xl italic mb-4">The Scriptorium</h2>
+            <p class="text-stone-500 uppercase tracking-widest text-[10px] font-bold mb-8">Hamlet: Act 3, Scene 2</p>
+            
+            <div class="p-8 md:p-12 script-container rounded-sm border border-stone-800">
+                <div class="stage-direction mb-12 bg-stone-800/50 p-6 rounded text-stone-300 italic font-light">
+                    Hamlet gives direction to the actors and asks Horatio to help him observe Claudius’s reaction to the play. When the court arrive, Hamlet makes bawdy and bitter comments to Ophelia. The traveling actors perform, in dumb show and then with dialogue, a story that includes many elements of Claudius’s alleged seduction of Gertrude and murder of King Hamlet. At the moment that the Player King is murdered in his garden by his nephew, Claudius stops the play and rushes out. Hamlet is exuberant that the Ghost’s word has been proved true. Rosencrantz and Guildenstern return to tell Hamlet that Claudius is furious and that Gertrude wishes to see Hamlet at once in her sitting room. Hamlet promises himself that he will not harm her, though he will “speak daggers.”
+                </div>
+
+                <div class="stage-direction">Enter Hamlet and three of the Players.</div>
+
+                <span class="character-name">Hamlet</span>
+                <p class="serif text-lg md:text-xl leading-relaxed text-stone-200">
+                    Speak the speech, I pray you, as I pronounced it to you, trippingly on the tongue; but if you mouth it, as many of our players do, I had as lief the town-crier spoke my lines. Nor do not saw the air too much with your hand, thus, but use all gently; for in the very torrent, tempest, and, as I may say, whirlwind of your passion, you must acquire and beget a temperance that may give it smoothness. O, it offends me to the soul to hear a robustious, periwig-pated fellow tear a passion to tatters, to very rags, to split the ears of the groundlings, who for the most part are capable of nothing but inexplicable dumb shows and noise. I would have such a fellow whipped for o’erdoing Termagant. It out-Herods Herod. Pray you, avoid it.
+                </p>
+
+                <span class="character-name">Player</span>
+                <p class="serif text-lg md:text-xl leading-relaxed text-stone-200">
+                    I warrant your Honor.
+                </p>
+
+                <span class="character-name">Hamlet</span>
+                <p class="serif text-lg md:text-xl leading-relaxed text-stone-200">
+                    Be not too tame neither, but let your own discretion be your tutor. Suit the action to the word, the word to the action, with this special observance, that you o’erstep not the modesty of nature. For anything so o’erdone is from the purpose of playing, whose end, both at the first and now, was and is to hold, as ’twere, the mirror up to nature, to show virtue her own feature, scorn her own image, and the very age and body of the time his form and pressure. Now this overdone or come tardy off, though it makes the unskillful laugh, cannot but make the judicious grieve, the censure of the which one must in your allowance o’erweigh a whole theater of others. O, there be players that I have seen play and heard others praise (and that highly), not to speak it profanely, that, neither having th’ accent of Christians nor the gait of Christian, pagan, nor man, have so strutted and bellowed that I have thought some of nature’s journeymen had made men, and not made them well, they imitated humanity so abominably.
+                </p>
+
+                <span class="character-name">Player</span>
+                <p class="serif text-lg md:text-xl leading-relaxed text-stone-200">
+                    I hope we have reformed that indifferently with us, sir.
+                </p>
+
+                <span class="character-name">Hamlet</span>
+                <p class="serif text-lg md:text-xl leading-relaxed text-stone-200">
+                    O, reform it altogether. And let those that play your clowns speak no more than is set down for them, for there be of them that will themselves laugh, to set on some quantity of barren spectators to laugh too, though in the meantime some necessary question of the play be then to be considered. That’s villainous and shows a most pitiful ambition in the fool that uses it. Go make you ready.
+                </p>
+
+                <div class="stage-direction mt-8 text-right">[Players exit]</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STEP 1: EXPERIENTIAL OPENING -->
+    <section id="step1" class="py-24 px-6 md:px-24">
+        <div class="flex items-start gap-4 mb-12">
+            <span class="step-number">01</span>
             <div>
-                <h2 class="serif text-4xl mb-8 italic">The Opening Session</h2>
-                <div class="theatre-border space-y-6 text-stone-300 italic serif text-xl leading-relaxed">
-                    <p class="quote-line">"Be not too tame neither, but let your own discretion be your tutor..."</p>
-                    <p class="quote-line">"Suit the action to the word, the word to the action..."</p>
-                    <p class="quote-line">"...hold, as ’twere, the mirror up to nature..."</p>
-                </div>
-                <div class="mt-12 space-y-4">
-                    <h3 class="uppercase text-xs tracking-widest text-yellow-600 font-bold">The Exercise</h3>
-                    <p class="text-sm text-stone-400">Divide into groups of three. Assign the Mechanical Reader, the Strutter, and the Judicious. Act out the "Discretion" required to bridge the two extremes.</p>
-                </div>
+                <h2 class="serif text-4xl italic mt-4">Observe: The Three Players</h2>
+                <p class="text-stone-500 uppercase tracking-widest text-xs font-bold">Experiential Session (20 Mins)</p>
             </div>
-            <div class="mirror-gradient p-12 aspect-[4/5] flex flex-col justify-between border border-stone-800 rounded-sm">
-                <div class="space-y-8">
-                    <div class="p-6 border border-stone-700 bg-black/40 rounded-sm">
-                        <span class="text-[10px] uppercase text-stone-500 block mb-2">Mode: Mechanical</span>
-                        <p class="ai-text text-lg">Syntactically perfect. Spiritually absent. The AI baseline.</p>
-                    </div>
-                    <div class="p-6 border border-stone-700 bg-black/40 rounded-sm translate-x-4">
-                        <span class="text-[10px] uppercase text-stone-500 block mb-2">Mode: Strut & Bellow</span>
-                        <p class="text-lg uppercase font-bold tracking-tighter">THE ILLUSION OF RIGOR. BUSYNESS AS PROXY.</p>
-                    </div>
-                </div>
-                <div class="p-8 border-2 border-yellow-600/50 bg-yellow-600/5 rounded-sm relative overflow-hidden">
-                    <span class="text-[10px] uppercase text-yellow-600 font-bold block mb-2">The Aim: Nature's Mirror</span>
-                    <p class="serif text-2xl italic">"Discretion."</p>
-                    <p class="text-xs mt-4 text-stone-500 italic">Intentionality over volume.</p>
-                </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="instruction-card">
+                <h3 class="text-yellow-600 font-bold text-sm mb-4 uppercase tracking-tighter">Player A: The Mechanical</h3>
+                <p class="text-stone-300 text-sm mb-4">Read the script above as if you are a perfect machine. Accurate, monotone, and entirely devoid of subtext.</p>
+                <div class="shimmer italic serif">"The AI Baseline"</div>
+            </div>
+            <div class="instruction-card">
+                <h3 class="text-yellow-600 font-bold text-sm mb-4 uppercase tracking-tighter">Player B: The Strutter</h3>
+                <p class="text-stone-300 text-sm mb-4">Read with excessive volume and performative "work." Be busy, loud, and complex, but ignore the meaning.</p>
+                <div class="italic serif">"The Illusion of Rigor"</div>
+            </div>
+            <div class="instruction-card">
+                <h3 class="text-yellow-600 font-bold text-sm mb-4 uppercase tracking-tighter">Player C: The Judicious</h3>
+                <p class="text-stone-300 text-sm mb-4">Suit the action to the word. Use your discretion to hold a "mirror up to nature." Be intentional.</p>
+                <div class="italic serif text-yellow-600">"Humanistic Action"</div>
+            </div>
+        </div>
+
+        <div class="mt-12 p-8 bg-stone-900 border border-stone-800 rounded">
+            <h4 class="serif italic text-2xl mb-4 text-stone-200">The Reflection Questions:</h4>
+            <ul class="list-disc list-inside space-y-2 text-stone-400 font-light">
+                <li>Which performance felt like it required the most *intentional* work?</li>
+                <li>How does "overdone" work (Player B) mirror the way we often assign homework?</li>
+                <li>Where do we see "imitating humanity abominably" in AI-generated content?</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- STEP 2: CRITICAL ANALYSIS -->
+    <section id="step2" class="py-24 px-6 md:px-24 bg-stone-100 text-black">
+        <div class="flex items-start gap-4 mb-12">
+            <span class="step-number" style="color: black; opacity: 0.1;">02</span>
+            <div>
+                <h2 class="serif text-4xl italic mt-4">Analyze: The Heart of the Matter</h2>
+                <p class="text-stone-500 uppercase tracking-widest text-xs font-bold">Collaborative Dialogue (15 Mins)</p>
+            </div>
+        </div>
+
+        <div class="max-w-4xl mx-auto border-l-4 border-black pl-8 mb-16">
+            <blockquote class="serif text-3xl italic leading-tight mb-8">
+                "But to be human is not to have answers. It is to have <span class="underline decoration-yellow-600">questions</span>—and to live with them. The machines can’t do that for us. Not now, not ever."
+            </blockquote>
+            <p class="font-bold text-sm uppercase tracking-widest text-stone-500">— D. Graham Burnett</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12">
+            <div class="space-y-6">
+                <h3 class="font-bold border-b border-stone-300 pb-2">The Shift in Philosophy</h3>
+                <p class="text-stone-700 leading-relaxed">
+                    AI specializes in "Answers." It provides the final output instantly. If our curriculum is built solely around the production of "Answers," we are teaching our students to behave like machines. 
+                </p>
+            </div>
+            <div class="space-y-6">
+                <h3 class="font-bold border-b border-stone-300 pb-2">Humanistic Rigor</h3>
+                <p class="text-stone-700 leading-relaxed">
+                    Rigor in the age of AI is the <strong>lived experience</strong> of grappling with a question that doesn't have a clear answer. It is the "discretion" of the human to decide what matters.
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- 2. The Theoretical Frame -->
-    <section class="py-32 px-6 max-w-5xl mx-auto text-center section-fade" id="theory">
-        <span class="text-yellow-600 uppercase text-xs tracking-widest block mb-4">Theoretical Frame</span>
-        <h2 class="serif text-5xl mb-12">Living with Questions</h2>
-        <blockquote class="serif text-3xl italic text-stone-200 leading-snug mb-12 max-w-3xl mx-auto">
-            "But to be human is not to have answers. It is to have <span class="text-yellow-600">questions</span>—and to live with them. The machines can’t do that for us. Not now, not ever."
-            <footer class="text-sm uppercase tracking-widest text-stone-500 mt-8">— D. Graham Burnett, The New Yorker</footer>
-        </blockquote>
-        <p class="text-stone-400 mb-16 max-w-2xl mx-auto font-light leading-relaxed">
-            We can return to what was always the heart of the matter—the lived experience of existence. Being itself.
-        </p>
-        <div class="grid md:grid-cols-2 gap-8 text-left">
-            <div class="p-8 glass-panel border border-stone-800">
-                <h4 class="font-bold mb-4 uppercase text-xs tracking-widest text-yellow-600">Beyond Answers</h4>
-                <p class="text-stone-400 font-light text-sm leading-relaxed">If education is only about producing answers, we have already been replaced. The human shift is back to the *process* of inquiry.</p>
+    <!-- STEP 3: DESIGN LAB -->
+    <section id="step3" class="py-24 px-6 md:px-24">
+        <div class="flex items-start gap-4 mb-12">
+            <span class="step-number">03</span>
+            <div>
+                <h2 class="serif text-4xl italic mt-4">Design: Re-Aligning Pedagogy</h2>
+                <p class="text-stone-500 uppercase tracking-widest text-xs font-bold">The Practical Shift (30 Mins)</p>
             </div>
-            <div class="p-8 glass-panel border border-stone-800">
-                <h4 class="font-bold mb-4 uppercase text-xs tracking-widest text-yellow-600">Lived Experience</h4>
-                <p class="text-stone-400 font-light text-sm leading-relaxed">Humanistic education thrives in the "ruins" by focusing on things AI cannot possess: physical presence, ethical weight, and true discretion.</p>
-            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-stone-700 text-stone-500 text-[10px] uppercase tracking-widest">
+                        <th class="py-4 px-4">Legacy Assignment</th>
+                        <th class="py-4 px-4">The "Human Action" Pivot</th>
+                        <th class="py-4 px-4">Critical Collaboration</th>
+                    </tr>
+                </thead>
+                <tbody class="text-stone-300 text-sm">
+                    <tr class="border-b border-stone-800 hover:bg-white/5 transition-colors">
+                        <td class="py-8 px-4">
+                            <div class="font-bold mb-1">Standard Essay</div>
+                            <div class="text-stone-500 text-xs italic">"Write 1500 words on..."</div>
+                        </td>
+                        <td class="py-8 px-4">
+                            <div class="font-bold mb-1 text-yellow-600">Curation & Defense</div>
+                            <div class="text-xs">Select 5 artifacts/quotes and record a 3-minute defense of their relevance.</div>
+                        </td>
+                        <td class="py-8 px-4">
+                            <div class="text-xs">AI generates 30 options; Student exercises <span class="italic">discretion</span> to pick 5.</div>
+                        </td>
+                    </tr>
+                    <tr class="border-b border-stone-800 hover:bg-white/5 transition-colors">
+                        <td class="py-8 px-4">
+                            <div class="font-bold mb-1">Text Summary</div>
+                            <div class="text-stone-500 text-xs italic">"Summarize Chapter 4."</div>
+                        </td>
+                        <td class="py-8 px-4">
+                            <div class="font-bold mb-1 text-yellow-600">Experiential Application</div>
+                            <div class="text-xs">Apply one concept from Chapter 4 to a local real-world observation.</div>
+                        </td>
+                        <td class="py-8 px-4">
+                            <div class="text-xs">AI drafts the summary; Student performs the <span class="italic">lived observation</span>.</div>
+                        </td>
+                    </tr>
+                    <tr class="border-b border-stone-800 hover:bg-white/5 transition-colors">
+                        <td class="py-8 px-4">
+                            <div class="font-bold mb-1">Retrieval Quiz</div>
+                            <div class="text-stone-500 text-xs italic">"Who said X and when?"</div>
+                        </td>
+                        <td class="py-8 px-4">
+                            <div class="font-bold mb-1 text-yellow-600">The Unanswerable Question</div>
+                            <div class="text-xs">Find 3 things the AI gets "tardy" or "overdone" about this topic.</div>
+                        </td>
+                        <td class="py-8 px-4">
+                            <div class="text-xs">AI provides the "Answers"; Student documents the <span class="italic">failed subtext</span>.</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </section>
 
-    <!-- 3. The Design Lab -->
-    <section class="py-32 bg-stone-100 text-black">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-                <div class="max-w-xl">
-                    <h2 class="serif text-5xl italic mb-4">The Design Lab</h2>
-                    <p class="text-stone-600">Transforming "bottable" assignments into human-centric actions.</p>
-                </div>
-                <div class="text-xs uppercase tracking-widest font-bold border-b border-black pb-2">Suit the Action to the Word</div>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-0 border border-black/10">
-                <!-- Card 1 -->
-                <div class="p-10 border border-black/5 hover:bg-white transition-colors duration-300">
-                    <span class="text-[10px] font-bold text-stone-400 block mb-8">CASE STUDY 01</span>
-                    <h4 class="serif text-2xl mb-4">Volume vs. Curation</h4>
-                    <div class="space-y-6">
-                        <div>
-                            <span class="text-[10px] uppercase font-bold block text-red-800">The Illusion</span>
-                            <p class="text-sm">2,000-word essay on a specific theme.</p>
-                        </div>
-                        <div>
-                            <span class="text-[10px] uppercase font-bold block text-green-800">Human Action</span>
-                            <p class="text-sm font-semibold">Curation & Defense.</p>
-                            <p class="text-sm italic">Exercising discretion to justify 5 essential quotes.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 2 -->
-                <div class="p-10 border border-black/5 hover:bg-white transition-colors duration-300 bg-stone-50">
-                    <span class="text-[10px] font-bold text-stone-400 block mb-8">CASE STUDY 02</span>
-                    <h4 class="serif text-2xl mb-4">Summary vs. Application</h4>
-                    <div class="space-y-6">
-                        <div>
-                            <span class="text-[10px] uppercase font-bold block text-red-800">The Illusion</span>
-                            <p class="text-sm">Summarizing a dense philosophical text.</p>
-                        </div>
-                        <div>
-                            <span class="text-[10px] uppercase font-bold block text-green-800">Human Action</span>
-                            <p class="text-sm font-semibold">Lived Experience.</p>
-                            <p class="text-sm italic">Applying the text to a real community "pressure."</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 3 -->
-                <div class="p-10 border border-black/5 hover:bg-white transition-colors duration-300">
-                    <span class="text-[10px] font-bold text-stone-400 block mb-8">CASE STUDY 03</span>
-                    <h4 class="serif text-2xl mb-4">Answers vs. Questions</h4>
-                    <div class="space-y-6">
-                        <div>
-                            <span class="text-[10px] uppercase font-bold block text-red-800">The Illusion</span>
-                            <p class="text-sm">Accuracy-based tests and fact retrieval.</p>
-                        </div>
-                        <div>
-                            <span class="text-[10px] uppercase font-bold block text-green-800">Human Action</span>
-                            <p class="text-sm font-semibold">The Judicious Critic.</p>
-                            <p class="text-sm italic">Formulating the unanswerable questions AI fails to meet.</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- STEP 4: COMMITMENT -->
+    <section id="step4" class="py-24 px-6 md:px-24 bg-stone-900 border-t border-stone-800">
+        <div class="flex items-start gap-4 mb-12">
+            <span class="step-number">04</span>
+            <div>
+                <h2 class="serif text-4xl italic mt-4">Commit: The Manifesto</h2>
+                <p class="text-stone-500 uppercase tracking-widest text-xs font-bold">Individual Action (10 Mins)</p>
             </div>
         </div>
-    </section>
 
-    <!-- 4. The Manifesto -->
-    <section class="py-32 px-6 bg-black flex flex-col items-center">
-        <div class="max-w-2xl w-full text-center">
-            <h2 class="serif text-4xl italic mb-12">Manifesto of Intentionality</h2>
-            <div id="manifesto-form" class="space-y-12">
-                <div class="text-left group">
-                    <label class="text-[10px] uppercase tracking-widest text-stone-500 block mb-4">Practice to Abandon</label>
-                    <input type="text" placeholder="The 'overdone' or 'tardy' off..." class="w-full bg-transparent border-b border-stone-800 py-4 focus:border-yellow-600 outline-none transition-all serif text-2xl">
+        <div class="max-w-2xl mx-auto bg-black p-12 border border-stone-800 shadow-2xl">
+            <h3 class="serif italic text-3xl mb-8 text-center">"Being Itself"</h3>
+            <form class="space-y-12">
+                <div class="space-y-4">
+                    <label class="text-[10px] uppercase tracking-widest font-bold text-yellow-600">I will abandon this "Illusion of Rigor":</label>
+                    <input type="text" placeholder="e.g., The 10-page generic summary" class="w-full bg-transparent border-b border-stone-700 py-2 outline-none focus:border-white transition-all serif text-xl">
                 </div>
-                <div class="text-left">
-                    <label class="text-[10px] uppercase tracking-widest text-stone-500 block mb-4">Strategy for Being</label>
-                    <textarea rows="3" placeholder="How will you live with the questions?" class="w-full bg-transparent border-b border-stone-800 py-4 focus:border-yellow-600 outline-none transition-all serif text-2xl resize-none"></textarea>
+                <div class="space-y-4">
+                    <label class="text-[10px] uppercase tracking-widest font-bold text-yellow-600">I will introduce this "Lived Experience":</label>
+                    <input type="text" placeholder="e.g., Student-led interviews" class="w-full bg-transparent border-b border-stone-700 py-2 outline-none focus:border-white transition-all serif text-xl">
                 </div>
-                <button onclick="saveManifesto()" class="group relative px-12 py-4 overflow-hidden border border-yellow-600 text-yellow-600 uppercase text-xs tracking-widest font-bold">
-                    <span class="relative z-10">Seal the Manifesto</span>
-                    <div class="absolute inset-0 bg-yellow-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
-                    <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 text-black z-20 transition-opacity duration-500">Hold the Mirror</span>
+                <button type="button" onclick="alert('Your commitment is sealed in the theatre.')" class="w-full py-4 border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black transition-all font-bold uppercase tracking-widest text-xs">
+                    Seal the Intentionality
                 </button>
-            </div>
-            <div id="success-msg" class="hidden text-stone-400 serif italic text-xl">
-                "To thine own self be true." Your intentionality is recorded.
-            </div>
+            </form>
         </div>
     </section>
 
-    <footer class="py-12 border-t border-stone-900 text-center text-stone-600">
-        <p class="text-[10px] uppercase tracking-widest">The Illusion of Rigor &copy; 2024 | Built for the Judicious</p>
+    <footer class="py-24 px-6 text-center border-t border-stone-900">
+        <p class="serif italic text-stone-500">"The very age and body of the time his form and pressure."</p>
+        <p class="text-[10px] uppercase tracking-widest text-stone-700 mt-4">The Illusion of Rigor &copy; 2024</p>
     </footer>
 
-    <script>
-        const observerOptions = { threshold: 0.1 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.section-fade').forEach(el => observer.observe(el));
-
-        function saveManifesto() {
-            document.getElementById('manifesto-form').classList.add('hidden');
-            document.getElementById('success-msg').classList.remove('hidden');
-        }
-    </script>
 </body>
 </html>
