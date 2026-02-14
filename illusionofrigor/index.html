@@ -1,386 +1,243 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workshop Portal: The Human Algorithm</title>
-    <!-- React and ReactDOM -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import React, { useState } from 'react';
+import { BookOpen, Users, Lightbulb, Send, Brain, Compass, Sparkles, ChevronRight, MessageSquare, Newspaper } from 'lucide-react';
 
-        // Expose Firebase to the React scope
-        window.FirebaseUtils = {
-            initializeApp, getFirestore, collection, addDoc, onSnapshot, serverTimestamp,
-            getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, query, doc
-        };
-    </script>
-    <style>
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-in { animation: fadeIn 0.4s ease-out forwards; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-    </style>
-</head>
-<body class="bg-slate-50">
-    <div id="root"></div>
+const App = () => {
+  const [activeTab, setActiveTab] = useState(0);
+  const [newIdea, setNewIdea] = useState('');
+  const [contributions, setContributions] = useState({
+    addison: [],
+    maya: [],
+    leo: []
+  });
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        const { 
-            getFirestore, collection, addDoc, onSnapshot, serverTimestamp,
-            getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged 
-        } = window.FirebaseUtils;
+  // UNC Charlotte Brand Colors
+  const colors = {
+    ninerGreen: '#005035',
+    whiteGold: '#A49665',
+    lightGold: '#D5C896',
+    darkGrey: '#515151',
+    lightGrey: '#F2F2F2'
+  };
 
-        // Configuration
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'human-algorithm-workshop';
-        const app = window.FirebaseUtils.initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+  const caseStudies = [
+    {
+      id: 'addison',
+      title: 'Addison: The Creative War',
+      location: 'UNC CHARLOTTE • CHARLOTTE, NC',
+      content: `UNC CHARLOTTE — On the third floor of the J. Murrey Atkins Library, the rhythmic, mechanical clicking of mechanical keyboards creates a frantic symphony. Among the hundreds of students hunched over glowing screens is Addison, a sophomore at the University of North Carolina at Charlotte.\n\nTo a casual observer, Addison looks like the model of academic diligence. But beneath the surface of his focused exterior, he is fighting a quiet war against a curriculum that feels increasingly like a series of digital hoops.\n\nAddison is a first-generation college student. For his family, his enrollment at UNC Charlotte represents a monumental milestone—the breaking of a ceiling that has stood for generations. He arrived on campus with a passion for the arts: he is a creator who thrives in the visceral world of theater, the tactile joy of crafting, and the complex harmonies of music.\n\nHowever, Addison also carries a diagnosis of ADHD, first identified when he was ten. Despite a lifetime of IEPs, 504 plans, and formal accommodations, the modern "digital-first" classroom presents a unique set of hurdles that no simple extension on a deadline can clear.\n\nThe "Repetitive Rigor" Trap\n"I came here ready to be challenged, to be inspired," Addison says, gesturing to a screen filled with open tabs. "But half my nights are spent posting to discussion forums where everyone says the same thing, taking automated quizzes that feel like memory games, and writing essays that feel like I'm just filling a word count. It’s rigorous in terms of time, but it feels hollow in terms of growth."\n\nAddison’s experience highlights a growing tension in higher education: the "Repetitive Rigor" trap. As technology has made it easier to assign and grade work, it has also made it easier to inadvertently turn learning into a transactional process of clicking through modules. For a student with ADHD who craves novelty and creative engagement, this environment isn't just boring—it’s a barrier to entry.\n\nStarting with the Human Experience\nThe solution, according to educational technologists and advocates at UNC Charlotte, isn't to retreat from technology, but to radically pivot how we deploy it. The proposal is simple yet profound: We must start with the human experience.\n\nIf we begin by asking what it means to be human in the age of Artificial Intelligence, the conversation shifts. Instead of asking how we can use AI to "monitor" students or "automate" grading, we begin to ask: How can technology empower Addison to turn a sociology essay into a dramatic monologue? How can AI act as a collaborative partner in his creative process rather than a shortcut for a task he finds meaningless?\n\nHolistic Success and Student Agency\nThe American Association of Colleges & Universities (AAC&U) emphasizes that student success is a shared institutional responsibility that encompasses both academic achievement and the development of skills needed for life after college.\n\n"We need to give students the agency to use the tools available to them—including AI—to create powerful, authentic learning experiences," says a faculty member focused on digital pedagogy. "If Addison can use technology to visualize a historical event through a digital art piece or compose a score that explains a mathematical concept, he isn't just 'doing homework.' He is manifesting his understanding."\n\nThe shift toward authentic learning requires three key changes:\nAlignment with Goals: Assignments must bridge the gap between academic requirements and the student’s professional and creative aspirations.\nVisible Value: Students should be able to answer "Why am I doing this?" without pointing to a syllabus.\nTechnological Agency: Moving from technology as a medium for submission to technology as a tool for creation.\n\nBeyond the Keyboard\nAs the sun sets over the Charlotte skyline, Addison finally closes his laptop. He didn't finish the third discussion post of the night, but he spent twenty minutes sketching a set design for a play he's reading in his literature class.\n\n"When I'm drawing, I'm actually thinking about the characters, the themes, the subtext," he explains. "I'm learning more in those twenty minutes of 'crafting' than in two hours of typing 'I agree with what my classmate said' into a forum."\n\nThe challenge for the modern university is to ensure that Addison doesn't have to choose between his creative soul and his degree. By centering the human experience in our technological evolution, we can transform the "endless click" into a meaningful journey of discovery.`
+    },
+    {
+      id: 'maya',
+      title: 'Maya: The Ethics of Efficiency',
+      location: 'UNC CHARLOTTE • CHARLOTTE, NC',
+      content: `UNC CHARLOTTE — In the fluorescent-lit labs near the McMillan Greenhouse and the UNC Charlotte Botanical Gardens, Maya carefully adjusts the zoom on her microscope. A junior majoring in Environmental Science at Charlotte, Maya is a student who sees the world in systems—how a change in soil pH ripples through an entire Piedmont ecosystem.\n\nBut lately, Maya feels like her own system is breaking. Her workload has shifted from the field to the browser. Her advanced ecology course has transitioned into a "high-efficiency" hybrid model to accommodate growing enrollment. \n\nMaya is an empathetic learner. She chose environmental science because she wants to work in policy, translating complex data into human stories that inspire conservation. However, the rigor she encounters now is purely statistical. She spends her weekends fighting with an AI-powered proctoring software that flags her for "suspicious eye movement" whenever she looks away to think, and completing data-entry modules that feel more like secretarial work than scientific inquiry.\n\nThe "Algorithm of Achievement"\n"I feel like I'm being trained to be a data processor, not a scientist," Maya says. "The AI grades our lab reports based on keywords and formatting. If I try to write about the ethical implications of a certain land-use policy in Mecklenburg County, the system docks me points for being 'off-topic.' It’s rigorous in its precision, but it lacks any sense of purpose."\n\nMaya’s dilemma is the "Algorithm of Achievement": the tendency for educational systems to prioritize what can be easily measured over what actually matters. For a student like Maya, who finds value in the grey areas and the human impact of data, the rigidity of automated assessment feels like a straitjacket.\n\nReclaiming the Scientific Narrative\nAt UNC Charlotte, a new initiative is asking: how can we use AI to deepen Maya's empathy rather than automate her curiosity? The goal is to move beyond the "right or wrong" binary of automated testing. \n\nImagine if Maya could use AI as a simulator for complex stakeholder negotiations. Instead of a 50-question multiple-choice exam on forestry laws, she could interact with a Large Language Model acting as a skeptical local official or an angry land developer. Here, AI isn't the judge; it’s the sparring partner. It allows Maya to practice the human-centered skills—negotiation, critical thinking, and ethical reasoning—that no algorithm can replicate.\n\nThe shift toward "Empathy-First Tech" involves:\nInteractive Scaffolding: Using AI to build scenarios where there is no single "correct" answer.\nHolistic Evaluation: Valuing the student’s ability to navigate ethical complexity alongside technical data.\nRelational Learning: Ensuring technology facilitates connection between students rather than isolating them behind proctoring software.\n\nBetween the Lines\nMaya walks out of the lab and toward the campus green near the Star Quad. She pulls out a notebook and starts drafting a letter to the editor of a local paper about the stream she studied near campus last year. \n\n"The data tells us the nitrogen levels are high," she says. "But that’s just a number. The real work is explaining to the community why that number matters for their health. If AI can help me run the numbers faster, that’s great—but only if it gives me more time to focus on the community."`
+    },
+    {
+      id: 'leo',
+      title: 'Leo: The Data-Driven Soul',
+      location: 'UNC CHARLOTTE • CHARLOTTE, NC',
+      content: `UNC CHARLOTTE — The Belk College of Business is a place of high stakes and higher expectations. Leo, a senior preparing for a career in global supply chain management, is a student who loves the logic of a well-oiled machine. He is pragmatic, disciplined, and deeply ambitious.\n\nYet, as he nears graduation at Charlotte, Leo is haunted by a sense of obsolescence. He sees the headlines about AI automating the very analytical roles he has spent four years preparing for. His senior capstone project involves optimizing shipping routes—a task he knows a specialized AI can now do in seconds.\n\nThe "Obsolescence Anxiety" Gap\n"My professors tell us that rigor means staying up until 3:00 AM perfecting a spreadsheet," Leo reflects while sitting in the Popp Martin Student Union. "But I know that by the time I start my first job in Uptown, that spreadsheet will be generated by a prompt. I’m working incredibly hard to learn skills that are essentially being 'retired' in real-time."\n\nLeo is experiencing the "Obsolescence Anxiety" gap. In the race to maintain academic rigor, many programs continue to demand mastery of technical tasks that AI has already mastered, while neglecting the higher-order leadership and ethical skills that are becoming the new premium.\n\nLeadership in the Age of Autonomy\nThe path forward for Leo isn't to compete with the machine, but to lead it. The "Illusion of Rigor" in business education is the belief that technical proficiency alone is enough. At UNC Charlotte, researchers are exploring how to shift Leo’s focus from "The How" to "The Why."\n\nIf Leo uses AI to generate ten different supply chain models, his "rigor" is no longer found in the calculation, but in the ethical synthesis. Which model protects workers' rights? Which one minimizes environmental impact even at the cost of 2% profit? This is where Leo’s human agency shines. He becomes the ethical architect using AI as his high-speed drafting tool.\n\nEmpowering the Ethical Architect:\nFrom Calculation to Curation: Shifting the student's role from producer of data to curator of solutions.\nResilient Leadership: Using AI to stress-test ethical frameworks in high-pressure business simulations.\nStrategic Criticality: Developing the ability to question the biases within the AI’s recommendations.\n\nThe Human Margin\nLeo packs his bag. He’s heading to a meeting for a student-led non-profit he helped start. They use data to map food deserts in the North Tryon area. \n\n"The AI can show me where the 'holes' are on a map," Leo says. "But it can't walk into a neighborhood and build trust with a local grocery store owner. That’s the work I need to be ready for. I want my degree to represent the things an AI can’t do—the ability to care, to lead, and to choose the right path when the data is messy."`
+    }
+  ];
 
-        const SKILLS = ['Critical Thinking', 'Creativity', 'Collaboration', 'Frontier Thinking', 'Experiential Learning', 'Design Thinking'];
-        const AI_TOOLS = ['GEMs', 'NotebookLM', 'Generative AI', 'Ethical AI'];
+  const handleSubmitContribution = (e) => {
+    e.preventDefault();
+    if (!newIdea.trim()) return;
+    const caseId = caseStudies[activeTab].id;
+    setContributions(prev => ({
+      ...prev,
+      [caseId]: [
+        { text: newIdea, timestamp: Date.now(), id: Math.random().toString(36).substr(2, 9) },
+        ...prev[caseId]
+      ]
+    }));
+    setNewIdea('');
+  };
 
-        // Color map to ensure Tailwind classes are explicitly defined for the CDN compiler
-        const THEMES = {
-            indigo: {
-                text: 'text-indigo-600',
-                textDark: 'text-indigo-700',
-                bg: 'bg-indigo-600',
-                bgLight: 'bg-indigo-50',
-                bgLightAlt: 'bg-indigo-100',
-                border: 'border-indigo-100',
-                accent: '#4f46e5'
-            },
-            emerald: {
-                text: 'text-emerald-600',
-                textDark: 'text-emerald-700',
-                bg: 'bg-emerald-600',
-                bgLight: 'bg-emerald-50',
-                bgLightAlt: 'bg-emerald-100',
-                border: 'border-emerald-100',
-                accent: '#059669'
-            },
-            blue: {
-                text: 'text-blue-600',
-                textDark: 'text-blue-700',
-                bg: 'bg-blue-600',
-                bgLight: 'bg-blue-50',
-                bgLightAlt: 'bg-blue-100',
-                border: 'border-blue-100',
-                accent: '#2563eb'
-            }
-        };
+  const currentCase = caseStudies[activeTab];
 
-        const CASE_STUDIES = {
-            addison: {
-                id: 'addison',
-                name: 'Addison',
-                tag: 'Creative Agency',
-                color: 'indigo',
-                title: 'The Human Algorithm: Why the Future of Learning at UNC Charlotte Must Start with the Soul',
-                content: (
-                    <div className="text-slate-700 leading-relaxed space-y-6">
-                        <p><strong>CHARLOTTE, NC</strong> — On the third floor of the J. Murrey Atkins Library, the rhythmic symphony of mechanical keyboards fills the air. Among the students is <strong>Addison</strong>, a sophomore at UNC Charlotte.</p>
-                        <p>Addison is a first-generation student with a passion for theater and music. However, he also navigates life with ADHD. While he is diligent, he feels that the current "digital-first" academic requirements are more about jumping through hoops than meaningful growth.</p>
-                        <h3 className="text-xl font-bold text-slate-900 pt-4">The "Repetitive Rigor" Trap</h3>
-                        <p>"I came here ready to be inspired," Addison says. "But half my nights are spent posting to discussion forums where everyone says the same thing. It’s rigorous in terms of time, but it feels hollow."</p>
-                        <h3 className="text-xl font-bold text-slate-900 pt-4">Starting with the Human Experience</h3>
-                        <p>How can technology empower Addison to turn a sociology essay into a dramatic monologue? How can AI act as a collaborative partner in his creative process rather than just a shortcut?</p>
-                        <blockquote className="border-l-4 border-indigo-500 pl-4 py-3 italic text-slate-600 bg-slate-50 rounded-r-lg shadow-sm">
-                            "The AAC&U approach to student success emphasizes institutional responsibility for both academic achievement and the development of skills needed for life after college."
-                        </blockquote>
+  return (
+    <div className="h-screen bg-stone-50 text-stone-900 font-sans flex flex-col overflow-hidden selection:bg-stone-200">
+      {/* Brand Header */}
+      <header className="bg-white border-b border-stone-200 px-6 py-4 flex-none z-10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="bg-[#005035] p-2 rounded">
+              <Sparkles className="text-white w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="font-black text-base tracking-tight text-[#005035] uppercase leading-none">The Illusion of Rigor</h1>
+              <p className="text-[10px] text-[#A49665] font-bold uppercase tracking-[0.15em] mt-1">UNC Charlotte • Human-Centered AI</p>
+            </div>
+          </div>
+          
+          <div className="flex bg-[#F2F2F2] p-1 rounded-md border border-stone-200">
+            {caseStudies.map((cs, idx) => (
+              <button
+                key={cs.id}
+                onClick={() => setActiveTab(idx)}
+                className={`px-5 py-2 text-xs font-black uppercase tracking-wider rounded transition-all ${
+                  activeTab === idx 
+                    ? 'bg-[#005035] text-white shadow-md scale-105' 
+                    : 'text-stone-500 hover:text-[#005035]'
+                }`}
+              >
+                Story {idx + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content: Two Column Setup */}
+      <main className="flex-grow flex flex-col md:flex-row max-w-7xl mx-auto w-full overflow-hidden">
+        
+        {/* Left Column: Case Study Reader */}
+        <div className="w-full md:w-2/3 h-full overflow-y-auto px-6 py-10 md:pr-12 custom-scrollbar bg-white">
+          <div className="max-w-2xl mx-auto space-y-10 pb-20">
+            <div className="flex items-center gap-3 text-[#A49665] font-black text-xs tracking-[0.25em] uppercase">
+              <div className="h-px w-8 bg-[#A49665]" />
+              {currentCase.location}
+            </div>
+            
+            <h2 className="text-5xl font-serif font-black text-[#005035] leading-[1.05] tracking-tight">
+              {currentCase.title}
+            </h2>
+
+            <div className="space-y-8">
+              {currentCase.content.split('\n\n').map((para, i) => {
+                const isHeading = para.length < 50 && !para.includes('.');
+                return (
+                  <p 
+                    key={i} 
+                    className={`${
+                      isHeading 
+                      ? 'text-2xl font-black font-serif pt-6 text-[#005035] border-l-4 border-[#A49665] pl-6' 
+                      : 'text-[#515151] text-xl leading-relaxed font-medium'
+                    }`}
+                  >
+                    {para}
+                  </p>
+                );
+              })}
+            </div>
+
+            <div className="pt-12 border-t border-stone-100">
+              <div className="flex items-center justify-between">
+                <button 
+                  onClick={() => setActiveTab(prev => Math.max(0, prev - 1))}
+                  disabled={activeTab === 0}
+                  className="group flex items-center gap-3 text-xs font-black uppercase tracking-widest text-[#A49665] hover:text-[#005035] disabled:opacity-0 transition-all"
+                >
+                  <ChevronRight className="w-5 h-5 rotate-180 border-2 border-[#A49665] rounded-full group-hover:border-[#005035] p-0.5 transition-all" /> 
+                  Previous
+                </button>
+                <button 
+                  onClick={() => setActiveTab(prev => Math.min(caseStudies.length - 1, prev + 1))}
+                  disabled={activeTab === caseStudies.length - 1}
+                  className="group flex items-center gap-3 text-xs font-black uppercase tracking-widest text-[#A49665] hover:text-[#005035] disabled:opacity-0 transition-all"
+                >
+                  Next Story
+                  <ChevronRight className="w-5 h-5 border-2 border-[#A49665] rounded-full group-hover:border-[#005035] p-0.5 transition-all" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Interaction Sidebar */}
+        <div className="w-full md:w-1/3 bg-[#F9F9F7] border-l border-stone-200 h-full flex flex-col shadow-[-4px_0_10px_rgba(0,0,0,0.03)]">
+          <div className="p-8 bg-[#005035] text-white flex-none relative overflow-hidden">
+            {/* Subtle background decoration */}
+            <div className="absolute top-0 right-0 w-24 h-24 bg-[#A49665] opacity-10 rotate-45 translate-x-12 -translate-y-12" />
+            
+            <h3 className="text-xl font-black flex items-center gap-3 mb-3 uppercase tracking-wider">
+              <Brain className="w-6 h-6 text-[#A49665]" />
+              Workshop Log
+            </h3>
+            <p className="text-stone-200 text-sm leading-relaxed font-medium">
+              How can this student use <strong>human-centered skills</strong> to ethically harness AI at UNC Charlotte?
+            </p>
+          </div>
+
+          <div className="flex-grow overflow-y-auto p-8 space-y-10 custom-scrollbar">
+            {/* Input Form */}
+            <form onSubmit={handleSubmitContribution} className="space-y-4">
+              <div className="relative">
+                <textarea
+                  value={newIdea}
+                  onChange={(e) => setNewIdea(e.target.value)}
+                  placeholder="Draft your strategic insight..."
+                  className="w-full h-36 bg-white border-2 border-stone-200 rounded-lg p-5 text-sm text-[#515151] placeholder-stone-400 focus:ring-2 focus:ring-[#A49665] focus:border-transparent resize-none transition-all shadow-inner"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={!newIdea.trim()}
+                className="w-full bg-[#005035] text-white text-xs font-black uppercase tracking-[0.2em] py-4 rounded-lg flex items-center justify-center gap-3 hover:bg-[#00402a] active:scale-95 shadow-lg transition-all disabled:opacity-30 disabled:grayscale"
+              >
+                <Send className="w-4 h-4 text-[#A49665]" /> Commit Insight
+              </button>
+            </form>
+
+            {/* Ideas Feed */}
+            <div className="space-y-5">
+              <div className="flex items-center justify-between border-b-2 border-stone-200 pb-3">
+                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#A49665]">Collaborative Feed</h4>
+                <span className="text-[10px] bg-white border border-stone-200 text-[#005035] px-3 py-1 rounded font-black tracking-widest">
+                  {contributions[currentCase.id]?.length || 0} LOGS
+                </span>
+              </div>
+              
+              <div className="space-y-5">
+                {contributions[currentCase.id]?.map((item) => (
+                  <div key={item.id} className="group bg-white border-l-4 border-[#005035] p-5 rounded-r shadow-sm hover:shadow-md transition-all">
+                    <p className="text-sm text-[#515151] leading-relaxed font-serif italic">"{item.text}"</p>
+                    <div className="mt-4 flex items-center justify-between text-[10px] text-[#A49665] font-black uppercase tracking-widest">
+                       <span className="flex items-center gap-2">
+                         <div className="w-2 h-2 rounded-full bg-[#005035]" />
+                         Student Action
+                       </span>
+                       <span className="font-mono opacity-60">
+                         {new Date(item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                       </span>
                     </div>
-                ),
-                objective: "Brainstorm concrete ways Addison can use AI (GEMs, NotebookLM) to amplify his human skills. How can AI act as a collaborative partner in his creative process?"
-            },
-            maya: {
-                id: 'maya',
-                name: 'Maya',
-                tag: 'Time Equity',
-                color: 'emerald',
-                title: 'The Margin of Error: Navigating Time Poverty in the Environmental Science Lab',
-                content: (
-                    <div className="text-slate-700 leading-relaxed space-y-6">
-                        <p><strong>CHARLOTTE, NC</strong> — <strong>Maya</strong>, a senior in Environmental Science, is finishing her first "shift" of the day as the sun rises. She hasn't slept more than five hours a night this semester.</p>
-                        <p>Working 30 hours a week while caring for her grandmother, Maya lives in "Time Poverty." Her capstone requires synthesizing hundreds of pages of technical reports—a task that demands deep focus her life doesn't always permit.</p>
-                        <h3 className="text-xl font-bold text-slate-900 pt-4">The "Cognitive Load" Barrier</h3>
-                        <p>"By the time I’ve navigated the technical jargon on the bus, my stop is here," Maya explains. "I feel like I'm constantly restarting from zero because I don't have the luxury of long study blocks."</p>
-                        <h3 className="text-xl font-bold text-slate-900 pt-4">Designing for the Overburdened</h3>
-                        <p>How can tools like NotebookLM help her turn a 50-page technical report into a high-level briefing she can digest during her commute, allowing her to spend her precious "deep focus" time on analysis?</p>
-                        <blockquote className="border-l-4 border-emerald-500 pl-4 py-3 italic text-slate-600 bg-slate-50 rounded-r-lg shadow-sm">
-                            "Success means providing tools that respect her time and acknowledge that her life outside the classroom is a reality we must design for."
-                        </blockquote>
-                    </div>
-                ),
-                objective: "Explore how Maya can use AI to manage 'Time Poverty.' How can technology help her maintain analytical depth within a fragmented schedule?"
-            },
-            leo: {
-                id: 'leo',
-                name: 'Leo',
-                tag: 'Foundational Sense-Making',
-                color: 'blue',
-                title: 'Lost in the Lecture Hall: Bridging the "Expert-Novice" Gap in First-Year Chemistry',
-                content: (
-                    <div className="text-slate-700 leading-relaxed space-y-6">
-                        <p><strong>CHARLOTTE, NC</strong> — In a lecture hall of 300, <strong>Leo</strong> feels invisible. A first-year Mechanical Engineering major, he arrived with high marks, but Chemistry 1251 feels like an impenetrable wall of abstract formulas.</p>
-                        <p>Leo is a conceptual learner; he needs to see how the gears mesh. But in foundational STEM, he is met with a barrage of trends that seem disconnected from the physical world he loves to build in.</p>
-                        <h3 className="text-xl font-bold text-slate-900 pt-4">The "Imposter" Silence</h3>
-                        <p>"I have a dozen questions, but I don't want to slow down 300 people," Leo admits. "So I stay quiet and try to teach myself from a textbook that reads like a manual."</p>
-                        <h3 className="text-xl font-bold text-slate-900 pt-4">The AI Socratic Tutor</h3>
-                        <p>What if Leo had a 24/7 Socratic tutor that helps him visualize molecular structures as mechanical systems? We can use AI to build a bridge from his existing knowledge to these abstract concepts.</p>
-                        <blockquote className="border-l-4 border-blue-500 pl-4 py-3 italic text-slate-600 bg-slate-50 rounded-r-lg shadow-sm">
-                            "Institutional responsibility includes fostering the confidence to ask questions and the agency to use technology as a personal laboratory for thought."
-                        </blockquote>
-                    </div>
-                ),
-                objective: "Discuss how Leo can use AI as a 'Socratic Partner' to bridge the expert-novice gap. How can AI help him translate abstract concepts into visual language?"
-            }
-        };
+                  </div>
+                ))}
+                {(!contributions[currentCase.id] || contributions[currentCase.id].length === 0) && (
+                  <div className="text-center py-16 bg-white border-2 border-dashed border-stone-200 rounded-xl">
+                    <MessageSquare className="w-10 h-10 text-stone-200 mx-auto mb-4" />
+                    <p className="text-[10px] font-black uppercase tracking-widest text-stone-400 px-6">Awaiting human contribution for this case...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          {/* Status Bar */}
+          <div className="bg-white border-t border-stone-200 p-5 flex items-center justify-between text-[10px] text-[#515151] font-black uppercase tracking-[0.15em] flex-none">
+            <span className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-[#005035] animate-pulse" />
+              Niner Workshop Mode
+            </span>
+            <span className="text-[#A49665]">Est. 1946</span>
+          </div>
+        </div>
+      </main>
 
-        const Icons = {
-            Brain: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.54Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.54Z"/></svg>,
-            Lightbulb: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .5 2.2 1.5 3.1.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>,
-            Users: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-            Send: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
-            User: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-            ExternalLink: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>,
-            Sparkles: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
-        };
+      <style dangerouslySetInnerHTML={{ __html: `
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f2f2f2; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #A49665; border-radius: 0px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #005035; }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Inter:wght@400;500;700;900&display=swap');
+        
+        .font-serif { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Inter', sans-serif; }
+      `}} />
+    </div>
+  );
+};
 
-        function App() {
-            const [user, setUser] = useState(null);
-            const [ideas, setIdeas] = useState([]);
-            const [newIdea, setNewIdea] = useState('');
-            const [selectedSkill, setSelectedSkill] = useState(SKILLS[0]);
-            const [selectedAI, setSelectedAI] = useState(AI_TOOLS[0]);
-            const [userName, setUserName] = useState('');
-            const [authLoading, setAuthLoading] = useState(true);
-            const [activeCase, setActiveCase] = useState('addison');
-
-            useEffect(() => {
-                const initAuth = async () => {
-                    try {
-                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                            await signInWithCustomToken(auth, __initial_auth_token);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    } catch (err) {
-                        console.error("Auth failed", err);
-                    } finally {
-                        setAuthLoading(false);
-                    }
-                };
-                initAuth();
-                const unsubscribe = onAuthStateChanged(auth, (u) => setUser(u));
-                return () => unsubscribe();
-            }, []);
-
-            useEffect(() => {
-                if (authLoading || !user) return;
-                const ideasRef = collection(db, 'artifacts', appId, 'public', 'data', 'brainstorming');
-                const unsubscribe = onSnapshot(ideasRef, (snapshot) => {
-                    const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    setIdeas(docs.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0)));
-                }, (err) => console.error("Firestore error:", err));
-                return () => unsubscribe();
-            }, [user, authLoading]);
-
-            const handleSubmitIdea = async (e) => {
-                e.preventDefault();
-                if (!newIdea.trim() || !user) return;
-                try {
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'brainstorming'), {
-                        text: newIdea,
-                        author: userName.trim() || 'Anonymous Participant',
-                        authorId: user.uid,
-                        skill: selectedSkill,
-                        aiTool: selectedAI,
-                        caseStudy: activeCase,
-                        createdAt: serverTimestamp()
-                    });
-                    setNewIdea('');
-                } catch (err) { console.error("Error adding idea:", err); }
-            };
-
-            const currentCase = CASE_STUDIES[activeCase];
-            const currentTheme = THEMES[currentCase.color];
-
-            return (
-                <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans">
-                    {/* Left: Case Study Sidebar */}
-                    <aside className="w-full md:w-1/2 lg:w-2/5 md:h-screen overflow-y-auto bg-white border-r border-slate-200 p-6 md:p-10 custom-scrollbar relative">
-                        <div className="flex gap-2 mb-8 bg-slate-100 p-1.5 rounded-xl self-start w-fit flex-wrap">
-                            {Object.values(CASE_STUDIES).map((cs) => {
-                                const csTheme = THEMES[cs.color];
-                                return (
-                                    <button 
-                                        key={cs.id}
-                                        onClick={() => setActiveCase(cs.id)}
-                                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${activeCase === cs.id ? `bg-white shadow-sm ${csTheme.text}` : 'text-slate-500 hover:text-slate-700'}`}
-                                    >
-                                        {cs.name}
-                                    </button>
-                                );
-                            })}
-                        </div>
-
-                        <div className="max-w-2xl mx-auto animate-in" key={activeCase}>
-                            <div className="flex items-center gap-2 mb-4">
-                                <span style={{ color: currentTheme.accent }}><Icons.Brain /></span>
-                                <span className={`px-3 py-1 text-sm font-semibold rounded-full uppercase tracking-wider ${currentTheme.bgLightAlt} ${currentTheme.textDark}`}>
-                                    Case Study: {currentCase.tag}
-                                </span>
-                            </div>
-                            
-                            <h1 className="text-3xl font-bold text-slate-900 mb-8 leading-tight">
-                                {currentCase.title}
-                            </h1>
-                            
-                            {currentCase.content}
-
-                            <div className={`mt-8 p-6 border rounded-xl mb-12 ${currentTheme.bgLight} ${currentTheme.border}`}>
-                                <h4 className="flex items-center gap-2 font-bold mb-3 text-slate-900">
-                                    <span style={{ color: currentTheme.accent }}><Icons.Lightbulb /></span> Workshop Objective
-                                </h4>
-                                <p className="text-slate-600 text-sm italic">
-                                    {currentCase.objective}
-                                </p>
-                            </div>
-                        </div>
-                    </aside>
-
-                    {/* Right: Idea Lab */}
-                    <main className="flex-1 md:h-screen overflow-y-auto flex flex-col bg-white">
-                        <header className="bg-white border-b border-slate-200 p-4 sticky top-0 z-20 flex flex-wrap justify-between items-center gap-4 shadow-sm">
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-indigo-600"><Icons.Users /></span>
-                                    <h2 className="font-bold text-slate-800">Idea Lab</h2>
-                                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full animate-pulse">Live</span>
-                                </div>
-                                <a 
-                                    href="https://gemini.google.com/gem/1lJP5Wvs8uMzJstsnzQCkcv23G3w2TZhj?usp=sharing" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="hidden sm:inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-1.5 rounded-full font-bold text-xs hover:bg-indigo-700 transition-all shadow-md"
-                                >
-                                    <Icons.Sparkles />
-                                    Collaborate with GEM
-                                    <Icons.ExternalLink />
-                                </a>
-                            </div>
-
-                            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5">
-                                <span className="text-slate-400"><Icons.User /></span>
-                                <input 
-                                    type="text" 
-                                    placeholder="Your Name (Optional)" 
-                                    className="bg-transparent text-sm text-slate-700 outline-none w-32 md:w-48"
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                />
-                            </div>
-                        </header>
-
-                        <div className="p-4 md:p-6 border-b border-slate-100 bg-slate-50/50">
-                            <form onSubmit={handleSubmitIdea} className="space-y-4 max-w-3xl mx-auto">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Human Skill Focus</label>
-                                        <select 
-                                            className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500 appearance-none shadow-sm"
-                                            value={selectedSkill}
-                                            onChange={(e) => setSelectedSkill(e.target.value)}
-                                        >
-                                            {SKILLS.map(s => <option key={s} value={s}>{s}</option>)}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">AI Tool/Framework</label>
-                                        <select 
-                                            className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500 appearance-none shadow-sm"
-                                            value={selectedAI}
-                                            onChange={(e) => setSelectedAI(e.target.value)}
-                                        >
-                                            {AI_TOOLS.map(t => <option key={t} value={t}>{t}</option>)}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="relative">
-                                    <textarea
-                                        className="w-full bg-white border border-slate-200 rounded-lg p-4 text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 outline-none min-h-[120px] shadow-sm"
-                                        placeholder={`Suggest a way for ${currentCase.name} to use AI...`}
-                                        value={newIdea}
-                                        onChange={(e) => setNewIdea(e.target.value)}
-                                    />
-                                    <button
-                                        type="submit"
-                                        className={`absolute bottom-4 right-4 text-white p-2 rounded-full shadow-md transition-all hover:scale-105 disabled:opacity-50 ${currentTheme.bg}`}
-                                        disabled={authLoading || !user || !newIdea.trim()}
-                                    >
-                                        <Icons.Send />
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div className="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-4 content-start custom-scrollbar">
-                            {ideas.length === 0 ? (
-                                <div className="col-span-full py-20 text-center flex flex-col items-center gap-4 text-slate-400">
-                                    <Icons.Users />
-                                    <p>{authLoading ? 'Connecting to workshop...' : 'No ideas yet. Be the first to contribute!'}</p>
-                                </div>
-                            ) : (
-                                ideas.map((idea) => {
-                                    const cs = CASE_STUDIES[idea.caseStudy] || CASE_STUDIES.addison;
-                                    const csTheme = THEMES[cs.color];
-                                    return (
-                                        <div key={idea.id} className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm animate-in hover:shadow-md transition-shadow relative overflow-hidden">
-                                            <div className={`absolute top-0 right-0 w-1 h-full ${csTheme.bg}`}></div>
-                                            <div className="flex flex-wrap gap-2 mb-3">
-                                                <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase rounded tracking-wider">{idea.skill}</span>
-                                                <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase rounded tracking-wider">{idea.aiTool}</span>
-                                                <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded tracking-wider ${csTheme.bgLight} ${csTheme.text}`}>
-                                                    For: {cs.name}
-                                                </span>
-                                            </div>
-                                            <p className="text-slate-700 mb-4 whitespace-pre-wrap leading-relaxed text-sm italic">"{idea.text}"</p>
-                                            <div className="flex items-center justify-between border-t border-slate-50 pt-3">
-                                                <div className="flex items-center gap-2">
-                                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white uppercase ${csTheme.bg}`}>
-                                                        {idea.author?.[0] || 'A'}
-                                                    </div>
-                                                    <span className="text-xs font-medium text-slate-600 truncate max-w-[120px]">{idea.author}</span>
-                                                </div>
-                                                <span className="text-[10px] text-slate-400 tabular-nums">
-                                                    {idea.createdAt ? new Date(idea.createdAt.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            )}
-                        </div>
-                    </main>
-                </div>
-            );
-        }
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
-</body>
-</html>
+export default App;
