@@ -102,16 +102,16 @@
         <div class="mb-12">
             <div class="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
                 <span id="step-label">Step 1: Define</span>
-                <span id="step-count">1 of 4</span>
+                <span id="step-count">1 of 5</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-1 overflow-hidden">
-                <div id="progress-bar" class="progress-bar bg-charlotte-green w-1/4"></div>
+                <div id="progress-bar" class="progress-bar bg-charlotte-green w-1/5"></div>
             </div>
         </div>
 
         <div id="workshop-content">
             
-            <!-- STEP 1: MORNING CHECK-IN (DEFINE) -->
+            <!-- STEP 1: DEFINE -->
             <div class="workshop-step active" id="step-1">
                 <h2 class="text-3xl font-bold mb-4 text-charlotte-green">Step 1: Define Your Friction</h2>
                 <p class="text-slate-600 mb-8 leading-relaxed">
@@ -119,17 +119,17 @@
                 </p>
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 accent-border">
                     <label class="block text-sm font-bold text-slate-500 uppercase mb-3">Define one task to tackle today:</label>
-                    <textarea id="user-task" class="w-full p-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all h-32" placeholder="e.g., Drafting a 3-month family budget, organizing the neighborhood volunteer schedule, or simplifying a complex medical bill..."></textarea>
+                    <textarea id="user-task" class="w-full p-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all h-32" placeholder="e.g., Drafting a 3-month family budget, organizing the neighborhood volunteer schedule..."></textarea>
                     <button onclick="goToStep(2)" class="mt-6 bg-charlotte-green text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all flex items-center gap-2">
                         Next: Augment this Task →
                     </button>
                 </div>
                 <div class="mt-8 p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-                    <p class="text-sm text-slate-500"><strong class="text-charlotte-green">The Human Check:</strong> Does this task require empathy or nuanced moral judgment? If yes, keep it manual. If it’s just logistical weight, define it here.</p>
+                    <p class="text-sm text-slate-500"><strong class="text-charlotte-green">The Human Check:</strong> Does this task require empathy or nuanced moral judgment? If yes, keep it manual.</p>
                 </div>
             </div>
 
-            <!-- STEP 2: THE COLLABORATION (AUGMENT) -->
+            <!-- STEP 2: AUGMENT -->
             <div class="workshop-step" id="step-2">
                 <div class="flex items-center gap-3 mb-4">
                     <h2 class="text-3xl font-bold text-accent-ai">Step 2: The Collaboration</h2>
@@ -138,55 +138,64 @@
                     Now, we <strong>Augment</strong> your capability. We aren't asking the AI to "think" for you, but to provide the structure for the task you just defined.
                 </p>
                 <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl overflow-hidden relative">
-                    <div class="absolute top-0 right-0 p-4 opacity-10">
-                        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    </div>
                     <p class="text-xs font-bold text-accent-ai uppercase tracking-widest mb-4">Your Dynamic Prompt</p>
                     <p class="text-xl serif mb-6" id="prompt-display">
                         "I need to [Your Task]. Help me organize this into a 20-minute action plan so I can reclaim an hour of my afternoon for [Human Activity]."
                     </p>
                     <div class="bg-white/10 p-5 rounded-xl text-sm leading-relaxed border border-white/10">
-                        <p class="mb-4"><strong>Workshop Tip:</strong> Be specific about the time you want back. This anchors the technology in your actual lived reality.</p>
                         <button onclick="copyPrompt()" class="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-xs hover:bg-slate-100 transition-all">Copy Prompt to Clipboard</button>
                     </div>
                     <div class="mt-8 flex gap-4">
                         <button onclick="goToStep(1)" class="text-slate-400 font-bold text-sm hover:text-white transition-all">← Back</button>
-                        <button onclick="goToStep(3)" class="bg-accent-ai text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all">Next: The Audit →</button>
+                        <button onclick="goToStep(3)" class="bg-accent-ai text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all">Next: Infuse & Interrogate →</button>
                     </div>
                 </div>
             </div>
 
-            <!-- STEP 3: THE AUDIT (INFUSE & LOCALIZE) -->
+            <!-- STEP 3: INFUSE -->
             <div class="workshop-step" id="step-3">
-                <h2 class="text-3xl font-bold mb-4">Step 3: The Audit</h2>
+                <h2 class="text-3xl font-bold mb-4 text-accent-ai">Step 3: Infuse Your Voice</h2>
                 <p class="text-slate-600 mb-8 leading-relaxed">
-                    The AI has produced a draft. Now, you must <strong>Infuse</strong> it with your voice and <strong>Localize</strong> it to your environment. Interrogate the result for generic "AI-speak."
+                    AI tends to be generic. In this step, you <strong>Infuse</strong> the draft with your specific expertise, stories, and personality. Don't let the machine have the final word on style.
+                </p>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 accent-border">
+                    <h3 class="font-bold text-slate-800 mb-3">Interrogation Exercise</h3>
+                    <p class="text-sm text-slate-600 mb-4">Paste the AI output and ask: "Where is the human here?" Adjust the tone to match your actual conversational style.</p>
+                    <div class="bg-slate-50 p-4 rounded-xl text-xs font-mono italic border border-slate-200">
+                        "Rewrite this using my specific vocabulary and remove any marketing jargon or corporate fluff."
+                    </div>
+                    <div class="mt-6 flex gap-4">
+                        <button onclick="goToStep(2)" class="text-slate-400 font-bold text-sm hover:text-slate-600 transition-all">← Back</button>
+                        <button onclick="goToStep(4)" class="bg-charlotte-green text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all">Next: Localize →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: LOCALIZE -->
+            <div class="workshop-step" id="step-4">
+                <h2 class="text-3xl font-bold mb-4 text-charlotte-green">Step 4: Localize the Context</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">
+                    AI is often "homeless"—it knows everything but lives nowhere. <strong>Localize</strong> the output to Charlotte or your specific neighborhood.
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <h3 class="font-bold text-charlotte-green mb-3">Infuse Personality</h3>
-                        <p class="text-sm text-slate-600 mb-4">Does this sound like you, or a brochure? Practice adding your specific "Interrogation":</p>
-                        <div class="bg-slate-50 p-4 rounded-xl text-xs font-mono italic">
-                            "This sounds too corporate. Adjust this to reflect my specific neighborhood context in Charlotte and use a neighborly, direct tone."
-                        </div>
+                        <h3 class="font-bold text-charlotte-green mb-3">The Geography Check</h3>
+                        <p class="text-sm text-slate-600 italic">"Ensure all recommendations are available within the 28205 zip code and verify current business hours."</p>
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <h3 class="font-bold text-charlotte-green mb-3">Localize Facts</h3>
-                        <p class="text-sm text-slate-600 mb-4">Check for local hallucinations. Ensure the locations and resources mentioned are actually in your community.</p>
-                        <div class="bg-slate-50 p-4 rounded-xl text-xs font-mono italic">
-                            "Are these specific to [My Zip Code]? Ensure all logistics mentioned are achievable within my local transit or walking range."
-                        </div>
+                        <h3 class="font-bold text-charlotte-green mb-3">The Community Lens</h3>
+                        <p class="text-sm text-slate-600 italic">"How would a resident of Plaza Midwood interpret this advice? Adjust for our local community norms."</p>
                     </div>
                 </div>
                 <div class="mt-10 flex gap-4">
-                    <button onclick="goToStep(2)" class="text-slate-400 font-bold text-sm hover:text-slate-600 transition-all">← Back</button>
-                    <button onclick="goToStep(4)" class="bg-charlotte-green text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all">Final Step: The Compass →</button>
+                    <button onclick="goToStep(3)" class="text-slate-400 font-bold text-sm hover:text-slate-600 transition-all">← Back</button>
+                    <button onclick="goToStep(5)" class="bg-charlotte-green text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all">Next: Yield & Compass →</button>
                 </div>
             </div>
 
-            <!-- STEP 4: THE COMPASS (YIELD) -->
-            <div class="workshop-step" id="step-4">
-                <h2 class="text-3xl font-bold mb-4 text-center">Step 4: The Compass</h2>
+            <!-- STEP 5: YIELD -->
+            <div class="workshop-step" id="step-5">
+                <h2 class="text-3xl font-bold mb-4 text-center">Step 5: The Yield</h2>
                 <div class="max-w-2xl mx-auto text-center">
                     <p class="text-slate-600 mb-10 leading-relaxed text-lg italic">
                         "The final check is your <strong>Yield</strong>. You take the responsibility for the output, ensuring it serves your human flourishing."
@@ -204,7 +213,7 @@
                             </li>
                             <li class="flex gap-3">
                                 <input type="checkbox" class="w-6 h-6 rounded accent-charlotte-green">
-                                <span class="text-slate-700">I <strong>Localized</strong> and checked all the facts myself.</span>
+                                <span class="text-slate-700">I <strong>Infused</strong> my personality and <strong>Localized</strong> facts.</span>
                             </li>
                         </ul>
                         <p class="text-xs uppercase tracking-widest font-bold text-charlotte-green/60">Responsibility rests with you. Always.</p>
@@ -219,10 +228,10 @@
         </div>
     </main>
 
-    <!-- Framework Sidebar Snippet (Visible on Desktop) -->
+    <!-- Framework Sidebar Snippet -->
     <div class="hidden lg:block fixed left-8 top-1/2 -translate-y-1/2 w-48 space-y-4">
         <div class="text-[10px] uppercase font-black text-slate-300 tracking-[0.2em] mb-4">DAILY Framework</div>
-        <div class="flex items-center gap-3 text-slate-400" id="nav-step-1">
+        <div class="flex items-center gap-3 text-charlotte-green" id="nav-step-1">
             <span class="w-6 h-6 rounded-full border border-slate-200 flex items-center justify-center text-[10px] font-bold">D</span>
             <span class="text-xs font-bold">Define</span>
         </div>
@@ -238,6 +247,10 @@
             <span class="w-6 h-6 rounded-full border border-slate-200 flex items-center justify-center text-[10px] font-bold">L</span>
             <span class="text-xs font-bold">Localize</span>
         </div>
+        <div class="flex items-center gap-3 text-slate-400" id="nav-step-5">
+            <span class="w-6 h-6 rounded-full border border-slate-200 flex items-center justify-center text-[10px] font-bold">Y</span>
+            <span class="text-xs font-bold">Yield</span>
+        </div>
     </div>
 
     <!-- Workshop Logic Script -->
@@ -247,17 +260,17 @@
             document.querySelectorAll('.workshop-step').forEach(step => step.classList.remove('active'));
             document.getElementById(`step-${stepNumber}`).classList.add('active');
 
-            // Update Progress Bar
-            const progress = (stepNumber / 4) * 100;
+            // Update Progress Bar (5 steps total)
+            const progress = (stepNumber / 5) * 100;
             document.getElementById('progress-bar').style.width = `${progress}%`;
             
             // Update Labels
-            const labels = ["", "Step 1: Define", "Step 2: Augment", "Step 3: Infuse/Localize", "Step 4: Yield"];
+            const labels = ["", "Step 1: Define", "Step 2: Augment", "Step 3: Infuse", "Step 4: Localize", "Step 5: Yield"];
             document.getElementById('step-label').innerText = labels[stepNumber];
-            document.getElementById('step-count').innerText = `${stepNumber} of 4`;
+            document.getElementById('step-count').innerText = `${stepNumber} of 5`;
 
             // Update Sidebar Navigation highlights
-            for(let i=1; i<=4; i++) {
+            for(let i=1; i<=5; i++) {
                 const nav = document.getElementById(`nav-step-${i}`);
                 if(nav) {
                     if(i === stepNumber) {
@@ -270,7 +283,7 @@
                 }
             }
 
-            // Specific logic for Step 2: Injecting user input into prompt
+            // Step 2 logic
             if(stepNumber === 2) {
                 const task = document.getElementById('user-task').value || "[Your Task]";
                 document.getElementById('prompt-display').innerHTML = `"I need to <strong>${task}</strong>. Help me organize this into a 20-minute action plan so I can reclaim an hour of my afternoon for a human experience in Charlotte."`;
