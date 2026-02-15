@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAILY: AI Needs You</title>
+    <title>DAILY Live Workshop: AI Needs You</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -13,7 +13,7 @@
         :root {
             --clt-green: #00703c;
             --clt-gold: #b3a369;
-            --clt-accent-ai: #d97706; /* A warm amber/gold to highlight 'AI' */
+            --clt-accent-ai: #d97706;
         }
 
         body { 
@@ -34,19 +34,13 @@
             border-left: 4px solid var(--clt-green);
         }
 
-        /* Hover interaction for single-page engagement */
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        .workshop-step {
+            display: none;
         }
 
-        /* Smooth reveal for section content */
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
+        .workshop-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out forwards;
         }
 
         @keyframes fadeIn {
@@ -54,234 +48,251 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive adjustments for the DAILY mnemonic */
-        @media (max-width: 768px) {
-            .mnemonic-label {
-                margin-bottom: -20px;
-                font-size: 4rem;
-            }
+        .progress-bar {
+            height: 4px;
+            transition: width 0.3s ease;
         }
     </style>
 </head>
 <body class="text-slate-800 antialiased">
 
-    <!-- Hero Section -->
-    <header class="relative overflow-hidden py-24 px-6 md:py-32">
-        <div class="max-w-4xl mx-auto text-center relative z-10 fade-in">
-            <span class="inline-block px-4 py-1 mb-6 text-sm font-semibold tracking-widest uppercase bg-green-100 text-charlotte-green rounded-full">
-                Human-Centered AI For Everyday Use
+    <!-- Hero / Header -->
+    <header class="py-12 px-6 bg-white border-b border-slate-100">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="inline-block px-4 py-1 mb-4 text-xs font-bold tracking-widest uppercase bg-green-100 text-charlotte-green rounded-full">
+                Human-Centered AI for Everyday Use
             </span>
-            <h1 class="text-5xl md:text-8xl font-bold mb-6 text-slate-900 leading-tight">
-                D<span class="text-accent-ai">AI</span>LY: <span class="italic text-charlotte-green font-normal">AI Needs You</span>
+            <h1 class="text-4xl md:text-6xl font-bold mb-2 text-slate-900 leading-tight">
+                D<span class="text-accent-ai">AI</span>LY Live
             </h1>
-            <p class="text-xl md:text-2xl text-slate-600 mb-10 serif leading-relaxed max-w-2xl mx-auto">
-                Stop using technology to replace your voice. Start using it to find the time to use your voice.
-            </p>
-            <div class="p-8 bg-white shadow-xl rounded-2xl accent-border text-left max-w-2xl mx-auto border border-slate-100">
-                <p class="text-slate-700 italic text-lg md:text-xl leading-relaxed">
-                    "AI has no heartbeat, no memories of the mist on Lake Norman, and no stake in our community. We don't use it to act human—we use it to clear the clutter so we can <strong>be</strong> human."
-                </p>
+            <p class="text-lg text-slate-500 font-medium uppercase tracking-tighter mb-6">Live Interactive Workshop</p>
+            
+            <!-- DAILY Acronym Definition -->
+            <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-8">
+                <div class="text-center">
+                    <span class="block text-2xl font-black text-charlotte-green">D</span>
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Define</span>
+                </div>
+                <div class="text-center">
+                    <span class="block text-2xl font-black text-accent-ai">A</span>
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Augment</span>
+                </div>
+                <div class="text-center">
+                    <span class="block text-2xl font-black text-accent-ai">I</span>
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Infuse</span>
+                </div>
+                <div class="text-center">
+                    <span class="block text-2xl font-black text-charlotte-green">L</span>
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Localize</span>
+                </div>
+                <div class="text-center">
+                    <span class="block text-2xl font-black text-charlotte-green">Y</span>
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Yield</span>
+                </div>
             </div>
+
+            <p class="text-xl text-slate-600 serif italic">"AI Needs You"</p>
         </div>
     </header>
 
-    <!-- The Mission Section -->
-    <section id="mission" class="py-20 px-6 bg-white border-y border-slate-100">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-8 text-slate-900">The "Why" Behind the Machine</h2>
-            <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-12">
-                The greatest threat of AI isn't that it replaces us, but that we use it to automate the very things that make life worth living. We handle the <strong>logistics</strong> so the human can handle the <strong>soul-work</strong>.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-left">
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100">
-                    <div class="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-4 font-bold">×</div>
-                    <h3 class="font-bold text-slate-900 text-xl mb-3">Wrong Way: Automation</h3>
-                    <p class="text-slate-600 leading-relaxed">Using AI to write a generic birthday card to a friend because you're "too busy." This creates a thinner, more hollow life.</p>
-                </div>
-                <div class="p-8 rounded-2xl bg-green-50 border border-green-100">
-                    <div class="w-10 h-10 bg-charlotte-green text-white rounded-full flex items-center justify-center mb-4 font-bold">✓</div>
-                    <h3 class="font-bold text-charlotte-green text-xl mb-3">The DAILY Way: Reclamation</h3>
-                    <p class="text-slate-600 leading-relaxed">Using AI to organize your chaotic work schedule so you can leave at 5 PM and take that friend to dinner. This creates a more lived life.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Historical Perspective Quote Section -->
-    <section class="py-20 px-6 bg-slate-50">
-        <div class="max-w-3xl mx-auto text-center italic">
-            <svg class="w-12 h-12 text-slate-200 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.851h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.154c-2.438.914-4 3.644-4 5.85h4v10h-9.996z" />
-            </svg>
-            <h2 class="text-2xl md:text-3xl text-slate-700 leading-relaxed serif mb-6">
-                "Such shaping of a tool to oneself, learning a technological skill, is hardly dehumanizing. The use of a technology can enrich the human psyche, enlarge the human spirit, intensify its interior life."
-            </h2>
-            <div class="text-charlotte-green font-bold tracking-widest uppercase text-sm">
-                Walter J. Ong
-            </div>
-            <div class="text-slate-400 text-xs mt-1">
-                Orality and Literacy, 1982
-            </div>
-        </div>
-    </section>
-
-    <!-- The DAILY Framework Section -->
-    <section id="framework" class="py-20 px-6 max-w-7xl mx-auto bg-white rounded-[2.5rem] my-12 shadow-inner border border-slate-100">
-        <div class="text-center mb-16 px-4">
-            <h2 class="text-4xl md:text-5xl font-bold mb-4">The D<span class="text-accent-ai">AI</span>LY Practice</h2>
-            <p class="text-slate-500 text-lg">A framework for living a real life in a digital age.</p>
-        </div>
+    <!-- Workshop Container -->
+    <main class="max-w-4xl mx-auto py-12 px-6">
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 px-4">
-            <!-- D -->
-            <div class="flex flex-col group">
-                <span class="text-7xl font-black text-slate-200 group-hover:text-green-200 transition-colors mb-[-35px] ml-[-10px] z-0 mnemonic-label">D</span>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 relative z-10 h-full card-hover">
-                    <h3 class="font-bold text-xl mb-3 text-charlotte-green">Discover Needs</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Where is the "life-friction"? Identify the dry, administrative tasks that are stealing your time from people and place.</p>
-                </div>
+        <!-- Progress Indicator -->
+        <div class="mb-12">
+            <div class="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+                <span id="step-label">Step 1: Define</span>
+                <span id="step-count">1 of 4</span>
             </div>
-            <!-- A -->
-            <div class="flex flex-col group">
-                <span class="text-7xl font-black text-slate-200 group-hover:text-amber-200 transition-colors mb-[-35px] ml-[-10px] z-0 mnemonic-label">A</span>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 relative z-10 h-full card-hover">
-                    <h3 class="font-bold text-xl mb-3 text-accent-ai">Assist Reality</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Let the AI solve the logistical puzzle—meal plans, itinerary drafts, data summaries—so you can physically show up.</p>
-                </div>
-            </div>
-            <!-- I -->
-            <div class="flex flex-col group">
-                <span class="text-7xl font-black text-slate-200 group-hover:text-amber-200 transition-colors mb-[-35px] ml-[-10px] z-0 mnemonic-label">I</span>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 relative z-10 h-full card-hover">
-                    <h3 class="font-bold text-xl mb-3 text-accent-ai">Infuse Self</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Keep your fingerprints visible. Use AI to sharpen your ideas, but never let it hide your actual voice or stories.</p>
-                </div>
-            </div>
-            <!-- L -->
-            <div class="flex flex-col group">
-                <span class="text-7xl font-black text-slate-200 group-hover:text-green-200 transition-colors mb-[-35px] ml-[-10px] z-0 mnemonic-label">L</span>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 relative z-10 h-full card-hover">
-                    <h3 class="font-bold text-xl mb-3 text-charlotte-green">Listen Locally</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Anchor the AI in Charlotte. Reference local neighborhoods and history to keep the output grounded in our community.</p>
-                </div>
-            </div>
-            <!-- Y -->
-            <div class="flex flex-col group">
-                <span class="text-7xl font-black text-slate-200 group-hover:text-green-200 transition-colors mb-[-35px] ml-[-10px] z-0 mnemonic-label">Y</span>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 relative z-10 h-full card-hover">
-                    <h3 class="font-bold text-xl mb-3 text-charlotte-green">Yield with Care</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">The final check is your responsibility. If it feels machine-made, you've leaned too hard on the tool.</p>
-                </div>
+            <div class="w-full bg-slate-100 rounded-full h-1 overflow-hidden">
+                <div id="progress-bar" class="progress-bar bg-charlotte-green w-1/4"></div>
             </div>
         </div>
-    </section>
 
-    <!-- Real World Scenarios -->
-    <section id="scenarios" class="bg-slate-900 text-white py-24 px-6">
-        <div class="max-w-6xl mx-auto text-center">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6 serif italic">Reclaiming Your Reality</h2>
-            <p class="text-slate-400 mb-16 max-w-2xl mx-auto text-lg">Real scenarios where AI clears the path for a more authentic life in the Queen City.</p>
+        <div id="workshop-content">
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 text-left">
-                <!-- Use Case 1 -->
-                <div class="bg-white/5 border border-white/10 p-10 rounded-3xl card-hover">
-                    <h3 class="text-2xl font-bold text-green-400 mb-4">The Alumni Parent</h3>
-                    <p class="text-slate-300 mb-6 italic leading-relaxed text-lg">"I want to spend Sunday with my kids at Freedom Park, not stuck at the counter wondering what to cook for the week."</p>
-                    <div class="space-y-4">
-                        <p class="text-xs uppercase tracking-widest text-slate-500 font-bold">The D<span class="text-accent-ai">AI</span>LY Shift</p>
-                        <p class="text-sm text-slate-400 leading-relaxed">Offload the 'Food Logistics' puzzle to buy back three hours of outdoor play.</p>
-                        <div class="bg-black/40 p-5 rounded-xl font-mono text-green-300 text-xs border border-white/5">
-                            "I have these specific items from the Charlotte Regional Farmers Market. Help me create a 15-minute prep plan for 3 dinners so I can play with my kids until sunset."
+            <!-- STEP 1: MORNING CHECK-IN (DEFINE) -->
+            <div class="workshop-step active" id="step-1">
+                <h2 class="text-3xl font-bold mb-4 text-charlotte-green">Step 1: Define Your Friction</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">
+                    The first step is to <strong>Define</strong> the specific task. Don't look for an "AI problem"; look for a "Life-Friction." What is currently stealing your energy from your human priorities?
+                </p>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 accent-border">
+                    <label class="block text-sm font-bold text-slate-500 uppercase mb-3">Define one task to tackle today:</label>
+                    <textarea id="user-task" class="w-full p-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all h-32" placeholder="e.g., Drafting a 3-month family budget, organizing the neighborhood volunteer schedule, or simplifying a complex medical bill..."></textarea>
+                    <button onclick="goToStep(2)" class="mt-6 bg-charlotte-green text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all flex items-center gap-2">
+                        Next: Augment this Task →
+                    </button>
+                </div>
+                <div class="mt-8 p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+                    <p class="text-sm text-slate-500"><strong class="text-charlotte-green">The Human Check:</strong> Does this task require empathy or nuanced moral judgment? If yes, keep it manual. If it’s just logistical weight, define it here.</p>
+                </div>
+            </div>
+
+            <!-- STEP 2: THE COLLABORATION (AUGMENT) -->
+            <div class="workshop-step" id="step-2">
+                <div class="flex items-center gap-3 mb-4">
+                    <h2 class="text-3xl font-bold text-accent-ai">Step 2: The Collaboration</h2>
+                </div>
+                <p class="text-slate-600 mb-8 leading-relaxed">
+                    Now, we <strong>Augment</strong> your capability. We aren't asking the AI to "think" for you, but to provide the structure for the task you just defined.
+                </p>
+                <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl overflow-hidden relative">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <p class="text-xs font-bold text-accent-ai uppercase tracking-widest mb-4">Your Dynamic Prompt</p>
+                    <p class="text-xl serif mb-6" id="prompt-display">
+                        "I need to [Your Task]. Help me organize this into a 20-minute action plan so I can reclaim an hour of my afternoon for [Human Activity]."
+                    </p>
+                    <div class="bg-white/10 p-5 rounded-xl text-sm leading-relaxed border border-white/10">
+                        <p class="mb-4"><strong>Workshop Tip:</strong> Be specific about the time you want back. This anchors the technology in your actual lived reality.</p>
+                        <button onclick="copyPrompt()" class="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-xs hover:bg-slate-100 transition-all">Copy Prompt to Clipboard</button>
+                    </div>
+                    <div class="mt-8 flex gap-4">
+                        <button onclick="goToStep(1)" class="text-slate-400 font-bold text-sm hover:text-white transition-all">← Back</button>
+                        <button onclick="goToStep(3)" class="bg-accent-ai text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all">Next: The Audit →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: THE AUDIT (INFUSE & LOCALIZE) -->
+            <div class="workshop-step" id="step-3">
+                <h2 class="text-3xl font-bold mb-4">Step 3: The Audit</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">
+                    The AI has produced a draft. Now, you must <strong>Infuse</strong> it with your voice and <strong>Localize</strong> it to your environment. Interrogate the result for generic "AI-speak."
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-charlotte-green mb-3">Infuse Personality</h3>
+                        <p class="text-sm text-slate-600 mb-4">Does this sound like you, or a brochure? Practice adding your specific "Interrogation":</p>
+                        <div class="bg-slate-50 p-4 rounded-xl text-xs font-mono italic">
+                            "This sounds too corporate. Adjust this to reflect my specific neighborhood context in Charlotte and use a neighborly, direct tone."
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-charlotte-green mb-3">Localize Facts</h3>
+                        <p class="text-sm text-slate-600 mb-4">Check for local hallucinations. Ensure the locations and resources mentioned are actually in your community.</p>
+                        <div class="bg-slate-50 p-4 rounded-xl text-xs font-mono italic">
+                            "Are these specific to [My Zip Code]? Ensure all logistics mentioned are achievable within my local transit or walking range."
                         </div>
                     </div>
                 </div>
+                <div class="mt-10 flex gap-4">
+                    <button onclick="goToStep(2)" class="text-slate-400 font-bold text-sm hover:text-slate-600 transition-all">← Back</button>
+                    <button onclick="goToStep(4)" class="bg-charlotte-green text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all">Final Step: The Compass →</button>
+                </div>
+            </div>
 
-                <!-- Use Case 2 -->
-                <div class="bg-white/5 border border-white/10 p-10 rounded-3xl card-hover">
-                    <h3 class="text-2xl font-bold text-green-400 mb-4">The Creative Artisan</h3>
-                    <p class="text-slate-300 mb-6 italic leading-relaxed text-lg">"Social media feels like a job that takes me away from my woodshop in NoDa."</p>
-                    <div class="space-y-4">
-                        <p class="text-xs uppercase tracking-widest text-slate-500 font-bold">The D<span class="text-accent-ai">AI</span>LY Shift</p>
-                        <p class="text-sm text-slate-400 leading-relaxed">Dictate your raw, messy passion; let AI handle the structural formatting 'chores'.</p>
-                        <div class="bg-black/40 p-5 rounded-xl font-mono text-green-300 text-xs border border-white/5">
-                            "Here is a voice transcript of me talking about why I love this wood texture. Don't change my words, just help me organize this into 3 updates so I can get back to my lathe."
-                        </div>
+            <!-- STEP 4: THE COMPASS (YIELD) -->
+            <div class="workshop-step" id="step-4">
+                <h2 class="text-3xl font-bold mb-4 text-center">Step 4: The Compass</h2>
+                <div class="max-w-2xl mx-auto text-center">
+                    <p class="text-slate-600 mb-10 leading-relaxed text-lg italic">
+                        "The final check is your <strong>Yield</strong>. You take the responsibility for the output, ensuring it serves your human flourishing."
+                    </p>
+                    <div class="p-10 bg-green-50 rounded-[3rem] border-2 border-charlotte-green border-dashed relative">
+                        <h3 class="text-2xl font-bold text-charlotte-green mb-6">Responsibility Audit</h3>
+                        <ul class="text-left space-y-4 mb-8">
+                            <li class="flex gap-3">
+                                <input type="checkbox" class="w-6 h-6 rounded accent-charlotte-green">
+                                <span class="text-slate-700">I <strong>Defined</strong> the task clearly from my own needs.</span>
+                            </li>
+                            <li class="flex gap-3">
+                                <input type="checkbox" class="w-6 h-6 rounded accent-charlotte-green">
+                                <span class="text-slate-700">The <strong>Augmentation</strong> saved time without sacrificing quality.</span>
+                            </li>
+                            <li class="flex gap-3">
+                                <input type="checkbox" class="w-6 h-6 rounded accent-charlotte-green">
+                                <span class="text-slate-700">I <strong>Localized</strong> and checked all the facts myself.</span>
+                            </li>
+                        </ul>
+                        <p class="text-xs uppercase tracking-widest font-bold text-charlotte-green/60">Responsibility rests with you. Always.</p>
+                    </div>
+                    <div class="mt-12 flex justify-center gap-6">
+                        <button onclick="window.print()" class="text-slate-500 font-bold text-sm border-b border-slate-300">Save Session Notes</button>
+                        <button onclick="goToStep(1)" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold">New Daily Task</button>
                     </div>
                 </div>
             </div>
+
         </div>
-    </section>
+    </main>
 
-    <!-- Workshop Challenges -->
-    <section id="challenges" class="py-24 px-6 max-w-5xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-bold mb-4 serif">Workshop Challenges</h2>
-            <p class="text-slate-500 italic text-lg">"Using the machine to find the human."</p>
+    <!-- Framework Sidebar Snippet (Visible on Desktop) -->
+    <div class="hidden lg:block fixed left-8 top-1/2 -translate-y-1/2 w-48 space-y-4">
+        <div class="text-[10px] uppercase font-black text-slate-300 tracking-[0.2em] mb-4">DAILY Framework</div>
+        <div class="flex items-center gap-3 text-slate-400" id="nav-step-1">
+            <span class="w-6 h-6 rounded-full border border-slate-200 flex items-center justify-center text-[10px] font-bold">D</span>
+            <span class="text-xs font-bold">Define</span>
         </div>
-        
-        <div class="space-y-12">
-            <!-- Challenge 1 -->
-            <div class="bg-white p-10 rounded-3xl shadow-xl border border-slate-100 card-hover accent-border">
-                <div class="flex items-center gap-5 mb-6">
-                    <div class="bg-charlotte-green text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-md">1</div>
-                    <h3 class="text-2xl font-bold text-slate-900">The "Un-Plug" Audit</h3>
-                </div>
-                <p class="text-slate-700 mb-8 leading-relaxed text-lg">
-                    Identify one administrative task currently weighing on you. Use AI to create an execution plan to get it off your plate <strong>so you can be present elsewhere.</strong>
-                </p>
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
-                    <p class="text-xs uppercase tracking-widest font-bold text-slate-400 mb-3">Action Prompt</p>
-                    <p class="text-slate-800 font-medium italic leading-relaxed">
-                        "I am feeling overwhelmed by [Task]. Give me a step-by-step plan to finish this in 20 minutes so I can go for a phone-free walk in <strong>Freedom Park</strong>. Then, suggest 3 local landmarks I should look for to stay grounded in the moment."
-                    </p>
-                </div>
-            </div>
-
-            <!-- Challenge 2 -->
-            <div class="bg-white p-10 rounded-3xl shadow-xl border border-slate-100 card-hover accent-border">
-                <div class="flex items-center gap-5 mb-6">
-                    <div class="bg-charlotte-green text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-md">2</div>
-                    <h3 class="text-2xl font-bold text-slate-900">The "Local Soul" Filter</h3>
-                </div>
-                <p class="text-slate-700 mb-8 leading-relaxed text-lg">
-                    Challenge the AI to think like a neighbor. If its advice sounds like a generic robot, force it back into the reality of <strong>Charlotte.</strong>
-                </p>
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
-                    <p class="text-xs uppercase tracking-widest font-bold text-slate-400 mb-3">Action Prompt</p>
-                    <p class="text-slate-800 font-medium italic leading-relaxed">
-                        "You just gave me a generic answer. Rewrite this so it respects the culture of <strong>Plaza Midwood</strong> and includes a reference to our local pride in the <strong>49ers</strong>. What part of your first answer would a real Charlottean find 'fake'?"
-                    </p>
-                </div>
-            </div>
-
-            <!-- Challenge 3 -->
-            <div class="bg-white p-10 rounded-3xl shadow-xl border border-slate-100 card-hover accent-border">
-                <div class="flex items-center gap-5 mb-6">
-                    <div class="bg-charlotte-green text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-md">3</div>
-                    <h3 class="text-2xl font-bold text-slate-900">The "Voice Anchor"</h3>
-                </div>
-                <p class="text-slate-700 mb-8 leading-relaxed text-lg">
-                    Practice 'I' (Infuse Self). Never let the AI lead. You provide the heart; the AI provides the spine.
-                </p>
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
-                    <p class="text-xs uppercase tracking-widest font-bold text-slate-400 mb-3">Action Prompt</p>
-                    <p class="text-slate-800 font-medium italic leading-relaxed">
-                        "Here is a paragraph I wrote. It's rough, but it captures how I actually feel. Help me clarify the structure, but do NOT remove my story about [Personal Experience]. If you change my voice too much, I want you to explain why."
-                    </p>
-                </div>
-            </div>
+        <div class="flex items-center gap-3 text-slate-400" id="nav-step-2">
+            <span class="w-6 h-6 rounded-full border border-slate-200 flex items-center justify-center text-[10px] font-bold">A</span>
+            <span class="text-xs font-bold">Augment</span>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-50 py-24 px-6 text-center border-t border-slate-200">
-        <div class="max-w-2xl mx-auto">
-            <h2 class="serif italic text-3xl mb-6">"AI is the map. You are the traveler."</h2>
-            <p class="text-slate-600 mb-8 font-medium">A workshop for the UNC Charlotte Community & the citizens of the Queen City.</p>
-            <div class="w-16 h-1 bg-charlotte-green mx-auto mb-10"></div>
-            <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">© 2025 The Authentic Intelligence Project | Charlotte, NC</p>
+        <div class="flex items-center gap-3 text-slate-400" id="nav-step-3">
+            <span class="w-6 h-6 rounded-full border border-slate-200 flex items-center justify-center text-[10px] font-bold">I</span>
+            <span class="text-xs font-bold">Infuse</span>
         </div>
-    </footer>
+        <div class="flex items-center gap-3 text-slate-400" id="nav-step-4">
+            <span class="w-6 h-6 rounded-full border border-slate-200 flex items-center justify-center text-[10px] font-bold">L</span>
+            <span class="text-xs font-bold">Localize</span>
+        </div>
+    </div>
 
+    <!-- Workshop Logic Script -->
+    <script>
+        function goToStep(stepNumber) {
+            // Update UI
+            document.querySelectorAll('.workshop-step').forEach(step => step.classList.remove('active'));
+            document.getElementById(`step-${stepNumber}`).classList.add('active');
+
+            // Update Progress Bar
+            const progress = (stepNumber / 4) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            
+            // Update Labels
+            const labels = ["", "Step 1: Define", "Step 2: Augment", "Step 3: Infuse/Localize", "Step 4: Yield"];
+            document.getElementById('step-label').innerText = labels[stepNumber];
+            document.getElementById('step-count').innerText = `${stepNumber} of 4`;
+
+            // Update Sidebar Navigation highlights
+            for(let i=1; i<=4; i++) {
+                const nav = document.getElementById(`nav-step-${i}`);
+                if(nav) {
+                    if(i === stepNumber) {
+                        nav.classList.remove('text-slate-400');
+                        nav.classList.add('text-charlotte-green');
+                    } else {
+                        nav.classList.add('text-slate-400');
+                        nav.classList.remove('text-charlotte-green');
+                    }
+                }
+            }
+
+            // Specific logic for Step 2: Injecting user input into prompt
+            if(stepNumber === 2) {
+                const task = document.getElementById('user-task').value || "[Your Task]";
+                document.getElementById('prompt-display').innerHTML = `"I need to <strong>${task}</strong>. Help me organize this into a 20-minute action plan so I can reclaim an hour of my afternoon for a human experience in Charlotte."`;
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function copyPrompt() {
+            const text = document.getElementById('prompt-display').innerText;
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = originalText, 2000);
+        }
+    </script>
 </body>
 </html>
