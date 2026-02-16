@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini GEM Builder | UNC Charlotte Save Point</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Custom Icon Component to bridge Lucide and React in this environment
+        const Icon = ({ name, className }) => {
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]);
+            return <i data-lucide={name} className={className}></i>;
+        };
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('framework');
+            const [copied, setCopied] = useState(false);
+            const [formData, setFormData] = useState({
+                name: '',
+                identity: '',
+                field: '',
+                interactionStyle: 'offer critiques and ask clarifying questions',
+                values: 'critical inquiry and student equity',
+                knowledgeSources: ''
+            });
+
+            const generatedInstructions = `You are ${formData.identity || "[Identity]"}. Your goal is to support my work in ${formData.field || "[Task/Field]"}.
+
+**Interaction Style:** Do not generate final outputs immediately. Instead, ${formData.interactionStyle || "[Style]"}.
+
+**Human Values:** Always prioritize ${formData.values || "[Values]"}.
+
+**Constraint:** If I ask you to 'just do it for me,' gently remind me that we are collaborating and offer a first step I can take instead.`;
+
+            const handleCopy = () => {
+                const textArea = document.createElement("textarea");
+                textArea.value = generatedInstructions;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            };
+
+            return (
+                <div className="min-h-screen p-4 md:p-8">
+                    {/* Header */}
+                    <header className="max-w-5xl mx-auto mb-12 text-center">
+                        <div className="inline-flex items-center justify-center p-2 bg-green-100 text-green-800 rounded-full px-4 mb-4 text-sm font-semibold tracking-wide uppercase border border-green-200">
+                            <Icon name="shield-check" className="w-4 h-4 mr-2" />
+                            UNC Charlotte Enterprise Edition
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-slate-900">
+                            Gemini GEM Builder: <span className="text-green-700">AI Needs You</span>
+                        </h1>
+                        <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+                            Centering human creativity, critical thinking, and living work over automated output.
+                        </p>
+                    </header>
+
+                    {/* Navigation */}
+                    <nav className="max-w-4xl mx-auto flex flex-wrap justify-center gap-2 mb-10">
+                        {[
+                            { id: 'framework', label: '1. The Framework', icon: 'brain' },
+                            { id: 'rag', label: '2. The Knowledge (RAG)', icon: 'book-open' },
+                            { id: 'lab', label: '3. Prototype Lab', icon: 'sparkles' },
+                        ].map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`flex items-center px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
+                                    activeTab === tab.id
+                                        ? 'bg-green-700 text-white shadow-lg scale-105'
+                                        : 'bg-white text-slate-600 hover:bg-slate-100'
+                                }`}
+                            >
+                                <Icon name={tab.icon} className="w-4 h-4 mr-2" />
+                                {tab.label}
+                            </button>
+                        ))}
+                    </nav>
+
+                    <main className="max-w-5xl mx-auto animate-fade-in">
+                        {/* Framework Section */}
+                        {activeTab === 'framework' && (
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                                    <div className="bg-blue-100 w-12 h-12 rounded-2xl flex items-center justify-center mb-6">
+                                        <Icon name="user-circle" className="text-blue-700 w-7 h-7" />
+                                    </div>
+                                    <h2 className="text-2xl font-bold mb-4">Identity (The "Who")</h2>
+                                    <p className="text-slate-600 mb-6">
+                                        Don't just give the Gem a job title; give it a perspective. Moving from a "tool" to a "partner."
+                                    </p>
+                                    <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-4">
+                                        <p className="text-sm font-semibold text-blue-800 mb-1 uppercase tracking-wider">Human-Centered Tip</p>
+                                        <p className="text-slate-700 italic">"You are a collaborative partner who values interdisciplinary connections and challenges my assumptions."</p>
+                                    </div>
+                                    <ul className="space-y-2 text-slate-600 text-sm">
+                                        <li className="flex items-start"><Icon name="info" className="w-4 h-4 mr-2 mt-1 text-blue-500" /> Define the personality: Socratic, whimsical, or rigorous?</li>
+                                        <li className="flex items-start"><Icon name="info" className="w-4 h-4 mr-2 mt-1 text-blue-500" /> Identify the "North Star": equity, sustainability, or inquiry?</li>
+                                    </ul>
+                                </div>
+
+                                <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                                    <div className="bg-purple-100 w-12 h-12 rounded-2xl flex items-center justify-center mb-6">
+                                        <Icon name="message-square" className="text-purple-700 w-7 h-7" />
+                                    </div>
+                                    <h2 className="text-2xl font-bold mb-4">Instructions (The "How")</h2>
+                                    <p className="text-slate-600 mb-6">
+                                        These are the guardrails that protect the "human work" of learning and thinking.
+                                    </p>
+                                    <div className="bg-purple-50 p-4 rounded-xl border border-purple-100 mb-4">
+                                        <p className="text-sm font-semibold text-purple-800 mb-1 uppercase tracking-wider">The "No-Magic" Clause</p>
+                                        <p className="text-slate-700 italic">"If I ask you to 'just do it for me,' gently remind me that we are collaborating."</p>
+                                    </div>
+                                    <ul className="space-y-2 text-slate-600 text-sm">
+                                        <li className="flex items-start"><Icon name="info" className="w-4 h-4 mr-2 mt-1 text-purple-500" /> Ask clarifying questions before answering.</li>
+                                        <li className="flex items-start"><Icon name="info" className="w-4 h-4 mr-2 mt-1 text-purple-500" /> Offer multiple frameworks instead of one "correct" solution.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* RAG Section */}
+                        {activeTab === 'rag' && (
+                            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-slate-200">
+                                <div className="max-w-3xl">
+                                    <div className="bg-green-100 w-12 h-12 rounded-2xl flex items-center justify-center mb-6">
+                                        <Icon name="book-open" className="text-green-700 w-7 h-7" />
+                                    </div>
+                                    <h2 className="text-3xl font-bold mb-6 italic">Curation as Human Agency</h2>
+                                    <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+                                        <strong>Retrieval-Augmented Generation (RAG)</strong> is the process of giving the AI a specific library of files to consult. This isn't just a technical feature; it's an act of <strong>curation</strong>.
+                                    </p>
+
+                                    <div className="grid md:grid-cols-3 gap-6">
+                                        {[
+                                            { title: "Avoid the Average", desc: "By using your own materials, you ensure Gemini doesn't pull from the generic public internet." },
+                                            { title: "Grounded Truth", desc: "It forces citations from YOUR materials, making it a tool for deep study." },
+                                            { title: "Synthesis", desc: "Upload opposing viewpoints and ask the Gem to help you navigate the complexity." }
+                                        ].map((item, i) => (
+                                            <div key={i} className="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                                                <h3 className="font-bold mb-2 text-green-800">{item.title}</h3>
+                                                <p className="text-sm text-slate-600">{item.desc}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    
+                                    <div className="mt-10 p-6 bg-amber-50 rounded-2xl border border-amber-100 flex items-start">
+                                        <Icon name="lightbulb" className="w-6 h-6 text-amber-600 mr-4 flex-shrink-0 mt-1" />
+                                        <div>
+                                            <h4 className="font-bold text-amber-900 mb-1">Collaborative Knowledge</h4>
+                                            <p className="text-amber-800 text-sm">Think of RAG as inviting the world's fastest reader into your private study group. They have the memory, but <strong>you</strong> provide the reading list.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Prototype Lab Section */}
+                        {activeTab === 'lab' && (
+                            <div className="grid lg:grid-cols-2 gap-8">
+                                <div className="space-y-6">
+                                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                                        <h3 className="text-xl font-bold mb-6 flex items-center">
+                                            <Icon name="sparkles" className="w-5 h-5 mr-2 text-green-600" />
+                                            Gem Blueprint
+                                        </h3>
+                                        
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-1">Gem Name</label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="e.g., Socratic Research Partner"
+                                                    className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-green-500 outline-none transition-all"
+                                                    value={formData.name}
+                                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-1">Identity (Who is it?)</label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="e.g., A rigorous but encouraging design critic"
+                                                    className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-green-500 outline-none transition-all"
+                                                    value={formData.identity}
+                                                    onChange={(e) => setFormData({...formData, identity: e.target.value})}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-1">Field of Work</label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="e.g., urban planning and social equity"
+                                                    className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-green-500 outline-none transition-all"
+                                                    value={formData.field}
+                                                    onChange={(e) => setFormData({...formData, field: e.target.value})}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-1">Interaction Style</label>
+                                                <textarea 
+                                                    rows="2"
+                                                    className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-green-500 outline-none transition-all"
+                                                    value={formData.interactionStyle}
+                                                    onChange={(e) => setFormData({...formData, interactionStyle: e.target.value})}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-1">Core Values</label>
+                                                <input 
+                                                    type="text" 
+                                                    className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-green-500 outline-none transition-all"
+                                                    value={formData.values}
+                                                    onChange={(e) => setFormData({...formData, values: e.target.value})}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-lg border border-slate-800">
+                                        <h3 className="text-xl font-bold mb-4 flex items-center">
+                                            <Icon name="arrow-right" className="w-5 h-5 mr-2 text-green-400" />
+                                            Implementation Steps
+                                        </h3>
+                                        <ol className="space-y-4 text-sm text-slate-400">
+                                            <li className="flex items-start">
+                                                <span className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center mr-3 flex-shrink-0 text-white border border-slate-700">1</span>
+                                                Go to <a href="https://gemini.google.com" target="_blank" className="text-green-400 hover:underline">gemini.google.com</a>.
+                                            </li>
+                                            <li className="flex items-start">
+                                                <span className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center mr-3 flex-shrink-0 text-white border border-slate-700">2</span>
+                                                Click "Create a Gem" on the sidebar.
+                                            </li>
+                                            <li className="flex items-start">
+                                                <span className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center mr-3 flex-shrink-0 text-white border border-slate-700">3</span>
+                                                Paste your generated instructions.
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div className="lg:sticky lg:top-8 h-fit">
+                                    <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden flex flex-col h-full min-h-[500px]">
+                                        <div className="bg-slate-50 border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+                                            <div className="flex items-center space-x-2">
+                                                <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                                                <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+                                                <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                                                <span className="ml-2 text-xs font-bold text-slate-400 tracking-widest uppercase">Live Gem Preview</span>
+                                            </div>
+                                            <button 
+                                                onClick={handleCopy}
+                                                className="flex items-center text-xs font-bold text-green-700 bg-green-50 px-3 py-1.5 rounded-lg border border-green-100 hover:bg-green-100 transition-colors"
+                                            >
+                                                <Icon name={copied ? 'check' : 'copy'} className="w-3 h-3 mr-1" />
+                                                {copied ? 'Copied!' : 'Copy Instructions'}
+                                            </button>
+                                        </div>
+                                        
+                                        <div className="p-8 flex-grow overflow-y-auto font-mono text-sm leading-relaxed text-slate-700 whitespace-pre-wrap">
+                                            {generatedInstructions}
+                                        </div>
+
+                                        <div className="p-6 bg-slate-50 border-t border-slate-200">
+                                            <p className="text-xs text-slate-500 mb-4 flex items-center">
+                                                <Icon name="info" className="w-3 h-3 mr-1" />
+                                                Copy this into the "Instructions" field of your Gemini Gem.
+                                            </p>
+                                            <div className="flex items-center p-3 bg-white rounded-xl border border-slate-200">
+                                                <div className="w-10 h-10 rounded-lg bg-green-700 flex items-center justify-center text-white mr-4">
+                                                    {formData.name ? formData.name.charAt(0).toUpperCase() : 'G'}
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-slate-900">{formData.name || 'Your Gem Name'}</h4>
+                                                    <p className="text-xs text-slate-500">{formData.field || 'Supporting your field of inquiry'}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </main>
+
+                    <footer className="max-w-5xl mx-auto mt-20 pt-8 border-t border-slate-200 text-center pb-12">
+                        <p className="text-slate-400 text-sm italic max-w-2xl mx-auto">
+                            "The 'magic' of AI is often just a simulation of existing patterns. Human living is unpredictable, messy, and deeply contextual. Your Gem is only as good as the curiosity you bring to it."
+                        </p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
