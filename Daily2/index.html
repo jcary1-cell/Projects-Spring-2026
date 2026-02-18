@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAILY: The Human-First AI Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            scroll-behavior: smooth;
+        }
+
+        .bento-card {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-pill.active {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            color: #6366f1;
+        }
+
+        .modal-overlay {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            animation: modalScale 0.3s ease-out;
+        }
+
+        @keyframes modalScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .hidden-content {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-pulse {
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        .tool-simulator {
+            background: #f1f5f9;
+            border-radius: 1rem;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <div class="bg-indigo-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-extrabold italic">D</div>
+                <span class="font-bold text-xl tracking-tight uppercase">Daily</span>
+            </div>
+            <div class="hidden md:flex space-x-6 text-sm font-semibold text-slate-500">
+                <a href="#framework" class="hover:text-indigo-600 transition">Framework</a>
+                <a href="#toolkit" class="hover:text-indigo-600 transition">Toolkit</a>
+                <a href="#manifesto" class="hover:text-indigo-600 transition">Principles</a>
+            </div>
+            <button onclick="openModal('workshopModal')" class="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-indigo-600 transition shadow-lg shadow-indigo-200">
+                Register Free
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        
+        <!-- Hero Section -->
+        <section class="text-center mb-20">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
+                AI for <span class="gradient-text italic">Real Humans</span>,<br>in your <span class="underline decoration-indigo-400 decoration-4 underline-offset-8">DAILY</span> life.
+            </h1>
+            <p class="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                We don't build businesses here. We build better mornings, easier dinners, and clearer minds.
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <button onclick="document.getElementById('framework').scrollIntoView()" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:scale-105 transition shadow-lg">Explore the DAILY Method</button>
+            </div>
+        </section>
+
+        <!-- Interactive Framework Selector -->
+        <section id="framework" class="mb-24 pt-10">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-2">The DAILY Framework</h2>
+                <p class="text-slate-500">Five pillars to automate the friction of existence.</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 mb-12 bg-slate-100 p-2 rounded-2xl w-fit mx-auto">
+                <button onclick="showStep('D')" id="btn-D" class="nav-pill active px-6 py-3 rounded-xl font-bold transition">D</button>
+                <button onclick="showStep('A')" id="btn-A" class="nav-pill px-6 py-3 rounded-xl font-bold transition">A</button>
+                <button onclick="showStep('I')" id="btn-I" class="nav-pill px-6 py-3 rounded-xl font-bold transition">I</button>
+                <button onclick="showStep('L')" id="btn-L" class="nav-pill px-6 py-3 rounded-xl font-bold transition">L</button>
+                <button onclick="showStep('Y')" id="btn-Y" class="nav-pill px-6 py-3 rounded-xl font-bold transition">Y</button>
+            </div>
+
+            <div id="content-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[400px]">
+                <!-- Dynamic Content Injected Here -->
+            </div>
+        </section>
+
+        <!-- Toolkit Bento Grid -->
+        <section id="toolkit" class="mb-24 pt-10">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold">The Daily Toolkit</h2>
+                <button onclick="openModal('fullToolkitModal')" class="text-indigo-600 font-semibold hover:underline">Full Tool Directory <i class="fa-solid fa-arrow-right ml-2"></i></button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Meal Planner -->
+                <div class="bento-card p-8 rounded-3xl md:col-span-2 bg-indigo-50 border-indigo-100 relative group cursor-pointer" onclick="openModal('mealPlanModal')">
+                    <div class="flex items-start justify-between mb-12">
+                        <div>
+                            <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Most Practical</span>
+                            <h3 class="text-3xl font-bold mt-4">The "What's for Dinner?" Solver</h3>
+                        </div>
+                        <i class="fa-solid fa-utensils text-4xl text-indigo-200"></i>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm mb-6 border border-indigo-100">
+                        <div class="flex items-center gap-3 mb-4 text-xs font-bold text-slate-400 uppercase">
+                            <span class="w-2 h-2 rounded-full bg-green-500"></span> Simulator Active
+                        </div>
+                        <div class="tool-simulator">
+                            <span class="text-indigo-500">User:</span> [Uploads photo of half-empty fridge]<br>
+                            <span class="text-purple-500">AI:</span> I see spinach, eggs, and feta. <br>
+                            <span class="text-emerald-500">Suggestion:</span> Crustless Spinach Pie (15 mins prep).
+                        </div>
+                    </div>
+                    <p class="text-slate-600 font-medium">Click to see exactly how to prompt this &rarr;</p>
+                </div>
+
+                <!-- Voice Mode -->
+                <div class="bento-card p-8 rounded-3xl bg-slate-900 text-white flex flex-col justify-between">
+                    <div>
+                        <i class="fa-solid fa-microphone text-3xl mb-6 text-indigo-400"></i>
+                        <h3 class="text-2xl font-bold mb-4">Hands-Free Mode</h3>
+                        <p class="text-slate-400 mb-8">Perfect for driving, cooking, or "screen-fatigued" evenings. Use AI as a sounding board while you move.</p>
+                    </div>
+                    <button onclick="openModal('voiceDemoModal')" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl transition font-semibold border border-white/10 shadow-lg">See 3 Use Cases</button>
+                </div>
+
+                <!-- Logistics -->
+                <div class="bento-card p-8 rounded-3xl bg-white border hover:border-indigo-300 cursor-pointer" onclick="openModal('logisticsModal')">
+                    <i class="fa-solid fa-calendar-check text-3xl mb-6 text-emerald-500"></i>
+                    <h3 class="text-2xl font-bold mb-4">Logistics Master</h3>
+                    <p class="text-slate-600 mb-4">From messy notes to a structured calendar. No manual entry needed.</p>
+                    <span class="text-indigo-600 font-bold text-sm">View Workflow &rarr;</span>
+                </div>
+
+                <!-- Claude Cowork -->
+                <div class="bento-card p-8 rounded-3xl bg-white md:col-span-2 flex items-center gap-8 border hover:border-indigo-300 cursor-pointer" onclick="window.open('https://claude.ai/downloads', '_blank')">
+                    <div class="w-1/3 bg-slate-100 h-32 rounded-2xl flex items-center justify-center text-5xl">🤖</div>
+                    <div class="w-2/3">
+                        <h3 class="text-2xl font-bold mb-2">Claude Cowork</h3>
+                        <p class="text-slate-600 mb-3">The "agentic" era is here. This app literally moves your mouse to organize your desktop or manage your files.</p>
+                        <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-500">External Tool • Desktop Only</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manifesto Footer -->
+        <section id="manifesto" class="bg-indigo-600 rounded-[3rem] p-12 md:p-24 text-center text-white relative overflow-hidden mb-12">
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-6xl font-extrabold mb-8 italic">"Human-First, AI-Second"</h2>
+                <p class="text-xl opacity-90 max-w-2xl mx-auto mb-12 leading-relaxed">
+                    AI isn't here to replace your creativity. It's here to kill the errands that prevent you from being creative.
+                </p>
+                <div class="flex flex-col md:flex-row gap-4 justify-center">
+                    <button onclick="openModal('cheatSheetModal')" class="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-bold hover:scale-105 transition btn-pulse shadow-xl">Get the PDF Cheat Sheet</button>
+                </div>
+            </div>
+            <!-- Background Blob -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+        </section>
+
+    </main>
+
+    <!-- Modals Section -->
+    <div id="workshopModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content bg-white w-full max-w-lg p-10 rounded-[2.5rem] shadow-2xl" onclick="event.stopPropagation()">
+            <h2 class="text-3xl font-bold mb-4">Reserve Your Spot</h2>
+            <p class="text-slate-500 mb-8">Our next session is: <br><strong>Thursday, March 12th @ 11:00 AM EST</strong></p>
+            <form class="space-y-4" onsubmit="alert('You are registered! Check your inbox for the link.'); return false;">
+                <input type="email" placeholder="Your Email Address" required class="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+                <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition">Send me the Link</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="mealPlanModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content bg-white w-full max-w-2xl p-10 rounded-[2.5rem] shadow-2xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <h2 class="text-3xl font-bold mb-6">Meal Planning AI Guide</h2>
+            <div class="space-y-6">
+                <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
+                    <h4 class="font-bold text-indigo-900 mb-2">The Secret Sauce Prompt:</h4>
+                    <p class="text-slate-700 italic">"I am uploading a photo of my fridge and pantry. Based on these ingredients, give me 3 dinner ideas that take under 20 mins. For each, provide a grocery list of exactly what I am missing."</p>
+                </div>
+                <h4 class="font-bold">Why it works:</h4>
+                <p class="text-slate-600">Most AI models now have "vision." Instead of typing everything you have, just snap 3 photos. It reduces the 'decision fatigue' that happens at 5:00 PM.</p>
+                <button onclick="closeModal(event)" class="text-indigo-600 font-bold">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="logisticsModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content bg-white w-full max-w-2xl p-10 rounded-[2.5rem] shadow-2xl" onclick="event.stopPropagation()">
+            <h2 class="text-3xl font-bold mb-6">Logistics & Calendar</h2>
+            <p class="text-slate-600 mb-6">Never manually create a calendar event again.</p>
+            <div class="bg-slate-900 text-white p-6 rounded-2xl mb-6">
+                <p class="text-sm font-bold text-indigo-400 mb-2 uppercase tracking-widest">The Prompt:</p>
+                <p class="italic">"Here is a messy list of my meetings next week. Create a structured calendar view and provide a single-line link I can click to add each to my Google Calendar."</p>
+            </div>
+            <p class="text-sm text-slate-500">Pro Tip: If you use Gemini, you can just say 'Add these to my Google Calendar' and it will do it directly.</p>
+            <button onclick="closeModal(event)" class="mt-8 text-indigo-600 font-bold">Got it!</button>
+        </div>
+    </div>
+
+    <div id="voiceDemoModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content bg-white w-full max-w-lg p-10 rounded-[2.5rem] shadow-2xl" onclick="event.stopPropagation()">
+            <h2 class="text-3xl font-bold mb-6">3 Ways to Use Voice</h2>
+            <ul class="space-y-4">
+                <li class="flex gap-4">
+                    <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">1</span>
+                    <p class="text-slate-600"><strong>The Car Debrief:</strong> Talk through your day while driving home. Ask AI to summarize your notes into 3 tasks for tomorrow.</p>
+                </li>
+                <li class="flex gap-4">
+                    <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">2</span>
+                    <p class="text-slate-600"><strong>The Cooking Assistant:</strong> "Read me the next step in the recipe when I say 'next'."</p>
+                </li>
+                <li class="flex gap-4">
+                    <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">3</span>
+                    <p class="text-slate-600"><strong>Vibe Check:</strong> "I'm stressed about this email. I'll read it to you, tell me if I'm being too defensive."</p>
+                </li>
+            </ul>
+            <button onclick="closeModal(event)" class="mt-10 w-full py-4 bg-slate-100 rounded-xl font-bold">Close</button>
+        </div>
+    </div>
+
+    <div id="cheatSheetModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content bg-white w-full max-w-lg p-10 rounded-[2.5rem] shadow-2xl text-center" onclick="event.stopPropagation()">
+            <div class="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">
+                <i class="fa-solid fa-file-pdf"></i>
+            </div>
+            <h2 class="text-3xl font-bold mb-4">DAILY Prompt Kit</h2>
+            <p class="text-slate-500 mb-8">All 15 starter prompts for a human-centric AI experience.</p>
+            <a href="#" onclick="alert('Downloading...'); closeModal(event)" class="block w-full bg-indigo-600 text-white py-4 rounded-xl font-bold">Download Now</a>
+            <button onclick="closeModal(event)" class="mt-4 text-slate-400 text-sm">Cancel</button>
+        </div>
+    </div>
+
+    <footer class="py-12 border-t border-slate-200 text-center text-slate-400 text-sm">
+        &copy; 2026 DAILY Workshop Portal. Built for real people using real AI.
+    </footer>
+
+    <script>
+        const steps = {
+            'D': {
+                title: 'Decide & Delegate',
+                subtitle: 'End the choice paralysis.',
+                icon: 'fa-shuffle',
+                desc: 'Ever stare at a menu for 10 minutes? Or wonder which paint color to pick? Let AI look at your options and weigh them against your real values.',
+                prompt: 'I need to decide between these 3 vacation rentals. My priorities are quiet, walking distance to coffee, and good natural light for photos. Rank them.'
+            },
+            'A': {
+                title: 'Automate the Boring',
+                subtitle: 'Delete the digital clutter.',
+                icon: 'fa-bolt-lightning',
+                desc: 'Digital housekeeping drains our energy. Automate your inbox, summarize group chats, and let AI handle the "Can you make it?" emails.',
+                prompt: 'Summarize the last 20 messages in this group chat. Just tell me if there is a plan for Friday and what I need to bring.'
+            },
+            'I': {
+                title: 'Interact & Inquire',
+                subtitle: 'Google without the scrolling.',
+                icon: 'fa-comments',
+                desc: 'Stop fighting search results. Ask your question directly, get a conversational answer, and drill down until you truly understand.',
+                prompt: 'Explain how a heat pump works like we are hanging out at a coffee shop and I have zero engineering knowledge.'
+            },
+            'L': {
+                title: 'Logistics & Layout',
+                subtitle: 'The master of your schedule.',
+                icon: 'fa-calendar-days',
+                desc: 'Turn a brain-dump of errands into an optimized driving route or a messy list of meetings into a beautiful, blocked-out calendar.',
+                prompt: 'I have 6 errands to run today. Here are the locations. Map the most fuel-efficient route and tell me what time I need to leave my house.'
+            },
+            'Y': {
+                title: 'Your Style',
+                subtitle: 'AI that sounds like you.',
+                icon: 'fa-wand-magic-sparkles',
+                desc: 'No more robotic drivel. Train your assistant to write in your unique voice, humor, and professional tone.',
+                prompt: 'Read these 3 emails I wrote. Learn my tone. Now, draft a reply to this invite saying I can’t make it, but make it sound genuinely like me.'
+            }
+        };
+
+        function showStep(id) {
+            document.querySelectorAll('.nav-pill').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+
+            const content = steps[id];
+            const container = document.getElementById('content-container');
+            
+            container.innerHTML = `
+                <div class="hidden-content flex flex-col justify-center">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 text-xl">
+                            <i class="fa-solid ${content.icon}"></i>
+                        </div>
+                        <span class="text-indigo-600 font-bold uppercase tracking-widest text-sm">Pillar ${id}</span>
+                    </div>
+                    <h2 class="text-4xl font-extrabold mb-4">${content.title}</h2>
+                    <h3 class="text-xl font-semibold text-slate-500 mb-6 italic">${content.subtitle}</h3>
+                    <p class="text-lg text-slate-600 mb-8 leading-relaxed">${content.desc}</p>
+                </div>
+                <div class="hidden-content">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100">
+                        <span class="text-xs font-bold text-slate-400 uppercase mb-4 block tracking-widest">The Prompt Pattern</span>
+                        <div class="bg-slate-50 p-6 rounded-2xl mb-6 border-l-4 border-indigo-500">
+                            <p class="text-slate-800 font-medium italic">"${content.prompt}"</p>
+                        </div>
+                        <button onclick="copyText('${content.prompt}')" class="text-indigo-600 font-bold flex items-center hover:translate-x-2 transition cursor-pointer">
+                            Copy for ChatGPT/Claude <i class="fa-solid fa-copy ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            container.querySelectorAll('.hidden-content').forEach((el, i) => {
+                el.style.display = 'block';
+                el.style.animationDelay = (i * 0.1) + 's';
+            });
+        }
+
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(e) {
+            const overlays = document.querySelectorAll('.modal-overlay');
+            overlays.forEach(o => o.style.display = 'none');
+            document.body.style.overflow = 'auto';
+        }
+
+        function copyText(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            // Temporary feedback
+            const btn = event.currentTarget;
+            const original = btn.innerHTML;
+            btn.innerHTML = 'Copied! <i class="fa-solid fa-check ml-2"></i>';
+            setTimeout(() => btn.innerHTML = original, 2000);
+        }
+
+        window.onload = () => showStep('D');
+    </script>
+</body>
+</html>
