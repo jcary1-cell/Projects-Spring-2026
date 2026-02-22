@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuelLab - Growth Journal</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { 
+            font-family: 'Quicksand', sans-serif; 
+            background: #fdf6e3;
+            color: #433422;
+        }
+
+        .handwritten { font-family: 'Gaegu', cursive; }
+
+        .app-container {
+            background-color: #fdfcf7;
+            background-image: radial-gradient(#e5e7eb 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+        }
+
+        .paper-card {
+            background: #ffffff;
+            border: 2px solid #433422;
+            box-shadow: 4px 4px 0px #433422;
+            transition: all 0.2s ease;
+        }
+
+        .paper-card:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #433422;
+        }
+
+        .tape {
+            background: rgba(254, 240, 138, 0.6);
+            backdrop-filter: blur(2px);
+            transform: rotate(-2deg);
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, useEffect } = React;
+
+        const INGREDIENT_LIBRARY = {
+            "Dairy & Fats": [
+                { name: "Heavy Cream", cals: 100, unit: "2 tbsp", icon: "🥛", tag: "Liquid Gold" },
+                { name: "Salted Butter", cals: 100, unit: "1 tbsp", icon: "🧈", tag: "Melty" },
+                { name: "Mascarpone", cals: 120, unit: "2 tbsp", icon: "🧀", tag: "Creamy" },
+                { name: "Whole Milk", cals: 150, unit: "1 cup", icon: "🥛", tag: "Essential" },
+                { name: "Cheddar Cheese", cals: 115, unit: "1/4 cup", icon: "🧀", tag: "Gooey" },
+                { name: "Full-Fat Yogurt", cals: 140, unit: "1/2 cup", icon: "🍦", tag: "Smooth" }
+            ],
+            "Proteins": [
+                { name: "Nut Butter", cals: 190, unit: "2 tbsp", icon: "🥜", tag: "Sticky" },
+                { name: "Large Egg", cals: 70, unit: "1 egg", icon: "🥚", tag: "Fresh" },
+                { name: "Chicken Thigh", cals: 210, unit: "1 thigh", icon: "🍗", tag: "Hearty" },
+                { name: "Ground Beef", cals: 250, unit: "4oz", icon: "🥩", tag: "Bulk" },
+                { name: "Sliced Ham", cals: 100, unit: "2 slices", icon: "🍖", tag: "Salty" }
+            ],
+            "Carbs & Staples": [
+                { name: "Thick Bread", cals: 120, unit: "1 slice", icon: "🍞", tag: "Carrier" },
+                { name: "Bagel", cals: 250, unit: "1 bagel", icon: "🥯", tag: "Dense" },
+                { name: "Pasta", cals: 200, unit: "1 cup", icon: "🍝", tag: "Energy" },
+                { name: "Oats", cals: 150, unit: "1/2 cup", icon: "🥣", tag: "Fiber" },
+                { name: "Banana", cals: 105, unit: "1 fruit", icon: "🍌", tag: "Sweet" },
+                { name: "Avocado", cals: 160, unit: "1/2 fruit", icon: "🥑", tag: "Green" },
+                { name: "Granola", cals: 130, unit: "1/4 cup", icon: "🥣", tag: "Crunch" }
+            ],
+            "Pantry & Treats": [
+                { name: "Maple Syrup", cals: 100, unit: "2 tbsp", icon: "🍯", tag: "Topper" },
+                { name: "Honey", cals: 60, unit: "1 tbsp", icon: "🍯", tag: "Gold" },
+                { name: "Olive Oil", cals: 120, unit: "1 tbsp", icon: "🫒", tag: "Secret" },
+                { name: "Chocolate Chips", cals: 70, unit: "1 tbsp", icon: "🍫", tag: "Joy" },
+                { name: "Frozen Berries", cals: 40, unit: "1/2 cup", icon: "🍓", tag: "Chill" }
+            ]
+        };
+
+        const MEAL_IDEAS = {
+            "Super Shakes": [
+                { 
+                    name: "The Hulk Shake", 
+                    cals: 850, 
+                    icon: "🥤", 
+                    items: ["Whole Milk", "Heavy Cream", "Nut Butter", "Banana", "Honey"], 
+                    note: "Liquid energy!" 
+                },
+                { 
+                    name: "Choco-Oat Power", 
+                    cals: 710, 
+                    icon: "🍫", 
+                    items: ["Whole Milk", "Oats", "Nut Butter", "Chocolate Chips", "Honey"], 
+                    note: "Tastes like a cookie" 
+                },
+                { 
+                    name: "Berry Cream Blast", 
+                    cals: 630, 
+                    icon: "🍓", 
+                    items: ["Full-Fat Yogurt", "Heavy Cream", "Frozen Berries", "Granola", "Honey"], 
+                    note: "Thick and fruity" 
+                }
+            ],
+            "Quick Power Bites": [
+                { 
+                    name: "Fabulous French Toast", 
+                    cals: 720, 
+                    icon: "🍞", 
+                    items: ["Thick Bread", "Heavy Cream", "Large Egg", "Salted Butter", "Maple Syrup"], 
+                    note: "Soak it well!" 
+                },
+                { 
+                    name: "PB & Banana Bagel", 
+                    cals: 650, 
+                    icon: "🥯", 
+                    items: ["Bagel", "Nut Butter", "Banana", "Honey", "Chocolate Chips"], 
+                    note: "Protein packed" 
+                },
+                { 
+                    name: "Cheesy Egg Dippers", 
+                    cals: 580, 
+                    icon: "🥚", 
+                    items: ["Thick Bread", "Large Egg", "Salted Butter", "Cheddar Cheese", "Avocado"], 
+                    note: "Soldiers & Eggs" 
+                }
+            ],
+            "Big Growth Dinners": [
+                { 
+                    name: "Liquid Gold Pasta", 
+                    cals: 850, 
+                    icon: "🍝", 
+                    items: ["Pasta", "Chicken Thigh", "Salted Butter", "Heavy Cream", "Cheddar Cheese"], 
+                    note: "Ultra-gooey sauce" 
+                },
+                { 
+                    name: "Beefy Mac & Cheese", 
+                    cals: 920, 
+                    icon: "🧀", 
+                    items: ["Pasta", "Ground Beef", "Heavy Cream", "Salted Butter", "Cheddar Cheese"], 
+                    note: "The growth king" 
+                },
+                { 
+                    name: "Loaded Grilled Cheese", 
+                    cals: 740, 
+                    icon: "🥪", 
+                    items: ["Thick Bread", "Cheddar Cheese", "Sliced Ham", "Salted Butter", "Avocado"], 
+                    note: "Double butter the pan!" 
+                }
+            ]
+        };
+
+        const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        const MEAL_TYPES = ["Breakfast", "Lunch", "Dinner", "Snack"];
+
+        const Icon = ({ name, size = 20, className = "" }) => {
+            useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [name, size, className]);
+            return <i data-lucide={name} className={className} style={{ width: size, height: size }}></i>;
+        };
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('planner'); 
+            const [selectedDay, setSelectedDay] = useState("Mon");
+            const [plan, setPlan] = useState({}); 
+            const [isAdding, setIsAdding] = useState(null);
+            const [userBackup, setUserBackup] = useState(null);
+
+            const handleUserSave = () => setUserBackup(JSON.stringify(plan));
+            const handleUserRestore = () => userBackup && setPlan(JSON.parse(userBackup));
+            const resetWeek = () => {
+                if (confirm("Rip out all the pages? This will clear your entire week's plan.")) {
+                    setPlan({});
+                }
+            };
+
+            const addToMeal = (day, mealType, ingredient) => {
+                const key = `${day}-${mealType}`;
+                setPlan({ ...plan, [key]: [...(plan[key] || []), { ...ingredient, id: Math.random().toString(36).substr(2, 9) }] });
+                setIsAdding(null);
+            };
+
+            const removeFromMeal = (day, mealType, id) => {
+                const key = `${day}-${mealType}`;
+                setPlan({ ...plan, [key]: plan[key].filter(item => item.id !== id) });
+            };
+
+            const totalCals = useMemo(() => Object.values(plan).flat().reduce((s, i) => s + (i.cals || 0), 0), [plan]);
+
+            const shoppingList = useMemo(() => {
+                const counts = {};
+                Object.values(plan).flat().forEach(item => { if (item.name) counts[item.name] = (counts[item.name] || 0) + 1; });
+                return Object.entries(counts).map(([name, count]) => ({ name, count }));
+            }, [plan]);
+
+            return (
+                <div className="min-h-screen pb-28 max-w-md mx-auto relative app-container lg:my-8 lg:rounded-[2rem] lg:overflow-hidden border-[3px] border-[#433422] shadow-[8px_8px_0px_#433422]">
+                    
+                    {/* LOGO AREA */}
+                    <header className="px-6 pt-10 pb-6 relative overflow-hidden">
+                        <div className="flex justify-between items-start">
+                            <div className="relative">
+                                <div className="tape absolute -top-4 -left-2 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-800 z-10">Kitchen Lab</div>
+                                <h1 className="text-4xl font-black text-[#433422] tracking-tighter mt-2">Fuel<span className="text-orange-600">Lab</span></h1>
+                                <p className="handwritten text-xl text-slate-500 -mt-1">Growth Journal</p>
+                            </div>
+                            <div className="flex flex-col items-end gap-2">
+                                <div className="paper-card bg-orange-100 px-4 py-2 rounded-lg flex items-center gap-2">
+                                    <Icon name="flame" size={18} className="text-orange-600" />
+                                    <span className="font-black text-lg">{totalCals}</span>
+                                </div>
+                                <button onClick={handleUserSave} className="text-[10px] font-bold uppercase tracking-tighter border-b-2 border-dashed border-slate-300 text-slate-400">Save Progress</button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="px-6">
+                        {activeTab === 'planner' && (
+                            <div className="space-y-8">
+                                {/* DAYS + RESET */}
+                                <div className="flex items-center gap-3">
+                                    <div className="flex gap-3 overflow-x-auto no-scrollbar py-2 flex-1">
+                                        {DAYS.map(day => (
+                                            <button key={day} onClick={() => setSelectedDay(day)}
+                                                className={`flex-shrink-0 w-12 h-16 rounded-lg border-2 border-[#433422] flex flex-col items-center justify-center transition-all ${
+                                                    selectedDay === day ? 'bg-[#433422] text-white -translate-y-1 shadow-[4px_4px_0px_#fb923c]' : 'bg-white text-slate-400'
+                                                }`}>
+                                                <span className="text-[10px] font-bold uppercase">{day[0]}</span>
+                                                <span className="font-black text-lg">{day.slice(0,3)}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <button 
+                                        onClick={resetWeek} 
+                                        className="w-12 h-12 rounded-lg border-2 border-[#433422] bg-white flex items-center justify-center text-red-500 shadow-[3px_3px_0px_#433422] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#433422] transition-all"
+                                        title="Reset Journal"
+                                    >
+                                        <Icon name="trash-2" size={20} />
+                                    </button>
+                                </div>
+
+                                {userBackup && (
+                                    <button onClick={handleUserRestore} className="w-full handwritten text-lg text-indigo-600 hover:underline">
+                                        ✨ Bring back my old notes...
+                                    </button>
+                                )}
+
+                                {/* MEALS */}
+                                <div className="space-y-10">
+                                    {MEAL_TYPES.map(type => (
+                                        <div key={type} className="relative pt-4">
+                                            <div className="absolute -top-1 left-4 bg-white border-2 border-[#433422] px-3 py-0.5 rounded-full z-10 text-[10px] font-black uppercase tracking-widest">
+                                                {type}
+                                            </div>
+                                            <div className="paper-card p-6 rounded-2xl space-y-4">
+                                                {(plan[`${selectedDay}-${type}`] || []).length > 0 ? (
+                                                    <div className="space-y-3">
+                                                        {(plan[`${selectedDay}-${type}`] || []).map(item => (
+                                                            <div key={item.id} className="flex items-center justify-between border-b-2 border-dashed border-slate-100 pb-2">
+                                                                <div className="flex items-center gap-3">
+                                                                    <span className="text-2xl">{item.icon}</span>
+                                                                    <div>
+                                                                        <p className="font-bold text-sm leading-none">{item.name}</p>
+                                                                        <p className="handwritten text-orange-600 font-bold">+{item.cals} kcal</p>
+                                                                    </div>
+                                                                </div>
+                                                                <button onClick={() => removeFromMeal(selectedDay, type, item.id)} className="text-slate-300 hover:text-red-400"><Icon name="trash" size={14}/></button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ) : <p className="handwritten text-slate-300 text-center py-2">Nothing added yet...</p>}
+                                                
+                                                <button onClick={() => setIsAdding({ day: selectedDay, type })} className="w-full py-3 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl text-slate-400 font-bold text-xs uppercase hover:bg-white hover:border-[#433422] hover:text-[#433422] transition-colors">
+                                                    + Add Fuel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'ideas' && (
+                            <div className="space-y-8 py-4 overflow-y-auto max-h-[70vh] no-scrollbar">
+                                {Object.entries(MEAL_IDEAS).map(([cat, ideas]) => (
+                                    <div key={cat} className="space-y-4">
+                                        <h3 className="text-2xl font-black italic text-slate-800 border-l-4 border-orange-400 pl-3">{cat}</h3>
+                                        {ideas.map(idea => (
+                                            <div key={idea.name} className="paper-card p-5 rounded-3xl flex items-center justify-between bg-white group">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="text-4xl transform group-hover:rotate-12 transition-transform">{idea.icon}</div>
+                                                    <div className="flex-1">
+                                                        <h4 className="font-black text-lg leading-none">{idea.name}</h4>
+                                                        <p className="handwritten text-orange-600 text-lg">{idea.cals} kcal total</p>
+                                                        <p className="text-[9px] text-slate-400 font-bold uppercase truncate max-w-[150px]">
+                                                            {idea.items.join(" + ")}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <button onClick={() => {
+                                                    let targetType = 'Dinner';
+                                                    if (cat === 'Super Shakes') targetType = 'Snack';
+                                                    if (cat === 'Quick Power Bites') targetType = 'Breakfast';
+
+                                                    const key = `${selectedDay}-${targetType}`;
+                                                    const libraryFlat = Object.values(INGREDIENT_LIBRARY).flat();
+                                                    const itemsToAdd = idea.items.map(itemName => {
+                                                        const match = libraryFlat.find(i => i.name === itemName);
+                                                        return match ? { ...match, id: Math.random().toString(36).substr(2, 9) } : null;
+                                                    }).filter(i => i !== null);
+
+                                                    setPlan({...plan, [key]: [...(plan[key] || []), ...itemsToAdd]});
+                                                    setActiveTab('planner');
+                                                }} className="bg-orange-400 text-white p-3 rounded-xl shadow-[3px_3px_0px_#433422] active:translate-x-0.5"><Icon name="arrow-right" /></button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {activeTab === 'list' && (
+                            <div className="py-6">
+                                <div className="paper-card bg-white p-8 rounded-[2rem] min-h-[400px]">
+                                    <h2 className="text-3xl font-black mb-6 flex items-center gap-3">
+                                        Market List <Icon name="shopping-basket" size={28} />
+                                    </h2>
+                                    {shoppingList.length > 0 ? (
+                                        <div className="space-y-4">
+                                            {shoppingList.map((item, idx) => (
+                                                <div key={idx} className="flex items-center gap-4 group">
+                                                    <div className="w-6 h-6 border-2 border-[#433422] rounded flex-shrink-0 group-hover:bg-green-100"></div>
+                                                    <div className="flex-1 flex justify-between items-center border-b border-slate-100 pb-2">
+                                                        <span className="font-bold text-lg">{item.name}</span>
+                                                        <span className="bg-slate-100 px-3 py-1 rounded-full text-xs font-black">x{item.count}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="text-center py-20 opacity-30">
+                                            <Icon name="package-open" size={60} className="mx-auto mb-4" />
+                                            <p className="handwritten text-xl italic">The list is empty!</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </main>
+
+                    {/* MODAL */}
+                    {isAdding && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-yellow-900/10 backdrop-blur-sm">
+                            <div className="paper-card bg-white w-full max-w-sm rounded-3xl p-8 max-h-[80vh] overflow-y-auto no-scrollbar">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-2xl font-black">Kitchen Stock</h2>
+                                    <button onClick={() => setIsAdding(null)} className="p-2 rounded-full border-2 border-[#433422]"><Icon name="x" size={20} /></button>
+                                </div>
+                                {Object.entries(INGREDIENT_LIBRARY).map(([cat, items]) => (
+                                    <div key={cat} className="mb-8">
+                                        <p className="text-[10px] font-black uppercase text-slate-400 mb-4 tracking-[0.2em]">{cat}</p>
+                                        <div className="grid gap-3">
+                                            {items.map(item => (
+                                                <button key={item.name} onClick={() => addToMeal(isAdding.day, isAdding.type, item)} className="paper-card bg-white p-4 flex items-center justify-between group hover:bg-yellow-50">
+                                                    <div className="flex items-center gap-4">
+                                                        <span className="text-3xl">{item.icon}</span>
+                                                        <div className="text-left">
+                                                            <p className="font-bold leading-none">{item.name}</p>
+                                                            <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">{item.unit}</p>
+                                                        </div>
+                                                    </div>
+                                                    <span className="handwritten text-lg font-black text-orange-600">+{item.cals}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* NAV */}
+                    <nav className="fixed bottom-0 left-0 right-0 p-6 flex justify-center pointer-events-none z-40">
+                        <div className="paper-card bg-[#433422] p-2 rounded-2xl flex items-center gap-1 pointer-events-auto">
+                            <button onClick={() => setActiveTab('planner')} className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all ${activeTab === 'planner' ? 'bg-orange-400 text-white' : 'text-slate-400'}`}>
+                                <Icon name="pen-tool" size={18} />
+                                <span className="font-black text-xs uppercase tracking-widest">Journal</span>
+                            </button>
+                            <button onClick={() => setActiveTab('ideas')} className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all ${activeTab === 'ideas' ? 'bg-orange-400 text-white' : 'text-slate-400'}`}>
+                                <Icon name="star" size={18} />
+                                <span className="font-black text-xs uppercase tracking-widest">Ideas</span>
+                            </button>
+                            <button onClick={() => setActiveTab('list')} className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all ${activeTab === 'list' ? 'bg-orange-400 text-white' : 'text-slate-400'}`}>
+                                <Icon name="shopping-cart" size={18} />
+                                <span className="font-black text-xs uppercase tracking-widest">Market</span>
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
