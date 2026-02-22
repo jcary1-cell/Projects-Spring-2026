@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FuelLab - Growth Journal</title>
+    <!-- Dependencies -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -16,6 +17,7 @@
             font-family: 'Quicksand', sans-serif; 
             background: #fdf6e3;
             color: #433422;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .handwritten { font-family: 'Gaegu', cursive; }
@@ -30,7 +32,7 @@
             background: #ffffff;
             border: 2px solid #433422;
             box-shadow: 4px 4px 0px #433422;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease-out;
         }
 
         .paper-card:active {
@@ -39,12 +41,21 @@
         }
 
         .tape {
-            background: rgba(254, 240, 138, 0.6);
+            background: rgba(254, 240, 138, 0.7);
             backdrop-filter: blur(2px);
             transform: rotate(-2deg);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Smooth tab transitions */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -162,20 +173,34 @@
         const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
         const MEAL_TYPES = ["Breakfast", "Lunch", "Dinner", "Snack"];
 
+        // Robust Icon component
         const Icon = ({ name, size = 20, className = "" }) => {
-            useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [name, size, className]);
+            useEffect(() => {
+                if (window.lucide) window.lucide.createIcons();
+            }, [name, size, className]);
             return <i data-lucide={name} className={className} style={{ width: size, height: size }}></i>;
         };
 
         function App() {
+            // Persistent State Initialization
+            const [plan, setPlan] = useState(() => {
+                const saved = localStorage.getItem('fuellab_plan');
+                return saved ? JSON.parse(saved) : {};
+            });
             const [activeTab, setActiveTab] = useState('planner'); 
             const [selectedDay, setSelectedDay] = useState("Mon");
-            const [plan, setPlan] = useState({}); 
             const [isAdding, setIsAdding] = useState(null);
-            const [userBackup, setUserBackup] = useState(null);
 
-            const handleUserSave = () => setUserBackup(JSON.stringify(plan));
-            const handleUserRestore = () => userBackup && setPlan(JSON.parse(userBackup));
+            // Sync with Local Storage
+            useEffect(() => {
+                localStorage.setItem('fuellab_plan', JSON.stringify(plan));
+            }, [plan]);
+
+            // Auto-refresh Lucide icons globally on tab change
+            useEffect(() => {
+                if (window.lucide) window.lucide.createIcons();
+            }, [activeTab, selectedDay, isAdding]);
+
             const resetWeek = () => {
                 if (confirm("Rip out all the pages? This will clear your entire week's plan.")) {
                     setPlan({});
@@ -184,27 +209,38 @@
 
             const addToMeal = (day, mealType, ingredient) => {
                 const key = `${day}-${mealType}`;
-                setPlan({ ...plan, [key]: [...(plan[key] || []), { ...ingredient, id: Math.random().toString(36).substr(2, 9) }] });
+                setPlan(prev => ({ 
+                    ...prev, 
+                    [key]: [...(prev[key] || []), { ...ingredient, id: Math.random().toString(36).substr(2, 9) }] 
+                }));
                 setIsAdding(null);
             };
 
             const removeFromMeal = (day, mealType, id) => {
                 const key = `${day}-${mealType}`;
-                setPlan({ ...plan, [key]: plan[key].filter(item => item.id !== id) });
+                setPlan(prev => ({ 
+                    ...prev, 
+                    [key]: prev[key].filter(item => item.id !== id) 
+                }));
             };
 
-            const totalCals = useMemo(() => Object.values(plan).flat().reduce((s, i) => s + (i.cals || 0), 0), [plan]);
+            const totalCals = useMemo(() => {
+                const dailyMeals = MEAL_TYPES.map(type => plan[`${selectedDay}-${type}`] || []).flat();
+                return dailyMeals.reduce((s, i) => s + (i.cals || 0), 0);
+            }, [plan, selectedDay]);
 
             const shoppingList = useMemo(() => {
                 const counts = {};
-                Object.values(plan).flat().forEach(item => { if (item.name) counts[item.name] = (counts[item.name] || 0) + 1; });
+                Object.values(plan).flat().forEach(item => { 
+                    if (item.name) counts[item.name] = (counts[item.name] || 0) + 1; 
+                });
                 return Object.entries(counts).map(([name, count]) => ({ name, count }));
             }, [plan]);
 
             return (
-                <div className="min-h-screen pb-28 max-w-md mx-auto relative app-container lg:my-8 lg:rounded-[2rem] lg:overflow-hidden border-[3px] border-[#433422] shadow-[8px_8px_0px_#433422]">
+                <div className="min-h-screen pb-28 max-w-md mx-auto relative app-container lg:my-8 lg:rounded-[2.5rem] lg:overflow-hidden border-[3px] border-[#433422] shadow-[12px_12px_0px_#433422]">
                     
-                    {/* LOGO AREA */}
+                    {/* HEADER */}
                     <header className="px-6 pt-10 pb-6 relative overflow-hidden">
                         <div className="flex justify-between items-start">
                             <div className="relative">
@@ -213,24 +249,24 @@
                                 <p className="handwritten text-xl text-slate-500 -mt-1">Growth Journal</p>
                             </div>
                             <div className="flex flex-col items-end gap-2">
-                                <div className="paper-card bg-orange-100 px-4 py-2 rounded-lg flex items-center gap-2">
+                                <div className="paper-card bg-orange-100 px-4 py-2 rounded-xl flex items-center gap-2">
                                     <Icon name="flame" size={18} className="text-orange-600" />
-                                    <span className="font-black text-lg">{totalCals}</span>
+                                    <span className="font-black text-xl">{totalCals}</span>
                                 </div>
-                                <button onClick={handleUserSave} className="text-[10px] font-bold uppercase tracking-tighter border-b-2 border-dashed border-slate-300 text-slate-400">Save Progress</button>
+                                <span className="text-[10px] font-bold uppercase text-slate-400 tracking-tighter">{selectedDay} Target</span>
                             </div>
                         </div>
                     </header>
 
                     <main className="px-6">
                         {activeTab === 'planner' && (
-                            <div className="space-y-8">
-                                {/* DAYS + RESET */}
+                            <div className="space-y-8 fade-in">
+                                {/* DAYS SELECTOR */}
                                 <div className="flex items-center gap-3">
                                     <div className="flex gap-3 overflow-x-auto no-scrollbar py-2 flex-1">
                                         {DAYS.map(day => (
                                             <button key={day} onClick={() => setSelectedDay(day)}
-                                                className={`flex-shrink-0 w-12 h-16 rounded-lg border-2 border-[#433422] flex flex-col items-center justify-center transition-all ${
+                                                className={`flex-shrink-0 w-12 h-16 rounded-xl border-2 border-[#433422] flex flex-col items-center justify-center transition-all ${
                                                     selectedDay === day ? 'bg-[#433422] text-white -translate-y-1 shadow-[4px_4px_0px_#fb923c]' : 'bg-white text-slate-400'
                                                 }`}>
                                                 <span className="text-[10px] font-bold uppercase">{day[0]}</span>
@@ -240,27 +276,20 @@
                                     </div>
                                     <button 
                                         onClick={resetWeek} 
-                                        className="w-12 h-12 rounded-lg border-2 border-[#433422] bg-white flex items-center justify-center text-red-500 shadow-[3px_3px_0px_#433422] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#433422] transition-all"
-                                        title="Reset Journal"
+                                        className="w-12 h-12 rounded-xl border-2 border-[#433422] bg-white flex items-center justify-center text-red-500 shadow-[3px_3px_0px_#433422] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#433422] transition-all"
                                     >
-                                        <Icon name="trash-2" size={20} />
+                                        <Icon name="refresh-cw" size={18} />
                                     </button>
                                 </div>
 
-                                {userBackup && (
-                                    <button onClick={handleUserRestore} className="w-full handwritten text-lg text-indigo-600 hover:underline">
-                                        ✨ Bring back my old notes...
-                                    </button>
-                                )}
-
-                                {/* MEALS */}
+                                {/* MEAL BUCKETS */}
                                 <div className="space-y-10">
                                     {MEAL_TYPES.map(type => (
                                         <div key={type} className="relative pt-4">
                                             <div className="absolute -top-1 left-4 bg-white border-2 border-[#433422] px-3 py-0.5 rounded-full z-10 text-[10px] font-black uppercase tracking-widest">
                                                 {type}
                                             </div>
-                                            <div className="paper-card p-6 rounded-2xl space-y-4">
+                                            <div className="paper-card p-6 rounded-[1.5rem] space-y-4">
                                                 {(plan[`${selectedDay}-${type}`] || []).length > 0 ? (
                                                     <div className="space-y-3">
                                                         {(plan[`${selectedDay}-${type}`] || []).map(item => (
@@ -272,14 +301,16 @@
                                                                         <p className="handwritten text-orange-600 font-bold">+{item.cals} kcal</p>
                                                                     </div>
                                                                 </div>
-                                                                <button onClick={() => removeFromMeal(selectedDay, type, item.id)} className="text-slate-300 hover:text-red-400"><Icon name="trash" size={14}/></button>
+                                                                <button onClick={() => removeFromMeal(selectedDay, type, item.id)} className="text-slate-200 hover:text-red-400 transition-colors">
+                                                                    <Icon name="x-circle" size={18}/>
+                                                                </button>
                                                             </div>
                                                         ))}
                                                     </div>
-                                                ) : <p className="handwritten text-slate-300 text-center py-2">Nothing added yet...</p>}
+                                                ) : <p className="handwritten text-slate-300 text-center py-2 italic text-lg">Empty plate...</p>}
                                                 
-                                                <button onClick={() => setIsAdding({ day: selectedDay, type })} className="w-full py-3 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl text-slate-400 font-bold text-xs uppercase hover:bg-white hover:border-[#433422] hover:text-[#433422] transition-colors">
-                                                    + Add Fuel
+                                                <button onClick={() => setIsAdding({ day: selectedDay, type })} className="w-full py-3 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl text-slate-400 font-bold text-[10px] uppercase hover:bg-white hover:border-[#433422] hover:text-[#433422] transition-all">
+                                                    + Log Ingredient
                                                 </button>
                                             </div>
                                         </div>
@@ -289,19 +320,19 @@
                         )}
 
                         {activeTab === 'ideas' && (
-                            <div className="space-y-8 py-4 overflow-y-auto max-h-[70vh] no-scrollbar">
+                            <div className="space-y-8 py-4 fade-in overflow-y-auto max-h-[70vh] no-scrollbar">
                                 {Object.entries(MEAL_IDEAS).map(([cat, ideas]) => (
                                     <div key={cat} className="space-y-4">
                                         <h3 className="text-2xl font-black italic text-slate-800 border-l-4 border-orange-400 pl-3">{cat}</h3>
                                         {ideas.map(idea => (
-                                            <div key={idea.name} className="paper-card p-5 rounded-3xl flex items-center justify-between bg-white group">
+                                            <div key={idea.name} className="paper-card p-5 rounded-[2rem] flex items-center justify-between bg-white group hover:border-orange-400">
                                                 <div className="flex items-center gap-4">
                                                     <div className="text-4xl transform group-hover:rotate-12 transition-transform">{idea.icon}</div>
                                                     <div className="flex-1">
                                                         <h4 className="font-black text-lg leading-none">{idea.name}</h4>
-                                                        <p className="handwritten text-orange-600 text-lg">{idea.cals} kcal total</p>
+                                                        <p className="handwritten text-orange-600 text-lg">+{idea.cals} kcal</p>
                                                         <p className="text-[9px] text-slate-400 font-bold uppercase truncate max-w-[150px]">
-                                                            {idea.items.join(" + ")}
+                                                            {idea.items.join(" • ")}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -317,9 +348,11 @@
                                                         return match ? { ...match, id: Math.random().toString(36).substr(2, 9) } : null;
                                                     }).filter(i => i !== null);
 
-                                                    setPlan({...plan, [key]: [...(plan[key] || []), ...itemsToAdd]});
+                                                    setPlan(prev => ({...prev, [key]: [...(prev[key] || []), ...itemsToAdd]}));
                                                     setActiveTab('planner');
-                                                }} className="bg-orange-400 text-white p-3 rounded-xl shadow-[3px_3px_0px_#433422] active:translate-x-0.5"><Icon name="arrow-right" /></button>
+                                                }} className="bg-[#433422] text-white p-3 rounded-xl shadow-[3px_3px_0px_#fb923c] active:translate-x-0.5 active:shadow-none transition-all">
+                                                    <Icon name="plus" size={20} />
+                                                </button>
                                             </div>
                                         ))}
                                     </div>
@@ -328,27 +361,28 @@
                         )}
 
                         {activeTab === 'list' && (
-                            <div className="py-6">
-                                <div className="paper-card bg-white p-8 rounded-[2rem] min-h-[400px]">
-                                    <h2 className="text-3xl font-black mb-6 flex items-center gap-3">
-                                        Market List <Icon name="shopping-basket" size={28} />
+                            <div className="py-6 fade-in">
+                                <div className="paper-card bg-white p-8 rounded-[2.5rem] min-h-[400px] relative overflow-hidden">
+                                    <div className="tape absolute top-6 -right-8 w-32 py-1 text-center font-bold text-[10px] text-yellow-900 z-10">To Buy</div>
+                                    <h2 className="text-3xl font-black mb-8 flex items-center gap-3">
+                                        Market List <Icon name="shopping-bag" size={28} />
                                     </h2>
                                     {shoppingList.length > 0 ? (
                                         <div className="space-y-4">
                                             {shoppingList.map((item, idx) => (
-                                                <div key={idx} className="flex items-center gap-4 group">
-                                                    <div className="w-6 h-6 border-2 border-[#433422] rounded flex-shrink-0 group-hover:bg-green-100"></div>
-                                                    <div className="flex-1 flex justify-between items-center border-b border-slate-100 pb-2">
-                                                        <span className="font-bold text-lg">{item.name}</span>
-                                                        <span className="bg-slate-100 px-3 py-1 rounded-full text-xs font-black">x{item.count}</span>
+                                                <div key={idx} className="flex items-center gap-4 group cursor-pointer">
+                                                    <div className="w-6 h-6 border-2 border-[#433422] rounded flex-shrink-0 group-hover:bg-green-100 transition-colors"></div>
+                                                    <div className="flex-1 flex justify-between items-center border-b-2 border-dashed border-slate-100 pb-2">
+                                                        <span className="font-bold text-lg text-[#433422]">{item.name}</span>
+                                                        <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-black">x{item.count}</span>
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="text-center py-20 opacity-30">
-                                            <Icon name="package-open" size={60} className="mx-auto mb-4" />
-                                            <p className="handwritten text-xl italic">The list is empty!</p>
+                                        <div className="text-center py-20 opacity-20">
+                                            <Icon name="clipboard-check" size={64} className="mx-auto mb-4" />
+                                            <p className="handwritten text-2xl italic">Everything is stocked!</p>
                                         </div>
                                     )}
                                 </div>
@@ -356,28 +390,30 @@
                         )}
                     </main>
 
-                    {/* MODAL */}
+                    {/* ADD INGREDIENT MODAL */}
                     {isAdding && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-yellow-900/10 backdrop-blur-sm">
-                            <div className="paper-card bg-white w-full max-w-sm rounded-3xl p-8 max-h-[80vh] overflow-y-auto no-scrollbar">
-                                <div className="flex justify-between items-center mb-6">
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-[#433422]/60 backdrop-blur-sm animate-in fade-in duration-200">
+                            <div className="paper-card bg-white w-full max-w-sm rounded-[2.5rem] p-8 max-h-[85vh] overflow-y-auto no-scrollbar shadow-[10px_10px_0px_#fb923c]">
+                                <div className="flex justify-between items-center mb-8 sticky top-0 bg-white pb-4 z-20">
                                     <h2 className="text-2xl font-black">Kitchen Stock</h2>
-                                    <button onClick={() => setIsAdding(null)} className="p-2 rounded-full border-2 border-[#433422]"><Icon name="x" size={20} /></button>
+                                    <button onClick={() => setIsAdding(null)} className="p-2 rounded-full border-2 border-[#433422] bg-white hover:bg-slate-50">
+                                        <Icon name="x" size={20} />
+                                    </button>
                                 </div>
                                 {Object.entries(INGREDIENT_LIBRARY).map(([cat, items]) => (
                                     <div key={cat} className="mb-8">
                                         <p className="text-[10px] font-black uppercase text-slate-400 mb-4 tracking-[0.2em]">{cat}</p>
                                         <div className="grid gap-3">
                                             {items.map(item => (
-                                                <button key={item.name} onClick={() => addToMeal(isAdding.day, isAdding.type, item)} className="paper-card bg-white p-4 flex items-center justify-between group hover:bg-yellow-50">
+                                                <button key={item.name} onClick={() => addToMeal(isAdding.day, isAdding.type, item)} className="paper-card bg-white p-4 flex items-center justify-between group hover:bg-orange-50 hover:border-orange-400">
                                                     <div className="flex items-center gap-4">
-                                                        <span className="text-3xl">{item.icon}</span>
+                                                        <span className="text-3xl transform group-hover:scale-110 transition-transform">{item.icon}</span>
                                                         <div className="text-left">
                                                             <p className="font-bold leading-none">{item.name}</p>
-                                                            <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">{item.unit}</p>
+                                                            <p className="text-[10px] text-slate-400 font-bold uppercase mt-1 tracking-tighter">{item.unit}</p>
                                                         </div>
                                                     </div>
-                                                    <span className="handwritten text-lg font-black text-orange-600">+{item.cals}</span>
+                                                    <span className="handwritten text-xl font-black text-orange-600">+{item.cals}</span>
                                                 </button>
                                             ))}
                                         </div>
@@ -387,20 +423,20 @@
                         </div>
                     )}
 
-                    {/* NAV */}
+                    {/* BOTTOM NAV */}
                     <nav className="fixed bottom-0 left-0 right-0 p-6 flex justify-center pointer-events-none z-40">
-                        <div className="paper-card bg-[#433422] p-2 rounded-2xl flex items-center gap-1 pointer-events-auto">
-                            <button onClick={() => setActiveTab('planner')} className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all ${activeTab === 'planner' ? 'bg-orange-400 text-white' : 'text-slate-400'}`}>
-                                <Icon name="pen-tool" size={18} />
-                                <span className="font-black text-xs uppercase tracking-widest">Journal</span>
+                        <div className="paper-card bg-[#433422] p-2 rounded-2xl flex items-center gap-1 pointer-events-auto shadow-[6px_6px_0px_rgba(67,52,34,0.4)]">
+                            <button onClick={() => setActiveTab('planner')} className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all ${activeTab === 'planner' ? 'bg-orange-400 text-white shadow-inner' : 'text-slate-400 hover:text-slate-300'}`}>
+                                <Icon name="layout" size={18} />
+                                <span className="font-black text-[10px] uppercase tracking-widest">Journal</span>
                             </button>
-                            <button onClick={() => setActiveTab('ideas')} className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all ${activeTab === 'ideas' ? 'bg-orange-400 text-white' : 'text-slate-400'}`}>
-                                <Icon name="star" size={18} />
-                                <span className="font-black text-xs uppercase tracking-widest">Ideas</span>
+                            <button onClick={() => setActiveTab('ideas')} className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all ${activeTab === 'ideas' ? 'bg-orange-400 text-white shadow-inner' : 'text-slate-400 hover:text-slate-300'}`}>
+                                <Icon name="sparkles" size={18} />
+                                <span className="font-black text-[10px] uppercase tracking-widest">Ideas</span>
                             </button>
-                            <button onClick={() => setActiveTab('list')} className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all ${activeTab === 'list' ? 'bg-orange-400 text-white' : 'text-slate-400'}`}>
-                                <Icon name="shopping-cart" size={18} />
-                                <span className="font-black text-xs uppercase tracking-widest">Market</span>
+                            <button onClick={() => setActiveTab('list')} className={`px-5 py-3 rounded-xl flex items-center gap-2 transition-all ${activeTab === 'list' ? 'bg-orange-400 text-white shadow-inner' : 'text-slate-400 hover:text-slate-300'}`}>
+                                <Icon name="scroll" size={18} />
+                                <span className="font-black text-[10px] uppercase tracking-widest">Market</span>
                             </button>
                         </div>
                     </nav>
@@ -408,8 +444,11 @@
             );
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        // Wait for Lucide to be available
+        window.onload = () => {
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(<App />);
+        };
     </script>
 </body>
 </html>
