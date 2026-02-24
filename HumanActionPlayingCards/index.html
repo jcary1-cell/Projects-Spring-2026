@@ -34,6 +34,104 @@
         /* Custom serif font for quotes */
         @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
         .font-serif { font-family: 'Merriweather', serif; }
+
+        /* --- FUN GRAPHICAL ELEMENTS --- */
+        
+        /* 1. Playful Polka Dot Pattern on the Front */
+        .card-row > div:first-child {
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-size: 20px 20px;
+            position: relative;
+            overflow: hidden; /* Clips the corner accent */
+        }
+
+        /* 2. Amber Color Pop Corner (Bottom Right of Front) */
+        .card-row > div:first-child::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            right: -25px;
+            width: 50px;
+            height: 50px;
+            background-color: #fbbf24; /* Amber 400 */
+            transform: rotate(45deg);
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* 3. Story Label styled as a tilted sticker */
+        .card-row > div:first-child > div:last-child {
+            background-color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px dashed #94a3b8;
+            display: inline-block;
+            width: max-content;
+            transform: rotate(-2deg);
+            box-shadow: 2px 2px 0px rgba(16, 185, 129, 0.15);
+            color: #475569;
+            font-weight: bold;
+        }
+
+        /* 4. Candy-Stripe Accent Border on the Back */
+        .card-row > div:last-child {
+            position: relative;
+        }
+        .card-row > div:last-child::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: repeating-linear-gradient(
+                -45deg,
+                #10b981,
+                #10b981 10px,
+                #34d399 10px,
+                #34d399 20px
+            );
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* 5. Giant Decorative Quote Mark */
+        blockquote {
+            position: relative;
+            z-index: 10;
+        }
+        blockquote::before {
+            content: '“';
+            position: absolute;
+            font-size: 5rem;
+            color: rgba(52, 211, 153, 0.2); /* Faded emerald */
+            font-family: 'Merriweather', serif;
+            left: -15px;
+            top: -25px;
+            line-height: 1;
+            z-index: -1;
+        }
+
+        /* 6. Subtle glowing orb watermark on the back */
+        .card-row > div:last-child::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at center, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Ensure text stays readable above the orb */
+        .card-row > div:last-child > div {
+            position: relative;
+            z-index: 10;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-gray-900 font-sans min-h-screen p-4 md:p-8">
