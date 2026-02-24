@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printable Workshop Cards - Addison's Story</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Print-specific styling to ensure perfect physical cards */
+        @media print {
+            body { 
+                background-color: white !important; 
+                margin: 0;
+                padding: 0;
+            }
+            .no-print { 
+                display: none !important; 
+            }
+            .card-row { 
+                break-inside: avoid; 
+                page-break-inside: avoid; 
+                margin-bottom: 0 !important;
+            }
+            @page { 
+                margin: 0.5in; 
+                size: letter portrait;
+            }
+            .print-border {
+                border-color: #cbd5e1 !important; /* Lighter borders for printing */
+            }
+        }
+        
+        /* Custom serif font for quotes */
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
+        .font-serif { font-family: 'Merriweather', serif; }
+    </style>
+</head>
+<body class="bg-slate-100 text-gray-900 font-sans min-h-screen p-4 md:p-8">
+
+    <!-- Instructions (Only visible on screen) -->
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6 mb-8 border-l-4 border-emerald-600 no-print">
+        <h1 class="text-2xl font-bold text-emerald-900 mb-2">🖨️ Ready to Print</h1>
+        <p class="text-gray-700 mb-4">
+            This page is optimized for printing on standard 8.5" x 11" paper. 
+            For best results:
+        </p>
+        <ul class="list-disc list-inside text-gray-600 space-y-1 mb-6">
+            <li>Press <strong>Ctrl+P</strong> (or Cmd+P on Mac) to open the print dialog.</li>
+            <li>Set margins to "Default" or "Minimum".</li>
+            <li>Make sure "Background graphics" is enabled if you want the light gray shading.</li>
+        </ul>
+        <button onclick="window.print()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-6 rounded-lg transition-colors flex items-center gap-2">
+            <i data-lucide="printer" class="w-5 h-5"></i>
+            Print Cards Now
+        </button>
+    </div>
+
+    <!-- Printable Area -->
+    <div class="max-w-4xl mx-auto bg-white print:bg-transparent">
+        
+        <!-- Print Header -->
+        <div class="text-center mb-8 pt-4">
+            <h2 class="text-3xl font-extrabold text-emerald-900 font-serif tracking-tight">The Human-Centered Classroom</h2>
+            <div class="max-w-2xl mx-auto mt-3 bg-emerald-50 p-4 rounded-lg border border-emerald-200">
+                <p class="text-sm text-emerald-800 font-bold uppercase tracking-wider mb-2">Workshop Focus Questions</p>
+                <ul class="text-gray-700 text-left list-disc list-inside space-y-1">
+                    <li>What do educators do, particularly in the humanities, to use AI to make us more human?</li>
+                    <li>How do we embrace a human-centered mindset in the age of AI?</li>
+                    <li>What is the educational reframe now, and how do we do it?</li>
+                </ul>
+            </div>
+            <p class="text-gray-600 mt-4">Workshop Prompt Cards &mdash; ✂️ Cut along the solid outer borders, fold along the dotted center line.</p>
+        </div>
+
+        <!-- Cards Container -->
+        <div class="flex flex-col gap-6">
+
+            <!-- Card 1 -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="clock" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">The Illusion of Rigor</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "It’s rigorous in terms of time, but hollow in terms of growth... a series of digital hoops."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Addison's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Dismantling 'Click-Rigor'</h3>
+                        <p class="text-gray-700 text-sm mb-4">If academic rigor is no longer measured by the hours spent navigating modules and fulfilling word counts, how do we define it?</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Brainstorm one way to use AI to assess the vulnerability and depth of a student's human experience, rather than their stamina for repetitive tasks.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="book-open" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">The Discussion Board Trap</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "Half my nights are spent on automated quizzes and discussion forums where everyone says the same thing."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Addison's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Beyond 'I Agree'</h3>
+                        <p class="text-gray-700 text-sm mb-4">The traditional discussion board often forces performative compliance rather than genuine connection.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">How could an educator use an AI tool to transform a transactional forum into a collaborative, creative world-building exercise?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="palette" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Translating Knowledge</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "How can technology help Addison turn a sociology essay into a dramatic monologue, or a history project into a digital art piece?"
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Addison's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">AI as the Translator</h3>
+                        <p class="text-gray-700 text-sm mb-4">Students often compartmentalize their academic requirements from their 'visceral' creative passions.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Design an assignment prompt where students use AI to bridge their research with a human-centered art form (a play, a song, a physical craft).</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="brain-circuit" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">True Accessibility</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "Addison carries a diagnosis of ADHD... the modern 'digital-first' classroom presents a hurdle no deadline extension can clear."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Addison's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Proactive Partnership</h3>
+                        <p class="text-gray-700 text-sm mb-2">Standard accommodations often react to failure rather than designing for success from the start.</p>
+                        <div class="bg-emerald-50 rounded p-3 mt-2">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm leading-tight block">How can educators frame AI as a proactive 'executive functioning partner' so neurodivergent students focus on creative synthesis over structural compliance?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="heart" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Reclaiming the 20 Minutes</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "I learn more in twenty minutes of crafting than in two hours of typing 'I agree' into a forum."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Addison's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Valuing Visceral Learning</h3>
+                        <p class="text-gray-700 text-sm mb-4">If a student sketches a set design instead of writing a post, the learning is deep, but the grading rubric is broken.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">How can AI help the educator map a student's '20-minute creative artifact' back to the course's core academic learning objectives?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">The First-Gen Stakes</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "I came here to be inspired... Addison’s enrollment is a monumental milestone for his family."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Addison's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Honoring the Journey</h3>
+                        <p class="text-gray-700 text-sm mb-4">For students where college is a high-stakes milestone, the automation of learning can feel like a betrayal of the college promise.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">How can we design AI-assisted assignments that honor a student's background and actively restore the promise of inspiration?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="unplug" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Empowering vs. Monitoring</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "Advocates suggest shifting the focus: instead of using AI to monitor or automate, use it to empower."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Addison's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">The Agency Shift</h3>
+                        <p class="text-gray-700 text-sm mb-4">Technology in the classroom is frequently used as a medium for submission and surveillance.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Identify one assignment that uses tech to monitor submission. Rewrite it today so technology is used exclusively to empower creation.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">The Humanistic Core</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "The challenge... is ensuring students don't have to choose between their degree and their creative identity."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Addison's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Making AI Human</h3>
+                        <p class="text-gray-700 text-sm mb-4">What do educators do, particularly in the humanities, to use AI to make us more human?</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Brainstorm an AI-assisted final project where the output must evoke a genuine, visceral emotional response from the rest of the class.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9 (Maya's Story) -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="bot" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Algorithm of Achievement</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "I feel like I'm being trained to be a data processor, not a scientist... It’s rigorous in its precision, but it lacks any sense of purpose."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Maya's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Measuring What Matters</h3>
+                        <p class="text-gray-700 text-sm mb-4">Educational systems often prioritize easily measured metrics over complex, human-centered reasoning.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Identify one highly structured assignment. How can you inject a "grey area" that requires students to argue for an ethical or human impact?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 10 (Maya's Story) -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="message-square" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">AI as a Sparring Partner</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "Imagine if Maya could use AI as a simulator for complex stakeholder negotiations... Here, AI isn't the judge; it’s the sparring partner."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Maya's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">From Judge to Simulator</h3>
+                        <p class="text-gray-700 text-sm mb-4">Automated testing relies on a "right or wrong" binary, stripping away the nuance of real-world problem-solving.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Design an activity where students use an AI tool (like an LLM) to role-play a challenging conversation with a skeptical stakeholder.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 11 (Maya's Story) -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="eye-off" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">The Cost of Surveillance</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "She spends her weekends fighting with an AI-powered proctoring software that flags her for 'suspicious eye movement' whenever she looks away to think."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Maya's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Relational Learning</h3>
+                        <p class="text-gray-700 text-sm mb-4">Technology designed solely for security or efficiency can isolate students and penalize the natural thinking process.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Review your educational technology stack. Replace one tool used for "monitoring" with a practice designed to foster student connection.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 12 (Maya's Story) -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="leaf" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Data with a Pulse</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "Maya is an empathetic learner. She chose environmental science because she wants to work in policy, translating complex data into human stories..."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Maya's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Interactive Scaffolding</h3>
+                        <p class="text-gray-700 text-sm mb-4">The humanities and sciences intersect most powerfully when data is translated into compelling human narratives.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Create a prompt where students must use AI to help translate a rigid dataset or technical report into a compelling story aimed at a local community.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 13 (Leo's Story) -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="hourglass" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Obsolescence Anxiety</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "I’m working incredibly hard to learn skills that are essentially being 'retired' in real-time... that spreadsheet will be generated by a prompt."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Leo's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">The "How" vs. The "Why"</h3>
+                        <p class="text-gray-700 text-sm mb-4">Many programs demand mastery of technical tasks AI has already mastered, neglecting higher-order leadership skills.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Identify a technical assignment in your syllabus. How can you shift the grading weight from the execution of the task to the ethical defense of the result?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 14 (Leo's Story) -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Calculation to Curation</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "If Leo uses AI to generate ten different supply chain models, his 'rigor' is no longer found in the calculation, but in the ethical synthesis."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Leo's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">The Ethical Architect</h3>
+                        <p class="text-gray-700 text-sm mb-4">Shifting the student's role from producer of data to curator of solutions makes AI a high-speed drafting tool.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Design a prompt where students generate multiple AI solutions to a problem, but must select and defend the one that best protects human welfare over maximum profit.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 15 (Leo's Story) -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="scale" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Strategic Criticality</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "The path forward for Leo isn't to compete with the machine, but to lead it... developing the ability to question the biases within the AI’s recommendations."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Leo's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Resilient Leadership</h3>
+                        <p class="text-gray-700 text-sm mb-4">True rigor now lies in stress-testing ethical frameworks against high-pressure AI outputs.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">Create a simulation where the AI deliberately provides a highly profitable but ethically flawed recommendation. Ask students to audit and correct the AI's bias.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 16 (Leo's Story) -->
+            <div class="card-row flex w-full border-2 border-gray-400 print-border rounded-lg overflow-hidden h-[3.5in]">
+                <!-- Front -->
+                <div class="w-1/2 p-6 flex flex-col justify-between bg-slate-50 border-r-2 border-dashed border-gray-400 print-border">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-emerald-100 px-2 py-1 rounded">Front</span>
+                        <i data-lucide="map" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">The Human Margin</h3>
+                        <blockquote class="font-serif italic text-gray-700 border-l-2 border-emerald-600 pl-4 text-sm leading-relaxed">
+                            "Leo packs his bag. He’s heading to a meeting for a student-led non-profit he helped start. They use data to map food deserts in the North Tryon area."
+                        </blockquote>
+                    </div>
+                    <div class="text-xs text-gray-400 uppercase tracking-widest mt-4">Leo's Story</div>
+                </div>
+                <!-- Back -->
+                <div class="w-1/2 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-start text-emerald-800">
+                        <span class="text-xs font-bold uppercase tracking-widest bg-gray-100 px-2 py-1 rounded">Back</span>
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2 border-b border-gray-200 pb-2">Reinvesting Time</h3>
+                        <p class="text-gray-700 text-sm mb-4">When AI automates mechanical work, it frees up cognitive load for profound, community-centered impact.</p>
+                        <div class="bg-emerald-50 rounded p-3">
+                            <span class="font-bold text-emerald-800 text-xs uppercase block mb-1">Design Challenge:</span>
+                            <span class="text-gray-800 text-sm">If AI saves your students 3 hours a week on mechanical tasks, design a localized, community-based project where they must reinvest those 3 hours.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
