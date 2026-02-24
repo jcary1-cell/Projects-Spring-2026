@@ -17,10 +17,19 @@
             .no-print { 
                 display: none !important; 
             }
+            /* Fix for flexbox pagination bug in browsers */
+            .flex.flex-col.gap-6 {
+                display: block !important;
+            }
             .card-row { 
-                break-inside: avoid; 
-                page-break-inside: avoid; 
-                margin-bottom: 0 !important;
+                break-inside: avoid !important; 
+                page-break-inside: avoid !important; 
+                margin-bottom: 1.5rem !important;
+            }
+            /* Force a page break after every 2nd card so they never spill over */
+            .card-row:nth-child(2n) {
+                page-break-after: always !important;
+                break-after: page !important;
             }
             @page { 
                 margin: 0.5in; 
