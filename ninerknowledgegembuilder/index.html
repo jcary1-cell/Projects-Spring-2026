@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gem Identity Builder</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #f8fafd;
+            color: #1f1f1f;
+        }
+        .gem-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 24px;
+        }
+        .instruction-box {
+            background: #f0f4f9;
+            border: 1px solid #d3e3fd;
+            border-radius: 16px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cfd4da;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const Icon = ({ name, size = 20, className = "" }) => {
+            const ref = useRef(null);
+            useEffect(() => {
+                if (ref.current && window.lucide) {
+                    const iconNode = lucide.icons[name];
+                    if (iconNode) {
+                        const element = lucide.createElement(iconNode);
+                        element.setAttribute('width', size);
+                        element.setAttribute('height', size);
+                        element.setAttribute('class', className);
+                        ref.current.innerHTML = '';
+                        ref.current.appendChild(element);
+                    }
+                }
+            }, [name, size, className]);
+            return <span ref={ref} className="inline-block" />;
+        };
+
+        const App = () => {
+            const [gemData, setGemData] = useState({
+                name: "",
+                vibe: "Helpful and friendly",
+                goal: "",
+                style: "Balanced"
+            });
+
+            // State to handle manual edits to the generated instructions
+            const [customInstructions, setCustomInstructions] = useState("");
+            const [isManuallyEditing, setIsManuallyEditing] = useState(false);
+            const [copied, setCopied] = useState(false);
+
+            const styleGuide = {
+                "Casual": "Use a friendly, conversational tone with light humor and emojis.",
+                "Balanced": "Maintain a professional yet approachable tone. Clear and direct.",
+                "Formal": "Use a sophisticated, precise, and academic tone. No slang or emojis."
+            };
+
+            // Generate instructions based on form data
+            const generateBaseInstructions = () => {
+                if (!gemData.goal) return "";
+                return `You are ${gemData.name || 'a helpful assistant'}. 
+                
+Your primary goal is to: ${gemData.goal}
+
+Your personality "vibe" is: ${gemData.vibe}
+
+Tone and Style: ${styleGuide[gemData.style]}
+
+Always stay in character and prioritize accuracy while being ${gemData.vibe}.`;
+            };
+
+            // Update custom instructions whenever base inputs change, 
+            // but only if the user hasn't started manually typing in the preview yet.
+            useEffect(() => {
+                if (!isManuallyEditing) {
+                    setCustomInstructions(generateBaseInstructions());
+                }
+            }, [gemData, isManuallyEditing]);
+
+            const handleCopy = () => {
+                const text = customInstructions || generateBaseInstructions();
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            const handleInstructionChange = (e) => {
+                setIsManuallyEditing(true);
+                setCustomInstructions(e.target.value);
+            };
+
+            const resetToAuto = () => {
+                setIsManuallyEditing(false);
+                setCustomInstructions(generateBaseInstructions());
+            };
+
+            return (
+                <div className="min-h-screen p-4 md:p-8 flex items-center justify-center">
+                    <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        {/* Creation Side */}
+                        <div className="gem-card p-6 md:p-8 space-y-8 shadow-sm">
+                            <div className="flex justify-between items-center">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-blue-100 rounded-lg">
+                                        <Icon name="sparkles" className="text-blue-600" size={24} />
+                                    </div>
+                                    <h1 className="text-xl font-medium">Create a Gem</h1>
+                                </div>
+                                {isManuallyEditing && (
+                                    <button 
+                                        onClick={resetToAuto}
+                                        className="text-[10px] font-bold text-blue-600 uppercase tracking-wider hover:underline"
+                                    >
+                                        Auto-Sync On
+                                    </button>
+                                )}
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium ml-1 text-gray-700">Name your Gem</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder="e.g. Coding Buddy"
+                                        value={gemData.name}
+                                        onChange={(e) => setGemData({...gemData, name: e.target.value})}
+                                        className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium ml-1 text-gray-700">What will it do?</label>
+                                    <textarea 
+                                        placeholder="Describe its main job..."
+                                        value={gemData.goal}
+                                        onChange={(e) => setGemData({...gemData, goal: e.target.value})}
+                                        className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm h-28 focus:ring-2 focus:ring-blue-500 outline-none resize-none transition-shadow"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium ml-1 text-gray-700">How should it feel?</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder="e.g. Encouraging and patient"
+                                        value={gemData.vibe}
+                                        onChange={(e) => setGemData({...gemData, vibe: e.target.value})}
+                                        className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+                                    />
+                                </div>
+
+                                <div className="flex gap-2">
+                                    {["Casual", "Balanced", "Formal"].map((s) => (
+                                        <button
+                                            key={s}
+                                            onClick={() => setGemData({...gemData, style: s})}
+                                            className={`flex-1 py-2 rounded-full text-xs font-medium border transition-all ${
+                                                gemData.style === s 
+                                                ? 'bg-blue-600 text-white border-blue-600 shadow-sm' 
+                                                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
+                                            }`}
+                                        >
+                                            {s}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Preview/Output Side */}
+                        <div className="flex flex-col gap-6">
+                            <div className="gem-card p-6 flex-1 shadow-sm flex flex-col">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider">Instructions Preview</h2>
+                                    {isManuallyEditing && (
+                                        <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-bold uppercase">Custom Edit</span>
+                                    )}
+                                </div>
+                                
+                                <textarea 
+                                    className="instruction-box p-4 flex-1 font-sans text-sm leading-relaxed text-gray-700 focus:ring-1 focus:ring-blue-300 outline-none resize-none custom-scrollbar"
+                                    value={customInstructions || (gemData.goal ? "" : "Fill in the 'What will it do?' section to generate instructions.")}
+                                    onChange={handleInstructionChange}
+                                    placeholder="Your instructions will appear here. You can also type directly in this box to add your own custom details!"
+                                />
+
+                                <button 
+                                    onClick={handleCopy}
+                                    disabled={!gemData.goal && !customInstructions}
+                                    className={`mt-6 w-full py-4 rounded-2xl font-medium transition-all flex items-center justify-center gap-2 ${
+                                        (gemData.goal || customInstructions)
+                                        ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md' 
+                                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                    }`}
+                                >
+                                    {copied ? <Icon name="check" size={18} /> : <Icon name="copy" size={18} />}
+                                    {copied ? 'Copied to clipboard' : 'Copy Instructions'}
+                                </button>
+                            </div>
+
+                            <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex gap-3">
+                                <Icon name="info" className="text-blue-500 shrink-0" size={20} />
+                                <p className="text-xs text-blue-700 leading-normal">
+                                    <strong>Edit directly:</strong> You can now type in the preview box to customize your instructions before copying them to Gemini.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
