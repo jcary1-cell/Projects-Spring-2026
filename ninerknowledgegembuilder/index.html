@@ -3,34 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gem Identity Builder</title>
+    <title>Niner Gem Identity Builder</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap');
+        
+        :root {
+            --charlotte-green: #005035;
+            --niner-gold: #A49665;
+            --white: #ffffff;
+            --light-gray: #F3F4F6;
+        }
+
         body {
-            font-family: 'Google Sans', sans-serif;
-            background-color: #f8fafd;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--light-gray);
             color: #1f1f1f;
         }
+
+        .bg-charlotte-green { background-color: var(--charlotte-green); }
+        .text-charlotte-green { color: var(--charlotte-green); }
+        .border-charlotte-green { border-color: var(--charlotte-green); }
+        
+        .bg-niner-gold { background-color: var(--niner-gold); }
+        .text-niner-gold { color: var(--niner-gold); }
+        
         .gem-card {
             background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 24px;
-        }
-        .instruction-box {
-            background: #f0f4f9;
-            border: 1px solid #d3e3fd;
+            border-top: 4px solid var(--charlotte-green);
             border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
+
+        .instruction-box {
+            background: #f9f9f7;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+        }
+
+        .btn-primary {
+            background-color: var(--charlotte-green);
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #003d29;
+            transform: translateY(-1px);
+        }
+
+        .template-chip {
+            border: 1px solid #d1d5db;
+            transition: all 0.2s ease;
+        }
+
+        .template-chip:hover {
+            border-color: var(--niner-gold);
+            background-color: #fdfbf7;
+        }
+
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cfd4da;
+            background: var(--niner-gold);
             border-radius: 10px;
         }
     </style>
@@ -67,7 +107,6 @@
                 style: "Balanced"
             });
 
-            // State to handle manual edits to the generated instructions
             const [customInstructions, setCustomInstructions] = useState("");
             const [isManuallyEditing, setIsManuallyEditing] = useState(false);
             const [copied, setCopied] = useState(false);
@@ -78,7 +117,40 @@
                 "Formal": "Use a sophisticated, precise, and academic tone. No slang or emojis."
             };
 
-            // Generate instructions based on form data
+            const templates = [
+                {
+                    label: "⛏️ Niner Guide",
+                    name: "Norm",
+                    goal: "Help new students navigate campus life, traditions, and finding the best spots in the Student Union.",
+                    vibe: "Energetic, helpful, and full of Niner spirit",
+                    style: "Balanced"
+                },
+                {
+                    label: "🎓 Academic Advisor",
+                    name: "Advisor Bot",
+                    goal: "Help me brainstorm elective choices and understand general education requirements.",
+                    vibe: "Patient, professional, and structured",
+                    style: "Formal"
+                },
+                {
+                    label: "💡 Innovation Coach",
+                    name: "Ventures Muse",
+                    goal: "Give me feedback on my startup ideas and suggest resources for student entrepreneurs.",
+                    vibe: "Creative, bold, and forward-thinking",
+                    style: "Casual"
+                }
+            ];
+
+            const applyTemplate = (t) => {
+                setIsManuallyEditing(false);
+                setGemData({
+                    name: t.name,
+                    goal: t.goal,
+                    vibe: t.vibe,
+                    style: t.style
+                });
+            };
+
             const generateBaseInstructions = () => {
                 if (!gemData.goal) return "";
                 return `You are ${gemData.name || 'a helpful assistant'}. 
@@ -92,8 +164,6 @@ Tone and Style: ${styleGuide[gemData.style]}
 Always stay in character and prioritize accuracy while being ${gemData.vibe}.`;
             };
 
-            // Update custom instructions whenever base inputs change, 
-            // but only if the user hasn't started manually typing in the preview yet.
             useEffect(() => {
                 if (!isManuallyEditing) {
                     setCustomInstructions(generateBaseInstructions());
@@ -123,115 +193,171 @@ Always stay in character and prioritize accuracy while being ${gemData.vibe}.`;
             };
 
             return (
-                <div className="min-h-screen p-4 md:p-8 flex items-center justify-center">
-                    <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="min-h-screen p-4 md:p-8 flex flex-col items-center">
+                    {/* Header with UNC Charlotte branding colors */}
+                    <div className="w-full max-w-6xl mb-8 flex items-center justify-between border-b border-gray-200 pb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-charlotte-green p-2 rounded">
+                                <Icon name="gem" className="text-white" size={28} />
+                            </div>
+                            <div>
+                                <h1 className="text-2xl font-bold text-charlotte-green leading-none">Niner Gem Builder</h1>
+                                <p className="text-xs text-gray-500 font-medium uppercase tracking-widest mt-1">UNC Charlotte Custom AI Design</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
                         
                         {/* Creation Side */}
-                        <div className="gem-card p-6 md:p-8 space-y-8 shadow-sm">
-                            <div className="flex justify-between items-center">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-blue-100 rounded-lg">
-                                        <Icon name="sparkles" className="text-blue-600" size={24} />
+                        <div className="lg:col-span-7 space-y-6">
+                            <div className="gem-card p-6 md:p-8 space-y-6 shadow-sm">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-lg font-bold flex items-center gap-2">
+                                        <Icon name="plus-circle" className="text-niner-gold" />
+                                        Identity Forge
+                                    </h2>
+                                    {isManuallyEditing && (
+                                        <button 
+                                            onClick={resetToAuto}
+                                            className="text-[10px] font-bold text-charlotte-green uppercase tracking-wider hover:underline flex items-center gap-1"
+                                        >
+                                            <Icon name="refresh-cw" size={10} /> Reset to Auto
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Inspiration Library</label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {templates.map((t, idx) => (
+                                            <button
+                                                key={idx}
+                                                onClick={() => applyTemplate(t)}
+                                                className="template-chip px-4 py-2 rounded-lg bg-white text-gray-700 text-xs font-medium"
+                                            >
+                                                {t.label}
+                                            </button>
+                                        ))}
                                     </div>
-                                    <h1 className="text-xl font-medium">Create a Gem</h1>
-                                </div>
-                                {isManuallyEditing && (
-                                    <button 
-                                        onClick={resetToAuto}
-                                        className="text-[10px] font-bold text-blue-600 uppercase tracking-wider hover:underline"
-                                    >
-                                        Auto-Sync On
-                                    </button>
-                                )}
-                            </div>
-
-                            <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium ml-1 text-gray-700">Name your Gem</label>
-                                    <input 
-                                        type="text" 
-                                        placeholder="e.g. Coding Buddy"
-                                        value={gemData.name}
-                                        onChange={(e) => setGemData({...gemData, name: e.target.value})}
-                                        className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
-                                    />
                                 </div>
 
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-charlotte-green uppercase">Gem Name</label>
+                                        <input 
+                                            type="text" 
+                                            placeholder="e.g. Norm Bot"
+                                            value={gemData.name}
+                                            onChange={(e) => setGemData({...gemData, name: e.target.value})}
+                                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-niner-gold focus:ring-1 focus:ring-niner-gold outline-none transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-charlotte-green uppercase">Personality/Vibe</label>
+                                        <input 
+                                            type="text" 
+                                            placeholder="e.g. Energetic and Patient"
+                                            value={gemData.vibe}
+                                            onChange={(e) => setGemData({...gemData, vibe: e.target.value})}
+                                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-niner-gold focus:ring-1 focus:ring-niner-gold outline-none transition-all"
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium ml-1 text-gray-700">What will it do?</label>
+                                    <label className="text-xs font-bold text-charlotte-green uppercase">Main Objective</label>
                                     <textarea 
-                                        placeholder="Describe its main job..."
+                                        placeholder="What is this Gem's specific purpose at UNC Charlotte?"
                                         value={gemData.goal}
                                         onChange={(e) => setGemData({...gemData, goal: e.target.value})}
-                                        className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm h-28 focus:ring-2 focus:ring-blue-500 outline-none resize-none transition-shadow"
+                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm h-32 focus:border-niner-gold focus:ring-1 focus:ring-niner-gold outline-none resize-none transition-all"
                                     />
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium ml-1 text-gray-700">How should it feel?</label>
-                                    <input 
-                                        type="text" 
-                                        placeholder="e.g. Encouraging and patient"
-                                        value={gemData.vibe}
-                                        onChange={(e) => setGemData({...gemData, vibe: e.target.value})}
-                                        className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
-                                    />
+                                <div className="space-y-3">
+                                    <label className="text-xs font-bold text-charlotte-green uppercase">Response Style</label>
+                                    <div className="flex gap-2">
+                                        {["Casual", "Balanced", "Formal"].map((s) => (
+                                            <button
+                                                key={s}
+                                                onClick={() => setGemData({...gemData, style: s})}
+                                                className={`flex-1 py-3 rounded-lg text-xs font-bold border transition-all ${
+                                                    gemData.style === s 
+                                                    ? 'bg-charlotte-green text-white border-charlotte-green shadow-md' 
+                                                    : 'bg-white text-gray-500 border-gray-200 hover:border-niner-gold hover:text-niner-gold'
+                                                }`}
+                                            >
+                                                {s}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
+                            </div>
 
-                                <div className="flex gap-2">
-                                    {["Casual", "Balanced", "Formal"].map((s) => (
-                                        <button
-                                            key={s}
-                                            onClick={() => setGemData({...gemData, style: s})}
-                                            className={`flex-1 py-2 rounded-full text-xs font-medium border transition-all ${
-                                                gemData.style === s 
-                                                ? 'bg-blue-600 text-white border-blue-600 shadow-sm' 
-                                                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
-                                            }`}
-                                        >
-                                            {s}
-                                        </button>
-                                    ))}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="p-4 bg-white border-l-4 border-niner-gold rounded shadow-sm">
+                                    <div className="flex items-center gap-2 mb-2 text-charlotte-green">
+                                        <Icon name="info" size={16} />
+                                        <span className="text-xs font-bold uppercase tracking-wider">Pro Tip</span>
+                                    </div>
+                                    <p className="text-xs text-gray-600 leading-relaxed">
+                                        Add <strong>"Context: UNC Charlotte"</strong> to your custom writing to ensure the AI knows the local setting.
+                                    </p>
+                                </div>
+                                <div className="p-4 bg-white border-l-4 border-charlotte-green rounded shadow-sm">
+                                    <div className="flex items-center gap-2 mb-2 text-charlotte-green">
+                                        <Icon name="rocket" size={16} />
+                                        <span className="text-xs font-bold uppercase tracking-wider">Niner Challenge</span>
+                                    </div>
+                                    <p className="text-xs text-gray-600 leading-relaxed">
+                                        Try adding: <strong>"Always use 'Go Niners!' to end every message."</strong>
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Preview/Output Side */}
-                        <div className="flex flex-col gap-6">
-                            <div className="gem-card p-6 flex-1 shadow-sm flex flex-col">
+                        <div className="lg:col-span-5 flex flex-col gap-6">
+                            <div className="gem-card p-6 flex-1 shadow-sm flex flex-col border-t-4 border-niner-gold">
                                 <div className="flex justify-between items-center mb-4">
-                                    <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider">Instructions Preview</h2>
+                                    <h2 className="text-sm font-bold text-charlotte-green uppercase tracking-wider">System Instructions</h2>
                                     {isManuallyEditing && (
-                                        <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-bold uppercase">Custom Edit</span>
+                                        <span className="text-[9px] bg-niner-gold/20 text-niner-gold px-2 py-0.5 rounded font-bold uppercase border border-niner-gold/30">Customized</span>
                                     )}
                                 </div>
                                 
                                 <textarea 
-                                    className="instruction-box p-4 flex-1 font-sans text-sm leading-relaxed text-gray-700 focus:ring-1 focus:ring-blue-300 outline-none resize-none custom-scrollbar"
-                                    value={customInstructions || (gemData.goal ? "" : "Fill in the 'What will it do?' section to generate instructions.")}
+                                    className="instruction-box p-4 flex-1 font-sans text-sm leading-relaxed text-gray-700 focus:ring-1 focus:ring-niner-gold outline-none resize-none custom-scrollbar"
+                                    value={customInstructions || (gemData.goal ? "" : "The forge is cool. Select a template or start typing to begin...")}
                                     onChange={handleInstructionChange}
-                                    placeholder="Your instructions will appear here. You can also type directly in this box to add your own custom details!"
+                                    placeholder="Your custom AI logic will generate here..."
                                 />
 
                                 <button 
                                     onClick={handleCopy}
                                     disabled={!gemData.goal && !customInstructions}
-                                    className={`mt-6 w-full py-4 rounded-2xl font-medium transition-all flex items-center justify-center gap-2 ${
+                                    className={`mt-6 w-full py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg ${
                                         (gemData.goal || customInstructions)
-                                        ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md' 
-                                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                        ? 'btn-primary' 
+                                        : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
                                     }`}
                                 >
                                     {copied ? <Icon name="check" size={18} /> : <Icon name="copy" size={18} />}
-                                    {copied ? 'Copied to clipboard' : 'Copy Instructions'}
+                                    {copied ? 'Copied to Clipboard' : 'Copy Instructions'}
                                 </button>
                             </div>
 
-                            <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex gap-3">
-                                <Icon name="info" className="text-blue-500 shrink-0" size={20} />
-                                <p className="text-xs text-blue-700 leading-normal">
-                                    <strong>Edit directly:</strong> You can now type in the preview box to customize your instructions before copying them to Gemini.
-                                </p>
+                            <div className="bg-charlotte-green p-5 rounded-xl flex gap-4 shadow-xl">
+                                <div className="bg-white/10 p-2 rounded-lg self-start">
+                                    <Icon name="help-circle" className="text-white" size={24} />
+                                </div>
+                                <div className="space-y-2">
+                                    <p className="text-xs text-white font-bold uppercase tracking-widest">Next Step:</p>
+                                    <p className="text-xs text-gray-200 leading-normal">
+                                        Open your <strong>Gemini</strong> account, select <strong>Create a Gem</strong>, and paste this text into the <strong>Instructions</strong> field.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
