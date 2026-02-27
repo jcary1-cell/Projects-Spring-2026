@@ -104,7 +104,9 @@
                 name: "",
                 vibe: "Helpful and friendly",
                 goal: "",
-                style: "Balanced"
+                style: "Balanced",
+                guardrails: "",
+                interactionStyle: ""
             });
 
             const [customInstructions, setCustomInstructions] = useState("");
@@ -119,25 +121,31 @@
 
             const templates = [
                 {
-                    label: "⛏️ Niner Guide",
-                    name: "Norm",
-                    goal: "Help new students navigate campus life, traditions, and finding the best spots in the Student Union.",
-                    vibe: "Energetic, helpful, and full of Niner spirit",
-                    style: "Balanced"
+                    label: "🧠 Socratic Mentor",
+                    name: "Critical Partner",
+                    goal: "Act as a kind and supportive mentor. Instead of giving me the answers immediately, ask me probing questions that help me arrive at the solution myself. Prioritize my long-term learning over quick fixes.",
+                    vibe: "Patient, thoughtful, and encouraging",
+                    style: "Balanced",
+                    guardrails: "Do not provide code or direct solutions if I haven't shown my work first.",
+                    interactionStyle: "Always end responses with a follow-up question to test my understanding."
                 },
                 {
-                    label: "🎓 Academic Advisor",
-                    name: "Advisor Bot",
-                    goal: "Help me brainstorm elective choices and understand general education requirements.",
-                    vibe: "Patient, professional, and structured",
-                    style: "Formal"
+                    label: "⚖️ Strict Specialist",
+                    name: "Knowledge Guard",
+                    goal: "Only reference the knowledge materials I provide. If an answer isn't in the scope of those documents, explicitly state that you don't know rather than speculating or using outside general knowledge.",
+                    vibe: "Precise, disciplined, and objective",
+                    style: "Formal",
+                    guardrails: "Never use web search or internal training data for facts; only use the uploaded files.",
+                    interactionStyle: "Cite specific pages or sections when answering."
                 },
                 {
-                    label: "💡 Innovation Coach",
-                    name: "Ventures Muse",
-                    goal: "Give me feedback on my startup ideas and suggest resources for student entrepreneurs.",
-                    vibe: "Creative, bold, and forward-thinking",
-                    style: "Casual"
+                    label: "⚡ Efficiency First",
+                    name: "The Strategist",
+                    goal: "Be extremely concise and skip all conversational filler (like 'I hope this helps'). Focus on high-impact, actionable insights. If I ask for feedback, be brutally honest and objective.",
+                    vibe: "Direct, efficient, and results-oriented",
+                    style: "Formal",
+                    guardrails: "Keep all responses under 200 words.",
+                    interactionStyle: "Use bullet points for all recommendations."
                 }
             ];
 
@@ -147,21 +155,32 @@
                     name: t.name,
                     goal: t.goal,
                     vibe: t.vibe,
-                    style: t.style
+                    style: t.style,
+                    guardrails: t.guardrails || "",
+                    interactionStyle: t.interactionStyle || ""
                 });
             };
 
             const generateBaseInstructions = () => {
-                if (!gemData.goal) return "";
-                return `You are ${gemData.name || 'a helpful assistant'}. 
+                if (!gemData.goal && !gemData.guardrails && !gemData.interactionStyle) return "";
                 
-Your primary goal is to: ${gemData.goal}
+                let text = `You are ${gemData.name || 'a helpful assistant'}.\n\n`;
+                text += `CORE DIRECTIVE: ${gemData.goal || 'General assistance.'}\n\n`;
+                
+                if (gemData.guardrails) {
+                    text += `STRICT GUARDRAILS:\n${gemData.guardrails}\n\n`;
+                }
+                
+                if (gemData.interactionStyle) {
+                    text += `INTERACTION GUIDELINES:\n${gemData.interactionStyle}\n\n`;
+                }
 
-Your personality "vibe" is: ${gemData.vibe}
-
-Tone and Style: ${styleGuide[gemData.style]}
-
-Always stay in character and prioritize accuracy while being ${gemData.vibe}.`;
+                text += `PERSONALITY ATTRIBUTES:\n`;
+                text += `- Vibe: ${gemData.vibe}\n`;
+                text += `- Tone: ${styleGuide[gemData.style]}\n\n`;
+                text += `Always stay in character and maintain this behavioral framework.`;
+                
+                return text;
             };
 
             useEffect(() => {
@@ -194,15 +213,15 @@ Always stay in character and prioritize accuracy while being ${gemData.vibe}.`;
 
             return (
                 <div className="min-h-screen p-4 md:p-8 flex flex-col items-center">
-                    {/* Header with UNC Charlotte branding colors */}
+                    {/* Header */}
                     <div className="w-full max-w-6xl mb-8 flex items-center justify-between border-b border-gray-200 pb-4">
                         <div className="flex items-center gap-3">
                             <div className="bg-charlotte-green p-2 rounded">
                                 <Icon name="gem" className="text-white" size={28} />
                             </div>
                             <div>
-                                <h1 className="text-2xl font-bold text-charlotte-green leading-none">Niner Gem Builder</h1>
-                                <p className="text-xs text-gray-500 font-medium uppercase tracking-widest mt-1">UNC Charlotte Custom AI Design</p>
+                                <h1 className="text-2xl font-bold text-charlotte-green leading-none">Niner Alumni Gem Builder</h1>
+                                <p className="text-xs text-gray-500 font-medium uppercase tracking-widest mt-1 text-charlotte-green/70 font-semibold">UNC Charlotte Behavioral Workshop</p>
                             </div>
                         </div>
                     </div>
@@ -213,150 +232,177 @@ Always stay in character and prioritize accuracy while being ${gemData.vibe}.`;
                         <div className="lg:col-span-7 space-y-6">
                             <div className="gem-card p-6 md:p-8 space-y-6 shadow-sm">
                                 <div className="flex justify-between items-center">
-                                    <h2 className="text-lg font-bold flex items-center gap-2">
-                                        <Icon name="plus-circle" className="text-niner-gold" />
-                                        Identity Forge
+                                    <h2 className="text-lg font-bold flex items-center gap-2 text-charlotte-green">
+                                        <Icon name="pen-tool" className="text-niner-gold" />
+                                        Step 1: Choose a Foundation
                                     </h2>
                                     {isManuallyEditing && (
                                         <button 
                                             onClick={resetToAuto}
                                             className="text-[10px] font-bold text-charlotte-green uppercase tracking-wider hover:underline flex items-center gap-1"
                                         >
-                                            <Icon name="refresh-cw" size={10} /> Reset to Auto
+                                            <Icon name="refresh-cw" size={10} /> Sync with Builder
                                         </button>
                                     )}
                                 </div>
 
-                                <div className="space-y-3">
-                                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Inspiration Library</label>
-                                    <div className="flex flex-wrap gap-2">
-                                        {templates.map((t, idx) => (
-                                            <button
-                                                key={idx}
-                                                onClick={() => applyTemplate(t)}
-                                                className="template-chip px-4 py-2 rounded-lg bg-white text-gray-700 text-xs font-medium"
-                                            >
-                                                {t.label}
-                                            </button>
-                                        ))}
-                                    </div>
+                                <div className="flex flex-wrap gap-2">
+                                    {templates.map((t, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => applyTemplate(t)}
+                                            className="template-chip px-4 py-2 rounded-lg bg-white text-gray-700 text-xs font-medium border-gray-200"
+                                        >
+                                            {t.label}
+                                        </button>
+                                    ))}
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-6 pt-4 border-t border-gray-100">
+                                    <h2 className="text-lg font-bold flex items-center gap-2 text-charlotte-green">
+                                        <Icon name="compass" className="text-niner-gold" />
+                                        Step 2: Guided Behavior Workshop
+                                    </h2>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold text-charlotte-green uppercase tracking-widest">Persona Name</label>
+                                            <input 
+                                                type="text" 
+                                                placeholder="e.g. Socratic Mentor"
+                                                value={gemData.name}
+                                                onChange={(e) => setGemData({...gemData, name: e.target.value})}
+                                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:border-niner-gold outline-none transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold text-charlotte-green uppercase tracking-widest">Persona Vibe</label>
+                                            <input 
+                                                type="text" 
+                                                placeholder="e.g. Patient and Probing"
+                                                value={gemData.vibe}
+                                                onChange={(e) => setGemData({...gemData, vibe: e.target.value})}
+                                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:border-niner-gold outline-none transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-charlotte-green uppercase">Gem Name</label>
-                                        <input 
-                                            type="text" 
-                                            placeholder="e.g. Norm Bot"
-                                            value={gemData.name}
-                                            onChange={(e) => setGemData({...gemData, name: e.target.value})}
-                                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-niner-gold focus:ring-1 focus:ring-niner-gold outline-none transition-all"
+                                        <label className="text-xs font-bold text-charlotte-green flex items-center gap-2">
+                                            <Icon name="target" size={14} /> 
+                                            The Core Mission
+                                        </label>
+                                        <p className="text-[11px] text-gray-500 italic mb-1">What is the broad behavioral goal of this Gem?</p>
+                                        <textarea 
+                                            placeholder="e.g. Help me learn by asking questions instead of giving answers..."
+                                            value={gemData.goal}
+                                            onChange={(e) => setGemData({...gemData, goal: e.target.value})}
+                                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm h-20 focus:border-niner-gold outline-none resize-none transition-all"
                                         />
                                     </div>
+
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-charlotte-green uppercase">Personality/Vibe</label>
-                                        <input 
-                                            type="text" 
-                                            placeholder="e.g. Energetic and Patient"
-                                            value={gemData.vibe}
-                                            onChange={(e) => setGemData({...gemData, vibe: e.target.value})}
-                                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-niner-gold focus:ring-1 focus:ring-niner-gold outline-none transition-all"
+                                        <label className="text-xs font-bold text-charlotte-green flex items-center gap-2">
+                                            <Icon name="shield-alert" size={14} /> 
+                                            Setting Guardrails
+                                        </label>
+                                        <p className="text-[11px] text-gray-500 italic mb-1">What should the Gem NEVER do? What are its limits?</p>
+                                        <textarea 
+                                            placeholder="e.g. Never go outside the provided knowledge scope. Don't use slang..."
+                                            value={gemData.guardrails}
+                                            onChange={(e) => setGemData({...gemData, guardrails: e.target.value})}
+                                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm h-20 focus:border-niner-gold outline-none resize-none transition-all"
                                         />
                                     </div>
-                                </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-charlotte-green uppercase">Main Objective</label>
-                                    <textarea 
-                                        placeholder="What is this Gem's specific purpose at UNC Charlotte?"
-                                        value={gemData.goal}
-                                        onChange={(e) => setGemData({...gemData, goal: e.target.value})}
-                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm h-32 focus:border-niner-gold focus:ring-1 focus:ring-niner-gold outline-none resize-none transition-all"
-                                    />
-                                </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-charlotte-green flex items-center gap-2">
+                                            <Icon name="message-square" size={14} /> 
+                                            Interaction Style
+                                        </label>
+                                        <p className="text-[11px] text-gray-500 italic mb-1">How should it structure its responses? (e.g. use bullets, ask follow-ups)</p>
+                                        <textarea 
+                                            placeholder="e.g. Always end with a question. Use bullet points for steps..."
+                                            value={gemData.interactionStyle}
+                                            onChange={(e) => setGemData({...gemData, interactionStyle: e.target.value})}
+                                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm h-20 focus:border-niner-gold outline-none resize-none transition-all"
+                                        />
+                                    </div>
 
-                                <div className="space-y-3">
-                                    <label className="text-xs font-bold text-charlotte-green uppercase">Response Style</label>
-                                    <div className="flex gap-2">
-                                        {["Casual", "Balanced", "Formal"].map((s) => (
-                                            <button
-                                                key={s}
-                                                onClick={() => setGemData({...gemData, style: s})}
-                                                className={`flex-1 py-3 rounded-lg text-xs font-bold border transition-all ${
-                                                    gemData.style === s 
-                                                    ? 'bg-charlotte-green text-white border-charlotte-green shadow-md' 
-                                                    : 'bg-white text-gray-500 border-gray-200 hover:border-niner-gold hover:text-niner-gold'
-                                                }`}
-                                            >
-                                                {s}
-                                            </button>
-                                        ))}
+                                    <div className="space-y-3">
+                                        <label className="text-xs font-bold text-charlotte-green uppercase tracking-widest">Tone Profile</label>
+                                        <div className="flex gap-2">
+                                            {["Casual", "Balanced", "Formal"].map((s) => (
+                                                <button
+                                                    key={s}
+                                                    onClick={() => setGemData({...gemData, style: s})}
+                                                    className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
+                                                        gemData.style === s 
+                                                        ? 'bg-charlotte-green text-white border-charlotte-green shadow-md' 
+                                                        : 'bg-white text-gray-500 border-gray-200 hover:border-niner-gold hover:text-niner-gold'
+                                                    }`}
+                                                >
+                                                    {s}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="p-4 bg-white border-l-4 border-niner-gold rounded shadow-sm">
-                                    <div className="flex items-center gap-2 mb-2 text-charlotte-green">
-                                        <Icon name="info" size={16} />
-                                        <span className="text-xs font-bold uppercase tracking-wider">Pro Tip</span>
-                                    </div>
-                                    <p className="text-xs text-gray-600 leading-relaxed">
-                                        Add <strong>"Context: UNC Charlotte"</strong> to your custom writing to ensure the AI knows the local setting.
-                                    </p>
-                                </div>
-                                <div className="p-4 bg-white border-l-4 border-charlotte-green rounded shadow-sm">
-                                    <div className="flex items-center gap-2 mb-2 text-charlotte-green">
-                                        <Icon name="rocket" size={16} />
-                                        <span className="text-xs font-bold uppercase tracking-wider">Niner Challenge</span>
-                                    </div>
-                                    <p className="text-xs text-gray-600 leading-relaxed">
-                                        Try adding: <strong>"Always use 'Go Niners!' to end every message."</strong>
-                                    </p>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Preview/Output Side */}
+                        {/* Preview Side */}
                         <div className="lg:col-span-5 flex flex-col gap-6">
-                            <div className="gem-card p-6 flex-1 shadow-sm flex flex-col border-t-4 border-niner-gold">
+                            <div className="gem-card p-6 flex-1 shadow-sm flex flex-col border-t-4 border-niner-gold h-full">
                                 <div className="flex justify-between items-center mb-4">
-                                    <h2 className="text-sm font-bold text-charlotte-green uppercase tracking-wider">System Instructions</h2>
+                                    <h2 className="text-sm font-bold text-charlotte-green uppercase tracking-wider">Final Gem Blueprint</h2>
                                     {isManuallyEditing && (
-                                        <span className="text-[9px] bg-niner-gold/20 text-niner-gold px-2 py-0.5 rounded font-bold uppercase border border-niner-gold/30">Customized</span>
+                                        <span className="text-[9px] bg-niner-gold/20 text-niner-gold px-2 py-0.5 rounded font-bold uppercase border border-niner-gold/30">Manual Edit</span>
                                     )}
                                 </div>
                                 
                                 <textarea 
-                                    className="instruction-box p-4 flex-1 font-sans text-sm leading-relaxed text-gray-700 focus:ring-1 focus:ring-niner-gold outline-none resize-none custom-scrollbar"
-                                    value={customInstructions || (gemData.goal ? "" : "The forge is cool. Select a template or start typing to begin...")}
+                                    className="instruction-box p-4 flex-1 font-mono text-[12px] leading-relaxed text-gray-700 focus:ring-1 focus:ring-niner-gold outline-none resize-none custom-scrollbar"
+                                    value={customInstructions || (gemData.goal || gemData.guardrails ? "" : "Define your Gem's behavior in Step 2 to generate the instructions...")}
                                     onChange={handleInstructionChange}
-                                    placeholder="Your custom AI logic will generate here..."
+                                    placeholder="Your custom behavioral logic will generate here..."
                                 />
 
                                 <button 
                                     onClick={handleCopy}
-                                    disabled={!gemData.goal && !customInstructions}
+                                    disabled={!gemData.goal && !gemData.guardrails && !gemData.interactionStyle && !customInstructions}
                                     className={`mt-6 w-full py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg ${
-                                        (gemData.goal || customInstructions)
+                                        (gemData.goal || gemData.guardrails || gemData.interactionStyle || customInstructions)
                                         ? 'btn-primary' 
                                         : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
                                     }`}
                                 >
                                     {copied ? <Icon name="check" size={18} /> : <Icon name="copy" size={18} />}
-                                    {copied ? 'Copied to Clipboard' : 'Copy Instructions'}
+                                    {copied ? 'Copied Blueprint' : 'Copy Instructions'}
                                 </button>
+                                
+                                <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                    <p className="text-[11px] text-gray-600 leading-normal">
+                                        <strong>Ready to use?</strong> Click the button above, go to <strong>Gemini</strong>, select <strong>Create a Gem</strong>, and paste this text into the <strong>Instructions</strong> field.
+                                    </p>
+                                </div>
                             </div>
 
-                            <div className="bg-charlotte-green p-5 rounded-xl flex gap-4 shadow-xl">
-                                <div className="bg-white/10 p-2 rounded-lg self-start">
-                                    <Icon name="help-circle" className="text-white" size={24} />
-                                </div>
+                            <div className="bg-white p-5 rounded-xl border border-gray-200 flex flex-col gap-3 shadow-sm">
+                                <h3 className="text-xs font-bold text-charlotte-green uppercase tracking-wider">Design Strategy</h3>
                                 <div className="space-y-2">
-                                    <p className="text-xs text-white font-bold uppercase tracking-widest">Next Step:</p>
-                                    <p className="text-xs text-gray-200 leading-normal">
-                                        Open your <strong>Gemini</strong> account, select <strong>Create a Gem</strong>, and paste this text into the <strong>Instructions</strong> field.
-                                    </p>
+                                    <div className="flex gap-2">
+                                        <Icon name="zap" className="text-niner-gold" size={14} />
+                                        <p className="text-[11px] text-gray-600 italic">"Be supportive" sets the tone.</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Icon name="shield" className="text-niner-gold" size={14} />
+                                        <p className="text-[11px] text-gray-600 italic">"Only use material" sets the boundaries.</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Icon name="repeat" className="text-niner-gold" size={14} />
+                                        <p className="text-[11px] text-gray-600 italic">"Ask questions" sets the loop.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
