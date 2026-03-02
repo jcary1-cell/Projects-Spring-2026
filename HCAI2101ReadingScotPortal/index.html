@@ -81,7 +81,9 @@
             { category: "The Workflow", text: "How does this change the 'day in the life' of a professional in this field? Is it more or less creative?" },
             { category: "The Ethics", text: "What is the biggest ethical 'red flag' you see in how this AI implementation is being described?" },
             { category: "Resilience", text: "If you were a hiring manager in this field today, what non-AI skill would you look for in a candidate?" },
-            { category: "Probabilities", text: "Is the AI in this article predicting a likely future, or just a profitable one? How can you tell?" }
+            { category: "Probabilities", text: "Is the AI in this article predicting a likely future, or just a profitable one? How can you tell?" },
+            { category: "Data Source", text: "What kind of data do you think was used to 'train' the AI described in this article? Is that data objective?" },
+            { category: "Cross-Major", text: "How might a professional from a completely different major (e.g. Art vs. Engineering) view this specific AI tool?" }
         ];
 
         const WelcomeView = ({ onStart }) => (
@@ -90,7 +92,7 @@
                     <Icon name="globe" size={48} className="text-white" />
                 </div>
                 <h1 className="text-5xl font-black text-slate-900 mb-6 tracking-tight">Disciplinary Scout Portal</h1>
-                <p className="text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">Week 2 Activity: Finding the Probability of Bias & Change across our majors.</p>
+                <p className="text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">Week 2: Mapping AI Impact Across the University Landscape.</p>
                 <button onClick={onStart} className="flex items-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all hover:scale-105 shadow-2xl">
                     Begin Field Research <Icon name="arrow-right" size={22} />
                 </button>
@@ -119,6 +121,10 @@
                         <input name="articleTitle" placeholder="What article did you find?" value={scoutData.articleTitle} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none transition-all" />
                     </div>
                     <div className="space-y-1">
+                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Article URL (Link)</label>
+                        <input name="articleUrl" type="url" placeholder="https://..." value={scoutData.articleUrl} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none transition-all" />
+                    </div>
+                    <div className="space-y-1">
                         <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Key Impact Summary (2-3 Sentences)</label>
                         <textarea name="keyImpact" placeholder="How is AI specifically changing this field?" value={scoutData.keyImpact} onChange={onInputChange} rows="4" className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none resize-none transition-all"></textarea>
                     </div>
@@ -138,7 +144,6 @@
         );
 
         const InterviewView = ({ scoutData, onReset, onViewMap }) => {
-            // Get a random selection of questions for each interview
             const [questions, setQuestions] = useState([]);
             
             useEffect(() => {
@@ -159,7 +164,7 @@
                 <div className="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
                     <div className="bg-slate-900 text-white p-8 flex justify-between items-center">
                         <div>
-                            <span className="bg-indigo-500 text-[10px] font-black px-2 py-0.5 rounded uppercase mb-2 inline-block">Transmission Active</span>
+                            <span className="bg-indigo-500 text-[10px] font-black px-2 py-0.5 rounded uppercase mb-2 inline-block tracking-tighter">Debriefing Protocol</span>
                             <h2 className="text-3xl font-black italic">FIELD INTERVIEW GUIDE</h2>
                             <p className="opacity-70 font-medium text-sm">Reviewing: {scoutData.name} ({scoutData.major})</p>
                         </div>
@@ -167,14 +172,21 @@
                     </div>
                     <div className="p-10 space-y-8">
                         <div className="p-6 bg-slate-50 rounded-2xl border-l-8 border-indigo-600">
-                            <h3 className="text-[10px] font-black text-indigo-600 uppercase mb-1 tracking-widest">The Finding</h3>
+                            <div className="flex justify-between items-start mb-2">
+                                <h3 className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">The Finding</h3>
+                                {scoutData.articleUrl && (
+                                    <a href={scoutData.articleUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 font-bold text-xs flex items-center gap-1 hover:underline">
+                                        Open Source <Icon name="external-link" size={12} />
+                                    </a>
+                                )}
+                            </div>
                             <p className="text-2xl font-bold text-slate-900 mb-2 leading-tight">{scoutData.articleTitle}</p>
                             <p className="text-slate-600 italic">"{scoutData.keyImpact}"</p>
                         </div>
 
                         <div className="space-y-4">
                             <h3 className="flex items-center gap-2 text-slate-400 font-bold uppercase text-xs tracking-widest">
-                                <Icon name="mic" size={16} /> Peer Interview Prompts
+                                <Icon name="mic" size={16} /> Partner Interview Prompts
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {questions.map((q, i) => (
@@ -211,7 +223,7 @@
                         <h2 className="text-4xl font-black text-slate-900">Intelligence Map</h2>
                         <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest mt-1">Cross-Disciplinary Trends</p>
                     </div>
-                    <button onClick={onAdd} className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg hover:bg-indigo-700"><Icon name="plus-circle" size={20} /> Add Report</button>
+                    <button onClick={onAdd} className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg hover:bg-indigo-700 transition-all hover:scale-105 active:scale-95"><Icon name="plus-circle" size={20} /> Add Report</button>
                 </div>
                 {submissions.length === 0 ? (
                     <div className="bg-white rounded-3xl border-4 border-dashed border-slate-200 py-20 text-center">
@@ -221,22 +233,33 @@
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {submissions.map(s => (
-                            <div key={s.id} onClick={() => onInterview(s)} className="bg-white p-8 rounded-3xl border border-slate-100 hover:shadow-2xl cursor-pointer transition-all hover:-translate-y-1">
-                                <div className="flex items-center gap-4 mb-4">
+                            <div key={s.id} className="group bg-white p-8 rounded-3xl border border-slate-100 hover:shadow-2xl transition-all hover:-translate-y-1 flex flex-col h-full">
+                                <div className="flex items-center gap-4 mb-4" onClick={() => onInterview(s)}>
                                     <div className="w-10 h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-lg">{s.name ? s.name[0] : 'S'}</div>
-                                    <div className="overflow-hidden">
+                                    <div className="overflow-hidden cursor-pointer">
                                         <p className="text-[10px] font-black text-indigo-500 uppercase truncate">{s.major || 'Undecided'}</p>
                                         <p className="font-bold text-slate-900 truncate">{s.name || 'Scout'}</p>
                                     </div>
                                 </div>
-                                <h4 className="font-black text-slate-800 text-lg mb-2 leading-tight line-clamp-2">{s.articleTitle}</h4>
-                                <p className="text-slate-500 text-sm line-clamp-3 italic leading-relaxed">{s.keyImpact}</p>
-                                <div className="mt-6 pt-4 border-t flex justify-between items-center">
-                                    <span className={`text-[9px] px-2 py-1 rounded font-black uppercase tracking-tighter ${
-                                        s.futureJobStatus === 'threatened' ? 'bg-red-50 text-red-600' : 
-                                        s.futureJobStatus === 'augmented' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-indigo-600'
-                                    }`}>{s.futureJobStatus}</span>
-                                    <span className="text-indigo-600 text-[10px] font-black uppercase flex items-center gap-1">Interview <Icon name="chevron-right" size={12} /></span>
+                                <div className="flex-grow cursor-pointer" onClick={() => onInterview(s)}>
+                                    <h4 className="font-black text-slate-800 text-lg mb-2 leading-tight line-clamp-2 group-hover:text-indigo-600 transition-colors">{s.articleTitle}</h4>
+                                    <p className="text-slate-500 text-sm line-clamp-3 italic leading-relaxed">{s.keyImpact}</p>
+                                </div>
+                                <div className="mt-6 pt-4 border-t flex flex-col gap-3">
+                                    <div className="flex justify-between items-center">
+                                        <span className={`text-[9px] px-2 py-1 rounded font-black uppercase tracking-tighter ${
+                                            s.futureJobStatus === 'threatened' ? 'bg-red-50 text-red-600' : 
+                                            s.futureJobStatus === 'augmented' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-indigo-600'
+                                        }`}>{s.futureJobStatus}</span>
+                                        {s.articleUrl && (
+                                            <a href={s.articleUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-slate-400 hover:text-indigo-600 transition-colors p-1" title="Read Source">
+                                                <Icon name="external-link" size={16} />
+                                            </a>
+                                        )}
+                                    </div>
+                                    <button onClick={() => onInterview(s)} className="w-full bg-slate-50 text-indigo-600 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">
+                                        Analyze Discovery
+                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -250,7 +273,7 @@
             const [loading, setLoading] = useState(true);
             const [user, setUser] = useState(null);
             const [submissions, setSubmissions] = useState([]);
-            const [scoutData, setScoutData] = useState({ name: '', major: '', articleTitle: '', keyImpact: '', futureJobStatus: 'augmented' });
+            const [scoutData, setScoutData] = useState({ name: '', major: '', articleTitle: '', articleUrl: '', keyImpact: '', futureJobStatus: 'augmented' });
 
             useEffect(() => {
                 const checkFB = setInterval(async () => {
@@ -291,7 +314,8 @@
                         userId: user?.uid || 'anonymous-scout', 
                         timestamp: Date.now()
                     });
-                    setScoutData(prev => ({...prev, id: docRef.id}));
+                    const finalData = { ...scoutData, id: docRef.id };
+                    setScoutData(finalData);
                     setView('interview');
                 } catch (e) { console.error("Submit failed", e); }
             };
@@ -312,7 +336,7 @@
                         </div>
                         <nav className="flex gap-6 text-[10px] font-black uppercase tracking-widest">
                             <button onClick={() => setView('welcome')} className={view === 'welcome' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 transition-colors'}>Home</button>
-                            <button onClick={() => setView('gallery')} className={view === 'gallery' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 transition-colors'}>Map</button>
+                            <button onClick={() => setView('gallery')} className={view === 'gallery' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 transition-colors'}>Intelligence Map</button>
                         </nav>
                     </header>
                     <main className="mt-4">
@@ -330,7 +354,7 @@
                             <InterviewView 
                                 scoutData={scoutData} 
                                 onReset={() => { 
-                                    setScoutData({name:'', major:'', articleTitle:'', keyImpact:'', futureJobStatus:'augmented'}); 
+                                    setScoutData({name:'', major:'', articleTitle:'', articleUrl: '', keyImpact:'', futureJobStatus:'augmented'}); 
                                     setView('input'); 
                                 }} 
                                 onViewMap={() => setView('gallery')} 
