@@ -21,6 +21,7 @@
         body { font-family: 'Inter', sans-serif; }
         .icon-wrapper { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
         .lucide { display: block; }
+        .scroll-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="bg-[#F8FAFC]">
@@ -45,7 +46,6 @@
                 signInAnonymously, onAuthStateChanged, signInWithCustomToken,
                 initialized: true 
             };
-            console.log("Firebase SDKs Loaded Successfully");
         } catch (err) {
             console.error("Firebase Init Failed:", err);
             window.FB = { initialized: false, error: err.message };
@@ -73,8 +73,16 @@
             );
         };
 
-        // --- View Components (Welcome, Input, Interview, Gallery) ---
-        // (Simplified for internal logic clarity, keeping your exact styling)
+        const INTERVIEW_QUESTION_POOL = [
+            { category: "The Pivot", text: "Based on this article, what is one task in your major that will be 100% automated by 2030?" },
+            { category: "Human Value", text: "If an AI performs the technical part of this job, what is the 'human-in-the-loop' responsible for checking?" },
+            { category: "The Bias", text: "Does this article assume a 'default' person? Who might be left out of this AI-driven future?" },
+            { category: "The Skill", text: "What is a 'soft skill' mentioned or implied here that an LLM would struggle to replicate?" },
+            { category: "The Workflow", text: "How does this change the 'day in the life' of a professional in this field? Is it more or less creative?" },
+            { category: "The Ethics", text: "What is the biggest ethical 'red flag' you see in how this AI implementation is being described?" },
+            { category: "Resilience", text: "If you were a hiring manager in this field today, what non-AI skill would you look for in a candidate?" },
+            { category: "Probabilities", text: "Is the AI in this article predicting a likely future, or just a profitable one? How can you tell?" }
+        ];
 
         const WelcomeView = ({ onStart }) => (
             <div className="flex flex-col items-center justify-center min-h-[500px] text-center p-8 bg-white rounded-3xl shadow-sm border border-slate-200">
@@ -82,9 +90,9 @@
                     <Icon name="globe" size={48} className="text-white" />
                 </div>
                 <h1 className="text-5xl font-black text-slate-900 mb-6 tracking-tight">Disciplinary Scout Portal</h1>
-                <p className="text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">Connect to the shared intelligence map. Submit your findings and see what your peers are discovering.</p>
+                <p className="text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">Week 2 Activity: Finding the Probability of Bias & Change across our majors.</p>
                 <button onClick={onStart} className="flex items-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all hover:scale-105 shadow-2xl">
-                    Sync Research to Map <Icon name="arrow-right" size={22} />
+                    Begin Field Research <Icon name="arrow-right" size={22} />
                 </button>
             </div>
         );
@@ -92,78 +100,148 @@
         const InputView = ({ scoutData, onInputChange, onStatusChange, onCancel, onSubmit }) => (
             <div className="max-w-3xl mx-auto p-10 bg-white shadow-2xl rounded-3xl border border-slate-100">
                 <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-3xl font-bold flex items-center gap-3 text-slate-800"><Icon name="book-open" size={32} className="text-indigo-600" /> Intelligence Upload</h2>
+                    <h2 className="text-3xl font-bold flex items-center gap-3 text-slate-800"><Icon name="file-search" size={32} className="text-indigo-600" /> Intelligence Upload</h2>
                     <button onClick={onCancel} className="text-slate-400 hover:text-slate-600 font-bold uppercase text-xs tracking-widest">Cancel</button>
                 </div>
                 <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <input name="name" placeholder="Your Name" value={scoutData.name} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none" />
-                        <input name="major" placeholder="Major" value={scoutData.major} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none" />
+                        <div className="space-y-1">
+                             <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Your Name</label>
+                             <input name="name" placeholder="Scout Name" value={scoutData.name} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none transition-all" />
+                        </div>
+                        <div className="space-y-1">
+                             <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Academic Major</label>
+                             <input name="major" placeholder="e.g. Sociology" value={scoutData.major} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none transition-all" />
+                        </div>
                     </div>
-                    <input name="articleTitle" placeholder="Article Title" value={scoutData.articleTitle} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none" />
-                    <textarea name="keyImpact" placeholder="Summary..." value={scoutData.keyImpact} onChange={onInputChange} rows="4" className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none resize-none"></textarea>
-                    <div className="flex gap-4">
-                        {['augmented', 'threatened', 'transformed'].map(s => (
-                            <button key={s} onClick={() => onStatusChange(s)} className={`flex-1 py-4 rounded-xl font-bold border-2 ${scoutData.futureJobStatus === s ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-slate-100 bg-slate-50 text-slate-400'}`}>{s}</button>
-                        ))}
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Source/Article Title</label>
+                        <input name="articleTitle" placeholder="What article did you find?" value={scoutData.articleTitle} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none transition-all" />
                     </div>
-                    <button onClick={onSubmit} className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-lg hover:bg-indigo-600 shadow-xl">Publish to Class Map</button>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Key Impact Summary (2-3 Sentences)</label>
+                        <textarea name="keyImpact" placeholder="How is AI specifically changing this field?" value={scoutData.keyImpact} onChange={onInputChange} rows="4" className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none resize-none transition-all"></textarea>
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Disciplinary Outlook</label>
+                        <div className="flex gap-4">
+                            {['augmented', 'threatened', 'transformed'].map(s => (
+                                <button key={s} type="button" onClick={() => onStatusChange(s)} className={`flex-1 py-4 rounded-xl font-bold border-2 capitalize transition-all ${scoutData.futureJobStatus === s ? 'border-indigo-600 bg-indigo-50 text-indigo-700 ring-2 ring-indigo-100' : 'border-slate-100 bg-slate-50 text-slate-400'}`}>{s}</button>
+                            ))}
+                        </div>
+                    </div>
+                    <button onClick={onSubmit} className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-lg hover:bg-indigo-600 shadow-xl transition-all transform active:scale-[0.98]">
+                        Publish to Intelligence Map
+                    </button>
                 </div>
             </div>
         );
 
-        const InterviewView = ({ scoutData, onReset, onViewMap }) => (
-            <div className="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
-                <div className="bg-emerald-600 text-white p-8 flex justify-between items-center">
-                    <div>
-                        <h2 className="text-3xl font-black italic">SCOUT DEBRIEFING</h2>
-                        <p className="opacity-90">{scoutData.name} • {scoutData.major}</p>
+        const InterviewView = ({ scoutData, onReset, onViewMap }) => {
+            // Get a random selection of questions for each interview
+            const [questions, setQuestions] = useState([]);
+            
+            useEffect(() => {
+                const shuffled = [...INTERVIEW_QUESTION_POOL].sort(() => 0.5 - Math.random());
+                setQuestions(shuffled.slice(0, 4));
+            }, [scoutData.id]);
+
+            const copyToClipboard = (text) => {
+                const el = document.createElement('textarea');
+                el.value = text;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            };
+
+            return (
+                <div className="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+                    <div className="bg-slate-900 text-white p-8 flex justify-between items-center">
+                        <div>
+                            <span className="bg-indigo-500 text-[10px] font-black px-2 py-0.5 rounded uppercase mb-2 inline-block">Transmission Active</span>
+                            <h2 className="text-3xl font-black italic">FIELD INTERVIEW GUIDE</h2>
+                            <p className="opacity-70 font-medium text-sm">Reviewing: {scoutData.name} ({scoutData.major})</p>
+                        </div>
+                        <Icon name="message-square" size={32} className="text-indigo-400" />
                     </div>
-                    <Icon name="mic" size={32} className="animate-pulse" />
-                </div>
-                <div className="p-10 space-y-8">
-                    <div className="p-6 bg-indigo-50 rounded-2xl border-l-8 border-indigo-500">
-                        <p className="text-2xl font-bold text-slate-900">{scoutData.articleTitle}</p>
-                        <p className="text-slate-700 mt-2">{scoutData.keyImpact}</p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {["Personal Outlook change?", "Human skills left?", "Field in 2030?", "Warnings for students?"].map((q, i) => (
-                            <div key={i} className="p-6 bg-slate-50 rounded-2xl border-2 border-slate-100">
-                                <p className="text-indigo-600 font-black">Q{i+1}</p>
-                                <p className="text-slate-700 font-medium">{q}</p>
+                    <div className="p-10 space-y-8">
+                        <div className="p-6 bg-slate-50 rounded-2xl border-l-8 border-indigo-600">
+                            <h3 className="text-[10px] font-black text-indigo-600 uppercase mb-1 tracking-widest">The Finding</h3>
+                            <p className="text-2xl font-bold text-slate-900 mb-2 leading-tight">{scoutData.articleTitle}</p>
+                            <p className="text-slate-600 italic">"{scoutData.keyImpact}"</p>
+                        </div>
+
+                        <div className="space-y-4">
+                            <h3 className="flex items-center gap-2 text-slate-400 font-bold uppercase text-xs tracking-widest">
+                                <Icon name="mic" size={16} /> Peer Interview Prompts
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {questions.map((q, i) => (
+                                    <div key={i} className="group relative p-6 bg-white border-2 border-slate-100 rounded-2xl hover:border-indigo-200 transition-all">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <span className="text-[9px] font-black px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded uppercase">{q.category}</span>
+                                            <button onClick={() => copyToClipboard(q.text)} className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-indigo-500 transition-all">
+                                                <Icon name="copy" size={14} />
+                                            </button>
+                                        </div>
+                                        <p className="text-slate-800 font-semibold leading-relaxed">{q.text}</p>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                    <div className="flex justify-between items-center pt-8 border-t">
-                        <button onClick={onReset} className="text-slate-400 font-bold hover:text-indigo-600 flex items-center gap-2"><Icon name="rotate-ccw" size={18} /> New Report</button>
-                        <button onClick={onViewMap} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold">View Class Map</button>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row justify-between items-center pt-8 border-t gap-4">
+                            <button onClick={onReset} className="text-slate-400 font-bold hover:text-indigo-600 flex items-center gap-2 transition-colors">
+                                <Icon name="rotate-ccw" size={18} /> New Submission
+                            </button>
+                            <button onClick={onViewMap} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition-all">
+                                Back to Intelligence Map
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        };
 
         const GalleryView = ({ submissions, onAdd, onInterview }) => (
             <div className="max-w-6xl mx-auto px-4">
                 <div className="flex justify-between items-center mb-10">
-                    <h2 className="text-4xl font-black text-slate-900">Intelligence Map</h2>
-                    <button onClick={onAdd} className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2"><Icon name="plus-circle" size={20} /> Add Research</button>
+                    <div>
+                        <h2 className="text-4xl font-black text-slate-900">Intelligence Map</h2>
+                        <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest mt-1">Cross-Disciplinary Trends</p>
+                    </div>
+                    <button onClick={onAdd} className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg hover:bg-indigo-700"><Icon name="plus-circle" size={20} /> Add Report</button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {submissions.map(s => (
-                        <div key={s.id} onClick={() => onInterview(s)} className="bg-white p-8 rounded-3xl border border-slate-100 hover:shadow-xl cursor-pointer transition-all">
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="w-10 h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold">{s.name ? s.name[0] : 'S'}</div>
-                                <div><p className="text-[10px] font-black text-indigo-500 uppercase">{s.major}</p><p className="font-bold">{s.name}</p></div>
+                {submissions.length === 0 ? (
+                    <div className="bg-white rounded-3xl border-4 border-dashed border-slate-200 py-20 text-center">
+                        <Icon name="cloud-off" size={48} className="mx-auto text-slate-200 mb-4" />
+                        <p className="text-slate-400 font-bold text-xl">Waiting for intelligence reports...</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {submissions.map(s => (
+                            <div key={s.id} onClick={() => onInterview(s)} className="bg-white p-8 rounded-3xl border border-slate-100 hover:shadow-2xl cursor-pointer transition-all hover:-translate-y-1">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="w-10 h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-lg">{s.name ? s.name[0] : 'S'}</div>
+                                    <div className="overflow-hidden">
+                                        <p className="text-[10px] font-black text-indigo-500 uppercase truncate">{s.major || 'Undecided'}</p>
+                                        <p className="font-bold text-slate-900 truncate">{s.name || 'Scout'}</p>
+                                    </div>
+                                </div>
+                                <h4 className="font-black text-slate-800 text-lg mb-2 leading-tight line-clamp-2">{s.articleTitle}</h4>
+                                <p className="text-slate-500 text-sm line-clamp-3 italic leading-relaxed">{s.keyImpact}</p>
+                                <div className="mt-6 pt-4 border-t flex justify-between items-center">
+                                    <span className={`text-[9px] px-2 py-1 rounded font-black uppercase tracking-tighter ${
+                                        s.futureJobStatus === 'threatened' ? 'bg-red-50 text-red-600' : 
+                                        s.futureJobStatus === 'augmented' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-indigo-600'
+                                    }`}>{s.futureJobStatus}</span>
+                                    <span className="text-indigo-600 text-[10px] font-black uppercase flex items-center gap-1">Interview <Icon name="chevron-right" size={12} /></span>
+                                </div>
                             </div>
-                            <h4 className="font-bold text-lg mb-2">{s.articleTitle}</h4>
-                            <p className="text-slate-500 text-sm line-clamp-2">{s.keyImpact}</p>
-                            <div className="mt-4 pt-4 border-t flex justify-between items-center">
-                                <span className="text-[10px] px-2 py-1 bg-slate-100 rounded font-bold uppercase">{s.futureJobStatus}</span>
-                                <span className="text-indigo-600 text-xs font-bold underline">Analyze</span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
         );
 
@@ -174,7 +252,6 @@
             const [submissions, setSubmissions] = useState([]);
             const [scoutData, setScoutData] = useState({ name: '', major: '', articleTitle: '', keyImpact: '', futureJobStatus: 'augmented' });
 
-            // Initialize Auth with a hard timeout to prevent infinite spinning
             useEffect(() => {
                 const checkFB = setInterval(async () => {
                     if (window.FB && window.FB.initialized) {
@@ -191,20 +268,12 @@
                         });
                     }
                 }, 100);
-
-                // Fallback after 5 seconds
-                const timeout = setTimeout(() => {
-                    clearInterval(checkFB);
-                    setLoading(false);
-                }, 5000);
-
-                return () => { clearInterval(checkFB); clearTimeout(timeout); };
+                setTimeout(() => setLoading(false), 5000);
             }, []);
 
-            // Fetch data
             useEffect(() => {
                 if (!user || !window.FB) return;
-                const { db, collection, onSnapshot, appId, query } = window.FB;
+                const { db, collection, onSnapshot, appId } = window.FB;
                 const q = collection(db, 'artifacts', appId, 'public', 'data', 'reports');
                 const unsubscribe = onSnapshot(q, (snapshot) => {
                     const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -213,39 +282,70 @@
                 return () => unsubscribe();
             }, [user]);
 
-            const submit = async () => {
-                if (!scoutData.name || !scoutData.articleTitle || !window.FB) return;
+            const submitReport = async () => {
+                if (!scoutData.name.trim() || !scoutData.articleTitle.trim()) return;
                 const { db, collection, addDoc, appId } = window.FB;
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'reports'), {
-                    ...scoutData, userId: user?.uid || 'anon', timestamp: Date.now()
-                });
-                setView('interview');
+                try {
+                    const docRef = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'reports'), {
+                        ...scoutData, 
+                        userId: user?.uid || 'anonymous-scout', 
+                        timestamp: Date.now()
+                    });
+                    setScoutData(prev => ({...prev, id: docRef.id}));
+                    setView('interview');
+                } catch (e) { console.error("Submit failed", e); }
             };
 
             if (loading) return (
                 <div className="h-screen flex flex-col items-center justify-center gap-4">
                     <Icon name="loader-2" size={48} className="animate-spin text-indigo-600" />
-                    <p className="text-slate-400 font-bold animate-pulse">Initializing Portal...</p>
+                    <p className="text-slate-400 font-bold animate-pulse">Syncing Scout Portal...</p>
                 </div>
             );
 
             return (
-                <div className="min-h-screen pb-20">
+                <div className="min-h-screen pb-20 selection:bg-indigo-100">
                     <header className="max-w-6xl mx-auto p-8 flex justify-between items-center">
-                        <div className="flex items-center gap-3 cursor-pointer" onClick={() => setView('welcome')}>
-                            <div className="bg-slate-900 text-white p-2 rounded-xl"><Icon name="graduation-cap" size={24} /></div>
+                        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setView('welcome')}>
+                            <div className="bg-slate-900 text-white p-2 rounded-xl group-hover:bg-indigo-600 transition-colors"><Icon name="graduation-cap" size={24} /></div>
                             <span className="font-black text-xl tracking-tight uppercase">HCAI 2101</span>
                         </div>
-                        <nav className="flex gap-6 text-xs font-black uppercase tracking-widest">
-                            <button onClick={() => setView('welcome')} className={view === 'welcome' ? 'text-indigo-600' : 'text-slate-400'}>Home</button>
-                            <button onClick={() => setView('gallery')} className={view === 'gallery' ? 'text-indigo-600' : 'text-slate-400'}>Map</button>
+                        <nav className="flex gap-6 text-[10px] font-black uppercase tracking-widest">
+                            <button onClick={() => setView('welcome')} className={view === 'welcome' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 transition-colors'}>Home</button>
+                            <button onClick={() => setView('gallery')} className={view === 'gallery' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 transition-colors'}>Map</button>
                         </nav>
                     </header>
                     <main className="mt-4">
                         {view === 'welcome' && <WelcomeView onStart={() => setView('input')} />}
-                        {view === 'input' && <InputView scoutData={scoutData} onInputChange={(e) => setScoutData({...scoutData, [e.target.name]: e.target.value})} onStatusChange={(s) => setScoutData({...scoutData, futureJobStatus: s})} onCancel={() => setView('welcome')} onSubmit={submit} />}
-                        {view === 'interview' && <InterviewView scoutData={scoutData} onReset={() => { setScoutData({name:'', major:'', articleTitle:'', keyImpact:'', futureJobStatus:'augmented'}); setView('input'); }} onViewMap={() => setView('gallery')} />}
-                        {view === 'gallery' && <GalleryView submissions={submissions} onAdd={() => setView('input')} onInterview={(s) => { setScoutData(s); setView('interview'); }} />}
+                        {view === 'input' && (
+                            <InputView 
+                                scoutData={scoutData} 
+                                onInputChange={(e) => setScoutData({...scoutData, [e.target.name]: e.target.value})} 
+                                onStatusChange={(s) => setScoutData({...scoutData, futureJobStatus: s})} 
+                                onCancel={() => setView('welcome')} 
+                                onSubmit={submitReport} 
+                            />
+                        )}
+                        {view === 'interview' && (
+                            <InterviewView 
+                                scoutData={scoutData} 
+                                onReset={() => { 
+                                    setScoutData({name:'', major:'', articleTitle:'', keyImpact:'', futureJobStatus:'augmented'}); 
+                                    setView('input'); 
+                                }} 
+                                onViewMap={() => setView('gallery')} 
+                            />
+                        )}
+                        {view === 'gallery' && (
+                            <GalleryView 
+                                submissions={submissions} 
+                                onAdd={() => setView('input')} 
+                                onInterview={(s) => { 
+                                    setScoutData(s); 
+                                    setView('interview'); 
+                                }} 
+                            />
+                        )}
                     </main>
                 </div>
             );
