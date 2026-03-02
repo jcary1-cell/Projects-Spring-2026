@@ -22,6 +22,12 @@
         .icon-wrapper { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
         .lucide { display: block; }
         .scroll-hide::-webkit-scrollbar { display: none; }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slideUp 0.3s ease-out forwards; }
     </style>
 </head>
 <body class="bg-[#F8FAFC]">
@@ -87,7 +93,7 @@
         ];
 
         const WelcomeView = ({ onStart }) => (
-            <div className="flex flex-col items-center justify-center min-h-[500px] text-center p-8 bg-white rounded-3xl shadow-sm border border-slate-200">
+            <div className="flex flex-col items-center justify-center min-h-[500px] text-center p-8 bg-white rounded-3xl shadow-sm border border-slate-200 animate-slide-up">
                 <div className="bg-indigo-600 p-5 rounded-3xl mb-8 shadow-xl rotate-3 flex items-center justify-center">
                     <Icon name="globe" size={48} className="text-white" />
                 </div>
@@ -99,8 +105,8 @@
             </div>
         );
 
-        const InputView = ({ scoutData, onInputChange, onStatusChange, onCancel, onSubmit }) => (
-            <div className="max-w-3xl mx-auto p-10 bg-white shadow-2xl rounded-3xl border border-slate-100">
+        const InputView = ({ scoutData, onInputChange, onStatusChange, onCancel, onSubmit, isSubmitting }) => (
+            <div className="max-w-3xl mx-auto p-10 bg-white shadow-2xl rounded-3xl border border-slate-100 animate-slide-up">
                 <div className="flex justify-between items-center mb-8">
                     <h2 className="text-3xl font-bold flex items-center gap-3 text-slate-800"><Icon name="file-search" size={32} className="text-indigo-600" /> Intelligence Upload</h2>
                     <button onClick={onCancel} className="text-slate-400 hover:text-slate-600 font-bold uppercase text-xs tracking-widest">Cancel</button>
@@ -108,36 +114,43 @@
                 <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-1">
-                             <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Your Name</label>
+                             <label className="text-[10px] font-black uppercase text-slate-400 ml-1 tracking-widest">Your Name</label>
                              <input name="name" placeholder="Scout Name" value={scoutData.name} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none transition-all" />
                         </div>
                         <div className="space-y-1">
-                             <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Academic Major</label>
+                             <label className="text-[10px] font-black uppercase text-slate-400 ml-1 tracking-widest">Academic Major</label>
                              <input name="major" placeholder="e.g. Sociology" value={scoutData.major} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none transition-all" />
                         </div>
                     </div>
                     <div className="space-y-1">
-                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Source/Article Title</label>
+                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1 tracking-widest">Source/Article Title</label>
                         <input name="articleTitle" placeholder="What article did you find?" value={scoutData.articleTitle} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none transition-all" />
                     </div>
                     <div className="space-y-1">
-                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Article URL (Link)</label>
+                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1 tracking-widest">Article URL (Link)</label>
                         <input name="articleUrl" type="url" placeholder="https://..." value={scoutData.articleUrl} onChange={onInputChange} className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none transition-all" />
                     </div>
                     <div className="space-y-1">
-                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Key Impact Summary (2-3 Sentences)</label>
+                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1 tracking-widest">Key Impact Summary (2-3 Sentences)</label>
                         <textarea name="keyImpact" placeholder="How is AI specifically changing this field?" value={scoutData.keyImpact} onChange={onInputChange} rows="4" className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-500 outline-none resize-none transition-all"></textarea>
                     </div>
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Disciplinary Outlook</label>
+                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1 tracking-widest">Disciplinary Outlook</label>
                         <div className="flex gap-4">
                             {['augmented', 'threatened', 'transformed'].map(s => (
                                 <button key={s} type="button" onClick={() => onStatusChange(s)} className={`flex-1 py-4 rounded-xl font-bold border-2 capitalize transition-all ${scoutData.futureJobStatus === s ? 'border-indigo-600 bg-indigo-50 text-indigo-700 ring-2 ring-indigo-100' : 'border-slate-100 bg-slate-50 text-slate-400'}`}>{s}</button>
                             ))}
                         </div>
                     </div>
-                    <button onClick={onSubmit} className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-lg hover:bg-indigo-600 shadow-xl transition-all transform active:scale-[0.98]">
-                        Publish to Intelligence Map
+                    <button 
+                        onClick={onSubmit} 
+                        disabled={isSubmitting || !scoutData.name || !scoutData.articleTitle}
+                        className={`w-full py-5 rounded-2xl font-black text-lg shadow-xl transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 ${
+                            isSubmitting ? 'bg-indigo-400 cursor-not-allowed text-white' : 'bg-slate-900 text-white hover:bg-indigo-600'
+                        }`}
+                    >
+                        {isSubmitting ? <Icon name="loader-2" className="animate-spin" /> : <Icon name="send" size={20} />}
+                        {isSubmitting ? "Publishing..." : "Publish to Intelligence Map"}
                     </button>
                 </div>
             </div>
@@ -161,7 +174,7 @@
             };
 
             return (
-                <div className="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+                <div className="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 animate-slide-up">
                     <div className="bg-slate-900 text-white p-8 flex justify-between items-center">
                         <div>
                             <span className="bg-indigo-500 text-[10px] font-black px-2 py-0.5 rounded uppercase mb-2 inline-block tracking-tighter">Debriefing Protocol</span>
@@ -217,10 +230,10 @@
         };
 
         const GalleryView = ({ submissions, onAdd, onInterview }) => (
-            <div className="max-w-6xl mx-auto px-4">
-                <div className="flex justify-between items-center mb-10">
+            <div className="max-w-6xl mx-auto px-4 animate-slide-up">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
                     <div>
-                        <h2 className="text-4xl font-black text-slate-900">Intelligence Map</h2>
+                        <h2 className="text-4xl font-black text-slate-900 tracking-tight">Intelligence Map</h2>
                         <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest mt-1">Cross-Disciplinary Trends</p>
                     </div>
                     <button onClick={onAdd} className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg hover:bg-indigo-700 transition-all hover:scale-105 active:scale-95"><Icon name="plus-circle" size={20} /> Add Report</button>
@@ -231,13 +244,13 @@
                         <p className="text-slate-400 font-bold text-xl">Waiting for intelligence reports...</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20">
                         {submissions.map(s => (
                             <div key={s.id} className="group bg-white p-8 rounded-3xl border border-slate-100 hover:shadow-2xl transition-all hover:-translate-y-1 flex flex-col h-full">
                                 <div className="flex items-center gap-4 mb-4" onClick={() => onInterview(s)}>
                                     <div className="w-10 h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-lg">{s.name ? s.name[0] : 'S'}</div>
                                     <div className="overflow-hidden cursor-pointer">
-                                        <p className="text-[10px] font-black text-indigo-500 uppercase truncate">{s.major || 'Undecided'}</p>
+                                        <p className="text-[10px] font-black text-indigo-500 uppercase truncate tracking-tighter">{s.major || 'Undecided'}</p>
                                         <p className="font-bold text-slate-900 truncate">{s.name || 'Scout'}</p>
                                     </div>
                                 </div>
@@ -271,9 +284,20 @@
         const App = () => {
             const [view, setView] = useState('welcome');
             const [loading, setLoading] = useState(true);
+            const [isSubmitting, setIsSubmitting] = useState(false);
             const [user, setUser] = useState(null);
             const [submissions, setSubmissions] = useState([]);
-            const [scoutData, setScoutData] = useState({ name: '', major: '', articleTitle: '', articleUrl: '', keyImpact: '', futureJobStatus: 'augmented' });
+            
+            const initialScoutState = { 
+                name: '', 
+                major: '', 
+                articleTitle: '', 
+                articleUrl: '', 
+                keyImpact: '', 
+                futureJobStatus: 'augmented' 
+            };
+            
+            const [scoutData, setScoutData] = useState(initialScoutState);
 
             useEffect(() => {
                 const checkFB = setInterval(async () => {
@@ -298,52 +322,72 @@
                 if (!user || !window.FB) return;
                 const { db, collection, onSnapshot, appId } = window.FB;
                 const q = collection(db, 'artifacts', appId, 'public', 'data', 'reports');
+                
                 const unsubscribe = onSnapshot(q, (snapshot) => {
                     const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
                     setSubmissions(docs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)));
-                }, (err) => console.error("Firestore Err:", err));
+                }, (err) => {
+                    console.error("Firestore Error:", err);
+                });
+                
                 return () => unsubscribe();
             }, [user]);
 
             const submitReport = async () => {
-                if (!scoutData.name.trim() || !scoutData.articleTitle.trim()) return;
+                if (!scoutData.name.trim() || !scoutData.articleTitle.trim() || !user || isSubmitting) return;
+                
+                setIsSubmitting(true);
                 const { db, collection, addDoc, appId } = window.FB;
+                
                 try {
-                    const docRef = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'reports'), {
-                        ...scoutData, 
-                        userId: user?.uid || 'anonymous-scout', 
+                    const reportData = {
+                        name: scoutData.name,
+                        major: scoutData.major,
+                        articleTitle: scoutData.articleTitle,
+                        articleUrl: scoutData.articleUrl,
+                        keyImpact: scoutData.keyImpact,
+                        futureJobStatus: scoutData.futureJobStatus,
+                        userId: user.uid,
                         timestamp: Date.now()
-                    });
-                    const finalData = { ...scoutData, id: docRef.id };
-                    setScoutData(finalData);
+                    };
+
+                    const docRef = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'reports'), reportData);
+                    
+                    // Update state with ID and navigate
+                    setScoutData({ ...scoutData, id: docRef.id });
                     setView('interview');
-                } catch (e) { console.error("Submit failed", e); }
+                } catch (e) { 
+                    console.error("Submission error:", e);
+                } finally {
+                    setIsSubmitting(false);
+                }
             };
 
             if (loading) return (
-                <div className="h-screen flex flex-col items-center justify-center gap-4">
+                <div className="h-screen flex flex-col items-center justify-center gap-4 bg-slate-50">
                     <Icon name="loader-2" size={48} className="animate-spin text-indigo-600" />
-                    <p className="text-slate-400 font-bold animate-pulse">Syncing Scout Portal...</p>
+                    <p className="text-slate-400 font-bold animate-pulse tracking-widest uppercase text-xs">Accessing Satellite Uplink...</p>
                 </div>
             );
 
             return (
-                <div className="min-h-screen pb-20 selection:bg-indigo-100">
+                <div className="min-h-screen bg-[#F8FAFC] selection:bg-indigo-100">
                     <header className="max-w-6xl mx-auto p-8 flex justify-between items-center">
                         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setView('welcome')}>
-                            <div className="bg-slate-900 text-white p-2 rounded-xl group-hover:bg-indigo-600 transition-colors"><Icon name="graduation-cap" size={24} /></div>
-                            <span className="font-black text-xl tracking-tight uppercase">HCAI 2101</span>
+                            <div className="bg-slate-900 text-white p-2 rounded-xl group-hover:bg-indigo-600 transition-colors shadow-lg"><Icon name="graduation-cap" size={24} /></div>
+                            <span className="font-black text-xl tracking-tight uppercase text-slate-900">HCAI 2101</span>
                         </div>
                         <nav className="flex gap-6 text-[10px] font-black uppercase tracking-widest">
                             <button onClick={() => setView('welcome')} className={view === 'welcome' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 transition-colors'}>Home</button>
-                            <button onClick={() => setView('gallery')} className={view === 'gallery' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 transition-colors'}>Intelligence Map</button>
+                            <button onClick={() => setView('gallery')} className={view === 'gallery' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 transition-colors'}>Map</button>
                         </nav>
                     </header>
-                    <main className="mt-4">
+                    <main className="mt-4 px-4">
                         {view === 'welcome' && <WelcomeView onStart={() => setView('input')} />}
                         {view === 'input' && (
                             <InputView 
                                 scoutData={scoutData} 
+                                isSubmitting={isSubmitting}
                                 onInputChange={(e) => setScoutData({...scoutData, [e.target.name]: e.target.value})} 
                                 onStatusChange={(s) => setScoutData({...scoutData, futureJobStatus: s})} 
                                 onCancel={() => setView('welcome')} 
@@ -354,7 +398,7 @@
                             <InterviewView 
                                 scoutData={scoutData} 
                                 onReset={() => { 
-                                    setScoutData({name:'', major:'', articleTitle:'', articleUrl: '', keyImpact:'', futureJobStatus:'augmented'}); 
+                                    setScoutData(initialScoutState); 
                                     setView('input'); 
                                 }} 
                                 onViewMap={() => setView('gallery')} 
