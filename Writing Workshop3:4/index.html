@@ -1,0 +1,514 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;The Human-AI Inquiry Forge&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&amp;family=Inter:wght@400;600&amp;display=swap');</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--forge-indigo: #4f46e5;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--forge-slate: #0f172a;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #f1f5f9;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #1e293b;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>h1, h2, h3, .font-heading {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Space Grotesk', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Step Transitions */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.step-card {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: slideIn 0.4s ease-out forwards;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.step-card.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes slideIn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>from { opacity: 0; transform: translateX(20px); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>to { opacity: 1; transform: translateX(0); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Journal persistence styling */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.journal-segment {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-left: 2px solid #e2e8f0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding-left: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: border-color 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.journal-segment:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-left-color: var(--forge-indigo);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Custom Scrollbar */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.custom-scroll::-webkit-scrollbar {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.custom-scroll::-webkit-scrollbar-track {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #f1f5f9;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.custom-scroll::-webkit-scrollbar-thumb {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #cbd5e1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* PRINT PDF FIXES */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@media print {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* Hide UI elements */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.no-print, header, nav, button, .bg-slate-800, #ai-modal {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>display: none !important;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* Hide the main form workspace */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>main {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>display: none !important;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* Make the Sidebar/Journal take up the full page */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>aside {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>position: absolute !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>top: 0 !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>left: 0 !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>width: 100% !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>height: auto !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>border: none !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>display: block !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>background: white !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>box-shadow: none !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>padding: 0 !important;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>#journal-content {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>overflow: visible !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>display: block !important;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>.journal-segment {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>border-left: 2px solid #000 !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>page-break-inside: avoid;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>body, html {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>background: white !important;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>height: auto !important;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>p, div {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>color: black !important;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="min-h-screen flex flex-col"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Header --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;header class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center no-print"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="bg-indigo-600 p-2 rounded-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1 class="text-xl font-bold tracking-tight"&gt;The Inquiry Forge&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-slate-400 text-[10px] uppercase tracking-[0.2em]"&gt;Is Writing a Human Act?&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="hidden md:block text-right mr-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p id="phase-indicator" class="text-[10px] font-bold text-indigo-400 uppercase"&gt;Phase 1: Synthesis&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="text-center bg-slate-800 px-4 py-1.5 rounded-xl border border-slate-700 min-w-[100px]"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span id="timer-display" class="text-xl font-mono font-bold text-white"&gt;50:00&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex gap-3 justify-center mt-0.5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="timer-btn" onclick="toggleTimer()" class="text-[9px] uppercase font-black text-indigo-400 hover:text-white transition-colors"&gt;Start&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="resetTimer()" class="text-[9px] uppercase font-black text-slate-500 hover:text-white transition-colors"&gt;Reset&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="flex flex-1 overflow-hidden"&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- MAIN WORKSPACE --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;main class="flex-1 overflow-y-auto p-6 md:p-10 bg-slate-50 no-print"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;nav class="max-w-3xl mx-auto mb-10 flex justify-between relative"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 -z-10 -translate-y-1/2"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="showStep(1)" id="nav-1" class="w-8 h-8 rounded-full bg-indigo-600 text-white text-sm font-bold ring-4 ring-white transition-all"&gt;1&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="showStep(2)" id="nav-2" class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 text-sm font-bold ring-4 ring-white transition-all"&gt;2&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="showStep(3)" id="nav-3" class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 text-sm font-bold ring-4 ring-white transition-all"&gt;3&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="showStep(4)" id="nav-4" class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 text-sm font-bold ring-4 ring-white transition-all"&gt;4&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/nav&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="max-w-3xl mx-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- STEP 1: Insight Synthesis --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;section id="step-1" class="step-card active"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="text-indigo-600 font-bold text-sm uppercase tracking-widest"&gt;Phase 1: 10 Mins&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h2 class="text-4xl font-black text-slate-800 mt-2"&gt;Insight Synthesis&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-slate-500 mt-4 leading-relaxed"&gt;Bridge your research logs with your own voice. Find a quote from your research that challenges your current answer to: &lt;em&gt;Is writing a human act?&lt;/em&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="space-y-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label class="block font-bold text-slate-700 mb-2"&gt;Research Anchor (The "Evidence")&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;textarea id="in-research" oninput="syncToJournal()" class="w-full h-32 p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="Paste the quote or data point here..."&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label class="block font-bold text-slate-700 mb-2"&gt;Human Gut Reaction (The "Interpretation")&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;textarea id="in-reaction" oninput="syncToJournal()" class="w-full h-32 p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="Why does this quote matter? What is your human intuition telling you about it?"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onclick="showStep(2)" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all"&gt;Next: De-Essay the Idea →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- STEP 2: The De-Essayist --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;section id="step-2" class="step-card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="text-pink-600 font-bold text-sm uppercase tracking-widest"&gt;Phase 2: 10 Mins&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h2 class="text-4xl font-black text-slate-800 mt-2"&gt;The De-Essayist&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-slate-500 mt-4 leading-relaxed"&gt;Writing is often trapped in the "Academic Essay." Choose a new container that forces your research to live in a different world.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div onclick="selectGenre('The Dialogue Script')" class="p-4 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer hover:border-pink-500 transition-all group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="font-black text-slate-800 group-hover:text-pink-600"&gt;The Script&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-xs text-slate-400 mt-1"&gt;A debate between a 1920s novelist and GPT-5.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div onclick="selectGenre('The Field Guide')" class="p-4 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer hover:border-blue-500 transition-all group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="font-black text-slate-800 group-hover:text-blue-600"&gt;The Field Guide&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-xs text-slate-400 mt-1"&gt;An anatomical map of a "Human Choice" in a draft.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div onclick="selectGenre('The Manifesto')" class="p-4 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer hover:border-green-500 transition-all group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="font-black text-slate-800 group-hover:text-green-600"&gt;The Manifesto&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-xs text-slate-400 mt-1"&gt;Rules for being a "Human Collaborator" in 2024.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="genre-detail" class="hidden bg-white p-8 rounded-2xl shadow-sm border border-slate-200 animate-fadeIn"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 id="active-genre-title" class="text-xl font-black text-slate-800 mb-4 uppercase tracking-tight"&gt;&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-sm text-slate-500 mb-4"&gt;What three "stylistic moves" does this genre allow that an essay doesn't?&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;textarea id="in-moves" oninput="syncToJournal()" class="w-full h-32 p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-pink-500 transition-all" placeholder="1. (e.g. Informal stage directions)&amp;#10;2. (e.g. Visual diagrams)&amp;#10;3. (e.g. Direct address to the reader)"&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mt-8 flex gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onclick="showStep(1)" class="flex-1 bg-slate-200 text-slate-600 py-4 rounded-xl font-bold hover:bg-slate-300"&gt;Back&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onclick="showStep(3)" class="flex-[2] bg-indigo-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700"&gt;Next: Start Drafting →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- STEP 3: Collaborative Draft --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;section id="step-3" class="step-card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="text-orange-600 font-bold text-sm uppercase tracking-widest"&gt;Phase 3: 20 Mins&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h2 class="text-4xl font-black text-slate-800 mt-2"&gt;Collaborative Draft&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-slate-500 mt-4 leading-relaxed"&gt;Begin weaving your interpretation and your chosen genre together. Use your "moves" to give the research life.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="space-y-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-white p-2 rounded-2xl shadow-md border border-slate-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;textarea id="in-draft" oninput="syncToJournal()" class="w-full h-[450px] p-6 text-lg leading-relaxed border-none focus:ring-0 resize-none custom-scroll" placeholder="Write your draft here. Everything you type here is preserved in your Forge Journal..."&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                        </span></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-slate-800 p-6 rounded-2xl text-white"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-[10px] font-bold text-indigo-400 uppercase mb-4 tracking-widest"&gt;Need a collaborator's spark?&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="flex flex-wrap gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button onclick="simulateAI('Ask AI: I\'m writing a ' + currentGenre + ' about writing as a human act. Help me brainstorm a sensory opening.')" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all border border-white/10"&gt;🧠 Sensory Nudge&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button onclick="simulateAI('Ask AI: Critique my writing for generic AI patterns. How can I inject more human friction?')" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all border border-white/10"&gt;👁️ Human-Check&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button onclick="simulateAI('Ask AI: Give me 3 weird metaphors for the feeling of a cursor blinking on a blank page.')" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all border border-white/10"&gt;🌈 Metaphor Spark&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="mt-8 flex gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button onclick="showStep(2)" class="flex-1 bg-slate-200 text-slate-600 py-4 rounded-xl font-bold"&gt;Back&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button onclick="showStep(4)" class="flex-[2] bg-indigo-600 text-white py-4 rounded-xl font-bold"&gt;Next: Final Reflection →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- STEP 4: Human Signature --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;section id="step-4" class="step-card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="text-emerald-600 font-bold text-sm uppercase tracking-widest"&gt;Phase 4: 10 Mins&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h2 class="text-4xl font-black text-slate-800 mt-2"&gt;The Human Signature&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-slate-500 mt-4 leading-relaxed"&gt;Look at your draft. Find the moment where you feel most "in control."&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="space-y-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label class="block font-bold text-slate-700 mb-2"&gt;The "Un-AI-able" Sentence&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-xs text-slate-400 mb-3 italic"&gt;Which specific line in your draft above could only have come from your specific mind or experience?&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="text" id="in-sig-1" oninput="syncToJournal()" class="w-full p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-emerald-500" placeholder="Paste that line here..."&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label class="block font-bold text-slate-700 mb-2"&gt;The Final Inquiry Pivot&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-xs text-slate-400 mb-3 italic"&gt;After this 50-minute forge, has your definition of "human writing" changed?&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;textarea id="in-sig-2" oninput="syncToJournal()" class="w-full h-32 p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-emerald-500" placeholder="Briefly reflect on how your thinking has evolved today..."&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                        </span></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-indigo-900 p-8 rounded-3xl text-white shadow-2xl shadow-indigo-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h4 class="text-2xl font-black mb-2"&gt;The Forge is Closed&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-indigo-200 text-sm mb-6 leading-relaxed"&gt;You've successfully integrated research, experimented with genre, and defined your human contribution. Export your journal now to keep your work.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="flex flex-col sm:flex-row gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button onclick="exportToDoc()" class="flex-1 bg-white text-indigo-900 py-4 rounded-xl font-black hover:bg-indigo-50 transition-all flex items-center justify-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>Copy to Clipboard</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button onclick="window.print()" class="flex-1 bg-indigo-700 text-white py-4 rounded-xl font-black hover:bg-indigo-600 transition-all flex items-center justify-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>Print PDF</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- SIDEBAR JOURNAL (Persists) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;aside class="w-80 bg-white border-l border-slate-200 flex flex-col shadow-2xl z-40"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 no-print"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3 class="font-black text-slate-800 text-xs uppercase tracking-widest"&gt;Forge Journal&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="text-[9px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-bold"&gt;LIVE SYNC&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- This div is what will be printed --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="journal-content" class="flex-1 overflow-y-auto p-5 space-y-8 custom-scroll"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="hidden show-on-print mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h1 class="text-3xl font-black"&gt;Workshop Inquiry Draft&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-slate-500"&gt;Topic: Is Writing a Human Act?&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;hr class="mt-4 border-slate-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="journal-segment"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-2"&gt;I. The Evidence&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="j-research" class="text-xs text-slate-400 italic"&gt;No quote captured...&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="j-reaction" class="text-sm text-slate-700 font-medium mt-2"&gt;No interpretation yet...&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="journal-segment"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-[10px] font-black text-pink-400 uppercase tracking-widest mb-2"&gt;II. The Container&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="j-genre" class="text-xs font-bold text-slate-800 mb-1"&gt;Essay (Default)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="j-moves" class="text-xs text-slate-500 italic leading-relaxed"&gt;No genre moves defined...&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="journal-segment"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-[10px] font-black text-orange-400 uppercase tracking-widest mb-2"&gt;III. Working Draft&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="j-draft" class="text-sm text-slate-800 whitespace-pre-wrap leading-relaxed font-serif"&gt;Empty forge...&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="journal-segment"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-2"&gt;IV. Human Mark&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="j-sig-1" class="text-xs font-bold text-slate-800 mb-2"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="j-sig-2" class="text-xs text-slate-500 italic"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-4 bg-indigo-50 border-t border-indigo-100 no-print"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-[9px] text-indigo-500 text-center leading-tight"&gt;Data persists only in this window.&lt;br&gt;Export work before closing.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/aside&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- AI Modal --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="ai-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-slate-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="bg-indigo-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3 class="text-2xl font-black text-slate-800 mb-2"&gt;Collaborative Prompt&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-slate-500 mb-6 text-sm leading-relaxed"&gt;Copy this tailored prompt into Gemini or NotebookLM to deepen your inquiry.&lt;/p&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-6 italic text-slate-700 text-sm leading-relaxed font-serif" id="ai-prompt-text"&gt;&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="copyPrompt(this)" class="bg-indigo-600 text-white px-6 py-4 rounded-xl font-bold flex-1 hover:bg-indigo-700 transition-all"&gt;Copy Prompt&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="closeModal()" class="bg-slate-100 text-slate-600 px-6 py-4 rounded-xl font-bold hover:bg-slate-200"&gt;Back to Draft&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// State Management</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let timeLeft = 3000;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let timerId = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let currentGenre = "Academic Essay";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const phaseNames = ["Synthesis", "De-Essay", "Drafting", "Signature"];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Timer Logic</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateTimer() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const mins = Math.floor(timeLeft / 60);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const secs = timeLeft % 60;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('timer-display').textContent =<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (timeLeft &lt;= 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>clearInterval(timerId);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('timer-display').classList.add('text-red-500');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>timeLeft--;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function toggleTimer() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const btn = document.getElementById('timer-btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!timerId) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>timerId = setInterval(updateTimer, 1000);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.textContent = "Pause";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>clearInterval(timerId);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>timerId = null;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.textContent = "Resume";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function resetTimer() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clearInterval(timerId);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>timerId = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>timeLeft = 3000;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('timer-display').textContent = "50:00";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('timer-btn').textContent = "Start";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Navigation</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showStep(num) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.step-card').forEach(s =&gt; s.classList.remove('active'));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(`step-${num}`).classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('phase-indicator').textContent = `Phase ${num}: ${phaseNames[num-1]}`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 1; i &lt;= 4; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const btn = document.getElementById(`nav-${i}`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (i === num) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>btn.className = "w-8 h-8 rounded-full bg-indigo-600 text-white text-sm font-bold ring-4 ring-white transition-all scale-110";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else if (i &lt; num) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>btn.className = "w-8 h-8 rounded-full bg-emerald-500 text-white text-sm font-bold ring-4 ring-white transition-all";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>btn.className = "w-8 h-8 rounded-full bg-slate-200 text-slate-500 text-sm font-bold ring-4 ring-white transition-all";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>window.scrollTo(0,0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Genre Logic</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function selectGenre(name) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentGenre = name;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('genre-detail').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('active-genre-title').textContent = name;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('j-genre').textContent = name;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('genre-detail').scrollIntoView({ behavior: 'smooth', block: 'center' });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>syncToJournal();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Real-time Syncing</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function syncToJournal() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const research = document.getElementById('in-research').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const reaction = document.getElementById('in-reaction').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('j-research').textContent = research || "No quote captured...";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('j-reaction').textContent = reaction || "No interpretation yet...";</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const moves = document.getElementById('in-moves').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('j-moves').textContent = moves || "No moves defined...";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const draft = document.getElementById('in-draft').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('j-draft').textContent = draft || "Empty forge...";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sig1 = document.getElementById('in-sig-1').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sig2 = document.getElementById('in-sig-2').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('j-sig-1').textContent = sig1 ? "Human Signature: " + sig1 : "";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('j-sig-2').textContent = sig2 ? "Pivot: " + sig2 : "";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// AI Interactions</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function simulateAI(prompt) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('ai-prompt-text').textContent = prompt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('ai-modal').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function closeModal() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('ai-modal').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function copyPrompt(btn) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const text = document.getElementById('ai-prompt-text').textContent;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>navigator.clipboard.writeText(text).then(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const original = btn.textContent;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.textContent = "Copied!";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; btn.textContent = original, 2000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Final Export (Clipboard)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function exportToDoc() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const research = document.getElementById('in-research').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const reaction = document.getElementById('in-reaction').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const moves = document.getElementById('in-moves').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const draft = document.getElementById('in-draft').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sig1 = document.getElementById('in-sig-1').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sig2 = document.getElementById('in-sig-2').value;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const fullText = `</p>
+<p class="p1">THE INQUIRY FORGE: WORKSHOP OUTPUT</p>
+<p class="p1">Topic: Is Writing a Human Act?</p>
+<p class="p1">-------------------------------------------</p>
+<p class="p1">GENRE SELECTED: ${currentGenre}</p>
+<p class="p2"><br></p>
+<p class="p1">1. RESEARCH FOCUS</p>
+<p class="p1">Quote: ${research}</p>
+<p class="p1">My Interpretation: ${reaction}</p>
+<p class="p2"><br></p>
+<p class="p1">2. GENRE MOVES</p>
+<p class="p1">${moves}</p>
+<p class="p2"><br></p>
+<p class="p1">3. THE DRAFT</p>
+<p class="p1">${draft}</p>
+<p class="p2"><br></p>
+<p class="p1">4. THE HUMAN SIGNATURE</p>
+<p class="p1">Line: ${sig1}</p>
+<p class="p1">Reflection: ${sig2}</p>
+<p class="p1">-------------------------------------------</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>navigator.clipboard.writeText(fullText).then(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const box = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>box.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl z-[200] font-bold animate-bounce";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>box.textContent = "Draft Copied to Clipboard!";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.body.appendChild(box);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; box.remove(), 3000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
