@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation: The AI Paralegal</title>
+    
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ninerGreen: '#005035',
+                        ninerGold: '#A49665',
+                        brandDark: '#111827',
+                        brandPanel: '#1F2937'
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #0f172a; font-family: 'Inter', 'Segoe UI', sans-serif; color: #e2e8f0; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        textarea::-webkit-scrollbar { width: 8px; }
+        textarea::-webkit-scrollbar-track { background: #1e293b; border-radius: 4px; }
+        textarea::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        textarea::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        
+        .flagged-text { background-color: rgba(239, 68, 68, 0.15); border-bottom: 2px dashed #ef4444; cursor: pointer; transition: all 0.2s; }
+        .flagged-text:hover { background-color: rgba(239, 68, 68, 0.3); }
+        .flagged-text.resolved { background-color: rgba(34, 197, 94, 0.2); border-bottom: 2px dashed #22c55e; }
+        
+        .fact-card { transition: all 0.3s ease; }
+        .fact-card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- ICONS ---
+        const AlertCircle = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
+        const CheckCircle = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+        const ChevronRight = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>;
+        const Send = ({size = 20}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>;
+        const Bot = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>;
+        const Scale = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>;
+        const Database = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>;
+        const ExternalLink = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>;
+
+        const App = () => {
+            const [currentPhase, setCurrentPhase] = useState('briefing');
+            const [flagsFound, setFlagsFound] = useState([]);
+            const [userDraft, setUserDraft] = useState('');
+            const [evaluation, setEvaluation] = useState(null);
+
+            const aiBadDraftText = [
+                { id: 't1', text: "MEMORANDUM OF LAW\n\nTO: Senior Partner\nFROM: Legal Team\nRE: Taylor v. City of Charlotte - Motion for Summary Judgment\n\nOur client, Mr. Taylor, was injured in an electric scooter accident on October 12, 2024, caused by a massive pothole on Tryon Street. ", isBad: false },
+                { id: 'f1', text: "As clearly established in the landmark case 'Charlotte v. Mobility Corp (2022)', the city is held strictly liable for all micro-mobility accidents occurring on municipal property.", isBad: true, reason: "HALLUCINATED PRECEDENT: This case does not exist. The AI completely invented a legal precedent to make the argument sound stronger." },
+                { id: 't2', text: "\n\nFurthermore, the city had ample warning of this specific hazard. ", isBad: false },
+                { id: 'f2', text: "Discovery records show the pothole was reported via certified letter directly to the Mayor's office three weeks prior to the incident.", isBad: true, reason: "EXAGGERATED FACT: The database shows it was reported via the CityApp just 48 hours prior, not a certified letter to the Mayor. AI 'explanation hacking' often exaggerates timelines to sound convincing." },
+                { id: 't3', text: "\n\nDue to this egregious negligence, ", isBad: false },
+                { id: 'f3', text: "we are pursuing $500,000 in punitive damages under the strict guidelines of the NC Safe Streets Act of 2023.", isBad: true, reason: "HALLUCINATED STATUTE: There is no 'NC Safe Streets Act of 2023' that guarantees punitive damages. The AI invented a law that sounded plausible." }
+            ];
+
+            const caseFacts = [
+                { title: "Incident Report", detail: "Client injured by pothole on Tryon St. on Oct 12, 2024." },
+                { title: "Actual Precedent", detail: "Smith v. Raleigh (2018): Cities are only liable if a pothole was officially reported at least 48 hours before an incident." },
+                { title: "Reporting Timeline", detail: "The Tryon St. pothole was reported on Oct 10, 2024 via the CLT+ Mobile App (exactly 48 hours before incident)." },
+                { title: "Damages Sought", detail: "Seeking compensatory damages for medical bills ($12,500). Punitive damages are not applicable in this jurisdiction for this offense." }
+            ];
+
+            const handleFlagClick = (id) => {
+                if (!flagsFound.includes(id)) {
+                    setFlagsFound([...flagsFound, id]);
+                }
+            };
+
+            const evaluateDraft = () => {
+                if(userDraft.trim().length < 50) {
+                    setEvaluation({ type: 'error', msg: 'Draft is too brief. You need to construct a complete legal argument based on the facts.' });
+                    return;
+                }
+                
+                const text = userDraft.toLowerCase();
+                
+                // Check if they removed the hallucinated garbage
+                const hasHallucinations = text.includes('mobility corp') || text.includes('mayor') || text.includes('safe streets act');
+                
+                // Check if they included the actual truth
+                const hasRealPrecedent = text.includes('smith') || text.includes('raleigh');
+                const hasRealTimeline = text.includes('48 hours') || text.includes('oct 10') || text.includes('october 10') || text.includes('app');
+
+                if (hasHallucinations) {
+                    setEvaluation({ type: 'error', msg: 'Critical Error: You left hallucinated AI facts in the brief. You cannot cite "Mobility Corp", the "Mayor", or the "Safe Streets Act".' });
+                } else if (hasRealPrecedent && hasRealTimeline) {
+                    setEvaluation({ type: 'success', msg: 'Outstanding work. You stripped the AI hallucinations and built an argument grounded in verified epistemological truth.' });
+                    setTimeout(() => setCurrentPhase('aiteam'), 3500);
+                } else {
+                    setEvaluation({ type: 'warning', msg: 'You removed the lies, but your argument is weak. You need to cite the actual precedent (Smith v. Raleigh) and the exact reporting timeline (48 hours/CityApp) to make your case.' });
+                }
+            };
+
+            return (
+                <div className="flex flex-col min-h-screen">
+                    {/* TOP NAVIGATION / STATUS BAR */}
+                    <header className="bg-brandDark border-b border-gray-800 p-4 sticky top-0 z-50 shadow-lg">
+                        <div className="max-w-6xl mx-auto flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-blue-900 rounded flex items-center justify-center border-2 border-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.3)]">
+                                    <Scale className="text-blue-300" size={20}/>
+                                </div>
+                                <div>
+                                    <h1 className="text-white font-bold tracking-wider">HARRISON & VANCE LAW FIRM</h1>
+                                    <p className="text-xs text-blue-400 uppercase font-mono tracking-widest">Document Verification Portal</p>
+                                </div>
+                            </div>
+                            
+                            {/* Phase Indicator */}
+                            <div className="hidden md:flex items-center gap-2 font-mono text-xs">
+                                <div className={`px-3 py-1 rounded ${currentPhase === 'briefing' ? 'bg-blue-900/50 text-blue-400 border border-blue-700' : 'text-gray-500'}`}>01. BRIEFING</div>
+                                <ChevronRight className="text-gray-700" />
+                                <div className={`px-3 py-1 rounded ${currentPhase === 'analyze' ? 'bg-orange-900/50 text-orange-400 border border-orange-700' : (flagsFound.length === 3 ? 'text-green-500' : 'text-gray-500')}`}>02. FACT CHECK</div>
+                                <ChevronRight className="text-gray-700" />
+                                <div className={`px-3 py-1 rounded ${currentPhase === 'rewrite' ? 'bg-purple-900/50 text-purple-400 border border-purple-700' : (currentPhase === 'aiteam' || currentPhase === 'debrief' ? 'text-green-500' : 'text-gray-500')}`}>03. HUMAN AGENCY</div>
+                                <ChevronRight className="text-gray-700" />
+                                <div className={`px-3 py-1 rounded ${currentPhase === 'aiteam' ? 'bg-ninerGreen/30 text-ninerGreen border border-ninerGreen' : (currentPhase === 'debrief' ? 'text-green-500' : 'text-gray-500')}`}>04. METACOGNITION</div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="flex-1 max-w-6xl mx-auto w-full p-4 md:p-8">
+                        
+                        {/* PHASE 1: BRIEFING */}
+                        {currentPhase === 'briefing' && (
+                            <div className="fade-in max-w-3xl mx-auto mt-12">
+                                <div className="bg-blue-900/20 border border-blue-500/50 rounded-lg p-6 mb-8 shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                                    <div className="flex items-center gap-3 text-blue-400 mb-4 border-b border-blue-500/30 pb-4">
+                                        <AlertCircle className="w-8 h-8" />
+                                        <h2 className="text-2xl font-bold uppercase tracking-widest">Epistemological Audit Required</h2>
+                                    </div>
+                                    <div className="space-y-4 text-gray-300">
+                                        <p><strong>To:</strong> Junior Paralegal (You)</p>
+                                        <p><strong>Situation:</strong> We are suing the city regarding a scooter accident. A senior partner, rushing to make a golf tee time, used a Generative AI tool to draft the introductory argument for our legal brief.</p>
+                                        <p><strong>The Crisis:</strong> AI is a language predictor, not a search engine. When it lacks context, it engages in <strong>"Explanation Hacking"</strong>—inventing highly plausible, completely fabricated facts and citations to fulfill the prompt.</p>
+                                        <div className="bg-black/40 p-4 border-l-4 border-red-500 font-mono text-sm text-red-200 mt-4">
+                                            > WARNING: Submitting hallucinated case law to a judge will result in severe sanctions, loss of the case, and potential disbarment.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="bg-brandPanel border border-gray-700 rounded-lg p-6">
+                                    <h3 className="text-xl font-bold text-white mb-3 flex items-center gap-2">Your Mission: Ground Truth Verification</h3>
+                                    <p className="text-gray-400 mb-6">
+                                        You must cross-reference the AI's generated draft against the actual facts of the case. Find the hallucinations, strip them out, and rewrite the argument using actual, verifiable evidence.
+                                    </p>
+                                    <button 
+                                        onClick={() => setCurrentPhase('analyze')}
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition-all shadow-lg hover:shadow-xl flex justify-center items-center gap-2"
+                                    >
+                                        Open Document & Database <ChevronRight />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* PHASE 2: ANALYZE */}
+                        {currentPhase === 'analyze' && (
+                            <div className="fade-in grid lg:grid-cols-2 gap-6">
+                                {/* LEFT COLUMN: THE DATABASE */}
+                                <div className="flex flex-col h-[75vh]">
+                                    <div className="bg-gray-800 rounded-t-lg px-4 py-3 border-b border-gray-700 flex items-center gap-2">
+                                        <Database className="text-blue-400"/>
+                                        <h2 className="font-bold text-white tracking-wide">Verified Case Database</h2>
+                                    </div>
+                                    <div className="bg-[#1e293b] border-x border-b border-gray-700 rounded-b-lg p-4 flex-1 overflow-y-auto space-y-3">
+                                        <p className="text-sm text-gray-400 mb-4 italic">Compare the draft on the right against these absolute facts. <strong className="text-orange-400">Click on the 3 hallucinated statements</strong> in the draft to flag them.</p>
+                                        
+                                        {caseFacts.map((fact, index) => (
+                                            <div key={index} className="fact-card bg-brandDark border border-gray-600 p-4 rounded shadow-md">
+                                                <h4 className="text-blue-300 font-bold text-sm mb-1 uppercase tracking-wider">{fact.title}</h4>
+                                                <p className="text-gray-300 text-sm">{fact.detail}</p>
+                                            </div>
+                                        ))}
+
+                                        <div className="mt-8">
+                                            <div className="flex items-center justify-between text-sm font-mono text-gray-400 border-b border-gray-700 pb-2 mb-4">
+                                                <span>Audit Progress</span>
+                                                <span className={flagsFound.length === 3 ? 'text-green-400 font-bold' : ''}>{flagsFound.length} / 3 Found</span>
+                                            </div>
+                                            {flagsFound.length > 0 && (
+                                                <div className="space-y-2">
+                                                    {aiBadDraftText.filter(item => flagsFound.includes(item.id)).map(item => (
+                                                        <div key={item.id} className="bg-red-900/20 border-l-2 border-red-500 p-2 text-xs fade-in text-gray-300">
+                                                            <strong className="text-red-400 block">{item.reason.split(':')[0]}</strong>
+                                                            {item.reason.split(':')[1]}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {flagsFound.length === 3 && (
+                                            <button 
+                                                onClick={() => setCurrentPhase('rewrite')}
+                                                className="w-full mt-4 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-lg transition-all fade-in shadow-lg flex justify-center items-center gap-2"
+                                            >
+                                                Proceed to Rewrite <ChevronRight />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* RIGHT COLUMN: THE DRAFT */}
+                                <div className="flex flex-col h-[75vh]">
+                                    <div className="bg-gray-100 rounded-t-lg border-b border-gray-300 px-4 py-3 flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                            <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                                            <div className="ml-4 text-xs font-mono text-gray-600 font-bold">AI_Draft_Brief_v1.docx</div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-white p-8 text-gray-800 font-serif leading-relaxed text-lg whitespace-pre-wrap flex-1 overflow-y-auto rounded-b-lg border-x border-b border-gray-300 shadow-inner">
+                                        {aiBadDraftText.map((segment, index) => {
+                                            if (segment.isBad) {
+                                                const isFound = flagsFound.includes(segment.id);
+                                                return (
+                                                    <span 
+                                                        key={index} 
+                                                        onClick={() => handleFlagClick(segment.id)}
+                                                        className={`flagged-text ${isFound ? 'resolved' : ''}`}
+                                                        title="Click to cross-reference and flag hallucination"
+                                                    >
+                                                        {segment.text}
+                                                    </span>
+                                                )
+                                            }
+                                            return <span key={index}>{segment.text}</span>
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* PHASE 3: REWRITE */}
+                        {currentPhase === 'rewrite' && (
+                            <div className="fade-in max-w-4xl mx-auto h-[75vh] flex flex-col">
+                                <div className="mb-4">
+                                    <h2 className="text-2xl font-bold text-white flex items-center gap-2">Reclaim Human Agency</h2>
+                                    <p className="text-gray-400">The AI failed entirely at factual accuracy. Rewrite the argument. You must <strong>remove all AI hallucinations</strong> and construct an argument using <strong>only the verified facts</strong> (Smith v. Raleigh, the 48-hour timeline, the CityApp report).</p>
+                                </div>
+
+                                <div className="flex-1 bg-white border border-gray-300 rounded-lg shadow-xl flex flex-col overflow-hidden">
+                                    <div className="bg-gray-100 px-4 py-2 border-b border-gray-300 text-sm font-mono text-gray-600 flex justify-between items-center">
+                                        <span>Verified_Brief_Final.docx</span>
+                                    </div>
+                                    <textarea 
+                                        className="flex-1 w-full bg-transparent text-gray-900 p-8 outline-none resize-none font-serif text-lg leading-relaxed"
+                                        placeholder="Our client, Mr. Taylor, was injured in an electric scooter accident on October 12, 2024, caused by a massive pothole on Tryon Street. According to..."
+                                        value={userDraft}
+                                        onChange={(e) => setUserDraft(e.target.value)}
+                                        spellCheck="false"
+                                    ></textarea>
+                                    
+                                    <div className="bg-gray-200 border-t border-gray-300 p-4 flex justify-between items-center">
+                                        <div className="flex-1 mr-4">
+                                            {evaluation && (
+                                                <div className={`text-sm px-4 py-2 rounded flex items-center gap-2 font-medium ${
+                                                    evaluation.type === 'success' ? 'bg-green-100 text-green-800 border border-green-300' :
+                                                    evaluation.type === 'warning' ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' :
+                                                    'bg-red-100 text-red-800 border border-red-300'
+                                                }`}>
+                                                    {evaluation.type === 'success' ? <CheckCircle /> : <AlertCircle />}
+                                                    {evaluation.msg}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <button 
+                                            onClick={evaluateDraft}
+                                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition-all flex items-center gap-2 shrink-0 shadow"
+                                        >
+                                            <Send size={18}/> Submit Brief to Partner
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* PHASE 4: THE AI TEAM (ASSIGNMENT) */}
+                        {currentPhase === 'aiteam' && (
+                            <div className="fade-in max-w-4xl mx-auto mt-8">
+                                <div className="text-center mb-10">
+                                    <div className="inline-block bg-green-900/30 border border-green-500/50 rounded-full px-4 py-1 text-green-400 font-mono text-sm mb-4">LEGAL CRISIS AVERTED</div>
+                                    <h2 className="text-3xl font-bold text-white mb-4">Metacognition & Explanation Hacking</h2>
+                                    <p className="text-xl text-gray-400">You discovered firsthand that generative AI models are <em>probability engines</em>, not fact databases. When forced to provide an answer without data, they hallucinate.</p>
+                                </div>
+
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    <div className="bg-brandPanel border border-gray-700 rounded-lg p-6 space-y-4">
+                                        <h3 className="text-xl font-bold text-white flex items-center gap-2 border-b border-gray-700 pb-2">
+                                            <Bot className="text-blue-400"/> UNC Charlotte Enterprise Gemini
+                                        </h3>
+                                        <p className="text-gray-300 text-sm">
+                                            Let's use AI ethically to understand its own limitations. Open Gemini and use it to analyze the concept of "Explanation Hacking."
+                                        </p>
+                                        <a href="https://gemini.google.com" target="_blank" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-bold transition-colors">
+                                            Launch Gemini <ExternalLink />
+                                        </a>
+
+                                        <div className="mt-6 space-y-4">
+                                            <div className="bg-[#0f172a] p-4 rounded border border-gray-800">
+                                                <h4 className="text-teal-400 font-bold text-sm mb-2">Prompt 1: Understanding Hallucinations</h4>
+                                                <div className="font-mono text-[11px] text-gray-300 bg-black/50 p-2 rounded select-all cursor-pointer border border-gray-700 hover:border-teal-500 transition-colors">
+                                                    "I am learning about 'Explanation Hacking' in my writing class. Can you explain to me, technically but simply, why Large Language Models sometimes confidently invent fake legal cases or fake citations when asked a specific question?"
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="bg-[#0f172a] p-4 rounded border border-gray-800">
+                                                <h4 className="text-purple-400 font-bold text-sm mb-2">Prompt 2: The Grounding Technique</h4>
+                                                <div className="font-mono text-[11px] text-gray-300 bg-black/50 p-2 rounded select-all cursor-pointer border border-gray-700 hover:border-purple-500 transition-colors">
+                                                    "If I wanted to use you to help me draft a document, what prompt engineering techniques should I use to force you to ONLY use facts I provide, preventing you from hallucinating outside information?"
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-ninerGreen/10 border border-ninerGold/50 rounded-lg p-6 flex flex-col">
+                                        <h3 className="text-xl font-bold text-white mb-4">Week 4 Deliverable</h3>
+                                        <div className="flex-1 space-y-4 text-gray-300 text-sm">
+                                            <p>Return to Canvas to submit your assignment based on this simulation.</p>
+                                            <ul className="list-disc list-inside space-y-2 text-ninerGold">
+                                                <li><span className="text-gray-300">Submit a <strong>link/screenshot</strong> of your Gemini transcript.</span></li>
+                                                <li><span className="text-gray-300">Submit a <strong>reflection</strong> answering:</span>
+                                                    <ul className="list-[circle] list-inside ml-6 mt-2 space-y-1 text-gray-400">
+                                                        <li>Why is it dangerous to treat AI as a "search engine"?</li>
+                                                        <li>How did taking on the role of fact-checker change your perspective on using AI for research writing?</li>
+                                                    </ul>
+                                                </li>
+                                                <li><span className="text-gray-300">Share your final, fact-checked legal argument.</span></li>
+                                            </ul>
+                                        </div>
+                                        <button 
+                                            onClick={() => alert("Simulation Complete! You may now exit this window and complete your reflection in Canvas.")}
+                                            className="w-full mt-6 bg-ninerGold hover:bg-[#8b7f55] text-white font-bold py-3 rounded transition-colors"
+                                        >
+                                            Acknowledge & Finish Simulation
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
