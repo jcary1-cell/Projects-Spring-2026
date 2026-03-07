@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Literacy Sim: Centering Human Agency</title>
+    
+    <!-- Tailwind CSS (Latest stable) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ninerGreen: '#005035',
+                        ninerGold: '#A49665',
+                        slateBg: '#0f172a',
+                        panelBg: '#1e293b'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* Interactive Text Styles */
+        .bias-target {
+            background-color: rgba(239, 68, 68, 0.15);
+            border-bottom: 2px dashed #ef4444;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        .bias-target:hover { background-color: rgba(239, 68, 68, 0.3); }
+        .bias-target.resolved {
+            background-color: rgba(34, 197, 94, 0.2);
+            border-bottom: 2px solid #22c55e;
+            cursor: default;
+        }
+
+        .step-indicator { transition: all 0.3s; }
+        .step-active { color: #A49665; font-weight: bold; border-bottom: 2px solid #A49665; }
+        .step-inactive { color: #64748b; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- HEADER -->
+    <header class="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-ninerGreen rounded flex items-center justify-center text-white font-bold text-xl">
+                    AI
+                </div>
+                <div>
+                    <h1 class="text-white font-bold tracking-wide">Algorithmic Bias Audit</h1>
+                    <p class="text-xs text-ninerGold uppercase tracking-widest">Centering Human Agency</p>
+                </div>
+            </div>
+            
+            <!-- Progress Stepper -->
+            <div class="flex items-center gap-4 text-sm font-mono" id="stepper">
+                <div class="step-indicator step-active" id="step1">01. Briefing</div>
+                <div class="text-gray-700">></div>
+                <div class="step-indicator step-inactive" id="step2">02. Audit</div>
+                <div class="text-gray-700">></div>
+                <div class="step-indicator step-inactive" id="step3">03. Rewrite</div>
+                <div class="text-gray-700">></div>
+                <div class="step-indicator step-inactive" id="step4">04. Agency</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-6xl mx-auto w-full p-4 md:p-8 flex flex-col">
+        
+        <!-- PHASE 1: BRIEFING -->
+        <div id="phase1" class="phase-section fade-in max-w-3xl mx-auto mt-8">
+            <div class="bg-panelBg border border-gray-700 rounded-lg p-8 shadow-xl">
+                <div class="flex items-center gap-3 text-red-400 mb-6 pb-4 border-b border-gray-700">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <h2 class="text-2xl font-bold uppercase tracking-widest text-white">Critical Literacy Failure</h2>
+                </div>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-lg">
+                    <p><strong>Scenario:</strong> The City Planning Commission is hosting a town hall regarding new zoning laws in the <em>Eastway-Central</em> neighborhood.</p>
+                    <p>An intern, lacking <strong>AI literacy</strong>, relied solely on the operational functionality of an LLM (ChatGPT) to generate the community invitation. They accepted the AI's first draft without applying <strong>critical reasoning</strong>.</p>
+                    <p>Because generative AI models are heavily trained on corporate and affluent datasets, the default output stripped the diverse neighborhood of its context, generating a highly biased, elitist document.</p>
+                    
+                    <div class="bg-red-900/20 p-4 border-l-4 border-red-500 font-mono text-sm text-red-200 my-6">
+                        > CONSEQUENCE: Mailing this unchecked AI draft will alienate the working-class residents, suppress community attendance, and violate our ethical commitment to human-centered communication.
+                    </div>
+                    
+                    <p class="text-ninerGold font-medium">Your Task: You must reclaim human agency. Audit the AI's output, identify the harmful biases, and rewrite the message to serve the actual community.</p>
+                </div>
+
+                <button onclick="changePhase(2)" class="mt-8 w-full bg-ninerGreen hover:bg-[#003d29] text-white font-bold py-4 rounded-lg transition-all shadow-lg text-lg flex justify-center items-center gap-2">
+                    Start The Bias Audit
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- PHASE 2: AUDIT -->
+        <div id="phase2" class="phase-section hidden fade-in grid lg:grid-cols-2 gap-6 h-[75vh]">
+            <!-- Left: Demographics & Feedback -->
+            <div class="flex flex-col h-full bg-panelBg rounded-lg border border-gray-700 overflow-hidden">
+                <div class="bg-gray-800 px-4 py-3 border-b border-gray-700 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-ninerGold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                    <h2 class="font-bold text-white tracking-wide">Neighborhood Context</h2>
+                </div>
+                <div class="p-6 flex-1 overflow-y-auto">
+                    <p class="text-gray-400 mb-6 italic">The AI lacked this context. <strong class="text-red-400">Click the 3 biased phrases</strong> in the draft on the right that violate these demographic realities.</p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="border-l-4 border-ninerGold bg-slateBg p-4 rounded-r">
+                            <h4 class="text-white font-bold text-sm mb-1 uppercase">Housing & Class</h4>
+                            <p class="text-gray-400 text-sm">55% of residents are renters. Focus is on affordable housing, not real estate investments or gentrification.</p>
+                        </div>
+                        <div class="border-l-4 border-ninerGold bg-slateBg p-4 rounded-r">
+                            <h4 class="text-white font-bold text-sm mb-1 uppercase">Labor & Accessibility</h4>
+                            <p class="text-gray-400 text-sm">60% work shift/service labor. Meetings must be local (Eastway Rec Center) and during evenings/weekends, not weekday afternoons at distant country clubs.</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-700 pt-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-white">Audit Progress</h3>
+                            <span id="flag-counter" class="text-sm font-mono bg-gray-800 px-2 py-1 rounded text-gray-400">0 / 3 Found</span>
+                        </div>
+                        <div id="feedback-container" class="space-y-3">
+                            <!-- Feedback injected here by JS -->
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-800 border-t border-gray-700 hidden" id="proceed-btn-container">
+                    <button onclick="changePhase(3)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded transition-all shadow-lg flex justify-center items-center gap-2">
+                        Proceed to Inclusive Rewrite
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: The Draft -->
+            <div class="flex flex-col h-full bg-white rounded-lg border border-gray-300 overflow-hidden shadow-inner text-gray-900">
+                <div class="bg-gray-100 px-4 py-2 border-b border-gray-300 flex items-center gap-2 font-mono text-xs text-gray-500">
+                    <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                    <span class="ml-2">AI_Generated_Draft_v1.docx</span>
+                </div>
+                <div class="p-8 font-serif leading-relaxed text-lg flex-1 overflow-y-auto">
+                    <p class="mb-4">CITY OF CHARLOTTE - OFFICIAL NOTICE<br>RE: Upcoming Zoning Changes in Eastway-Central</p>
+                    <p class="mb-4">
+                        <span class="bias-target" data-id="1" data-title="SOCIO-ECONOMIC BIAS" data-reason="The AI assumes the audience consists solely of wealthy landowners and investors, alienating the majority renter population.">Dear Eastway-Central Property Owners and Real Estate Investors,</span>
+                    </p>
+                    <p class="mb-4">
+                        We are excited to announce a new zoning paradigm designed to maximize property valuations. As we look to the future of our vibrant community, we want your input on these developments. 
+                        <span class="bias-target" data-id="2" data-title="CLASS & ACCESSIBILITY BIAS" data-reason="Hosting a meeting at 1 PM on a weekday at a distant country club assumes a 9-to-5 white-collar schedule and private transportation.">We invite you to join us for an exclusive feedback luncheon at the SouthPark Country Club next Tuesday at 1:00 PM.</span>
+                    </p>
+                    <p class="mb-4">
+                        This rezoning initiative will bring sweeping changes to the district. 
+                        <span class="bias-target" data-id="3" data-title="HARMFUL JARGON" data-reason="The AI openly praises 'gentrification'—a process that displaces current residents—showing a complete lack of human empathy or ethical reasoning.">We hope to synergize our development frameworks to expedite the gentrification process and replace outdated multi-family housing.</span>
+                    </p>
+                    <p>Sincerely,<br>City Planning Commission</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHASE 3: REWRITE -->
+        <div id="phase3" class="phase-section hidden fade-in max-w-5xl mx-auto h-[75vh] flex flex-col w-full">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-white mb-2">Reclaiming Human Agency</h2>
+                <p class="text-gray-400">Do not rely on the machine's default. Exercise your agency to write an inclusive invitation. <strong>Remove the toxic assumptions</strong> and specifically invite <strong>renters/residents</strong> to an <strong>evening/weekend</strong> meeting at the local <strong>Rec Center</strong>.</p>
+            </div>
+
+            <div class="flex-1 flex flex-col bg-white rounded-lg shadow-xl overflow-hidden text-gray-900 border border-gray-300">
+                <div class="bg-gray-100 px-4 py-2 border-b border-gray-300 font-mono text-sm text-gray-600 flex justify-between items-center">
+                    <span>Human_Edited_Draft_Final.docx</span>
+                </div>
+                <textarea id="user-draft" class="flex-1 p-8 outline-none resize-none font-sans text-lg leading-relaxed bg-transparent" placeholder="Dear Eastway-Central Residents..."></textarea>
+                
+                <div class="bg-gray-200 border-t border-gray-300 p-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div id="eval-msg" class="flex-1 text-sm font-medium px-4 py-2 rounded hidden"></div>
+                    <button onclick="evaluateDraft()" class="bg-ninerGreen hover:bg-[#003d29] text-white font-bold py-3 px-8 rounded transition-all shadow w-full md:w-auto shrink-0">
+                        Evaluate & Publish
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHASE 4: DEBRIEF -->
+        <div id="phase4" class="phase-section hidden fade-in max-w-4xl mx-auto mt-8">
+            <div class="text-center mb-10 border-b border-gray-800 pb-10">
+                <div class="inline-block bg-green-900/30 border border-green-500/50 text-green-400 font-mono text-sm px-4 py-1 rounded-full mb-4">SIMULATION COMPLETE</div>
+                <h2 class="text-3xl font-bold text-white mb-4">Comprehensive AI Literacy Achieved</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">You moved beyond the functional use of AI and applied <strong>critical and ethical reasoning</strong> to safeguard your community.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-panelBg border border-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mb-3 text-ninerGold">The Core Lesson</h3>
+                    <p class="text-gray-300 mb-4 text-sm leading-relaxed">
+                        As highlighted in <em>"Comprehensive AI Literacy: The Case for Centering Human Agency"</em>, operational skills (knowing how to prompt) are insufficient. True AI literacy requires understanding that AI tools reflect the biases of their training data.
+                    </p>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        When we accept AI defaults without question, we surrender our agency to the machine, often harming marginalized communities. You successfully reclaimed that agency by choosing to edit with empathy and ethical awareness.
+                    </p>
+                </div>
+
+                <div class="bg-[#1e293b] border-l-4 border-ninerGreen p-6 rounded-r-lg flex flex-col justify-center">
+                    <h3 class="text-lg font-bold text-white mb-4">Reflection Assignment</h3>
+                    <ul class="space-y-3 text-sm text-gray-400 mb-6">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-ninerGreen shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>Why did the AI assume the audience consisted of wealthy investors?</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-ninerGreen shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>How does relying on AI "defaults" diminish human agency in professional writing?</span>
+                        </li>
+                    </ul>
+                    <button onclick="alert('Simulation finalized. Please return to your course module to submit your reflection.')" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded transition-colors border border-gray-600">
+                        Finish & Return to Course
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- VANILLA JS LOGIC -->
+    <script>
+        // State
+        let currentPhase = 1;
+        let flagsFound = new Set();
+        const totalFlags = 3;
+
+        // Navigation Logic
+        function changePhase(phase) {
+            // Hide all phases
+            document.querySelectorAll('.phase-section').forEach(el => el.classList.add('hidden'));
+            // Show target phase
+            document.getElementById('phase' + phase).classList.remove('hidden');
+            
+            // Update Stepper UI
+            document.querySelectorAll('.step-indicator').forEach((el, index) => {
+                if (index + 1 === phase) {
+                    el.classList.add('step-active');
+                    el.classList.remove('step-inactive');
+                } else if (index + 1 < phase) {
+                    el.classList.remove('step-active');
+                    el.classList.remove('step-inactive');
+                    el.classList.add('text-ninerGreen', 'font-bold'); // completed
+                } else {
+                    el.classList.remove('step-active');
+                    el.classList.add('step-inactive');
+                }
+            });
+
+            currentPhase = phase;
+        }
+
+        // Audit Phase Logic
+        document.querySelectorAll('.bias-target').forEach(el => {
+            el.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const title = this.getAttribute('data-title');
+                const reason = this.getAttribute('data-reason');
+
+                if (!flagsFound.has(id)) {
+                    flagsFound.add(id);
+                    
+                    // Update UI of the text
+                    this.classList.add('resolved');
+                    
+                    // Update Counter
+                    const counter = document.getElementById('flag-counter');
+                    counter.innerText = `${flagsFound.size} / 3 Found`;
+                    if (flagsFound.size === totalFlags) {
+                        counter.classList.replace('text-gray-400', 'text-green-400');
+                        document.getElementById('proceed-btn-container').classList.remove('hidden');
+                    }
+
+                    // Add Feedback Card
+                    const feedbackContainer = document.getElementById('feedback-container');
+                    const card = document.createElement('div');
+                    card.className = 'bg-red-900/20 border-l-2 border-red-500 p-3 text-sm text-gray-300 fade-in rounded-r';
+                    card.innerHTML = `<strong class="text-red-400 block mb-1">${title}</strong>${reason}`;
+                    feedbackContainer.appendChild(card);
+                }
+            });
+        });
+
+        // Rewrite Evaluation Logic
+        function evaluateDraft() {
+            const draft = document.getElementById('user-draft').value.toLowerCase();
+            const msgBox = document.getElementById('eval-msg');
+            msgBox.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-yellow-100', 'text-yellow-800', 'bg-green-100', 'text-green-800', 'border-red-300', 'border-yellow-300', 'border-green-300');
+            msgBox.classList.add('border');
+
+            if (draft.trim().length < 40) {
+                msgBox.classList.add('bg-red-100', 'text-red-800', 'border-red-300');
+                msgBox.innerText = 'Error: Draft is too brief. Please write a complete, professional invitation.';
+                return;
+            }
+
+            // Check for remaining toxic terms
+            const toxicTerms = ['investor', 'valuation', 'country club', '1:00 pm', 'gentrification', 'synergize'];
+            const foundToxic = toxicTerms.some(term => draft.includes(term));
+
+            // Check for inclusive terms
+            const inclusiveTerms = ['resident', 'renter', 'neighbor', 'community', 'evening', 'weekend', 'rec center', 'recreation center', 'local'];
+            let inclusiveCount = 0;
+            inclusiveTerms.forEach(term => {
+                if (draft.includes(term)) inclusiveCount++;
+            });
+
+            if (foundToxic) {
+                msgBox.classList.add('bg-red-100', 'text-red-800', 'border-red-300');
+                msgBox.innerText = 'Audit Failed: You left alienating AI language in the draft (e.g., mentioning investors, daytime meetings, or gentrification). Remove these defaults.';
+            } else if (inclusiveCount >= 2) {
+                msgBox.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
+                msgBox.innerText = 'Success! You successfully applied human empathy and critical reasoning to rewrite the draft.';
+                
+                // Delay moving to phase 4
+                setTimeout(() => changePhase(4), 2500);
+            } else {
+                msgBox.classList.add('bg-yellow-100', 'text-yellow-800', 'border-yellow-300');
+                msgBox.innerText = 'Almost there. You removed the bad language, but you need to actively include the community (e.g., specifically address "residents" and mention an evening/weekend time at the Rec Center).';
+            }
+        }
+    </script>
+</body>
+</html>
