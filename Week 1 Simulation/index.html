@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation: The PR Crisis</title>
+    
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ninerGreen: '#005035',
+                        ninerGold: '#A49665',
+                        brandDark: '#111827',
+                        brandPanel: '#1F2937'
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #0f172a; font-family: 'Inter', 'Segoe UI', sans-serif; color: #e2e8f0; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom scrollbar for textareas */
+        textarea::-webkit-scrollbar { width: 8px; }
+        textarea::-webkit-scrollbar-track { background: #1e293b; border-radius: 4px; }
+        textarea::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        textarea::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        
+        .flagged-text { background-color: rgba(239, 68, 68, 0.2); border-bottom: 2px dashed #ef4444; cursor: pointer; transition: all 0.2s; }
+        .flagged-text:hover { background-color: rgba(239, 68, 68, 0.4); }
+        .flagged-text.resolved { background-color: rgba(34, 197, 94, 0.2); border-bottom: 2px dashed #22c55e; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- ICONS ---
+        const AlertCircle = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
+        const CheckCircle = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+        const ChevronRight = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>;
+        const Send = ({size = 20}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>;
+        const Bot = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>;
+        const Brain = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>;
+        const ExternalLink = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>;
+
+        const App = () => {
+            const [currentPhase, setCurrentPhase] = useState('briefing'); // briefing, analyze, rewrite, aiteam, debrief
+            const [flagsFound, setFlagsFound] = useState([]);
+            const [userDraft, setUserDraft] = useState('');
+            const [evaluation, setEvaluation] = useState(null);
+
+            const aiBadDraftText = [
+                { id: 'f1', text: "To Whom It May Concern:", isBad: true, reason: "Impersonal and cold. You are speaking to specific clinic directors who rely on you." },
+                { id: 't1', text: " Be advised that Queen City Med-Supply deliveries are delayed indefinitely. ", isBad: false },
+                { id: 'f2', text: "Due to recent flooding, which constitutes an 'Act of God' under Section 4 of our vendor agreement,", isBad: true, reason: "Highly defensive and legalistic. Dodges responsibility and lacks any human empathy for the crisis." },
+                { id: 't2', text: " we cannot fulfill current orders. ", isBad: false },
+                { id: 'f3', text: "We assume no legal liability for any disruptions to your clinic's patient care operations.", isBad: true, reason: "The absolute worst thing to say. It prioritizes corporate protection over the well-being of the community." },
+                { id: 't3', text: " Deliveries will resume when roads are cleared.\n\nRegards,\nAutomated Communications System", isBad: false }
+            ];
+
+            const handleFlagClick = (id) => {
+                if (!flagsFound.includes(id)) {
+                    setFlagsFound([...flagsFound, id]);
+                }
+            };
+
+            const evaluateDraft = () => {
+                if(userDraft.trim().length < 30) {
+                    setEvaluation({ type: 'error', msg: 'Draft is too brief. Real human empathy requires at least a full sentence.' });
+                    return;
+                }
+                
+                const empatheticWords = ['sorry', 'apologize', 'understand', 'patient', 'community', 'care', 'working', 'committed', 'together', 'support', 'help'];
+                const text = userDraft.toLowerCase();
+                const score = empatheticWords.filter(word => text.includes(word)).length;
+
+                if (score >= 1) {
+                    setEvaluation({ type: 'success', msg: 'Excellent work. You applied human agency to prioritize empathy and partnership.' });
+                    setTimeout(() => setCurrentPhase('aiteam'), 2500);
+                } else {
+                    setEvaluation({ type: 'warning', msg: 'Almost there, but still feels cold. Try using a word like "apologize", "understand", or "care".' });
+                }
+            };
+
+            return (
+                <div className="flex flex-col min-h-screen">
+                    {/* TOP NAVIGATION / STATUS BAR */}
+                    <header className="bg-brandDark border-b border-gray-800 p-4 sticky top-0 z-50 shadow-lg">
+                        <div className="max-w-6xl mx-auto flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-ninerGreen rounded flex items-center justify-center border-2 border-ninerGold shadow-[0_0_15px_rgba(164,150,101,0.3)]">
+                                    <span className="font-bold text-white text-xl">QC</span>
+                                </div>
+                                <div>
+                                    <h1 className="text-white font-bold tracking-wider">QUEEN CITY MED-SUPPLY</h1>
+                                    <p className="text-xs text-ninerGold uppercase font-mono tracking-widest">Communications Operations Portal</p>
+                                </div>
+                            </div>
+                            
+                            {/* Phase Indicator */}
+                            <div className="hidden md:flex items-center gap-2 font-mono text-xs">
+                                <div className={`px-3 py-1 rounded ${currentPhase === 'briefing' ? 'bg-blue-900/50 text-blue-400 border border-blue-700' : 'text-gray-500'}`}>01. BRIEFING</div>
+                                <ChevronRight className="text-gray-700" />
+                                <div className={`px-3 py-1 rounded ${currentPhase === 'analyze' ? 'bg-orange-900/50 text-orange-400 border border-orange-700' : (flagsFound.length === 3 ? 'text-green-500' : 'text-gray-500')}`}>02. ANALYZE AI</div>
+                                <ChevronRight className="text-gray-700" />
+                                <div className={`px-3 py-1 rounded ${currentPhase === 'rewrite' ? 'bg-purple-900/50 text-purple-400 border border-purple-700' : (currentPhase === 'aiteam' || currentPhase === 'debrief' ? 'text-green-500' : 'text-gray-500')}`}>03. HUMAN AGENCY</div>
+                                <ChevronRight className="text-gray-700" />
+                                <div className={`px-3 py-1 rounded ${currentPhase === 'aiteam' ? 'bg-ninerGreen/30 text-ninerGreen border border-ninerGreen' : (currentPhase === 'debrief' ? 'text-green-500' : 'text-gray-500')}`}>04. METACOGNITION</div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="flex-1 max-w-5xl mx-auto w-full p-4 md:p-8">
+                        
+                        {/* PHASE 1: BRIEFING */}
+                        {currentPhase === 'briefing' && (
+                            <div className="fade-in max-w-3xl mx-auto mt-12">
+                                <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-6 mb-8 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
+                                    <div className="flex items-center gap-3 text-red-400 mb-4 border-b border-red-500/30 pb-4">
+                                        <AlertCircle className="animate-pulse-fast w-8 h-8" />
+                                        <h2 className="text-2xl font-bold uppercase tracking-widest">Urgent PR Crisis Detected</h2>
+                                    </div>
+                                    <div className="space-y-4 text-gray-300">
+                                        <p><strong>To:</strong> Director of Communications (You)</p>
+                                        <p><strong>Situation:</strong> Severe flash flooding in Charlotte has grounded our delivery fleet. Critical medical supplies intended for three local urgent care clinics are delayed indefinitely.</p>
+                                        <p><strong>The Crisis:</strong> While you were in a meeting, an intern panicked. Instead of drafting a thoughtful response, they used a generative AI tool to "write an email to clients about weather delays protecting our legal liability" and immediately hit send.</p>
+                                        <div className="bg-black/40 p-4 border-l-4 border-orange-500 font-mono text-sm text-orange-200 mt-4">
+                                            > NOTIFICATION: 3 Urgent Care Clinic Directors are threatening to cancel their vendor contracts due to a "staggering lack of human decency" in our recent communication.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="bg-brandPanel border border-gray-700 rounded-lg p-6">
+                                    <h3 className="text-xl font-bold text-white mb-3 flex items-center gap-2"><Brain className="text-ninerGold"/> Your Mission: Exercise Human Agency</h3>
+                                    <p className="text-gray-400 mb-6">
+                                        The AI acted functionally, prioritizing legal self-preservation over rhetorical awareness and empathy. As defined by Tadimalla & Cary, you must now apply your "empowered capacity for intentional, critical, and responsible choice." You need to fix this.
+                                    </p>
+                                    <button 
+                                        onClick={() => setCurrentPhase('analyze')}
+                                        className="w-full bg-ninerGreen hover:bg-[#003825] text-white font-bold py-4 rounded-lg transition-all shadow-lg hover:shadow-xl flex justify-center items-center gap-2"
+                                    >
+                                        Access the AI's Draft <ChevronRight />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* PHASE 2: ANALYZE */}
+                        {currentPhase === 'analyze' && (
+                            <div className="fade-in grid md:grid-cols-5 gap-8">
+                                <div className="md:col-span-2 space-y-6">
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-white mb-2">Identify the Failures</h2>
+                                        <p className="text-gray-400 text-sm">The intern's prompt created a "stochastic probability machine" output—predictable, corporate jargon devoid of human context. <strong className="text-orange-400">Click on the 3 highlighted phrases</strong> in the draft to analyze exactly why they fail rhetorically.</p>
+                                    </div>
+
+                                    <div className="bg-brandPanel border border-gray-700 rounded-lg p-4 space-y-3">
+                                        <div className="flex items-center justify-between text-sm font-mono text-gray-400 border-b border-gray-700 pb-2">
+                                            <span>Analysis Progress</span>
+                                            <span className={flagsFound.length === 3 ? 'text-green-400 font-bold' : ''}>{flagsFound.length} / 3 Found</span>
+                                        </div>
+                                        
+                                        {/* Dynamic feedback panel based on clicks */}
+                                        <div className="min-h-[150px]">
+                                            {flagsFound.length === 0 ? (
+                                                <p className="text-gray-500 italic text-sm text-center mt-10">Click highlighted text in the email to analyze.</p>
+                                            ) : (
+                                                <div className="space-y-3">
+                                                    {aiBadDraftText.filter(item => flagsFound.includes(item.id)).map(item => (
+                                                        <div key={item.id} className="bg-red-900/20 border-l-2 border-red-500 p-3 text-sm fade-in">
+                                                            <strong className="text-red-400 block mb-1">"{item.text.substring(0,25)}..."</strong>
+                                                            <span className="text-gray-300">{item.reason}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {flagsFound.length === 3 && (
+                                        <button 
+                                            onClick={() => setCurrentPhase('rewrite')}
+                                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all fade-in shadow-lg flex justify-center items-center gap-2"
+                                        >
+                                            Take Control & Rewrite <ChevronRight />
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <div className="bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col h-full border border-gray-200">
+                                        <div className="bg-gray-100 border-b border-gray-300 px-4 py-3 flex items-center gap-2">
+                                            <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                            <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                                            <div className="ml-4 text-xs font-mono text-gray-500">Subject: Supply Delay Notice</div>
+                                        </div>
+                                        <div className="p-8 text-gray-800 font-serif leading-relaxed text-lg whitespace-pre-wrap flex-1">
+                                            {aiBadDraftText.map((segment, index) => {
+                                                if (segment.isBad) {
+                                                    const isFound = flagsFound.includes(segment.id);
+                                                    return (
+                                                        <span 
+                                                            key={index} 
+                                                            onClick={() => handleFlagClick(segment.id)}
+                                                            className={`flagged-text ${isFound ? 'resolved' : ''}`}
+                                                            title="Click to analyze rhetorical failure"
+                                                        >
+                                                            {segment.text}
+                                                        </span>
+                                                    )
+                                                }
+                                                return <span key={index}>{segment.text}</span>
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* PHASE 3: REWRITE */}
+                        {currentPhase === 'rewrite' && (
+                            <div className="fade-in max-w-4xl mx-auto h-[70vh] flex flex-col">
+                                <div className="mb-4">
+                                    <h2 className="text-2xl font-bold text-white flex items-center gap-2"><Brain className="text-purple-400"/> Exercise Human Agency</h2>
+                                    <p className="text-gray-400">The AI outsourced empathy to algorithms. You must take it back. Draft a new email to the angry Clinic Directors. Focus on <strong>audience adaptation, tone, and genuine human empathy</strong> to rebuild trust.</p>
+                                </div>
+
+                                <div className="flex-1 bg-brandPanel border border-gray-700 rounded-lg shadow-xl flex flex-col overflow-hidden">
+                                    <div className="bg-gray-800 px-4 py-2 border-b border-gray-700 text-sm font-mono text-gray-400 flex justify-between items-center">
+                                        <span>New Message (Human Authored)</span>
+                                        <span>To: Urgent Care Directors</span>
+                                    </div>
+                                    <textarea 
+                                        className="flex-1 w-full bg-transparent text-gray-100 p-6 outline-none resize-none font-serif text-lg leading-relaxed"
+                                        placeholder="Dear Clinic Directors,&#10;&#10;I am writing to you personally to apologize for our earlier communication..."
+                                        value={userDraft}
+                                        onChange={(e) => setUserDraft(e.target.value)}
+                                        spellCheck="false"
+                                    ></textarea>
+                                    
+                                    <div className="bg-gray-900 border-t border-gray-700 p-4 flex justify-between items-center">
+                                        <div className="flex-1 mr-4">
+                                            {evaluation && (
+                                                <div className={`text-sm px-4 py-2 rounded flex items-center gap-2 ${
+                                                    evaluation.type === 'success' ? 'bg-green-900/30 text-green-400 border border-green-800' :
+                                                    evaluation.type === 'warning' ? 'bg-yellow-900/30 text-yellow-400 border border-yellow-800' :
+                                                    'bg-red-900/30 text-red-400 border border-red-800'
+                                                }`}>
+                                                    {evaluation.type === 'success' ? <CheckCircle /> : <AlertCircle />}
+                                                    {evaluation.msg}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <button 
+                                            onClick={evaluateDraft}
+                                            className="bg-ninerGreen hover:bg-[#003825] text-white font-bold py-2 px-6 rounded transition-all flex items-center gap-2 shrink-0"
+                                        >
+                                            <Send size={18}/> Send Communication
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* PHASE 4: THE AI TEAM (ASSIGNMENT) */}
+                        {currentPhase === 'aiteam' && (
+                            <div className="fade-in max-w-4xl mx-auto mt-8">
+                                <div className="text-center mb-10">
+                                    <div className="inline-block bg-green-900/30 border border-green-500/50 rounded-full px-4 py-1 text-green-400 font-mono text-sm mb-4">CRISIS AVERTED</div>
+                                    <h2 className="text-3xl font-bold text-white mb-4">Building Your AI Writing Team</h2>
+                                    <p className="text-xl text-gray-400">You successfully used your human agency to fix the AI's mistake. Now, let's learn how to use AI <em>correctly</em>: as a co-constructive, metacognitive partner.</p>
+                                </div>
+
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    <div className="bg-brandPanel border border-gray-700 rounded-lg p-6 space-y-4">
+                                        <h3 className="text-xl font-bold text-white flex items-center gap-2 border-b border-gray-700 pb-2">
+                                            <Bot className="text-blue-400"/> UNC Charlotte Enterprise Gemini
+                                        </h3>
+                                        <p className="text-gray-300 text-sm">
+                                            Open Gemini in a new tab. You will act as the "Manager" of this AI, assigning it specific roles to help you analyze your process. Do not let it write for you.
+                                        </p>
+                                        <a href="https://gemini.google.com" target="_blank" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-bold transition-colors">
+                                            Launch Gemini <ExternalLink />
+                                        </a>
+
+                                        <div className="mt-6 space-y-4">
+                                            <div className="bg-[#0f172a] p-4 rounded border border-gray-800">
+                                                <h4 className="text-teal-400 font-bold text-sm mb-2">Role 1: The Metacognitive Editor</h4>
+                                                <p className="text-xs text-gray-400 mb-2">Copy your draft and paste it into Gemini with this prompt:</p>
+                                                <div className="font-mono text-[11px] text-gray-300 bg-black/50 p-2 rounded select-all cursor-pointer border border-gray-700 hover:border-teal-500 transition-colors">
+                                                    "I am taking a First-Year writing class focusing on Rhetoric and Human Agency. Evaluate the tone of the email I just wrote to clinic directors regarding delayed supplies: [PASTE YOUR DRAFT HERE]. Do not rewrite it for me. Analyze my tone. Did I sound empathetic? Did I successfully avoid sounding like a 'stochastic probability machine'?"
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="bg-[#0f172a] p-4 rounded border border-gray-800">
+                                                <h4 className="text-purple-400 font-bold text-sm mb-2">Role 2: The Devil's Advocate</h4>
+                                                <p className="text-xs text-gray-400 mb-2">Ask Gemini to challenge your thinking:</p>
+                                                <div className="font-mono text-[11px] text-gray-300 bg-black/50 p-2 rounded select-all cursor-pointer border border-gray-700 hover:border-purple-500 transition-colors">
+                                                    "Act as a hostile clinic director who just received my email. Tell me 2 reasons why you might still be angry or skeptical of my apology. Push me to think critically about my rhetoric."
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-ninerGreen/10 border border-ninerGold/50 rounded-lg p-6 flex flex-col">
+                                        <h3 className="text-xl font-bold text-white mb-4">Week 1 Deliverable</h3>
+                                        <div className="flex-1 space-y-4 text-gray-300 text-sm">
+                                            <p>After interacting with Gemini using the prompts provided, head over to your main Canvas page to submit your assignment.</p>
+                                            <ul className="list-disc list-inside space-y-2 text-ninerGold">
+                                                <li><span className="text-gray-300">Submit a <strong>link or screenshot</strong> of your Gemini transcript.</span></li>
+                                                <li><span className="text-gray-300">Submit a <strong>500-word reflection</strong> answering:</span>
+                                                    <ul className="list-[circle] list-inside ml-6 mt-2 space-y-1 text-gray-400">
+                                                        <li>How did using AI as a "Metacognitive Editor" feel different than just having it generate text?</li>
+                                                        <li>What did you learn about your own "Human Agency" during the PR Crisis simulation?</li>
+                                                    </ul>
+                                                </li>
+                                                <li><span className="text-gray-300">Include a <strong>Transparent AI Statement</strong> detailing exactly how you collaborated with the tool.</span></li>
+                                            </ul>
+                                        </div>
+                                        <button 
+                                            onClick={() => alert("Simulation Complete! You may now exit this window and complete your reflection in Canvas.")}
+                                            className="w-full mt-6 bg-ninerGold hover:bg-[#8b7f55] text-white font-bold py-3 rounded transition-colors"
+                                        >
+                                            Acknowledge & Finish Simulation
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
