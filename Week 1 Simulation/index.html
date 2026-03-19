@@ -308,8 +308,12 @@
                                             <div className="bg-[#0f172a] p-4 rounded border border-gray-800">
                                                 <h4 className="text-teal-400 font-bold text-sm mb-2">Role 1: The Metacognitive Editor</h4>
                                                 <p className="text-xs text-gray-400 mb-2">Copy your draft and paste it into Gemini with this prompt:</p>
-                                                <div className="font-mono text-[11px] text-gray-300 bg-black/50 p-2 rounded select-all cursor-pointer border border-gray-700 hover:border-teal-500 transition-colors">
-                                                    "I am taking a First-Year writing class focusing on Rhetoric and Human Agency. Evaluate the tone of the email I just wrote to clinic directors regarding delayed supplies: [PASTE YOUR DRAFT HERE]. Do not rewrite it for me. Analyze my tone. Did I sound empathetic? Did I successfully avoid sounding like a 'stochastic probability machine'?"
+                                                <div className="font-mono text-[11px] text-gray-300 bg-black/50 p-2 rounded select-all cursor-pointer border border-gray-700 hover:border-teal-500 transition-colors whitespace-pre-wrap">
+                                                    "I am taking a First-Year writing class focusing on Rhetoric and Human Agency. Evaluate the tone of the email I just wrote to clinic directors regarding delayed supplies: 
+
+{userDraft}
+
+Do not rewrite it for me. Analyze my tone. Did I sound empathetic? Did I successfully avoid sounding like a 'stochastic probability machine'?"
                                                 </div>
                                             </div>
                                             
