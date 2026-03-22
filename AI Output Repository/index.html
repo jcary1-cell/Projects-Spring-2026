@@ -9,19 +9,37 @@
     <style>
         /* Print styling for physical interactive wall */
         @media print {
+            /* Hide UI elements */
             .no-print { display: none !important; }
-            .print-page { 
+            
+            /* Hide the interactive gallery grid during print */
+            #sampleContainer { display: none !important; }
+
+            /* Show the dedicated print container */
+            #printAllContainer { 
+                display: block !important; 
+            }
+
+            /* Format each sample as a full-page poster */
+            .print-poster { 
                 display: block !important;
                 page-break-after: always; 
-                font-size: 20pt !important;
-                line-height: 1.5;
                 padding: 2rem;
                 color: black !important;
+                border-bottom: 1px solid #eee;
+                min-height: 100vh;
             }
+            
             body { background: white !important; }
-            .modal-bg { position: static !important; background: white !important; display: block !important; box-shadow: none !important; }
+            
+            /* Ensure modal is hidden if open during print */
+            #modal { display: none !important; }
         }
         
+        @media screen {
+            #printAllContainer { display: none; }
+        }
+
         .ai-card:hover { transform: translateY(-2px); transition: all 0.2s; }
         
         /* Custom scrollbar for better UI */
@@ -40,8 +58,8 @@
                 <p class="opacity-80 font-medium">50 Prepared Samples for AI Literacy Workshops</p>
             </div>
             <div class="flex gap-3">
-                <button onclick="window.print()" class="bg-white/10 border border-white/20 text-white px-5 py-2 rounded-lg font-bold hover:bg-white/20 transition">
-                    Print Current View
+                <button onclick="window.print()" class="bg-indigo-600 border border-indigo-400 text-white px-5 py-2 rounded-lg font-bold hover:bg-indigo-500 transition shadow-sm">
+                    Print All (Full Form)
                 </button>
             </div>
         </div>
@@ -58,13 +76,16 @@
         <button id="btn-good" onclick="filterSamples('good')" class="filter-btn bg-white border border-slate-200 px-4 py-1.5 rounded-full font-medium hover:bg-indigo-50 transition">High-Quality Outputs</button>
     </nav>
 
-    <!-- Gallery Grid -->
+    <!-- Gallery Grid (Screen Only) -->
     <main class="max-w-6xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20" id="sampleContainer">
         <!-- JS will populate cards here -->
     </main>
 
-    <!-- Full Screen View Modal / Poster Template -->
-    <div id="modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center p-4 z-50 no-print modal-bg">
+    <!-- Print Only Container (Hidden on Screen) -->
+    <div id="printAllContainer"></div>
+
+    <!-- Full Screen View Modal / Poster Template (Screen Only) -->
+    <div id="modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center p-4 z-50 no-print">
         <div class="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 md:p-12 rounded-2xl relative shadow-2xl">
             <button onclick="closeModal()" class="absolute top-4 right-6 text-4xl text-slate-400 hover:text-slate-600 no-print transition">&times;</button>
             <div id="modalContent"></div>
@@ -95,7 +116,7 @@
 
             // HUMAN AUTHENTICITY
             { id: 17, cat: 'human', prompt: 'Write a text to my mom telling her I can\'t come for dinner.', output: 'Hey Mom, I\'m so sorry but I\'m literally buried in work and I don\'t think I can make it tonight. I feel terrible! Can we do Sunday instead? I\'ll bring the dessert. Love you!', note: 'High Authenticity: Uses "literally" (figuratively), enthusiastic punctuation, and casual phrasing.' },
-            { id: 18, cat: 'human', prompt: 'Write a review for a movie you hated.', output: 'I wanted to like this. I really did. But honestly? It was a mess. The acting was stiff, the plot made zero sense, and I actually checked my watch four times. Save your money.', note: 'Human Voice: Uses rhetorical questions ("But honestly?") and personal anecdotes ("checked my watch").' },
+            { id: 18, cat: 'human', prompt: 'Write a review for a movie you hated.', output: 'I wanted to like this. I really did. But honestly? It was a mess. The acting was mtiff, the plot made zero sense, and I actually checked my watch four times. Save your money.', note: 'Human Voice: Uses rhetorical questions ("But honestly?") and personal anecdotes ("checked my watch").' },
             { id: 19, cat: 'human', prompt: 'Explain why you are late to a meeting.', output: 'Look, there’s no excuse, but the 101 was a parking lot today. I left early and still got stuck. I’m walking in now—so sorry to keep everyone waiting.', note: 'Human Expression: Uses colloquialisms like "the 101 was a parking lot."' },
             { id: 20, cat: 'human', prompt: 'Write a poem about rain.', output: 'The sky is grey and full of gloom, / The flowers start to slowly bloom. / The water falls upon the street, / And cools the air from summer heat.', note: 'Low Authenticity: Very "AI-ish" rhyming scheme—simplistic AABB pattern that feels robotic and cliché.' },
             { id: 21, cat: 'human', prompt: 'Ask for a raise.', output: 'I’ve been thinking about my role lately. I love being part of the team, but looking at my contributions over the last year, I feel like my current salary doesn’t quite match the value I’m bringing. Can we chat about a market adjustment?', note: 'Authentic Softening: Uses phrases like "I\'ve been thinking" to ease into a difficult conversation.' },
@@ -137,12 +158,18 @@
         ];
 
         const container = document.getElementById('sampleContainer');
+        const printAllContainer = document.getElementById('printAllContainer');
         const modal = document.getElementById('modal');
         const modalContent = document.getElementById('modalContent');
 
         function displaySamples(data) {
+            // Update the screen gallery
             container.innerHTML = '';
+            // Update the hidden print container
+            printAllContainer.innerHTML = '';
+
             data.forEach(s => {
+                // Screen Card
                 const card = document.createElement('div');
                 card.className = `ai-card bg-white p-6 rounded-xl shadow-sm border border-slate-200 cursor-pointer flex flex-col justify-between hover:border-indigo-300 hover:shadow-md transition-all`;
                 card.onclick = () => openModal(s);
@@ -158,6 +185,32 @@
                     </div>
                 `;
                 container.appendChild(card);
+
+                // Print Poster (Hidden on screen)
+                const poster = document.createElement('div');
+                poster.className = `print-poster`;
+                poster.innerHTML = `
+                    <div style="margin-bottom: 2rem;">
+                        <span style="border: 2px solid black; padding: 4px 12px; font-weight: bold; text-transform: uppercase; font-size: 14pt;">${s.cat}</span>
+                        <span style="float: right; color: #666; font-weight: bold;">Sample #${s.id}</span>
+                    </div>
+                    
+                    <div style="border-left: 10px solid #ddd; padding-left: 2rem; margin-bottom: 3rem;">
+                        <h2 style="font-size: 16pt; color: #666; text-transform: uppercase; margin-bottom: 0.5rem;">The Prompt</h2>
+                        <p style="font-size: 26pt; font-weight: bold; font-style: italic;">"${s.prompt}"</p>
+                    </div>
+
+                    <div style="background: #f9f9f9; padding: 2.5rem; border-radius: 20px; border: 1px solid #ccc; margin-bottom: 3rem;">
+                        <h2 style="font-size: 16pt; color: #6366f1; text-transform: uppercase; margin-bottom: 1rem;">AI Generated Output</h2>
+                        <p style="font-size: 20pt; font-family: monospace; white-space: pre-wrap;">${s.output}</p>
+                    </div>
+                    
+                    <div style="margin-top: 4rem; padding-top: 2rem; border-top: 2px dashed #eee;">
+                        <h4 style="font-size: 14pt; color: #999; text-transform: uppercase; margin-bottom: 1rem;">Discussion Guide (For Instructor)</h4>
+                        <p style="font-size: 18pt; color: #444;">${s.note}</p>
+                    </div>
+                `;
+                printAllContainer.appendChild(poster);
             });
         }
 
@@ -182,35 +235,29 @@
 
         function openModal(sample) {
             modalContent.innerHTML = `
-                <div class="print-page">
-                    <div class="mb-6 no-print flex justify-between items-center">
-                        <span class="bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">${sample.cat}</span>
-                        <span class="text-slate-400 font-bold">Sample Poster #${sample.id}</span>
-                    </div>
-                    
-                    <div class="border-l-8 border-indigo-100 pl-6 mb-10">
-                        <h2 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-2">Original Prompt</h2>
-                        <p class="text-3xl font-bold text-slate-800 italic leading-tight">"${sample.prompt}"</p>
-                    </div>
+                <div class="mb-6 no-print flex justify-between items-center">
+                    <span class="bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">${sample.cat}</span>
+                    <span class="text-slate-400 font-bold">Sample Poster #${sample.id}</span>
+                </div>
+                
+                <div class="border-l-8 border-indigo-100 pl-6 mb-10">
+                    <h2 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-2">Original Prompt</h2>
+                    <p class="text-3xl font-bold text-slate-800 italic leading-tight">"${sample.prompt}"</p>
+                </div>
 
-                    <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 mb-10">
-                        <h2 class="text-sm font-black text-indigo-600 uppercase tracking-widest mb-4">AI-Generated Content</h2>
-                        <p class="text-2xl text-slate-900 font-mono leading-relaxed whitespace-pre-wrap">${sample.output}</p>
-                    </div>
-                    
-                    <div class="mt-12 p-8 bg-amber-50 rounded-2xl border-2 border-dashed border-amber-200 no-print">
-                        <h4 class="font-black text-amber-800 mb-3 uppercase tracking-widest text-xs">Instructor Discussion Key</h4>
-                        <p class="text-lg text-amber-900 leading-snug">${sample.note}</p>
-                    </div>
-                    
-                    <div class="mt-10 flex flex-wrap gap-4 no-print">
-                        <button onclick="window.print()" class="bg-indigo-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:bg-indigo-800 transition">Print This Poster</button>
-                        <button onclick="closeModal()" class="bg-slate-200 text-slate-700 px-8 py-4 rounded-xl font-bold hover:bg-slate-300 transition">Back to Repository</button>
-                    </div>
-
-                    <div class="hidden print:block mt-20 border-t-2 border-slate-100 pt-10 text-slate-300 text-sm italic">
-                        AI Literacy Workshop Materials • Physical Interactive Wall Space • Sample #${sample.id}
-                    </div>
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 mb-10">
+                    <h2 class="text-sm font-black text-indigo-600 uppercase tracking-widest mb-4">AI-Generated Content</h2>
+                    <p class="text-2xl text-slate-900 font-mono leading-relaxed whitespace-pre-wrap">${sample.output}</p>
+                </div>
+                
+                <div class="mt-12 p-8 bg-amber-50 rounded-2xl border-2 border-dashed border-amber-200 no-print">
+                    <h4 class="font-black text-amber-800 mb-3 uppercase tracking-widest text-xs">Instructor Discussion Key</h4>
+                    <p class="text-lg text-amber-900 leading-snug">${sample.note}</p>
+                </div>
+                
+                <div class="mt-10 flex flex-wrap gap-4 no-print">
+                    <button onclick="window.print()" class="bg-indigo-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:bg-indigo-800 transition">Print This Poster</button>
+                    <button onclick="closeModal()" class="bg-slate-200 text-slate-700 px-8 py-4 rounded-xl font-bold hover:bg-slate-300 transition">Back to Repository</button>
                 </div>
             `;
             modal.classList.remove('hidden');
