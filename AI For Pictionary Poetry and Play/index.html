@@ -134,13 +134,12 @@
     </header>
 
     <!-- Features Grid -->
-    <main class="max-w-7xl mx-auto px-6 py-10">
+    <main class="max-w-7xl mx-auto px-6 py-10 mb-20">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             <!-- Pic-to-Bot -->
             <section id="pictionary" class="glass-card p-8 rounded-[2.5rem] flex flex-col items-start">
                 <div class="robot-img-container">
-                    <!-- Placeholder: Update 'src' with your actual image path on GitHub -->
                     <img src="robot-pictionary.png" alt="Pic-to-Bot Robot" onerror="this.src='https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Pic-to-Bot+Robot'">
                 </div>
                 <span class="badge bg-blue-500/20 text-blue-300 border border-blue-500/30">Pictionary</span>
@@ -149,7 +148,7 @@
                     <h2 class="text-2xl font-bold">Pic-to-Bot</h2>
                 </div>
                 <p class="text-gray-400 mb-8 leading-relaxed text-sm">
-                    Collaborate with a vision-aware bot that doesn't just play Pictionary—it evolves your sketches into full masterpieces in real-time.
+                    A Gem for Drawing and Playing Pictionary. “Draw me a picture and I’ll guess what it is. C’mon, try to stump me!”
                 </p>
                 <div class="mt-auto w-full">
                     <a href="https://gemini.google.com/gem/11O2YexXTjLlT4Q9nlInRf6tZXG0xzxQG?usp=sharing" target="_blank" class="block w-full py-4 text-center rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all font-bold">
@@ -169,7 +168,7 @@
                     <h2 class="text-2xl font-bold">Chapter and Verse</h2>
                 </div>
                 <p class="text-gray-400 mb-8 leading-relaxed text-sm">
-                    A deep-thinking literary Gem designed to co-author intricate poetry and rhythmic prose based on your thematic prompts.
+                    A deep-thinking literary Gem designed to co-author intricate poetry and rhythmic prose based on your thematic prompts. Share an idea, a verse, a thought, a line or a heartbeat of life. We craft together.
                 </p>
                 <div class="mt-auto w-full">
                     <a href="https://gemini.google.com/gem/1yd5pLIGUA3GzpKYSI4Jivkb59U6U-sUp?usp=sharing" target="_blank" class="block w-full py-4 text-center rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all font-bold">
@@ -201,69 +200,32 @@
         </div>
     </main>
 
-    <!-- Call to Action -->
-    <section class="py-32 px-6">
-        <div class="max-w-5xl mx-auto glass-card p-16 rounded-[4rem] text-center relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-purple-500/20 blur-[100px]"></div>
-            <div class="relative z-10">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Join the Experiment</h2>
-                <p class="text-gray-400 mb-10 text-xl max-w-2xl mx-auto">
-                    Subscribe to get notified when new features are added to the <strong>AI for Pictionary, Poetry, and Play</strong> project.
-                </p>
-                <div id="status-container" class="mb-4 hidden">
-                    <div class="p-4 bg-purple-500/10 border border-purple-500/30 rounded-2xl">
-                        <p id="status-message" class="text-purple-400 font-bold"></p>
-                    </div>
-                </div>
-                <form id="waitlist-form" class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-                    <input type="email" placeholder="email@example.com" required class="flex-1 px-8 py-5 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-purple-500 transition-all text-lg">
-                    <button type="submit" class="px-10 py-5 bg-white text-black font-extrabold rounded-2xl hover:bg-purple-400 hover:text-white transition-all transform active:scale-95">
-                        Get Updates
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="py-16 px-6 border-t border-white/5 bg-black/50">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
             <div class="text-xl font-bold tracking-tighter uppercase">AI for <span class="text-purple-400">PPP</span></div>
-            <div class="flex gap-10 text-gray-500">
-                <a href="#" class="hover:text-white transition-colors">GitHub</a>
-                <a href="#" class="hover:text-white transition-colors">Discord</a>
-                <a href="#" class="hover:text-white transition-colors">Gemini API</a>
-            </div>
             <p class="text-gray-600 text-sm">&copy; 2026 AI for Pictionary, Poetry, and Play.</p>
         </div>
     </footer>
 
     <script>
-        // Form Handling
-        document.getElementById('waitlist-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const container = document.getElementById('status-container');
-            const msg = document.getElementById('status-message');
-            const form = document.getElementById('waitlist-form');
-            
-            form.style.opacity = '0';
-            setTimeout(() => {
-                form.style.display = 'none';
-                container.classList.remove('hidden');
-                msg.innerText = "Successfully added! Get ready for the mystery.";
-            }, 300);
-        });
-
         // Smooth scroll for anchors
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#' || !href.startsWith('#')) return;
+                
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if(target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                try {
+                    const target = document.querySelector(href);
+                    if(target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                } catch (err) {
+                    console.warn("Invalid selector:", href);
                 }
             });
         });
