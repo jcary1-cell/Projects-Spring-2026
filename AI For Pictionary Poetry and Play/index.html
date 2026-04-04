@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Pictionary, Poetry, and Play</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gem-blue: #4285f4;
+            --gem-purple: #9b72f3;
+            --gem-pink: #d96570;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        h1, h2, h3 {
+            font-family: 'Syne', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--gem-blue), var(--gem-purple), var(--gem-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-10px) scale(1.01);
+        }
+        .orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.2;
+            animation: float 25s infinite alternate;
+        }
+        @keyframes float {
+            0% { transform: translate(-10%, -10%); }
+            100% { transform: translate(20%, 15%); }
+        }
+        .section-icon {
+            font-size: 2.5rem;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+        }
+        .badge {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 99px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        .robot-img-container {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: rgba(255,255,255,0.05);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .robot-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .glass-card:hover .robot-img-container img {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Background Orbs -->
+    <div class="orb bg-blue-600 top-[-150px] left-[-150px]"></div>
+    <div class="orb bg-pink-600 bottom-[-150px] right-[-150px]"></div>
+    <div class="orb bg-purple-600 top-[40%] left-[30%] opacity-10"></div>
+
+    <!-- Navigation -->
+    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto relative z-20">
+        <div class="text-xl font-bold tracking-tighter uppercase">
+            AI for <span class="text-purple-400">Pictionary, Poetry, and Play</span>
+        </div>
+        <div class="hidden md:flex gap-10 text-sm font-medium uppercase tracking-widest text-gray-400">
+            <a href="#pictionary" class="hover:text-white transition-colors">Pic-to-Bot</a>
+            <a href="#poetry" class="hover:text-white transition-colors">Chapter & Verse</a>
+            <a href="#play" class="hover:text-white transition-colors">Daedalus Cave</a>
+        </div>
+        <button class="px-6 py-2 bg-white text-black font-bold rounded-full hover:bg-purple-400 hover:text-white transition-all text-sm">
+            Launch Portal
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="py-24 px-6 max-w-6xl mx-auto text-center">
+        <div class="inline-block px-4 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-bold tracking-widest uppercase mb-6 text-purple-300">
+            A Gemini-Powered Gem Collection
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-8 leading-[1.1]">
+            AI for <br class="hidden md:block">
+            <span class="gradient-text">Pictionary, Poetry, and Play</span>
+        </h1>
+        <p class="text-lg md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Three distinct experimental Gems exploring the boundaries of multimodal interaction, creative writing, and generative adventure.
+        </p>
+        <div class="flex flex-col md:flex-row gap-5 justify-center">
+            <a href="#pictionary" class="px-10 py-5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl font-bold hover:scale-105 transition-all shadow-lg shadow-purple-500/20">
+                Explore the Gems
+            </a>
+            <a href="#" class="px-10 py-5 glass-card rounded-2xl font-bold hover:bg-white/10 transition-all">
+                Project Overview
+            </a>
+        </div>
+    </header>
+
+    <!-- Features Grid -->
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Pic-to-Bot -->
+            <section id="pictionary" class="glass-card p-8 rounded-[2.5rem] flex flex-col items-start">
+                <div class="robot-img-container">
+                    <!-- Placeholder: Update 'src' with your actual image path on GitHub -->
+                    <img src="robot-pictionary.png" alt="Pic-to-Bot Robot" onerror="this.src='https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Pic-to-Bot+Robot'">
+                </div>
+                <span class="badge bg-blue-500/20 text-blue-300 border border-blue-500/30">Pictionary</span>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="section-icon">🤖🎨</div>
+                    <h2 class="text-2xl font-bold">Pic-to-Bot</h2>
+                </div>
+                <p class="text-gray-400 mb-8 leading-relaxed text-sm">
+                    Collaborate with a vision-aware bot that doesn't just play Pictionary—it evolves your sketches into full masterpieces in real-time.
+                </p>
+                <div class="mt-auto w-full">
+                    <a href="https://gemini.google.com/gem/11O2YexXTjLlT4Q9nlInRf6tZXG0xzxQG?usp=sharing" target="_blank" class="block w-full py-4 text-center rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all font-bold">
+                        Start Sketching
+                    </a>
+                </div>
+            </section>
+
+            <!-- Chapter and Verse -->
+            <section id="poetry" class="glass-card p-8 rounded-[2.5rem] flex flex-col items-start border-purple-500/20">
+                <div class="robot-img-container">
+                    <img src="robot-poetry.png" alt="Chapter and Verse Robot" onerror="this.src='https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Poetry+Robot'">
+                </div>
+                <span class="badge bg-purple-500/20 text-purple-300 border border-purple-500/30">Poetry</span>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="section-icon">📜✒️</div>
+                    <h2 class="text-2xl font-bold">Chapter and Verse</h2>
+                </div>
+                <p class="text-gray-400 mb-8 leading-relaxed text-sm">
+                    A deep-thinking literary Gem designed to co-author intricate poetry and rhythmic prose based on your thematic prompts.
+                </p>
+                <div class="mt-auto w-full">
+                    <a href="https://gemini.google.com/gem/1yd5pLIGUA3GzpKYSI4Jivkb59U6U-sUp?usp=sharing" target="_blank" class="block w-full py-4 text-center rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all font-bold">
+                        Compose Now
+                    </a>
+                </div>
+            </section>
+
+            <!-- Mystery of Daedalus Cave -->
+            <section id="play" class="glass-card p-8 rounded-[2.5rem] flex flex-col items-start border-pink-500/20">
+                <div class="robot-img-container">
+                    <img src="robot-play.png" alt="Daedalus Cave Robot" onerror="this.src='https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Adventure+Robot'">
+                </div>
+                <span class="badge bg-pink-500/20 text-pink-300 border border-pink-500/30">Play</span>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="section-icon">🗝️🌑</div>
+                    <h2 class="text-2xl font-bold">Mystery of Daedalus Cave</h2>
+                </div>
+                <p class="text-gray-400 mb-8 leading-relaxed text-sm">
+                    Step into an AI-driven text adventure where the labyrinth shifts with every decision you make. Can you escape the cave?
+                </p>
+                <div class="mt-auto w-full">
+                    <a href="https://gemini.google.com/gem/1Jp7uo5knnVk_E0ePBji1B6BvCghFkRtO?usp=sharing" target="_blank" class="block w-full py-4 text-center rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all font-bold">
+                        Enter the Cave
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Call to Action -->
+    <section class="py-32 px-6">
+        <div class="max-w-5xl mx-auto glass-card p-16 rounded-[4rem] text-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-purple-500/20 blur-[100px]"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Join the Experiment</h2>
+                <p class="text-gray-400 mb-10 text-xl max-w-2xl mx-auto">
+                    Subscribe to get notified when new features are added to the <strong>AI for Pictionary, Poetry, and Play</strong> project.
+                </p>
+                <div id="status-container" class="mb-4 hidden">
+                    <div class="p-4 bg-purple-500/10 border border-purple-500/30 rounded-2xl">
+                        <p id="status-message" class="text-purple-400 font-bold"></p>
+                    </div>
+                </div>
+                <form id="waitlist-form" class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+                    <input type="email" placeholder="email@example.com" required class="flex-1 px-8 py-5 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-purple-500 transition-all text-lg">
+                    <button type="submit" class="px-10 py-5 bg-white text-black font-extrabold rounded-2xl hover:bg-purple-400 hover:text-white transition-all transform active:scale-95">
+                        Get Updates
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 px-6 border-t border-white/5 bg-black/50">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-xl font-bold tracking-tighter uppercase">AI for <span class="text-purple-400">PPP</span></div>
+            <div class="flex gap-10 text-gray-500">
+                <a href="#" class="hover:text-white transition-colors">GitHub</a>
+                <a href="#" class="hover:text-white transition-colors">Discord</a>
+                <a href="#" class="hover:text-white transition-colors">Gemini API</a>
+            </div>
+            <p class="text-gray-600 text-sm">&copy; 2026 AI for Pictionary, Poetry, and Play.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Form Handling
+        document.getElementById('waitlist-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const container = document.getElementById('status-container');
+            const msg = document.getElementById('status-message');
+            const form = document.getElementById('waitlist-form');
+            
+            form.style.opacity = '0';
+            setTimeout(() => {
+                form.style.display = 'none';
+                container.classList.remove('hidden');
+                msg.innerText = "Successfully added! Get ready for the mystery.";
+            }, 300);
+        });
+
+        // Smooth scroll for anchors
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
