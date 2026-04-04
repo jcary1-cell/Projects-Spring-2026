@@ -70,8 +70,8 @@
         }
         .robot-img-container {
             width: 100%;
-            aspect-ratio: 4/5; /* Changed from 16/10 to be vertically longer */
-            background: rgba(255,255,255,0.05);
+            aspect-ratio: 4/5; 
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 1.5rem;
             overflow: hidden;
             margin-bottom: 1.5rem;
@@ -112,7 +112,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <header class="py-24 px-6 max-w-6xl mx-auto text-center">
+    <header class="py-20 px-6 max-w-6xl mx-auto text-center relative z-10">
         <div class="inline-block px-4 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-bold tracking-widest uppercase mb-6 text-purple-300">
             A Gemini-Powered Gem Collection
         </div>
@@ -120,9 +120,26 @@
             AI for <br class="hidden md:block">
             <span class="gradient-text">Pictionary, Poetry, and Play</span>
         </h1>
-        <p class="text-lg md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Three distinct experimental Gems exploring the boundaries of multimodal interaction, creative writing, and generative adventure.
-        </p>
+        
+        <!-- Revised Booth Experience Overview -->
+        <div class="max-w-4xl mx-auto mb-10">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4">Welcome to the Creative Lab</h2>
+            <p class="text-gray-400 text-lg leading-relaxed">
+                Unlock a new dimension of creativity where play, imagery, and poetry converge. Our booth experience invites you to rediscover the joy of collaboration through three unique AI "Gems." Whether you're bringing sketches to life, weaving lyrical verses from a single thought, or diving into an ever-evolving game, we offer a playground where technology serves your artistic spirit.
+            </p>
+        </div>
+
+        <!-- Directions Section -->
+        <div class="max-w-2xl mx-auto p-8 mb-12 glass-card rounded-3xl border-purple-500/20 text-center ring-1 ring-white/10">
+            <h3 class="text-white font-bold mb-3 uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                <span class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
+                How to Participate
+            </h3>
+            <p class="text-gray-300 leading-relaxed text-lg">
+                When you arrive at the booth, you will be able to play with your own <span class="text-purple-400 font-semibold">physical robot</span>. Simply scan the <span class="text-blue-400 font-semibold">QR code</span> on your robot to access these Gems and take your new AI companion home with you!
+            </p>
+        </div>
+
         <div class="flex flex-col md:flex-row gap-5 justify-center">
             <a href="#pictionary" class="px-10 py-5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl font-bold hover:scale-105 transition-all shadow-lg shadow-purple-500/20">
                 Explore the Gems
@@ -180,7 +197,7 @@
             <!-- Mystery of Daedalus Cave -->
             <section id="play" class="glass-card p-8 rounded-[2.5rem] flex flex-col items-start border-pink-500/20">
                 <div class="robot-img-container">
-                    <img src="robot-play.png" alt="Daedalus Cave Robot" onerror="this.src='https://via.placeholder.com/600x800/1e1e1e/ffffff?text=Adventure+Robot'">
+                    <img src="robot-play.png" alt="Daedalus Cave Robot" onerror="this.src='https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Adventure+Robot'">
                 </div>
                 <span class="badge bg-pink-500/20 text-pink-300 border border-pink-500/30">Play</span>
                 <div class="flex items-center gap-3 mb-2">
