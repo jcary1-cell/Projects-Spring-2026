@@ -12,12 +12,15 @@
             --gsole-purple: #934293;
             --gsole-green: #8cc63f;
             --gsole-dark-purple: #702e70;
-            --gsole-light-green: #f7fee7;
+            /* Updated for April: Fresher light green and a new spring lavender */
+            --gsole-light-green: #f0fce1; 
+            --gsole-spring-lavender: #fdfaff;
             --gsole-white: #ffffff;
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            /* Updated for April: A crisp spring-morning gray tint instead of standard gray */
+            background-color: #f0f4f8; 
             color: #1a1a1a;
         }
         .serif { font-family: 'Playfair Display', serif; }
@@ -26,7 +29,9 @@
             max-width: 1000px;
             margin: 2rem auto;
             background: var(--gsole-white);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            box-shadow: 0 20px 50px rgba(147, 66, 147, 0.05); /* Softer, slightly purple tinted shadow */
+            border-radius: 8px; /* Added slight rounding to the whole newsletter */
+            overflow: hidden;
         }
 
         .section-padding { padding: 4rem 3.5rem; }
@@ -88,13 +93,20 @@
         </header>
 
         <!-- Hero Section -->
-        <section class="section-padding">
-            <div class="grid md:grid-cols-12 gap-16">
+        <section class="section-padding bg-gradient-to-br from-white via-white to-[#fdfaff] relative overflow-hidden">
+            <!-- Subtle Spring Organic Shape -->
+            <div class="absolute top-0 right-0 -mr-10 -mt-10 opacity-20 pointer-events-none text-[#8cc63f]">
+                <svg width="300" height="300" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="currentColor" d="M45.7,-76.1C58.9,-69.3,69.1,-55.4,78.2,-41.2C87.3,-27,95.3,-13.5,93.6,-1.1C91.9,11.3,80.5,22.6,71.2,33.7C61.9,44.8,54.7,55.8,44.3,64.2C33.9,72.6,20.3,78.5,6.1,74.9C-8.1,71.3,-22.8,58.2,-34.5,47.8C-46.2,37.4,-54.9,29.7,-64.1,19.5C-73.3,9.3,-83.1,-3.5,-82.1,-15.3C-81.1,-27.1,-69.3,-38,-57.4,-46.6C-45.5,-55.2,-33.5,-61.5,-20.9,-67.2C-8.3,-72.9,4.9,-78,18.5,-78.9C32.1,-79.8,45.7,-76.1,45.7,-76.1Z" transform="translate(100 100)" />
+                </svg>
+            </div>
+
+            <div class="grid md:grid-cols-12 gap-16 relative z-10">
                 <div class="md:col-span-12 mb-4">
                     <h1 class="text-5xl md:text-7xl leading-tight mb-4">
                         A Decade of <span class="green-accent italic">Momentum.</span>
                     </h1>
-                    <div class="h-1.5 w-24 bg-[#8cc63f] mb-8"></div>
+                    <div class="h-1.5 w-24 bg-gradient-to-r from-[#8cc63f] to-[#a3e649] rounded-full mb-8"></div>
                     <p class="text-sm font-bold uppercase tracking-[0.25em] text-gray-400">A Message from President Amy Cicchino</p>
                 </div>
 
@@ -160,16 +172,16 @@
         </section>
 
         <!-- New Publications in Effective Practice -->
-        <section class="section-padding bg-[#fdfbff] border-y border-gray-100">
+        <section class="section-padding bg-gradient-to-b from-[#fdfbff] to-white border-y border-[var(--gsole-spring-lavender)]">
             <div class="max-w-4xl mx-auto">
                 <div class="text-center mb-12">
                     <p class="text-xs font-black text-[#8cc63f] uppercase tracking-widest mb-3">Fresh Insights</p>
                     <h2 class="text-4xl serif italic">New Publications in Effective Practice</h2>
-                    <div class="h-1 w-20 bg-[#934293] mx-auto mt-4"></div>
+                    <div class="h-1.5 w-20 bg-gradient-to-r from-[#934293] to-[#702e70] rounded-full mx-auto mt-4"></div>
                 </div>
                 
                 <div class="space-y-10">
-                    <div class="bg-white p-8 border-l-4 border-[#934293] shadow-sm">
+                    <div class="bg-white p-8 border-l-4 border-[#934293] rounded-r-xl shadow-[0_8px_30px_rgb(147,66,147,0.06)] hover:-translate-y-1 transition-transform duration-300">
                         <h4 class="text-lg font-bold text-gray-900 mb-2">A Little Goes a Long Way: Using Short, Informal Videos to Personalize and Build Classroom Community in Virtual Teaching Environments</h4>
                         <p class="text-sm text-[#8cc63f] font-bold mb-3 uppercase tracking-wider">Scott Ortolano | Effective Practices</p>
                         
@@ -186,19 +198,19 @@
                             <a href="http://www.SOrtolano.com" target="_blank" rel="noopener noreferrer" class="hover:text-[#934293]">www.SOrtolano.com</a>
                         </div>
 
-                        <a href="https://gsole.org/olor/ep/2026.02.20/" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase text-[#934293] border-b border-[#8cc63f] pb-1">Read Article →</a>
+                        <a href="https://gsole.org/olor/ep/2026.02.20/" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase text-[#934293] border-b border-[#8cc63f] pb-1 hover:text-[#702e70] transition-colors">Read Article →</a>
                     </div>
 
-                    <div class="bg-white p-8 border-l-4 border-[#934293] shadow-sm">
+                    <div class="bg-white p-8 border-l-4 border-[#934293] rounded-r-xl shadow-[0_8px_30px_rgb(147,66,147,0.06)] hover:-translate-y-1 transition-transform duration-300">
                         <h4 class="text-lg font-bold text-gray-900 mb-2">Review of Multimedia in the College Classroom: Improve Learning and Connect with Students in Online and Hybrid Courses</h4>
                         <p class="text-sm text-[#8cc63f] font-bold mb-3 uppercase tracking-wider">Cat S. Williams-Monardes | Book Review</p>
-                        <a href="https://gsole.org/olor/reviews2026.02.11/" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase text-[#934293] border-b border-[#8cc63f] pb-1">Read Review →</a>
+                        <a href="https://gsole.org/olor/reviews2026.02.11/" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase text-[#934293] border-b border-[#8cc63f] pb-1 hover:text-[#702e70] transition-colors">Read Review →</a>
                     </div>
 
-                    <div class="bg-white p-8 border-l-4 border-[#934293] shadow-sm">
+                    <div class="bg-white p-8 border-l-4 border-[#934293] rounded-r-xl shadow-[0_8px_30px_rgb(147,66,147,0.06)] hover:-translate-y-1 transition-transform duration-300">
                         <h4 class="text-lg font-bold text-gray-900 mb-2">Review of Better Practices: Exploring the Teaching of Writing in Online and Hybrid Spaces</h4>
                         <p class="text-sm text-[#8cc63f] font-bold mb-3 uppercase tracking-wider">Brian Harrell | Book Review</p>
-                        <a href="https://gsole.org/olor/reviews/2026.01.20/" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase text-[#934293] border-b border-[#8cc63f] pb-1">Read Review →</a>
+                        <a href="https://gsole.org/olor/reviews/2026.01.20/" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase text-[#934293] border-b border-[#8cc63f] pb-1 hover:text-[#702e70] transition-colors">Read Review →</a>
                     </div>
                 </div>
             </div>
@@ -226,17 +238,17 @@
             <div class="max-w-4xl mx-auto">
                 <div class="text-center mb-12">
                     <h2 class="text-4xl serif italic mb-4">GSOLE Grants & Awards</h2>
-                    <div class="h-1 w-20 bg-[#8cc63f] mx-auto mb-6"></div>
+                    <div class="h-1.5 w-20 bg-gradient-to-r from-[#8cc63f] to-[#a3e649] rounded-full mx-auto mb-6"></div>
                     <p class="text-gray-600 max-w-2xl mx-auto">GSOLE is proud to support research and excellence in online literacy education through our annual grants and awards programs.</p>
                 </div>
                 
                 <div class="grid md:grid-cols-2 gap-8 mb-12">
-                    <div class="bg-gray-50 p-8 border-l-4 border-[#934293] rounded-r-lg">
+                    <div class="bg-[var(--gsole-spring-lavender)] p-8 border-l-4 border-[#934293] rounded-r-lg">
                         <h4 class="font-black text-xs uppercase tracking-widest text-[#934293] mb-3">Research & Scholarship</h4>
                         <h3 class="text-xl font-bold mb-4">Beth Hewett Dissertation Award</h3>
                         <p class="text-sm text-gray-600 leading-relaxed mb-6">Recognizing outstanding dissertation research that contributes to the field of online literacy education, particularly studies focusing on pedagogy and inclusive practice.</p>
                     </div>
-                    <div class="bg-gray-50 p-8 border-l-4 border-[#8cc63f] rounded-r-lg">
+                    <div class="bg-[var(--gsole-light-green)] p-8 border-l-4 border-[#8cc63f] rounded-r-lg">
                         <h4 class="font-black text-xs uppercase tracking-widest text-[#8cc63f] mb-3">Teaching & Practice</h4>
                         <h3 class="text-xl font-bold mb-4">Scott Warnock Practitioner Award</h3>
                         <p class="text-sm text-gray-600 leading-relaxed mb-6">Celebrating excellence in the daily practice of OLI, awarded to those whose instructional materials and course design demonstrate exceptional commitment to student success.</p>
@@ -287,40 +299,40 @@
 
         <!-- Grid: Education & Salons -->
         <section class="grid md:grid-cols-2 border-t border-gray-100">
-            <div class="p-14 border-r border-gray-100 bg-[#fdfbff]">
+            <div class="p-14 border-r border-gray-100 bg-[#fdfbff] transition-colors hover:bg-white">
                 <h3 class="text-2xl mb-6">Basic OLI Certification</h3>
                 <p class="text-sm text-gray-600 mb-8 leading-relaxed">The Basic OLI Certification program offers eight month-long courses facilitated by experts. Register for a single module ($25) or enroll in the full certification for a 3-year window.</p>
-                <a href="https://gsole.org/certification" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase tracking-widest text-[#8cc63f]">Enrollment Details →</a>
+                <a href="https://gsole.org/certification" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase tracking-widest text-[#8cc63f] hover:text-[#934293] transition-colors">Enrollment Details →</a>
             </div>
-            <div class="p-14">
+            <div class="p-14 transition-colors hover:bg-white">
                 <h3 class="text-2xl mb-6">Community Engagement</h3>
                 <p class="text-sm text-gray-600 mb-8 leading-relaxed">Beyond our formal events, GSOLE thrives on the daily interactions between members in our forums and working groups. Get involved today!</p>
-                <a href="https://gsole.org/members/getinvolved" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase tracking-widest text-[#8cc63f]">Ways to Get Involved →</a>
+                <a href="https://gsole.org/members/getinvolved" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase tracking-widest text-[#8cc63f] hover:text-[#934293] transition-colors">Ways to Get Involved →</a>
             </div>
         </section>
 
         <!-- Publication Alert -->
-        <section class="section-padding bg-gray-50">
+        <section class="section-padding bg-gradient-to-tr from-[var(--gsole-light-green)] via-white to-white border-y border-[var(--gsole-spring-lavender)]">
             <div class="text-center mb-16">
                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Scholarship Spotlight</p>
                 <h2 class="text-4xl serif italic">New Publications Alert</h2>
             </div>
             <div class="grid md:grid-cols-2 gap-10">
-                <div class="bg-white p-10 border-t-4 border-[#934293] shadow-sm">
+                <div class="bg-white p-10 border-t-4 border-[#934293] rounded-b-xl shadow-[0_8px_30px_rgb(147,66,147,0.06)] hover:-translate-y-1 transition-transform duration-300">
                     <p class="text-[10px] font-bold text-[#8cc63f] uppercase mb-3">ROLE Issue 4.2 (2025)</p>
                     <h4 class="text-xl font-bold mb-4 serif italic text-[#934293]">Tribute to Michael Greer</h4>
                     <p class="text-sm text-gray-600 mb-6 leading-relaxed">
                         The latest issue of Research in Online Literacy Educators (ROLE) is now available! Issue 4.2 (2025) is a tribute to ROLE’s founding editor, Michael Greer, and the values he held dear: access, student agency, and the ability of online educators to respond to emerging writing technologies. Please check out this issue and celebrate our contributing authors: Jessie Borgman, Casey McArdle, Ann Marie Francis, Heidi McCauley, Cat Mahaffey, Justin Cary, and Jason Snart.
                     </p>
-                    <a href="https://gsole.org/olor/role/2025/" target="_blank" rel="noopener noreferrer" class="text-xs font-black text-[#934293] uppercase tracking-widest underline decoration-[#8cc63f] decoration-2">Read ROLE 4.2</a>
+                    <a href="https://gsole.org/olor/role/2025/" target="_blank" rel="noopener noreferrer" class="text-xs font-black text-[#934293] uppercase tracking-widest underline decoration-[#8cc63f] decoration-2 hover:text-[#702e70] transition-colors">Read ROLE 4.2</a>
                 </div>
-                <div class="bg-white p-10 border-t-4 border-[#934293] shadow-sm">
+                <div class="bg-white p-10 border-t-4 border-[#934293] rounded-b-xl shadow-[0_8px_30px_rgb(147,66,147,0.06)] hover:-translate-y-1 transition-transform duration-300">
                     <p class="text-[10px] font-bold text-[#8cc63f] uppercase mb-3">OLOR Reviews Piece (2026)</p>
                     <h4 class="text-xl font-bold mb-4 serif italic text-[#934293]">Reframing Online Writing Pedagogy</h4>
                     <p class="text-sm text-gray-600 mb-6 leading-relaxed italic">
                         Harrell, B. (2026). Reframing Online Writing Pedagogy: Review of Better Practices: Exploring the Teaching of Writing in Online and Hybrid Spaces. OLOR Reviews.
                     </p>
-                    <a href="https://gsole.org/olor/reviews/2026.01.20/" target="_blank" rel="noopener noreferrer" class="text-xs font-black text-[#934293] uppercase tracking-widest underline decoration-[#8cc63f] decoration-2">Read the Review</a>
+                    <a href="https://gsole.org/olor/reviews/2026.01.20/" target="_blank" rel="noopener noreferrer" class="text-xs font-black text-[#934293] uppercase tracking-widest underline decoration-[#8cc63f] decoration-2 hover:text-[#702e70] transition-colors">Read the Review</a>
                 </div>
             </div>
         </section>
@@ -350,7 +362,7 @@
         </section>
 
         <!-- Present Your Work Section -->
-        <section class="section-padding bg-gray-50 border-b border-gray-100">
+        <section class="section-padding bg-[var(--gsole-spring-lavender)] border-b border-gray-100">
             <div class="max-w-4xl mx-auto">
                 <div class="flex flex-col md:flex-row gap-12 items-start">
                     <div class="md:w-1/3">
@@ -369,10 +381,12 @@
         </section>
 
         <!-- GSOLE-GO Recruitment -->
-        <section class="bg-[#934293] text-white section-padding relative overflow-hidden">
+        <section class="bg-gradient-to-r from-[#934293] to-[#702e70] text-white section-padding relative overflow-hidden">
             <div class="absolute top-0 right-0 opacity-10 pointer-events-none -mr-20 -mt-20">
                 <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="200" cy="200" r="200" fill="currentColor"/>
+                    <circle cx="200" cy="200" r="150" fill="transparent" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="200" cy="200" r="100" fill="transparent" stroke="currentColor" stroke-width="2"/>
                 </svg>
             </div>
             
