@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Art on the Mart - Interactive Fluid</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050505;
+            touch-action: none; /* Prevents scroll on mobile */
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #ui {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: rgba(255, 255, 255, 0.95);
+            font-family: 'Montserrat', sans-serif;
+            pointer-events: none;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+            z-index: 10;
+            user-select: none;
+        }
+
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        p {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 15px;
+            opacity: 0.85;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <h1>Digital Canvas</h1>
+        <p>Hover or touch to interact with the fluid projection.</p>
+    </div>
+    <canvas id="glcanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('glcanvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+        if (!gl) {
+            alert('WebGL not supported in your browser.');
+        }
+
+        // --------------------------------------------------------
+        // SHADERS
+        // --------------------------------------------------------
+
+        const vsSource = `
+            attribute vec2 position;
+            varying vec2 vUv;
+            void main() {
+                vUv = position * 0.5 + 0.5;
+                gl_Position = vec4(position, 0.0, 1.0);
+            }
+        `;
+
+        // Calculates the next frame of the water ripples using the 2D wave equation
+        const simFsSource = `
+            precision highp float;
+            uniform sampler2D uCurrent;
+            uniform sampler2D uPrevious;
+            uniform vec2 uDelta;
+            uniform float uAspect;
+            uniform vec3 uMouse;
+            varying vec2 vUv;
+
+            void main() {
+                // Read neighbor pixels
+                float c = texture2D(uCurrent, vUv).r;
+                float p = texture2D(uPrevious, vUv).r;
+                float t = texture2D(uCurrent, vUv + vec2(0.0, uDelta.y)).r;
+                float b = texture2D(uCurrent, vUv + vec2(0.0, -uDelta.y)).r;
+                float l = texture2D(uCurrent, vUv + vec2(-uDelta.x, 0.0)).r;
+                float r = texture2D(uCurrent, vUv + vec2(uDelta.x, 0.0)).r;
+                
+                // Unpack from 0..1 to -1..1
+                c = (c - 0.5) * 2.0;
+                p = (p - 0.5) * 2.0;
+                t = (t - 0.5) * 2.0;
+                b = (b - 0.5) * 2.0;
+                l = (l - 0.5) * 2.0;
+                r = (r - 0.5) * 2.0;
+
+                // Wave equation
+                float next = (t + b + l + r) / 2.0 - p;
+                next *= 0.99; // Damping/friction
+                
+                // Mouse interaction
+                if (uMouse.z > 0.0) {
+                    vec2 diff = vUv - uMouse.xy;
+                    diff.x *= uAspect;
+                    float dist = length(diff);
+                    float radius = 0.015;
+                    if (dist < radius) {
+                        float drop = smoothstep(radius, 0.0, dist);
+                        next -= drop * uMouse.z; 
+                    }
+                }
+                
+                // Pack back to 0..1
+                float outVal = (next / 2.0) + 0.5;
+                gl_FragColor = vec4(outVal, 0.5, 0.5, 1.0);
+            }
+        `;
+
+        // Draws the vibrant background and refracts it based on the ripple heightmap
+        const renderFsSource = `
+            precision highp float;
+            uniform sampler2D uWater;
+            uniform vec2 uDelta;
+            uniform float uTime;
+            uniform float uAspect;
+            varying vec2 vUv;
+
+            // Procedural vibrant artwork
+            vec3 getBackground(vec2 uv) {
+                vec2 p = uv * 2.0 - 1.0;
+                p.x *= uAspect;
+                
+                float t = uTime * 0.15;
+                
+                // Fluid organic noise
+                float n1 = sin(p.x * 2.5 + t) * cos(p.y * 2.5 + t * 0.8);
+                float n2 = sin(p.x * -3.0 + t * 1.2) * cos(p.y * 1.5 - t * 0.5);
+                float n3 = sin(p.x * 1.5 + p.y * 2.0 - t * 1.5);
+                
+                // Vivid palette (Cyberpunk / Projection mapping style)
+                vec3 c1 = vec3(0.02, 0.08, 0.25); // Deep night blue
+                vec3 c2 = vec3(0.95, 0.1, 0.4);   // Vivid magenta
+                vec3 c3 = vec3(0.0, 0.9, 0.85);   // Neon cyan
+                vec3 c4 = vec3(0.4, 0.0, 0.9);    // Deep purple
+                
+                // Blend colors based on noise
+                vec3 color = mix(c1, c4, (n1 + 1.0) * 0.5);
+                color = mix(color, c3, smoothstep(-0.5, 0.5, n2 + n3 * 0.5));
+                color = mix(color, c2, smoothstep(0.2, 1.0, n1 * n2));
+                
+                // Add sweeping light beams
+                float beam = sin(p.x * 5.0 + t * 2.0) * cos(p.y * 3.0 - t);
+                color += smoothstep(0.7, 1.0, beam) * c3 * 0.4;
+                
+                // Subtle building window grid (Homage to Art on the Mart facade)
+                vec2 gridUv = uv * vec2(80.0 * uAspect, 80.0);
+                float grid = step(0.85, fract(gridUv.x)) * step(0.85, fract(gridUv.y));
+                color += grid * vec3(0.1, 0.15, 0.25); 
+                
+                return color;
+            }
+
+            void main() {
+                // Sample heights
+                float c = texture2D(uWater, vUv).r;
+                float r = texture2D(uWater, vUv + vec2(uDelta.x, 0.0)).r;
+                float t = texture2D(uWater, vUv + vec2(0.0, uDelta.y)).r;
+                
+                c = (c - 0.5) * 2.0;
+                r = (r - 0.5) * 2.0;
+                t = (t - 0.5) * 2.0;
+                
+                // Surface gradients
+                float dx = r - c;
+                float dy = t - c;
+                
+                // Refract UVs using gradient
+                vec2 offset = vec2(dx, dy) * 1.0; 
+                vec2 bgUv = vUv + offset;
+                
+                vec3 color = getBackground(bgUv);
+                
+                // Lighting calculation for water specular shine
+                vec3 lightDir = normalize(vec3(0.5, 1.0, 2.0));
+                vec3 normal = normalize(vec3(-dx * 20.0, -dy * 20.0, 1.0));
+                
+                float diff = max(0.0, dot(normal, lightDir));
+                float spec = pow(diff, 50.0);
+                
+                // Apply specular reflection and shadow depth
+                color += spec * vec3(1.0, 0.9, 0.9) * 1.2;
+                color -= max(0.0, -c * 1.0); 
+                color += max(0.0, c * 0.3); 
+                
+                gl_FragColor = vec4(color, 1.0);
+            }
+        `;
+
+        // --------------------------------------------------------
+        // WEBGL SETUP
+        // --------------------------------------------------------
+
+        function compileShader(type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error(gl.getShaderInfoLog(shader));
+            }
+            return shader;
+        }
+
+        function createProgram(vs, fs) {
+            const program = gl.createProgram();
+            gl.attachShader(program, compileShader(gl.VERTEX_SHADER, vs));
+            gl.attachShader(program, compileShader(gl.FRAGMENT_SHADER, fs));
+            gl.linkProgram(program);
+            return program;
+        }
+
+        const programSim = createProgram(vsSource, simFsSource);
+        const programRender = createProgram(vsSource, renderFsSource);
+
+        // Quad buffer
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -1, -1,   1, -1,   -1,  1,   1,  1
+        ]), gl.STATIC_DRAW);
+
+        // Framebuffer setup for simulation
+        const simRes = 1024; // High resolution for smooth ripples
+        function createFBO() {
+            const tex = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, tex);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            
+            // Neutral height is 0.5 (128 in 8-bit)
+            const data = new Uint8Array(simRes * simRes * 4);
+            for(let i = 0; i < data.length; i += 4) {
+                data[i] = 128;   // R
+                data[i+1] = 128; // G
+                data[i+2] = 128; // B
+                data[i+3] = 255; // A
+            }
+            
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, simRes, simRes, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+            
+            const fbo = gl.createFramebuffer();
+            gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+            
+            return { fbo, tex };
+        }
+
+        // We use 3 FBOs to prevent read/write feedback loop errors
+        let fboCur = createFBO();
+        let fboPrev = createFBO();
+        let fboNext = createFBO();
+
+        // Uniform locations mapping
+        const simUniforms = {
+            uCurrent: gl.getUniformLocation(programSim, "uCurrent"),
+            uPrevious: gl.getUniformLocation(programSim, "uPrevious"),
+            uDelta: gl.getUniformLocation(programSim, "uDelta"),
+            uAspect: gl.getUniformLocation(programSim, "uAspect"),
+            uMouse: gl.getUniformLocation(programSim, "uMouse"),
+            position: gl.getAttribLocation(programSim, "position")
+        };
+
+        const renderUniforms = {
+            uWater: gl.getUniformLocation(programRender, "uWater"),
+            uDelta: gl.getUniformLocation(programRender, "uDelta"),
+            uTime: gl.getUniformLocation(programRender, "uTime"),
+            uAspect: gl.getUniformLocation(programRender, "uAspect"),
+            position: gl.getAttribLocation(programRender, "position")
+        };
+
+        // --------------------------------------------------------
+        // INTERACTION & SIZING
+        // --------------------------------------------------------
+
+        let currentDrop = null;
+        let isMouseDown = false;
+        let lastMoveTime = Date.now();
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function addDrop(x, y, isClick) {
+            currentDrop = {
+                x: x / window.innerWidth,
+                y: 1.0 - (y / window.innerHeight),
+                z: isClick ? 0.12 : 0.04
+            };
+            lastMoveTime = Date.now();
+        }
+
+        window.addEventListener('mousemove', (e) => addDrop(e.clientX, e.clientY, isMouseDown));
+        window.addEventListener('mousedown', (e) => { isMouseDown = true; addDrop(e.clientX, e.clientY, true); });
+        window.addEventListener('mouseup', () => isMouseDown = false);
+        
+        window.addEventListener('touchmove', (e) => addDrop(e.touches[0].clientX, e.touches[0].clientY, true));
+        window.addEventListener('touchstart', (e) => addDrop(e.touches[0].clientX, e.touches[0].clientY, true));
+
+        // Auto-drip when idle to keep the canvas feeling alive
+        setInterval(() => {
+            if (Date.now() - lastMoveTime > 2000 && !currentDrop && Math.random() > 0.4) {
+                currentDrop = {
+                    x: 0.1 + Math.random() * 0.8,
+                    y: 0.1 + Math.random() * 0.8,
+                    z: 0.05 + Math.random() * 0.06
+                };
+            }
+        }, 400);
+
+        // Initial welcome splashes
+        setTimeout(() => currentDrop = { x: 0.5, y: 0.5, z: 0.15 }, 200);
+        setTimeout(() => currentDrop = { x: 0.4, y: 0.6, z: 0.1 }, 400);
+        setTimeout(() => currentDrop = { x: 0.6, y: 0.4, z: 0.1 }, 600);
+
+        // --------------------------------------------------------
+        // RENDER LOOP
+        // --------------------------------------------------------
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // --- 1. SIMULATION PASS ---
+            gl.useProgram(programSim);
+            gl.bindFramebuffer(gl.FRAMEBUFFER, fboNext.fbo);
+            gl.viewport(0, 0, simRes, simRes);
+            
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, fboCur.tex);
+            gl.uniform1i(simUniforms.uCurrent, 0);
+            
+            gl.activeTexture(gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_2D, fboPrev.tex);
+            gl.uniform1i(simUniforms.uPrevious, 1);
+            
+            gl.uniform2f(simUniforms.uDelta, 1.0 / simRes, 1.0 / simRes);
+            gl.uniform1f(simUniforms.uAspect, canvas.width / canvas.height);
+            
+            if (currentDrop) {
+                gl.uniform3f(simUniforms.uMouse, currentDrop.x, currentDrop.y, currentDrop.z);
+                currentDrop = null;
+            } else {
+                gl.uniform3f(simUniforms.uMouse, 0, 0, 0);
+            }
+            
+            gl.enableVertexAttribArray(simUniforms.position);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.vertexAttribPointer(simUniforms.position, 2, gl.FLOAT, false, 0, 0);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            
+            // Swap FBOs (Next becomes Current, Current becomes Previous)
+            let temp = fboPrev;
+            fboPrev = fboCur;
+            fboCur = fboNext;
+            fboNext = temp;
+            
+            // --- 2. RENDER PASS ---
+            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.useProgram(programRender);
+            
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, fboCur.tex);
+            gl.uniform1i(renderUniforms.uWater, 0);
+            
+            gl.uniform2f(renderUniforms.uDelta, 1.0 / simRes, 1.0 / simRes);
+            gl.uniform1f(renderUniforms.uTime, performance.now() / 1000.0);
+            gl.uniform1f(renderUniforms.uAspect, canvas.width / canvas.height);
+            
+            gl.enableVertexAttribArray(renderUniforms.position);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.vertexAttribPointer(renderUniforms.position, 2, gl.FLOAT, false, 0, 0);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
