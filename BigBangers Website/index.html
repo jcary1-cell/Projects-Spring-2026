@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Art on the Mart - Interactive Fluid</title>
+    <title>Interactive Fluid</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap');
 
@@ -165,7 +165,7 @@
                 float beam = sin(p.x * 5.0 + t * 2.0) * cos(p.y * 3.0 - t);
                 color += smoothstep(0.7, 1.0, beam) * c3 * 0.4;
                 
-                // Subtle building window grid (Homage to Art on the Mart facade)
+                // Subtle building window grid
                 vec2 gridUv = uv * vec2(80.0 * uAspect, 80.0);
                 float grid = step(0.85, fract(gridUv.x)) * step(0.85, fract(gridUv.y));
                 color += grid * vec3(0.1, 0.15, 0.25); 
