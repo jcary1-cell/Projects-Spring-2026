@@ -49,6 +49,25 @@
             font-size: 15px;
             opacity: 0.85;
             letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            pointer-events: auto; /* Allow clicking */
+            backdrop-filter: blur(4px);
+        }
+
+        .upload-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
         }
     </style>
 </head>
@@ -56,6 +75,8 @@
     <div id="ui">
         <h1>Digital Canvas</h1>
         <p>Hover or touch to interact with the fluid projection.</p>
+        <label for="bg-upload" class="upload-btn">Upload Custom Background</label>
+        <input type="file" id="bg-upload" accept="image/*" style="display: none;">
     </div>
     <canvas id="glcanvas"></canvas>
 
@@ -133,13 +154,16 @@
         const renderFsSource = `
             precision highp float;
             uniform sampler2D uWater;
+            uniform sampler2D uBgImage;
+            uniform float uHasImage;
+            uniform float uImageAspect;
             uniform vec2 uDelta;
             uniform float uTime;
             uniform float uAspect;
             varying vec2 vUv;
 
             // Procedural vibrant artwork
-            vec3 getBackground(vec2 uv) {
+            vec3 getProceduralBackground(vec2 uv) {
                 vec2 p = uv * 2.0 - 1.0;
                 p.x *= uAspect;
                 
@@ -191,7 +215,25 @@
                 vec2 offset = vec2(dx, dy) * 1.0; 
                 vec2 bgUv = vUv + offset;
                 
-                vec3 color = getBackground(bgUv);
+                vec3 color;
+                
+                if (uHasImage > 0.5) {
+                    // Object-fit: cover logic for custom image
+                    vec2 scale = vec2(1.0);
+                    if (uAspect > uImageAspect) {
+                        scale.y = uImageAspect / uAspect;
+                    } else {
+                        scale.x = uAspect / uImageAspect;
+                    }
+                    vec2 texUv = (bgUv - 0.5) * scale + 0.5;
+                    
+                    // Clamp to prevent edge bleeding on strong refractions
+                    texUv = clamp(texUv, 0.0, 1.0);
+                    
+                    color = texture2D(uBgImage, texUv).rgb;
+                } else {
+                    color = getProceduralBackground(bgUv);
+                }
                 
                 // Lighting calculation for water specular shine
                 vec3 lightDir = normalize(vec3(0.5, 1.0, 2.0));
@@ -286,6 +328,9 @@
 
         const renderUniforms = {
             uWater: gl.getUniformLocation(programRender, "uWater"),
+            uBgImage: gl.getUniformLocation(programRender, "uBgImage"),
+            uHasImage: gl.getUniformLocation(programRender, "uHasImage"),
+            uImageAspect: gl.getUniformLocation(programRender, "uImageAspect"),
             uDelta: gl.getUniformLocation(programRender, "uDelta"),
             uTime: gl.getUniformLocation(programRender, "uTime"),
             uAspect: gl.getUniformLocation(programRender, "uAspect"),
@@ -299,6 +344,36 @@
         let currentDrop = null;
         let isMouseDown = false;
         let lastMoveTime = Date.now();
+
+        // Custom Background Image Setup
+        let hasImage = 0.0;
+        let imageAspect = 1.0;
+        const bgTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, bgTexture);
+        // Bind an initial 1x1 empty texture so WebGL doesn't complain before upload
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
+
+        document.getElementById('bg-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    imageAspect = img.width / img.height;
+                    gl.bindTexture(gl.TEXTURE_2D, bgTexture);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+                    hasImage = 1.0;
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
 
         function resize() {
             const dpr = window.devicePixelRatio || 1;
@@ -391,6 +466,13 @@
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, fboCur.tex);
             gl.uniform1i(renderUniforms.uWater, 0);
+            
+            // Bind Custom Background Texture
+            gl.activeTexture(gl.TEXTURE2);
+            gl.bindTexture(gl.TEXTURE_2D, bgTexture);
+            gl.uniform1i(renderUniforms.uBgImage, 2);
+            gl.uniform1f(renderUniforms.uHasImage, hasImage);
+            gl.uniform1f(renderUniforms.uImageAspect, imageAspect);
             
             gl.uniform2f(renderUniforms.uDelta, 1.0 / simRes, 1.0 / simRes);
             gl.uniform1f(renderUniforms.uTime, performance.now() / 1000.0);
