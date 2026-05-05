@@ -1,0 +1,271 @@
+import React, { useState, useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { 
+  getAuth, 
+  signInAnonymously, 
+  signInWithCustomToken, 
+  onAuthStateChanged 
+} from 'firebase/auth';
+import { 
+  getFirestore, 
+  collection, 
+  doc, 
+  onSnapshot, 
+  updateDoc, 
+  setDoc, 
+  deleteDoc, 
+  getDocs 
+} from 'firebase/firestore';
+import { Users, AlertTriangle, ShieldCheck, Trash2, Plus, RefreshCw, Info } from 'lucide-react';
+
+// --- Firebase Configuration ---
+const firebaseConfig = JSON.parse(__firebase_config);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'ai-ethics-workshop';
+
+const CATEGORIES = [
+  { id: 'unassigned', label: 'Unassigned', color: 'bg-slate-100', icon: Info },
+  { id: 'responsible', label: 'Responsible', color: 'bg-emerald-50 border-emerald-200', text: 'text-emerald-700', icon: ShieldCheck },
+  { id: 'risky', label: 'Risky', color: 'bg-amber-50 border-amber-200', text: 'text-amber-700', icon: AlertTriangle },
+  { id: 'irresponsible', label: 'Irresponsible', color: 'bg-rose-50 border-rose-200', text: 'text-rose-700', icon: Trash2 },
+];
+
+const INITIAL_CARDS = [
+  { id: '1', text: 'Use AI to grade student essays', category: 'unassigned' },
+  { id: '2', text: 'AI-driven medical diagnosis tool', category: 'unassigned' },
+  { id: '3', text: 'Facial recognition for targeted ads', category: 'unassigned' },
+  { id: '4', text: 'Autonomous drones for delivery', category: 'unassigned' },
+  { id: '5', text: 'AI generated personalized news feeds', category: 'unassigned' },
+  { id: '6', text: 'Recruitment AI filtering resumes', category: 'unassigned' },
+  { id: '7', text: 'Real-time deepfake for virtual meetings', category: 'unassigned' },
+  { id: '8', text: 'Predictive policing algorithms', category: 'unassigned' }
+];
+
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [cards, setCards] = useState([]);
+  const [newCardText, setNewCardText] = useState('');
+  const [draggedCardId, setDraggedCardId] = useState(null);
+  const [isReseting, setIsReseting] = useState(false);
+
+  // 1. Auth Setup (RULE 3: Auth Before Queries)
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (err) {
+        console.error("Auth error:", err);
+      }
+    };
+    
+    initAuth();
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // 2. Real-time Data Sync (RULE 1 & 2 applied)
+  useEffect(() => {
+    if (!user) return;
+
+    const cardsRef = collection(db, 'artifacts', appId, 'public', 'data', 'cards');
+    
+    const unsubscribe = onSnapshot(cardsRef, (snapshot) => {
+      const cardList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // If DB is empty and not in the middle of a reset, initialize with defaults
+      if (cardList.length === 0 && !isReseting) {
+        INITIAL_CARDS.forEach(async (card) => {
+          await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cards', card.id), card);
+        });
+      } else {
+        setCards(cardList);
+      }
+    }, (error) => {
+      console.error("Firestore subscription error:", error);
+    });
+
+    return () => unsubscribe();
+  }, [user, isReseting]);
+
+  const moveCard = async (cardId, newCategory) => {
+    if (!user) return;
+    const cardRef = doc(db, 'artifacts', appId, 'public', 'data', 'cards', cardId);
+    try {
+      await updateDoc(cardRef, { category: newCategory });
+    } catch (err) {
+      console.error("Update error:", err);
+    }
+  };
+
+  const addNewCard = async (e) => {
+    e.preventDefault();
+    if (!newCardText.trim() || !user) return;
+    
+    const id = Date.now().toString();
+    const cardRef = doc(db, 'artifacts', appId, 'public', 'data', 'cards', id);
+    try {
+      await setDoc(cardRef, { 
+        id, 
+        text: newCardText, 
+        category: 'unassigned' 
+      });
+      setNewCardText('');
+    } catch (err) {
+      console.error("Add card error:", err);
+    }
+  };
+
+  const resetBoard = async () => {
+    if (!user || !window.confirm("Are you sure? This will move all cards back to unassigned and remove any custom ones.")) return;
+    
+    setIsReseting(true);
+    try {
+      const cardsRef = collection(db, 'artifacts', appId, 'public', 'data', 'cards');
+      const snapshot = await getDocs(cardsRef);
+      
+      // Batch delete
+      const deletePromises = snapshot.docs.map(d => deleteDoc(d.ref));
+      await Promise.all(deletePromises);
+      
+      // Reset defaults
+      const addPromises = INITIAL_CARDS.map(card => 
+        setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cards', card.id), card)
+      );
+      await Promise.all(addPromises);
+    } catch (err) {
+      console.error("Reset error:", err);
+    } finally {
+      setIsReseting(false);
+    }
+  };
+
+  // Drag and Drop Handlers
+  const handleDragStart = (e, cardId) => {
+    setDraggedCardId(cardId);
+    e.dataTransfer.setData('cardId', cardId);
+  };
+
+  const handleDrop = (e, categoryId) => {
+    e.preventDefault();
+    const cardId = e.dataTransfer.getData('cardId');
+    if (cardId) {
+      moveCard(cardId, categoryId);
+    }
+    setDraggedCardId(null);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-900">
+      {/* Header */}
+      <header className="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-800">AI Use Case Workshop</h1>
+          <p className="text-slate-500 mt-1">Collaboratively categorize these AI applications based on ethical impact.</p>
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-3">
+          <form onSubmit={addNewCard} className="flex gap-2">
+            <input 
+              type="text" 
+              placeholder="Add new use case..." 
+              value={newCardText}
+              onChange={(e) => setNewCardText(e.target.value)}
+              className="px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm w-48"
+            />
+            <button type="submit" className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <Plus size={20} />
+            </button>
+          </form>
+          
+          <button 
+            onClick={resetBoard}
+            disabled={isReseting}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors disabled:opacity-50"
+          >
+            <RefreshCw size={16} className={isReseting ? "animate-spin" : ""} />
+            Reset Board
+          </button>
+
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold">
+            <Users size={14} />
+            {user ? 'Live Connection Active' : 'Connecting...'}
+          </div>
+        </div>
+      </header>
+
+      {/* Main Board */}
+      <main className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {CATEGORIES.map((cat) => (
+          <div 
+            key={cat.id}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, cat.id)}
+            className={`flex flex-col h-[70vh] rounded-2xl border-2 border-dashed p-4 transition-colors ${cat.color} ${cat.id === 'unassigned' ? 'border-slate-300' : ''}`}
+          >
+            <div className="flex items-center gap-2 mb-4 px-2">
+              <cat.icon size={20} className={cat.text || "text-slate-500"} />
+              <h2 className={`font-bold uppercase tracking-wider text-sm ${cat.text || "text-slate-500"}`}>
+                {cat.label}
+              </h2>
+              <span className="ml-auto bg-white/50 px-2 py-0.5 rounded-full text-xs font-mono">
+                {cards.filter(c => c.category === cat.id).length}
+              </span>
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-thin scrollbar-thumb-slate-200">
+              {cards
+                .filter(card => card.category === cat.id)
+                .map(card => (
+                  <div
+                    key={card.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, card.id)}
+                    className={`
+                      group relative p-4 bg-white rounded-xl shadow-sm border border-slate-200 
+                      cursor-grab active:cursor-grabbing hover:shadow-md hover:border-blue-300 
+                      transition-all duration-200 transform
+                      ${draggedCardId === card.id ? 'opacity-40 scale-95' : 'opacity-100'}
+                    `}
+                  >
+                    <p className="text-sm font-medium leading-relaxed">{card.text}</p>
+                    
+                    <div className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex justify-end">
+                      <span className="text-[10px] text-slate-400 font-mono italic">Drag to move</span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        ))}
+      </main>
+
+      {/* Footer / Info */}
+      <footer className="max-w-7xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 text-sm text-slate-500">
+        <div className="flex gap-3">
+          <div className="shrink-0 mt-1"><ShieldCheck size={18} className="text-emerald-500" /></div>
+          <p><span className="font-semibold text-slate-700 block">Responsible:</span> Aligning with human values, transparency, and safety.</p>
+        </div>
+        <div className="flex gap-3">
+          <div className="shrink-0 mt-1"><AlertTriangle size={18} className="text-amber-500" /></div>
+          <p><span className="font-semibold text-slate-700 block">Risky:</span> High potential benefit but requires strict oversight or has major trade-offs.</p>
+        </div>
+        <div className="flex gap-3">
+          <div className="shrink-0 mt-1"><Trash2 size={18} className="text-rose-500" /></div>
+          <p><span className="font-semibold text-slate-700 block">Irresponsible:</span> Clear violation of privacy, high bias, or physical/social harm.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
