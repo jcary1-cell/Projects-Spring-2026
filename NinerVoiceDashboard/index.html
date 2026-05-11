@@ -25,12 +25,17 @@
         .uncc-bg-gold { background-color: #A49665; }
         .chart-container { min-height: 250px; position: relative; }
         
-        /* Animation for the sync notification */
         @keyframes slideIn {
             from { transform: translateY(100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
         .animate-slide-in { animation: slideIn 0.3s ease-out forwards; }
+
+        /* Custom scrollbar for archive */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -52,6 +57,7 @@
                 { id: 2, date: '05/05', topic: 'Mid-Draft Rehearsal', narrative: 6, engagement: 5, clarity: 7, presence: 6, fillers: 8 },
             ]);
 
+            const [selectedSessionId, setSelectedSessionId] = useState(null);
             const [showToast, setShowToast] = useState(false);
 
             const [newSession, setNewSession] = useState({
@@ -67,17 +73,17 @@
                 if (window.lucide) {
                     window.lucide.createIcons();
                 }
-            }, [sessions, showToast]);
+            }, [sessions, showToast, selectedSessionId]);
 
             const handleInputChange = (field, value) => {
                 setNewSession(prev => ({
                     ...prev,
-                    [field]: field === 'topic' ? value : Number(value)
+                    [field]: field === 'topic' ? value : value === '' ? 0 : Number(value)
                 }));
             };
 
             const addSession = useCallback(() => {
-                if (!newSession.topic.trim()) return;
+                if (!newSession.topic || newSession.topic.trim() === '') return;
                 
                 const now = new Date();
                 const displayDate = `${now.getMonth() + 1}/${now.getDate()}`;
@@ -86,37 +92,45 @@
                     ...newSession,
                     id: Date.now(),
                     date: displayDate,
-                    // Ensure all numeric values are strictly numbers for Recharts
-                    narrative: Number(newSession.narrative),
-                    engagement: Number(newSession.engagement),
-                    clarity: Number(newSession.clarity),
-                    presence: Number(newSession.presence),
-                    fillers: Number(newSession.fillers)
+                    topic: newSession.topic.trim(),
+                    narrative: Number(newSession.narrative) || 0,
+                    engagement: Number(newSession.engagement) || 0,
+                    clarity: Number(newSession.clarity) || 0,
+                    presence: Number(newSession.presence) || 0,
+                    fillers: Number(newSession.fillers) || 0
                 };
                 
                 setSessions(prev => [...prev, sessionToAdd]);
+                setSelectedSessionId(null); // Reset view to latest
                 setNewSession({ topic: '', narrative: 5, engagement: 5, clarity: 5, presence: 5, fillers: 0 });
                 
-                // Show feedback toast
                 setShowToast(true);
                 setTimeout(() => setShowToast(false), 3000);
             }, [newSession]);
 
-            const deleteSession = (id) => {
+            const deleteSession = (e, id) => {
+                e.stopPropagation(); // Don't trigger "select" when deleting
                 setSessions(prev => prev.filter(s => s.id !== id));
+                if (selectedSessionId === id) setSelectedSessionId(null);
             };
 
-            const latestStats = sessions.length > 0 ? sessions[sessions.length - 1] : null;
+            // Logic to determine which session to show in the detailed radar chart
+            const activeSession = useMemo(() => {
+                if (selectedSessionId) {
+                    return sessions.find(s => s.id === selectedSessionId) || sessions[sessions.length - 1];
+                }
+                return sessions[sessions.length - 1];
+            }, [sessions, selectedSessionId]);
 
             const radarData = useMemo(() => {
-                if (!latestStats) return [];
+                if (!activeSession) return [];
                 return [
-                    { subject: 'Narrative', A: latestStats.narrative },
-                    { subject: 'Engagement', A: latestStats.engagement },
-                    { subject: 'Clarity', A: latestStats.clarity },
-                    { subject: 'Presence', A: latestStats.presence },
+                    { subject: 'Narrative', A: activeSession.narrative },
+                    { subject: 'Engagement', A: activeSession.engagement },
+                    { subject: 'Clarity', A: activeSession.clarity },
+                    { subject: 'Presence', A: activeSession.presence },
                 ];
-            }, [latestStats]);
+            }, [activeSession]);
 
             const calculateAvg = () => {
                 if (sessions.length === 0) return "0.0";
@@ -124,24 +138,16 @@
                 return (sum / sessions.length).toFixed(1);
             };
 
-            if (!LineChart) {
-                return (
-                    <div className="flex items-center justify-center min-h-screen">
-                        <div className="text-center p-8 bg-white rounded-xl shadow-lg border border-red-100">
-                            <h2 className="text-xl font-bold text-red-600 mb-2">Sync Error</h2>
-                            <p className="text-slate-500 italic">Please refresh to reload dashboard assets.</p>
-                        </div>
-                    </div>
-                );
-            }
+            const isFormValid = newSession.topic && newSession.topic.trim().length > 0;
+
+            if (!LineChart) return <div className="p-20 text-center">Loading assets...</div>;
 
             return (
                 <div className="min-h-screen p-4 md:p-8 relative">
-                    {/* Feedback Toast */}
                     {showToast && (
                         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 uncc-bg-green text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-2 animate-slide-in">
                             <i data-lucide="check-circle" style={{width: 18, height: 18}}></i>
-                            <span className="text-sm font-bold">Dashboard Synced Successfully!</span>
+                            <span className="text-sm font-bold">Dashboard Synced!</span>
                         </div>
                     )}
 
@@ -170,18 +176,20 @@
                     </header>
 
                     <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        
+                        {/* Input Form Column */}
                         <section className="lg:col-span-1 space-y-6">
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800">
-                                    <i data-lucide="database" className="uncc-green" style={{width: 20, height: 20}}></i> Manual Data Input
+                                    <i data-lucide="plus-square" className="uncc-green" style={{width: 20, height: 20}}></i> Record Session
                                 </h2>
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Presentation Name</label>
+                                        <label className={`block text-[10px] font-bold uppercase mb-1 ${!isFormValid ? 'text-red-500' : 'text-slate-500'}`}>
+                                            Presentation Name {!isFormValid && '* Required'}
+                                        </label>
                                         <input 
                                             type="text" 
-                                            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#005035] outline-none text-sm transition-all"
+                                            className={`w-full p-3 bg-slate-50 border rounded-lg focus:ring-2 focus:ring-[#005035] outline-none text-sm transition-all ${!isFormValid ? 'border-red-100' : 'border-slate-200'}`}
                                             placeholder="Final Senior Project..."
                                             value={newSession.topic}
                                             onChange={e => handleInputChange('topic', e.target.value)}
@@ -193,7 +201,7 @@
                                                 <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1 capitalize">{skill}</label>
                                                 <input 
                                                     type="number" min="0" max="10" 
-                                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white transition-colors"
+                                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm"
                                                     value={newSession[skill]}
                                                     onChange={e => handleInputChange(skill, e.target.value)}
                                                 />
@@ -211,39 +219,48 @@
                                     </div>
                                     <button 
                                         onClick={addSession}
-                                        disabled={!newSession.topic.trim()}
+                                        disabled={!isFormValid}
                                         className={`w-full font-bold py-4 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 ${
-                                            !newSession.topic.trim() ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'uncc-bg-green hover:bg-[#003d29] text-white'
+                                            !isFormValid ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'uncc-bg-green hover:bg-[#003d29] text-white cursor-pointer'
                                         }`}
                                     >
-                                        <i data-lucide="refresh-cw" style={{width: 18, height: 18}}></i>
-                                        Sync Dashboard
+                                        <i data-lucide="zap" style={{width: 18, height: 18}}></i>
+                                        Sync Results
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="uncc-bg-green text-white p-6 rounded-2xl shadow-xl relative overflow-hidden group">
-                                <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
-                                    <i data-lucide="trending-up" style={{width: 120, height: 120}}></i>
-                                </div>
-                                <div className="relative z-10">
-                                    <h3 className="font-bold flex items-center gap-2 mb-2 italic">
-                                        <i data-lucide="sparkles" className="uncc-gold" style={{width: 20, height: 20}}></i> Student Wisdom
-                                    </h3>
-                                    <p className="text-sm opacity-90 leading-relaxed italic">
-                                        "Confidence isn't the absence of fear, but the mastery of it. Keep speaking, Niner."
-                                    </p>
-                                </div>
+                            <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-xl">
+                                <h3 className="font-bold flex items-center gap-2 mb-2 italic text-uncc-gold">
+                                    <i data-lucide="info" style={{width: 20, height: 20}}></i> Dashboard Help
+                                </h3>
+                                <p className="text-[11px] opacity-80 leading-relaxed uppercase font-bold tracking-wider">
+                                    Click any session in the archive to visualize its specific skill breakdown in the radar chart.
+                                </p>
                             </div>
                         </section>
 
+                        {/* Visualizations Column */}
                         <section className="lg:col-span-2 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* radar focused on selected session */}
                                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 chart-container">
-                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6 text-center italic underline decoration-uncc-gold decoration-2 underline-offset-4">Skill Balance (Current)</h3>
-                                    <div className="h-[200px]">
+                                    <div className="flex justify-between items-start mb-6">
+                                        <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic underline decoration-uncc-gold decoration-2 underline-offset-4">
+                                            {selectedSessionId ? 'Selected Session Balance' : 'Latest Session Balance'}
+                                        </h3>
+                                        {selectedSessionId && (
+                                            <button 
+                                                onClick={() => setSelectedSessionId(null)}
+                                                className="text-[9px] font-black uppercase text-uncc-green bg-green-50 px-2 py-1 rounded hover:bg-green-100 transition-colors"
+                                            >
+                                                Back to Latest
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="h-[180px]">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData} key={`radar-${sessions.length}-${Date.now()}`}>
+                                            <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData} key={`radar-${activeSession?.id}`}>
                                                 <PolarGrid stroke="#e2e8f0" />
                                                 <PolarAngleAxis dataKey="subject" tick={{fontSize: 10, fill: '#64748b', fontWeight: 'bold'}} />
                                                 <Radar
@@ -253,77 +270,97 @@
                                                     fill="#005035"
                                                     fillOpacity={0.6}
                                                     isAnimationActive={true}
-                                                    animationDuration={500}
                                                 />
                                             </RadarChart>
                                         </ResponsiveContainer>
                                     </div>
+                                    {activeSession && (
+                                        <p className="text-center mt-2 text-[11px] font-bold text-slate-800 italic">
+                                            "{activeSession.topic}"
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 chart-container">
                                     <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6 text-center italic underline decoration-red-400 decoration-2 underline-offset-4">Filler Word Reduction</h3>
                                     <div className="h-[200px]">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <LineChart data={sessions} key={`filler-${sessions.length}-${Date.now()}`}>
+                                            <LineChart data={sessions} key={`filler-${sessions.length}`}>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                                                 <XAxis dataKey="date" tick={{fontSize: 9}} />
                                                 <YAxis tick={{fontSize: 9}} />
-                                                <Tooltip contentStyle={{borderRadius: '12px', border: 'none', fontSize: '12px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'}} />
-                                                <Line type="monotone" dataKey="fillers" stroke="#ef4444" strokeWidth={4} dot={{fill: '#ef4444', r: 5, strokeWidth: 2, stroke: '#fff'}} activeDot={{r: 7}} isAnimationActive={true} animationDuration={500} />
+                                                <Tooltip />
+                                                <Line type="monotone" dataKey="fillers" stroke="#ef4444" strokeWidth={4} dot={{fill: '#ef4444', r: 5, strokeWidth: 2, stroke: '#fff'}} />
                                             </LineChart>
                                         </ResponsiveContainer>
                                     </div>
                                 </div>
                             </div>
 
+                            {/* Full Timeline */}
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 chart-container">
-                                <div className="flex justify-between items-center mb-8 px-2">
-                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Skill Evolution over Time</h3>
-                                    <div className="flex gap-4 text-[9px] font-black uppercase">
-                                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm uncc-bg-green"></span> Narrative</span>
-                                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm uncc-bg-gold"></span> Engagement</span>
-                                    </div>
-                                </div>
-                                <div className="h-[260px]">
+                                <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Skill Evolution Timeline</h3>
+                                <div className="h-[240px]">
                                     <ResponsiveContainer width="100%" height="100%">
-                                        <LineChart data={sessions} key={`evolution-${sessions.length}-${Date.now()}`}>
+                                        <LineChart data={sessions} key={`evolution-${sessions.length}`}>
                                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                                             <XAxis dataKey="date" tick={{fontSize: 10, fontWeight: 'bold', fill: '#94a3b8'}} />
                                             <YAxis domain={[0, 10]} tick={{fontSize: 10}} />
                                             <Tooltip />
-                                            <Line name="Narrative" type="monotone" dataKey="narrative" stroke="#005035" strokeWidth={4} dot={{r: 4, stroke: '#fff', strokeWidth: 2}} isAnimationActive={true} animationDuration={800} />
-                                            <Line name="Engagement" type="monotone" dataKey="engagement" stroke="#A49665" strokeWidth={4} dot={{r: 4, stroke: '#fff', strokeWidth: 2}} isAnimationActive={true} animationDuration={800} />
+                                            <Line name="Narrative" type="monotone" dataKey="narrative" stroke="#005035" strokeWidth={4} dot={{r: 4, stroke: '#fff', strokeWidth: 2}} />
+                                            <Line name="Engagement" type="monotone" dataKey="engagement" stroke="#A49665" strokeWidth={4} dot={{r: 4, stroke: '#fff', strokeWidth: 2}} />
                                         </LineChart>
                                     </ResponsiveContainer>
                                 </div>
                             </div>
 
+                            {/* Clickable Archive */}
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                                 <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                                    <h3 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Archive</h3>
-                                    <span className="text-[10px] font-bold px-2 py-1 bg-white border border-slate-200 rounded text-slate-500 uppercase">Latest on top</span>
+                                    <h3 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest italic">Session Archive</h3>
+                                    <span className="text-[9px] font-bold text-slate-400 uppercase">Click to view breakdown</span>
                                 </div>
-                                <div className="max-h-[300px] overflow-y-auto">
+                                <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
                                     <table className="w-full text-left">
                                         <tbody className="divide-y divide-slate-100">
                                             {[...sessions].reverse().map(session => (
-                                                <tr key={session.id} className="hover:bg-slate-50/80 transition-colors group">
-                                                    <td className="px-6 py-5">
-                                                        <p className="font-bold text-slate-800 text-sm">{session.topic}</p>
-                                                        <p className="text-[10px] text-slate-400 font-bold uppercase mt-1 tracking-wider">{session.date}</p>
+                                                <tr 
+                                                    key={session.id} 
+                                                    onClick={() => setSelectedSessionId(session.id)}
+                                                    className={`cursor-pointer transition-all group ${
+                                                        selectedSessionId === session.id 
+                                                        ? 'bg-green-50 ring-1 ring-inset ring-green-200' 
+                                                        : 'hover:bg-slate-50'
+                                                    }`}
+                                                >
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex items-center gap-3">
+                                                            {selectedSessionId === session.id && (
+                                                                <div className="w-1.5 h-1.5 rounded-full uncc-bg-green animate-pulse"></div>
+                                                            )}
+                                                            <div>
+                                                                <p className={`font-bold text-sm ${selectedSessionId === session.id ? 'uncc-green' : 'text-slate-800'}`}>
+                                                                    {session.topic}
+                                                                </p>
+                                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{session.date}</p>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td className="px-6 py-5 text-center">
-                                                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 border border-slate-100 text-xs font-black uncc-green group-hover:scale-110 transition-transform">
+                                                    <td className="px-6 py-4 text-center">
+                                                        <div className={`inline-flex items-center justify-center w-9 h-9 rounded-full border text-[11px] font-black transition-transform group-hover:scale-110 ${
+                                                            selectedSessionId === session.id 
+                                                            ? 'uncc-bg-green text-white border-transparent' 
+                                                            : 'bg-white text-slate-600 border-slate-100'
+                                                        }`}>
                                                             {((session.narrative + session.engagement + session.clarity + session.presence)/4).toFixed(1)}
                                                         </div>
                                                     </td>
-                                                    <td className="px-6 py-5 text-right">
+                                                    <td className="px-6 py-4 text-right">
                                                         <button 
-                                                            onClick={() => deleteSession(session.id)} 
+                                                            onClick={(e) => deleteSession(e, session.id)} 
                                                             className="text-slate-300 hover:text-red-500 p-2 transition-colors"
-                                                            title="Delete Session"
                                                         >
-                                                            <i data-lucide="trash-2" style={{width: 18, height: 18}}></i>
+                                                            <i data-lucide="trash-2" style={{width: 16, height: 16}}></i>
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -332,22 +369,15 @@
                                     </table>
                                 </div>
                                 {sessions.length === 0 && (
-                                    <div className="p-12 text-center text-slate-400 italic text-sm">
-                                        No data points synced yet.
-                                    </div>
+                                    <div className="p-12 text-center text-slate-400 italic text-sm">Empty archive.</div>
                                 )}
                             </div>
                         </section>
                     </main>
 
                     <footer className="max-w-6xl mx-auto mt-12 py-12 border-t border-slate-200 text-center">
-                        <div className="flex justify-center gap-6 mb-4">
-                            <div className="w-2 h-2 rounded-full uncc-bg-green"></div>
-                            <div className="w-2 h-2 rounded-full uncc-bg-gold"></div>
-                            <div className="w-2 h-2 rounded-full uncc-bg-green"></div>
-                        </div>
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.3em]">
-                            Niner Voice Platform • Powering UNC Charlotte Presentations
+                            Niner Voice • Presentation Intelligence
                         </p>
                     </footer>
                 </div>
