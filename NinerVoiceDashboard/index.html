@@ -23,27 +23,36 @@
         .uncc-bg-green { background-color: #005035; }
         .uncc-gold { color: #A49665; }
         .uncc-bg-gold { background-color: #A49665; }
+        .chart-container { min-height: 250px; position: relative; }
+        
+        /* Animation for the sync notification */
+        @keyframes slideIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-in { animation: slideIn 0.3s ease-out forwards; }
     </style>
 </head>
 <body class="bg-slate-50">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useMemo, useCallback } = React;
 
         const App = () => {
-            // Safe access to Recharts from the window object
             const RechartsObj = window.Recharts || {};
             const { 
                 LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, 
-                ResponsiveContainer, Legend, Radar, RadarChart, 
-                PolarGrid, PolarAngleAxis, PolarRadiusAxis 
+                ResponsiveContainer, Radar, RadarChart, 
+                PolarGrid, PolarAngleAxis 
             } = RechartsObj;
 
             const [sessions, setSessions] = useState([
-                { id: 1, date: '2024-05-01', topic: 'Initial Intro Practice', narrative: 4, engagement: 3, clarity: 5, presence: 4, fillers: 12 },
-                { id: 2, date: '2024-05-05', topic: 'Mid-Draft Rehearsal', narrative: 6, engagement: 5, clarity: 7, presence: 6, fillers: 8 },
+                { id: 1, date: '05/01', topic: 'Initial Intro Practice', narrative: 4, engagement: 3, clarity: 5, presence: 4, fillers: 12 },
+                { id: 2, date: '05/05', topic: 'Mid-Draft Rehearsal', narrative: 6, engagement: 5, clarity: 7, presence: 6, fillers: 8 },
             ]);
+
+            const [showToast, setShowToast] = useState(false);
 
             const [newSession, setNewSession] = useState({
                 topic: '',
@@ -54,36 +63,60 @@
                 fillers: 0
             });
 
-            // Initialize Lucide icons on mount and updates
             useEffect(() => {
                 if (window.lucide) {
                     window.lucide.createIcons();
                 }
-            }, [sessions]);
+            }, [sessions, showToast]);
 
-            const addSession = () => {
-                if (!newSession.topic) return;
+            const handleInputChange = (field, value) => {
+                setNewSession(prev => ({
+                    ...prev,
+                    [field]: field === 'topic' ? value : Number(value)
+                }));
+            };
+
+            const addSession = useCallback(() => {
+                if (!newSession.topic.trim()) return;
+                
+                const now = new Date();
+                const displayDate = `${now.getMonth() + 1}/${now.getDate()}`;
+
                 const sessionToAdd = {
                     ...newSession,
                     id: Date.now(),
-                    date: new Date().toISOString().split('T')[0]
+                    date: displayDate,
+                    // Ensure all numeric values are strictly numbers for Recharts
+                    narrative: Number(newSession.narrative),
+                    engagement: Number(newSession.engagement),
+                    clarity: Number(newSession.clarity),
+                    presence: Number(newSession.presence),
+                    fillers: Number(newSession.fillers)
                 };
-                setSessions([...sessions, sessionToAdd]);
+                
+                setSessions(prev => [...prev, sessionToAdd]);
                 setNewSession({ topic: '', narrative: 5, engagement: 5, clarity: 5, presence: 5, fillers: 0 });
-            };
+                
+                // Show feedback toast
+                setShowToast(true);
+                setTimeout(() => setShowToast(false), 3000);
+            }, [newSession]);
 
             const deleteSession = (id) => {
-                setSessions(sessions.filter(s => s.id !== id));
+                setSessions(prev => prev.filter(s => s.id !== id));
             };
 
             const latestStats = sessions.length > 0 ? sessions[sessions.length - 1] : null;
 
-            const radarData = latestStats ? [
-                { subject: 'Narrative', A: latestStats.narrative, fullMark: 10 },
-                { subject: 'Engagement', A: latestStats.engagement, fullMark: 10 },
-                { subject: 'Clarity', A: latestStats.clarity, fullMark: 10 },
-                { subject: 'Presence', A: latestStats.presence, fullMark: 10 },
-            ] : [];
+            const radarData = useMemo(() => {
+                if (!latestStats) return [];
+                return [
+                    { subject: 'Narrative', A: latestStats.narrative },
+                    { subject: 'Engagement', A: latestStats.engagement },
+                    { subject: 'Clarity', A: latestStats.clarity },
+                    { subject: 'Presence', A: latestStats.presence },
+                ];
+            }, [latestStats]);
 
             const calculateAvg = () => {
                 if (sessions.length === 0) return "0.0";
@@ -91,30 +124,36 @@
                 return (sum / sessions.length).toFixed(1);
             };
 
-            // Error boundary check for Recharts
             if (!LineChart) {
                 return (
                     <div className="flex items-center justify-center min-h-screen">
                         <div className="text-center p-8 bg-white rounded-xl shadow-lg border border-red-100">
-                            <h2 className="text-xl font-bold text-red-600 mb-2">Library Load Error</h2>
-                            <p className="text-slate-500 italic">Please refresh the page to reload Niner Voice metrics.</p>
+                            <h2 className="text-xl font-bold text-red-600 mb-2">Sync Error</h2>
+                            <p className="text-slate-500 italic">Please refresh to reload dashboard assets.</p>
                         </div>
                     </div>
                 );
             }
 
             return (
-                <div className="min-h-screen p-4 md:p-8">
-                    {/* Header */}
+                <div className="min-h-screen p-4 md:p-8 relative">
+                    {/* Feedback Toast */}
+                    {showToast && (
+                        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 uncc-bg-green text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-2 animate-slide-in">
+                            <i data-lucide="check-circle" style={{width: 18, height: 18}}></i>
+                            <span className="text-sm font-bold">Dashboard Synced Successfully!</span>
+                        </div>
+                    )}
+
                     <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="uncc-bg-green p-3 rounded-lg text-white">
-                                <i data-lucide="users" style={{width: 32, height: 32}}></i>
+                            <div className="uncc-bg-green p-3 rounded-lg text-white shadow-lg shadow-green-900/20">
+                                <i data-lucide="mic-2" style={{width: 32, height: 32}}></i>
                             </div>
                             <div>
-                                <h1 className="text-2xl font-extrabold text-slate-900 uppercase tracking-tight italic">Niner Voice</h1>
-                                <p className="text-slate-500 text-xs flex items-center gap-1 font-semibold uppercase">
-                                    <i data-lucide="map-pin" style={{width: 12, height: 12}}></i> UNC Charlotte Presentation Coaching
+                                <h1 className="text-2xl font-extrabold text-slate-900 uppercase tracking-tight italic leading-none">Niner Voice</h1>
+                                <p className="text-slate-500 text-[10px] flex items-center gap-1 font-bold uppercase mt-1">
+                                    <i data-lucide="map-pin" style={{width: 10, height: 10}}></i> Presentation Coach
                                 </p>
                             </div>
                         </div>
@@ -124,177 +163,167 @@
                                 <p className="text-2xl font-black uncc-green">{sessions.length}</p>
                             </div>
                             <div className="bg-white px-6 py-3 rounded-xl shadow-sm border border-slate-200 text-center min-w-[120px]">
-                                <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Avg. Confidence</p>
-                                <p className="text-2xl font-black uncc-gold">{calculateAvg()}/10</p>
+                                <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Global Avg</p>
+                                <p className="text-2xl font-black uncc-gold">{calculateAvg()}</p>
                             </div>
                         </div>
                     </header>
 
                     <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
                         
-                        {/* Left Column: Log Entry */}
                         <section className="lg:col-span-1 space-y-6">
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800">
-                                    <i data-lucide="plus-circle" className="uncc-green" style={{width: 20, height: 20}}></i> Log Gem Session
+                                    <i data-lucide="database" className="uncc-green" style={{width: 20, height: 20}}></i> Manual Data Input
                                 </h2>
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Presentation Topic</label>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Presentation Name</label>
                                         <input 
                                             type="text" 
                                             className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#005035] outline-none text-sm transition-all"
-                                            placeholder="e.g. Senior Design Pitch"
+                                            placeholder="Final Senior Project..."
                                             value={newSession.topic}
-                                            onChange={e => setNewSession({...newSession, topic: e.target.value})}
+                                            onChange={e => handleInputChange('topic', e.target.value)}
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         {['narrative', 'engagement', 'clarity', 'presence'].map(skill => (
                                             <div key={skill}>
-                                                <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1 capitalize">{skill} (1-10)</label>
+                                                <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1 capitalize">{skill}</label>
                                                 <input 
                                                     type="number" min="0" max="10" 
-                                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm"
+                                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white transition-colors"
                                                     value={newSession[skill]}
-                                                    onChange={e => setNewSession({...newSession, [skill]: parseInt(e.target.value) || 0})}
+                                                    onChange={e => handleInputChange(skill, e.target.value)}
                                                 />
                                             </div>
                                         ))}
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Filler Words Detected</label>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Filler Word Count</label>
                                         <input 
                                             type="number" 
                                             className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm"
                                             value={newSession.fillers}
-                                            onChange={e => setNewSession({...newSession, fillers: parseInt(e.target.value) || 0})}
+                                            onChange={e => handleInputChange('fillers', e.target.value)}
                                         />
                                     </div>
                                     <button 
                                         onClick={addSession}
-                                        className="w-full uncc-bg-green hover:bg-[#003d29] text-white font-bold py-4 rounded-xl transition-all shadow-md active:scale-[0.98]"
+                                        disabled={!newSession.topic.trim()}
+                                        className={`w-full font-bold py-4 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 ${
+                                            !newSession.topic.trim() ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'uncc-bg-green hover:bg-[#003d29] text-white'
+                                        }`}
                                     >
-                                        Sync Metrics from Gem
+                                        <i data-lucide="refresh-cw" style={{width: 18, height: 18}}></i>
+                                        Sync Dashboard
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="uncc-bg-green text-white p-6 rounded-2xl shadow-xl relative overflow-hidden">
+                            <div className="uncc-bg-green text-white p-6 rounded-2xl shadow-xl relative overflow-hidden group">
+                                <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                                    <i data-lucide="trending-up" style={{width: 120, height: 120}}></i>
+                                </div>
                                 <div className="relative z-10">
                                     <h3 className="font-bold flex items-center gap-2 mb-2 italic">
-                                        <i data-lucide="award" className="uncc-gold" style={{width: 20, height: 20}}></i> Pro-Tip of the Day
+                                        <i data-lucide="sparkles" className="uncc-gold" style={{width: 20, height: 20}}></i> Student Wisdom
                                     </h3>
                                     <p className="text-sm opacity-90 leading-relaxed italic">
-                                        "Human connection isn't about being perfect. It's about being present. If you mess up a word, laugh it off—it makes the audience trust you more."
+                                        "Confidence isn't the absence of fear, but the mastery of it. Keep speaking, Niner."
                                     </p>
                                 </div>
                             </div>
                         </section>
 
-                        {/* Right Column: Analytics */}
                         <section className="lg:col-span-2 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* Radar Chart */}
-                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 text-center">Performance Balance</h3>
-                                    <div className="h-[250px]">
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 chart-container">
+                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6 text-center italic underline decoration-uncc-gold decoration-2 underline-offset-4">Skill Balance (Current)</h3>
+                                    <div className="h-[200px]">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                                            <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData} key={`radar-${sessions.length}-${Date.now()}`}>
                                                 <PolarGrid stroke="#e2e8f0" />
                                                 <PolarAngleAxis dataKey="subject" tick={{fontSize: 10, fill: '#64748b', fontWeight: 'bold'}} />
                                                 <Radar
-                                                    name="Score"
+                                                    name="Current"
                                                     dataKey="A"
                                                     stroke="#005035"
                                                     fill="#005035"
-                                                    fillOpacity={0.5}
+                                                    fillOpacity={0.6}
+                                                    isAnimationActive={true}
+                                                    animationDuration={500}
                                                 />
                                             </RadarChart>
                                         </ResponsiveContainer>
                                     </div>
                                 </div>
 
-                                {/* Filler Progress */}
-                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Fluency (Filler Reduction)</h3>
-                                    <div className="h-[250px]">
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 chart-container">
+                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6 text-center italic underline decoration-red-400 decoration-2 underline-offset-4">Filler Word Reduction</h3>
+                                    <div className="h-[200px]">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <LineChart data={sessions}>
+                                            <LineChart data={sessions} key={`filler-${sessions.length}-${Date.now()}`}>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                                <XAxis dataKey="date" hide />
-                                                <YAxis tick={{fontSize: 10}} />
-                                                <Tooltip contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}} />
-                                                <Line type="monotone" dataKey="fillers" stroke="#ef4444" strokeWidth={4} dot={{fill: '#ef4444', r: 5}} />
+                                                <XAxis dataKey="date" tick={{fontSize: 9}} />
+                                                <YAxis tick={{fontSize: 9}} />
+                                                <Tooltip contentStyle={{borderRadius: '12px', border: 'none', fontSize: '12px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'}} />
+                                                <Line type="monotone" dataKey="fillers" stroke="#ef4444" strokeWidth={4} dot={{fill: '#ef4444', r: 5, strokeWidth: 2, stroke: '#fff'}} activeDot={{r: 7}} isAnimationActive={true} animationDuration={500} />
                                             </LineChart>
                                         </ResponsiveContainer>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Main Growth Trend */}
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                                <div className="flex justify-between items-center mb-6 px-2">
-                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Skill Evolution Timeline</h3>
-                                    <div className="flex gap-4 text-[10px] font-bold uppercase">
-                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full uncc-bg-green"></span> Narrative</span>
-                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full uncc-bg-gold"></span> Engagement</span>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 chart-container">
+                                <div className="flex justify-between items-center mb-8 px-2">
+                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Skill Evolution over Time</h3>
+                                    <div className="flex gap-4 text-[9px] font-black uppercase">
+                                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm uncc-bg-green"></span> Narrative</span>
+                                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm uncc-bg-gold"></span> Engagement</span>
                                     </div>
                                 </div>
-                                <div className="h-[300px]">
+                                <div className="h-[260px]">
                                     <ResponsiveContainer width="100%" height="100%">
-                                        <LineChart data={sessions}>
+                                        <LineChart data={sessions} key={`evolution-${sessions.length}-${Date.now()}`}>
                                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                                             <XAxis dataKey="date" tick={{fontSize: 10, fontWeight: 'bold', fill: '#94a3b8'}} />
                                             <YAxis domain={[0, 10]} tick={{fontSize: 10}} />
                                             <Tooltip />
-                                            <Line name="Narrative" type="monotone" dataKey="narrative" stroke="#005035" strokeWidth={3} dot={{r: 4}} />
-                                            <Line name="Engagement" type="monotone" dataKey="engagement" stroke="#A49665" strokeWidth={3} dot={{r: 4}} />
+                                            <Line name="Narrative" type="monotone" dataKey="narrative" stroke="#005035" strokeWidth={4} dot={{r: 4, stroke: '#fff', strokeWidth: 2}} isAnimationActive={true} animationDuration={800} />
+                                            <Line name="Engagement" type="monotone" dataKey="engagement" stroke="#A49665" strokeWidth={4} dot={{r: 4, stroke: '#fff', strokeWidth: 2}} isAnimationActive={true} animationDuration={800} />
                                         </LineChart>
                                     </ResponsiveContainer>
                                 </div>
                             </div>
 
-                            {/* Table */}
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                                <div className="p-4 bg-slate-50 border-b border-slate-200">
-                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Session Archive</h3>
+                                <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                    <h3 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Archive</h3>
+                                    <span className="text-[10px] font-bold px-2 py-1 bg-white border border-slate-200 rounded text-slate-500 uppercase">Latest on top</span>
                                 </div>
-                                <div className="overflow-x-auto">
+                                <div className="max-h-[300px] overflow-y-auto">
                                     <table className="w-full text-left">
-                                        <thead className="bg-slate-50/50">
-                                            <tr>
-                                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase">Presentation</th>
-                                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase text-center">Avg Score</th>
-                                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase text-right">Action</th>
-                                            </tr>
-                                        </thead>
                                         <tbody className="divide-y divide-slate-100">
-                                            {sessions.map(session => (
-                                                <tr key={session.id} className="hover:bg-slate-50/80 transition-colors">
-                                                    <td className="px-6 py-4">
+                                            {[...sessions].reverse().map(session => (
+                                                <tr key={session.id} className="hover:bg-slate-50/80 transition-colors group">
+                                                    <td className="px-6 py-5">
                                                         <p className="font-bold text-slate-800 text-sm">{session.topic}</p>
-                                                        <p className="text-[10px] text-slate-400 font-medium uppercase tracking-tighter">{session.date}</p>
+                                                        <p className="text-[10px] text-slate-400 font-bold uppercase mt-1 tracking-wider">{session.date}</p>
                                                     </td>
-                                                    <td className="px-6 py-4">
-                                                        <div className="flex flex-col items-center gap-1 text-center">
-                                                            <div className="w-32 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                                                <div 
-                                                                    className="h-full uncc-bg-green" 
-                                                                    style={{width: `${(session.narrative + session.engagement + session.clarity + session.presence) * 2.5}%`}}
-                                                                />
-                                                            </div>
-                                                            <span className="text-xs font-black uncc-green">
-                                                                {((session.narrative + session.engagement + session.clarity + session.presence)/4).toFixed(1)}
-                                                            </span>
+                                                    <td className="px-6 py-5 text-center">
+                                                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 border border-slate-100 text-xs font-black uncc-green group-hover:scale-110 transition-transform">
+                                                            {((session.narrative + session.engagement + session.clarity + session.presence)/4).toFixed(1)}
                                                         </div>
                                                     </td>
-                                                    <td className="px-6 py-4 text-right">
+                                                    <td className="px-6 py-5 text-right">
                                                         <button 
-                                                            onClick={() => deleteSession(session.id)}
-                                                            className="text-slate-300 hover:text-red-500 transition-colors p-2"
+                                                            onClick={() => deleteSession(session.id)} 
+                                                            className="text-slate-300 hover:text-red-500 p-2 transition-colors"
+                                                            title="Delete Session"
                                                         >
-                                                            <i data-lucide="trash-2" style={{width: 16, height: 16}}></i>
+                                                            <i data-lucide="trash-2" style={{width: 18, height: 18}}></i>
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -302,13 +331,23 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {sessions.length === 0 && (
+                                    <div className="p-12 text-center text-slate-400 italic text-sm">
+                                        No data points synced yet.
+                                    </div>
+                                )}
                             </div>
                         </section>
                     </main>
 
-                    <footer className="max-w-6xl mx-auto mt-12 pt-8 border-t border-slate-200 text-center pb-8">
-                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
-                            Built for UNC Charlotte Students • 49ers Stand Tall
+                    <footer className="max-w-6xl mx-auto mt-12 py-12 border-t border-slate-200 text-center">
+                        <div className="flex justify-center gap-6 mb-4">
+                            <div className="w-2 h-2 rounded-full uncc-bg-green"></div>
+                            <div className="w-2 h-2 rounded-full uncc-bg-gold"></div>
+                            <div className="w-2 h-2 rounded-full uncc-bg-green"></div>
+                        </div>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.3em]">
+                            Niner Voice Platform • Powering UNC Charlotte Presentations
                         </p>
                     </footer>
                 </div>
