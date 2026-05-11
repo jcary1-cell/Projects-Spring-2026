@@ -1,241 +1,322 @@
-import React, { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
-import { Award, TrendingUp, Users, BookOpen, PlusCircle, Trash2, MapPin } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niner Voice | Student Presentation Dashboard</title>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <!-- Prop-Types is mandatory for Recharts UMD builds -->
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Recharts -->
+    <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .uncc-green { color: #005035; }
+        .uncc-bg-green { background-color: #005035; }
+        .uncc-gold { color: #A49665; }
+        .uncc-bg-gold { background-color: #A49665; }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div id="root"></div>
 
-const App = () => {
-  const [sessions, setSessions] = useState([
-    { id: 1, date: '2024-05-01', topic: 'Initial Intro Practice', narrative: 4, engagement: 3, clarity: 5, presence: 4, fillers: 12 },
-    { id: 2, date: '2024-05-05', topic: 'Mid-Draft Rehearsal', narrative: 6, engagement: 5, clarity: 7, presence: 6, fillers: 8 },
-  ]);
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-  const [newSession, setNewSession] = useState({
-    topic: '',
-    narrative: 5,
-    engagement: 5,
-    clarity: 5,
-    presence: 5,
-    fillers: 0
-  });
+        const App = () => {
+            // Safe access to Recharts from the window object
+            const RechartsObj = window.Recharts || {};
+            const { 
+                LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, 
+                ResponsiveContainer, Legend, Radar, RadarChart, 
+                PolarGrid, PolarAngleAxis, PolarRadiusAxis 
+            } = RechartsObj;
 
-  const addSession = () => {
-    if (!newSession.topic) return;
-    const sessionToAdd = {
-      ...newSession,
-      id: Date.now(),
-      date: new Date().toISOString().split('T')[0]
-    };
-    setSessions([...sessions, sessionToAdd]);
-    setNewSession({ topic: '', narrative: 5, engagement: 5, clarity: 5, presence: 5, fillers: 0 });
-  };
+            const [sessions, setSessions] = useState([
+                { id: 1, date: '2024-05-01', topic: 'Initial Intro Practice', narrative: 4, engagement: 3, clarity: 5, presence: 4, fillers: 12 },
+                { id: 2, date: '2024-05-05', topic: 'Mid-Draft Rehearsal', narrative: 6, engagement: 5, clarity: 7, presence: 6, fillers: 8 },
+            ]);
 
-  const deleteSession = (id) => {
-    setSessions(sessions.filter(s => s.id !== id));
-  };
+            const [newSession, setNewSession] = useState({
+                topic: '',
+                narrative: 5,
+                engagement: 5,
+                clarity: 5,
+                presence: 5,
+                fillers: 0
+            });
 
-  const latestStats = sessions.length > 0 ? sessions[sessions.length - 1] : null;
+            // Initialize Lucide icons on mount and updates
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [sessions]);
 
-  const radarData = latestStats ? [
-    { subject: 'Narrative', A: latestStats.narrative, fullMark: 10 },
-    { subject: 'Engagement', A: latestStats.engagement, fullMark: 10 },
-    { subject: 'Clarity', A: latestStats.clarity, fullMark: 10 },
-    { subject: 'Presence', A: latestStats.presence, fullMark: 10 },
-  ] : [];
+            const addSession = () => {
+                if (!newSession.topic) return;
+                const sessionToAdd = {
+                    ...newSession,
+                    id: Date.now(),
+                    date: new Date().toISOString().split('T')[0]
+                };
+                setSessions([...sessions, sessionToAdd]);
+                setNewSession({ topic: '', narrative: 5, engagement: 5, clarity: 5, presence: 5, fillers: 0 });
+            };
 
-  return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans">
-      {/* Header */}
-      <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-        <div className="flex items-center gap-3">
-          <div className="bg-[#005035] p-3 rounded-lg text-white">
-            <Users size={32} />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 uppercase tracking-tight">Niner Voice</h1>
-            <p className="text-slate-500 text-sm flex items-center gap-1">
-              <MapPin size={14} /> UNC Charlotte Presentation Coaching
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200 text-center">
-            <p className="text-xs text-slate-400 uppercase font-bold">Total Sessions</p>
-            <p className="text-xl font-bold text-[#005035]">{sessions.length}</p>
-          </div>
-          <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200 text-center">
-            <p className="text-xs text-slate-400 uppercase font-bold">Avg. Confidence</p>
-            <p className="text-xl font-bold text-[#A49665]">
-              {sessions.length > 0 ? (sessions.reduce((acc, s) => acc + (s.narrative + s.engagement + s.clarity + s.presence) / 4, 0) / sessions.length).toFixed(1) : 0}/10
-            </p>
-          </div>
-        </div>
-      </header>
+            const deleteSession = (id) => {
+                setSessions(sessions.filter(s => s.id !== id));
+            };
 
-      <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left Column: Data Input */}
-        <section className="lg:col-span-1 space-y-6">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <PlusCircle className="text-[#005035]" /> Log Gem Session
-            </h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Presentation Topic</label>
-                <input 
-                  type="text" 
-                  className="w-full p-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#005035] outline-none"
-                  placeholder="e.g. Senior Design Pitch"
-                  value={newSession.topic}
-                  onChange={e => setNewSession({...newSession, topic: e.target.value})}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                {['narrative', 'engagement', 'clarity', 'presence'].map(skill => (
-                  <div key={skill}>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1 capitalize">{skill}</label>
-                    <input 
-                      type="number" min="0" max="10" 
-                      className="w-full p-2 border border-slate-200 rounded-lg"
-                      value={newSession[skill]}
-                      onChange={e => setNewSession({...newSession, [skill]: parseInt(e.target.value)})}
-                    />
-                  </div>
-                ))}
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Filler Word Count</label>
-                <input 
-                  type="number" 
-                  className="w-full p-2 border border-slate-200 rounded-lg"
-                  value={newSession.fillers}
-                  onChange={e => setNewSession({...newSession, fillers: parseInt(e.target.value)})}
-                />
-              </div>
-              <button 
-                onClick={addSession}
-                className="w-full bg-[#005035] hover:bg-[#003d29] text-white font-bold py-3 rounded-lg transition-colors"
-              >
-                Sync Metrics from Gem
-              </button>
-            </div>
-          </div>
+            const latestStats = sessions.length > 0 ? sessions[sessions.length - 1] : null;
 
-          <div className="bg-[#005035] text-white p-6 rounded-2xl shadow-lg">
-            <h3 className="font-bold flex items-center gap-2 mb-2">
-              <Award className="text-[#A49665]" /> Pro-Tip of the Week
-            </h3>
-            <p className="text-sm opacity-90 leading-relaxed">
-              "Human connection isn't about being perfect. It's about being present. If you mess up a word, laugh it off—it makes the audience trust you more."
-            </p>
-          </div>
-        </section>
+            const radarData = latestStats ? [
+                { subject: 'Narrative', A: latestStats.narrative, fullMark: 10 },
+                { subject: 'Engagement', A: latestStats.engagement, fullMark: 10 },
+                { subject: 'Clarity', A: latestStats.clarity, fullMark: 10 },
+                { subject: 'Presence', A: latestStats.presence, fullMark: 10 },
+            ] : [];
 
-        {/* Right Column: Visualization */}
-        <section className="lg:col-span-2 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Radar Chart for Latest Session */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-              <h3 className="text-sm font-bold text-slate-500 uppercase mb-4">Latest Performance Shape</h3>
-              <div className="h-[250px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-                    <PolarGrid stroke="#e2e8f0" />
-                    <PolarAngleAxis dataKey="subject" tick={{fontSize: 12, fill: '#64748b'}} />
-                    <Radar
-                      name="Score"
-                      dataKey="A"
-                      stroke="#005035"
-                      fill="#005035"
-                      fillOpacity={0.6}
-                    />
-                  </RadarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+            const calculateAvg = () => {
+                if (sessions.length === 0) return "0.0";
+                const sum = sessions.reduce((acc, s) => acc + (s.narrative + s.engagement + s.clarity + s.presence) / 4, 0);
+                return (sum / sessions.length).toFixed(1);
+            };
 
-            {/* Filler Words Progress */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-              <h3 className="text-sm font-bold text-slate-500 uppercase mb-4">Filler Words Over Time</h3>
-              <div className="h-[250px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={sessions}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="date" hide />
-                    <YAxis />
-                    <Tooltip />
-                    <Line type="monotone" dataKey="fillers" stroke="#ef4444" strokeWidth={3} dot={{fill: '#ef4444'}} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
+            // Error boundary check for Recharts
+            if (!LineChart) {
+                return (
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="text-center p-8 bg-white rounded-xl shadow-lg border border-red-100">
+                            <h2 className="text-xl font-bold text-red-600 mb-2">Library Load Error</h2>
+                            <p className="text-slate-500 italic">Please refresh the page to reload Niner Voice metrics.</p>
+                        </div>
+                    </div>
+                );
+            }
 
-          {/* Growth Trend */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-            <h3 className="text-sm font-bold text-slate-500 uppercase mb-4">Skill Growth Timeline</h3>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={sessions}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis dataKey="date" tick={{fontSize: 12}} />
-                  <YAxis domain={[0, 10]} />
-                  <Tooltip />
-                  <Legend />
-                  <Line name="Narrative" type="monotone" dataKey="narrative" stroke="#005035" strokeWidth={2} />
-                  <Line name="Engagement" type="monotone" dataKey="engagement" stroke="#A49665" strokeWidth={2} />
-                  <Line name="Human Presence" type="monotone" dataKey="presence" stroke="#64748b" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+            return (
+                <div className="min-h-screen p-4 md:p-8">
+                    {/* Header */}
+                    <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="uncc-bg-green p-3 rounded-lg text-white">
+                                <i data-lucide="users" style={{width: 32, height: 32}}></i>
+                            </div>
+                            <div>
+                                <h1 className="text-2xl font-extrabold text-slate-900 uppercase tracking-tight italic">Niner Voice</h1>
+                                <p className="text-slate-500 text-xs flex items-center gap-1 font-semibold uppercase">
+                                    <i data-lucide="map-pin" style={{width: 12, height: 12}}></i> UNC Charlotte Presentation Coaching
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="bg-white px-6 py-3 rounded-xl shadow-sm border border-slate-200 text-center min-w-[120px]">
+                                <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Total Sessions</p>
+                                <p className="text-2xl font-black uncc-green">{sessions.length}</p>
+                            </div>
+                            <div className="bg-white px-6 py-3 rounded-xl shadow-sm border border-slate-200 text-center min-w-[120px]">
+                                <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Avg. Confidence</p>
+                                <p className="text-2xl font-black uncc-gold">{calculateAvg()}/10</p>
+                            </div>
+                        </div>
+                    </header>
 
-          {/* Session History */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-             <table className="w-full text-left">
-               <thead className="bg-slate-50">
-                 <tr>
-                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Topic/Date</th>
-                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Score</th>
-                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Actions</th>
-                 </tr>
-               </thead>
-               <tbody className="divide-y divide-slate-100">
-                 {sessions.map(session => (
-                   <tr key={session.id} className="hover:bg-slate-50 transition-colors">
-                     <td className="px-6 py-4">
-                       <p className="font-semibold text-slate-800">{session.topic}</p>
-                       <p className="text-xs text-slate-400">{session.date}</p>
-                     </td>
-                     <td className="px-6 py-4">
-                       <div className="flex items-center gap-2">
-                         <div className="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
-                           <div 
-                             className="h-full bg-[#005035]" 
-                             style={{width: `${(session.narrative + session.engagement + session.clarity + session.presence) * 2.5}%`}}
-                           />
-                         </div>
-                         <span className="text-sm font-bold text-slate-600">
-                           {((session.narrative + session.engagement + session.clarity + session.presence)/4).toFixed(1)}
-                         </span>
-                       </div>
-                     </td>
-                     <td className="px-6 py-4">
-                       <button 
-                         onClick={() => deleteSession(session.id)}
-                         className="text-slate-300 hover:text-red-500 transition-colors"
-                       >
-                         <Trash2 size={18} />
-                       </button>
-                     </td>
-                   </tr>
-                 ))}
-               </tbody>
-             </table>
-          </div>
-        </section>
-      </main>
-    </div>
-  );
-};
+                    <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        
+                        {/* Left Column: Log Entry */}
+                        <section className="lg:col-span-1 space-y-6">
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800">
+                                    <i data-lucide="plus-circle" className="uncc-green" style={{width: 20, height: 20}}></i> Log Gem Session
+                                </h2>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Presentation Topic</label>
+                                        <input 
+                                            type="text" 
+                                            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#005035] outline-none text-sm transition-all"
+                                            placeholder="e.g. Senior Design Pitch"
+                                            value={newSession.topic}
+                                            onChange={e => setNewSession({...newSession, topic: e.target.value})}
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {['narrative', 'engagement', 'clarity', 'presence'].map(skill => (
+                                            <div key={skill}>
+                                                <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1 capitalize">{skill} (1-10)</label>
+                                                <input 
+                                                    type="number" min="0" max="10" 
+                                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm"
+                                                    value={newSession[skill]}
+                                                    onChange={e => setNewSession({...newSession, [skill]: parseInt(e.target.value) || 0})}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Filler Words Detected</label>
+                                        <input 
+                                            type="number" 
+                                            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm"
+                                            value={newSession.fillers}
+                                            onChange={e => setNewSession({...newSession, fillers: parseInt(e.target.value) || 0})}
+                                        />
+                                    </div>
+                                    <button 
+                                        onClick={addSession}
+                                        className="w-full uncc-bg-green hover:bg-[#003d29] text-white font-bold py-4 rounded-xl transition-all shadow-md active:scale-[0.98]"
+                                    >
+                                        Sync Metrics from Gem
+                                    </button>
+                                </div>
+                            </div>
 
-export default App;
+                            <div className="uncc-bg-green text-white p-6 rounded-2xl shadow-xl relative overflow-hidden">
+                                <div className="relative z-10">
+                                    <h3 className="font-bold flex items-center gap-2 mb-2 italic">
+                                        <i data-lucide="award" className="uncc-gold" style={{width: 20, height: 20}}></i> Pro-Tip of the Day
+                                    </h3>
+                                    <p className="text-sm opacity-90 leading-relaxed italic">
+                                        "Human connection isn't about being perfect. It's about being present. If you mess up a word, laugh it off—it makes the audience trust you more."
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Right Column: Analytics */}
+                        <section className="lg:col-span-2 space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Radar Chart */}
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 text-center">Performance Balance</h3>
+                                    <div className="h-[250px]">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                                                <PolarGrid stroke="#e2e8f0" />
+                                                <PolarAngleAxis dataKey="subject" tick={{fontSize: 10, fill: '#64748b', fontWeight: 'bold'}} />
+                                                <Radar
+                                                    name="Score"
+                                                    dataKey="A"
+                                                    stroke="#005035"
+                                                    fill="#005035"
+                                                    fillOpacity={0.5}
+                                                />
+                                            </RadarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+
+                                {/* Filler Progress */}
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Fluency (Filler Reduction)</h3>
+                                    <div className="h-[250px]">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <LineChart data={sessions}>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                                <XAxis dataKey="date" hide />
+                                                <YAxis tick={{fontSize: 10}} />
+                                                <Tooltip contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}} />
+                                                <Line type="monotone" dataKey="fillers" stroke="#ef4444" strokeWidth={4} dot={{fill: '#ef4444', r: 5}} />
+                                            </LineChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Main Growth Trend */}
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                <div className="flex justify-between items-center mb-6 px-2">
+                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Skill Evolution Timeline</h3>
+                                    <div className="flex gap-4 text-[10px] font-bold uppercase">
+                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full uncc-bg-green"></span> Narrative</span>
+                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full uncc-bg-gold"></span> Engagement</span>
+                                    </div>
+                                </div>
+                                <div className="h-[300px]">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <LineChart data={sessions}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                            <XAxis dataKey="date" tick={{fontSize: 10, fontWeight: 'bold', fill: '#94a3b8'}} />
+                                            <YAxis domain={[0, 10]} tick={{fontSize: 10}} />
+                                            <Tooltip />
+                                            <Line name="Narrative" type="monotone" dataKey="narrative" stroke="#005035" strokeWidth={3} dot={{r: 4}} />
+                                            <Line name="Engagement" type="monotone" dataKey="engagement" stroke="#A49665" strokeWidth={3} dot={{r: 4}} />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+
+                            {/* Table */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                                <div className="p-4 bg-slate-50 border-b border-slate-200">
+                                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Session Archive</h3>
+                                </div>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left">
+                                        <thead className="bg-slate-50/50">
+                                            <tr>
+                                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase">Presentation</th>
+                                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase text-center">Avg Score</th>
+                                                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase text-right">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-100">
+                                            {sessions.map(session => (
+                                                <tr key={session.id} className="hover:bg-slate-50/80 transition-colors">
+                                                    <td className="px-6 py-4">
+                                                        <p className="font-bold text-slate-800 text-sm">{session.topic}</p>
+                                                        <p className="text-[10px] text-slate-400 font-medium uppercase tracking-tighter">{session.date}</p>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex flex-col items-center gap-1 text-center">
+                                                            <div className="w-32 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                                <div 
+                                                                    className="h-full uncc-bg-green" 
+                                                                    style={{width: `${(session.narrative + session.engagement + session.clarity + session.presence) * 2.5}%`}}
+                                                                />
+                                                            </div>
+                                                            <span className="text-xs font-black uncc-green">
+                                                                {((session.narrative + session.engagement + session.clarity + session.presence)/4).toFixed(1)}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-right">
+                                                        <button 
+                                                            onClick={() => deleteSession(session.id)}
+                                                            className="text-slate-300 hover:text-red-500 transition-colors p-2"
+                                                        >
+                                                            <i data-lucide="trash-2" style={{width: 16, height: 16}}></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
+
+                    <footer className="max-w-6xl mx-auto mt-12 pt-8 border-t border-slate-200 text-center pb-8">
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
+                            Built for UNC Charlotte Students • 49ers Stand Tall
+                        </p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
