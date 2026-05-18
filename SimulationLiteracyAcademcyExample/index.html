@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The West End Horizon: Charlotte Crisis Simulation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDKs (Compatibility versions to expose global firebase object) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .serif-title {
+            font-family: 'Lora', serif;
+        }
+        /* Custom scrollbar for sleeker dashboard feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-emerald-900 text-white shadow-md px-6 py-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 sticky top-0 z-50">
+        <div class="flex items-center space-x-3">
+            <div class="bg-amber-500 text-emerald-950 p-2.5 rounded-xl shadow-inner flex items-center justify-center">
+                <i class="fa-solid fa-people-roof text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight serif-title flex items-center gap-2">
+                    The West End Horizon
+                </h1>
+                <p class="text-xs text-emerald-200 font-medium">Charlotte Community Advocacy Simulation</p>
+            </div>
+        </div>
+
+        <!-- Simulation Quick Stats / Status -->
+        <div class="flex items-center space-x-4 text-sm bg-emerald-950/50 px-4 py-2 rounded-lg border border-emerald-800/60">
+            <div class="flex items-center space-x-2">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+                <span class="text-xs font-semibold uppercase text-amber-400">Crisis Active:</span>
+            </div>
+            <span class="text-xs text-emerald-100 hidden sm:inline">30 Days Until Council Vote</span>
+            <span class="h-4 w-px bg-emerald-800"></span>
+            <div class="flex items-center space-x-1 text-emerald-200">
+                <i class="fa-solid fa-users text-xs"></i>
+                <span id="active-players-count" class="text-xs font-bold">Connecting...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: User Persona Status & Quick Navigation -->
+        <div class="lg:col-span-3 space-y-6">
+            
+            <!-- Persona Card -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full -mr-6 -mt-6"></div>
+                
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase mb-3">Your Role Identity</h3>
+                
+                <!-- Unselected Persona View -->
+                <div id="persona-unselected" class="space-y-3">
+                    <p class="text-xs text-slate-500 leading-relaxed">You haven't selected a stakeholder persona yet. To participate in the discussion and co-write the advocacy proposal, choose an identity.</p>
+                    <button onclick="openPersonaModal()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-3 rounded-xl transition duration-200 text-xs flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-user-tag"></i> Select Persona
+                    </button>
+                </div>
+
+                <!-- Selected Persona View -->
+                <div id="persona-selected" class="hidden space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div id="user-avatar" class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl font-bold shrink-0 shadow-inner">
+                            MB
+                        </div>
+                        <div>
+                            <h4 id="user-role-name" class="font-bold text-slate-800 text-sm">Maeve Baldwin</h4>
+                            <p id="user-role-title" class="text-xs text-emerald-700 font-semibold">Community Historian</p>
+                            <p id="user-real-name" class="text-[10px] text-slate-400 mt-1 italic">Playing as: Guest</p>
+                        </div>
+                    </div>
+                    
+                    <p id="user-role-goal" class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100 italic leading-relaxed">
+                        "Goal: Keep the community connected to its historic roots, preserving legacy stories over market metrics."
+                    </p>
+
+                    <div class="flex gap-2">
+                        <button onclick="openPersonaModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-2 rounded-lg transition duration-200 text-[11px] flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-arrows-rotate"></i> Change Role
+                        </button>
+                        <button onclick="editRealNameModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-2 rounded-lg transition duration-200 text-[11px] flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-pen"></i> Edit Name
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation Navigation Tabs -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3 space-y-1">
+                <button onclick="switchTab('brief')" id="tab-brief" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left font-medium text-xs transition duration-150 bg-emerald-50 text-emerald-800">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-circle-info text-emerald-600"></i> Scenario Dossier</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+                <button onclick="switchTab('forum')" id="tab-forum" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left font-medium text-xs transition duration-150 text-slate-600 hover:bg-slate-50">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-comments text-slate-400"></i> Community Forum</span>
+                    <span id="forum-badge" class="bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                </button>
+                <button onclick="switchTab('document')" id="tab-document" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left font-medium text-xs transition duration-150 text-slate-600 hover:bg-slate-50">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-file-signature text-slate-400"></i> Joint City Proposal</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+                <button onclick="switchTab('facilitator')" id="tab-facilitator" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left font-medium text-xs transition duration-150 text-slate-600 hover:bg-slate-50">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user text-slate-400"></i> Facilitator Injector</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+            </div>
+
+            <!-- Charlotte Local Context Mini-Card -->
+            <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200/60 space-y-3">
+                <div class="flex items-center space-x-2 text-amber-800">
+                    <i class="fa-solid fa-map-location-dot text-lg"></i>
+                    <h4 class="font-bold text-xs uppercase tracking-wider">Charlotte Context</h4>
+                </div>
+                <p class="text-[11px] text-amber-900 leading-relaxed">
+                    Set near the historical intersection of <strong>Beatties Ford Road & West Trade Street</strong>, the simulation mirrors real-world challenges faced by Charlotte's historic West End regarding housing equity, gentrification, food security, and public transit.
+                </p>
+                <div class="pt-1 flex justify-between items-center text-[10px] text-amber-800/80">
+                    <span>CATS Bus Routes: #7, #8, #22</span>
+                    <a href="https://qcexaminer.com/" target="_blank" class="hover:underline font-semibold flex items-center gap-0.5">Local News <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Interactive Tab Contents -->
+        <div class="lg:col-span-9 space-y-6">
+
+            <!-- TAB 1: SCENARIO DOSSIER -->
+            <div id="view-brief" class="tab-view space-y-6">
+                <!-- Banner -->
+                <div class="bg-slate-900 text-white rounded-3xl p-6 lg:p-8 relative overflow-hidden shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div class="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+                    <div class="space-y-2 z-10 max-w-xl">
+                        <span class="bg-amber-500 text-slate-950 font-bold text-[10px] uppercase px-2.5 py-1 rounded-full">Crisis Event #1</span>
+                        <h2 class="text-2xl lg:text-3xl font-bold serif-title leading-tight">The Threat to 'Beatties Ford Green & Cooperative'</h2>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            A local community safe haven providing 34 affordable garden cottages and the corridor's largest resident-managed urban farm has just been issued a 30-day demolition notice by a developer to build the "Queen City Luxury High-Rise". Simultaneously, CATS transit line revisions are cutting the neighborhood's direct express route.
+                        </p>
+                    </div>
+                    <div class="bg-slate-800/60 border border-slate-700 p-4 rounded-2xl z-10 w-full md:w-auto text-center shrink-0">
+                        <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Your Collective Goal</p>
+                        <p class="text-lg font-bold text-amber-400 mt-1">Co-Write the Council Appeal</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Submit proposal before deadline</p>
+                    </div>
+                </div>
+
+                <!-- Live Inject Banner (Updated dynamically by facilitator) -->
+                <div id="live-inject-banner" class="hidden bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start space-x-3 shadow-sm animate-fade-in">
+                    <span class="bg-red-500 text-white p-2 rounded-xl flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </span>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-red-700 uppercase tracking-wider">URGENT INJECT UPDATE:</span>
+                            <span id="inject-timestamp" class="text-[10px] text-slate-400 font-mono">Just now</span>
+                        </div>
+                        <h4 id="inject-title" class="font-bold text-slate-800 text-sm mt-0.5">Critical Situation Triggered</h4>
+                        <p id="inject-text" class="text-xs text-slate-600 mt-1 leading-relaxed">The developer has offered to move 20% of the apartments to another zone, but plans to remove the urban garden entirely. How does your group respond in the Proposal?</p>
+                    </div>
+                </div>
+
+                <!-- Map and Details Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Fictional Local Map (SVG) -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 space-y-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                                    <i class="fa-solid fa-map text-emerald-600"></i> Beatties Ford Corridor Corridor Map
+                                </h3>
+                                <span class="text-[10px] bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded">Interactive Zones</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Map highlighting the targeted displacement zones, critical transit hubs, and remaining green space infrastructure.</p>
+                        </div>
+                        
+                        <!-- Mini Interactive SVG Map of Charlotte / Beatties Ford Area -->
+                        <div class="bg-slate-50 border border-slate-100 rounded-xl p-4 flex justify-center items-center relative h-64">
+                            <svg viewBox="0 0 400 300" class="w-full h-full">
+                                <!-- Grid Lines -->
+                                <line x1="0" y1="50" x2="400" y2="50" stroke="#cbd5e1" stroke-dasharray="2 2"/>
+                                <line x1="0" y1="150" x2="400" y2="150" stroke="#cbd5e1" stroke-dasharray="2 2"/>
+                                <line x1="0" y1="250" x2="400" y2="250" stroke="#cbd5e1" stroke-dasharray="2 2"/>
+                                <line x1="100" y1="0" x2="100" y2="300" stroke="#cbd5e1" stroke-dasharray="2 2"/>
+                                <line x1="200" y1="0" x2="200" y2="300" stroke="#cbd5e1" stroke-dasharray="2 2"/>
+                                <line x1="300" y1="0" x2="300" y2="300" stroke="#cbd5e1" stroke-dasharray="2 2"/>
+
+                                <!-- Beatties Ford Road Arterial -->
+                                <path d="M 50 0 L 150 150 L 250 300" stroke="#94a3b8" stroke-width="14" fill="none" opacity="0.4"/>
+                                <path d="M 50 0 L 150 150 L 250 300" stroke="#f59e0b" stroke-width="6" fill="none" stroke-dasharray="10 6"/>
+
+                                <!-- West Trade Street -->
+                                <path d="M 0 150 L 400 150" stroke="#94a3b8" stroke-width="10" fill="none" opacity="0.4"/>
+                                <path d="M 0 150 L 400 150" stroke="#64748b" stroke-width="4" fill="none"/>
+
+                                <!-- Historic Zone Polygon -->
+                                <polygon points="110,80 180,80 170,140 100,120" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2" class="cursor-pointer hover:fill-opacity-35 transition duration-150" onclick="alertInline('Beatties Ford Green & Co-Op (Historic Garden Zone)','This is the focal point under demolition threat. It currently houses 34 families and feeds 200+ neighborhood residents weekly.')"/>
+                                <text x="115" y="70" font-family="'Inter'" font-size="9" font-weight="bold" fill="#047857">Beatties Ford Green & Co-op</text>
+                                
+                                <!-- Luxury Development Zone -->
+                                <polygon points="190,40 280,40 280,100 190,100" fill="#ef4444" fill-opacity="0.1" stroke="#ef4444" stroke-width="2" stroke-dasharray="3 3" class="cursor-pointer hover:fill-opacity-25 transition duration-150" onclick="alertInline('Planned Queen City High-Rise Complex','The developer seeks to acquire zoning permits to clear the cooperative and build modern high-end luxury lofts start at $750k+.')"/>
+                                <text x="195" y="32" font-family="'Inter'" font-size="9" font-weight="bold" fill="#b91c1c">Proposed High-Rise</text>
+
+                                <!-- Transit Hub Cut -->
+                                <circle cx="150" cy="150" r="16" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="2" class="cursor-pointer hover:fill-opacity-45 transition duration-150" onclick="alertInline('Interstation Route Cut','CATS proposes eliminating the express bus corridor at this node, creating a structural barrier for local workforce transit.')"/>
+                                <text x="165" y="165" font-family="'Inter'" font-size="9" font-weight="bold" fill="#1d4ed8">Transit Stop Hub (#7/8 Line)</text>
+
+                                <!-- Johnson C. Smith University Area Anchor -->
+                                <rect x="30" y="200" width="80" height="40" rx="4" fill="#6d28d9" fill-opacity="0.1" stroke="#6d28d9" stroke-width="1.5" class="cursor-pointer hover:fill-opacity-25 transition" onclick="alertInline('JCSU Campus Edge','A critical educational and community anchor. Historic West End partnerships and student advocacy hubs start here.')"/>
+                                <text x="35" y="215" font-family="'Inter'" font-size="9" font-weight="bold" fill="#6d28d9">JCSU Campus Edge</text>
+                            </svg>
+                        </div>
+                        <div class="text-[10px] text-slate-400 flex justify-between">
+                            <span>💡 Tip: Click zones on map for details</span>
+                            <span class="text-emerald-700 font-semibold"><i class="fa-solid fa-seedling"></i> West End Green Grid</span>
+                        </div>
+                    </div>
+
+                    <!-- Stakeholders Brief & Perspectives -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-id-badge text-emerald-600"></i> Stakeholder Briefs
+                        </h3>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            To ensure high-level empathy and dynamic collaboration, choose one of these roles to act through during the scenario. Remember to speak and write from their background, using their particular appeals:
+                        </p>
+                        <div class="space-y-3 max-h-[220px] overflow-y-auto pr-2">
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                                <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">Ethos & Legacy focus</span>
+                                <h4 class="font-bold text-xs text-slate-800">Ms. Maeve Baldwin (Elder & Community Historian)</h4>
+                                <p class="text-[10px] text-slate-500">Living in the corridor for 62 years, her family protected this garden during historic urban renewal shifts. Values heritage, preservation, and oral histories.</p>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                                <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Environmental & Food Justice</span>
+                                <h4 class="font-bold text-xs text-slate-800">Marcus Vance (Urban Farmer & Food Coordinator)</h4>
+                                <p class="text-[10px] text-slate-500">Coordinates the market cooperative. Focuses on nutritional equity, soil regeneration, and self-sufficient local green economies.</p>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Logistics & Infrastructure</span>
+                                <h4 class="font-bold text-xs text-slate-800">Carlos Mendoza (Local Bodega Owner & Transit Advocate)</h4>
+                                <p class="text-[10px] text-slate-500">Owns 'Mendoza Market.' Reliant on local foot traffic and public transit access for employees and goods. Demands accessible transport lines.</p>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                                <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">Grassroots Mobilization</span>
+                                <h4 class="font-bold text-xs text-slate-800">Jada Brooks (JCSU Student Organizer)</h4>
+                                <p class="text-[10px] text-slate-500">Active student body leader. Skilled in social media campaigns, organizing protests, and bridging student energy with old-school neighborhood leaders.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Guide & Learning Prompts -->
+                <div class="bg-gradient-to-r from-emerald-800 to-emerald-950 text-white rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm flex items-center gap-1.5 text-amber-400">
+                        <i class="fa-solid fa-graduation-cap"></i> First-Year Writing Core Mission
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-200">
+                        <div class="bg-emerald-900/40 p-3 rounded-xl border border-emerald-700/50">
+                            <span class="font-bold text-amber-400 block mb-1">1. Perspective Shift (Empathy)</span>
+                            Read and write strictly from your selected persona's viewpoint. Do not just use your own voice—practice deep perspective taking.
+                        </div>
+                        <div class="bg-emerald-900/40 p-3 rounded-xl border border-emerald-700/50">
+                            <span class="font-bold text-amber-400 block mb-1">2. Multi-Voice Debate</span>
+                            Head over to the <strong class="text-white">Community Forum</strong>. Engage in constructive, in-character debates. Find common ground with other stakeholders.
+                        </div>
+                        <div class="bg-emerald-900/40 p-3 rounded-xl border border-emerald-700/50">
+                            <span class="font-bold text-amber-400 block mb-1">3. The Joint Proposal</span>
+                            Contribute sections to the <strong class="text-white">City Council Appeal</strong> document. Integrate Ethos, Pathos, and Logos arguments.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB 2: COMMUNITY FORUM -->
+            <div id="view-forum" class="tab-view hidden space-y-6">
+                <!-- Forum Header -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-comments text-emerald-600"></i> The West End Crisis Forum
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Leave comments and negotiate with other stakeholders to form your community action coalition.</p>
+                    </div>
+                    <!-- Role Filter -->
+                    <div class="flex items-center space-x-2">
+                        <label for="forum-filter" class="text-xs text-slate-500 font-medium">Filter by Role:</label>
+                        <select id="forum-filter" onchange="renderForum()" class="text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="all">All Roles</option>
+                            <option value="Maeve Baldwin">Maeve Baldwin (Historian)</option>
+                            <option value="Marcus Vance">Marcus Vance (Urban Farmer)</option>
+                            <option value="Carlos Mendoza">Carlos Mendoza (Bodega/Transit)</option>
+                            <option value="Jada Brooks">Jada Brooks (Student Activist)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Live Notification Area -->
+                <div id="connection-notification" class="hidden bg-amber-50 text-amber-800 text-xs px-4 py-2 rounded-xl flex items-center space-x-2 border border-amber-200/60 shadow-sm">
+                    <i class="fa-solid fa-signal animate-pulse"></i>
+                    <span>Connecting dynamically to community workspace database...</span>
+                </div>
+
+                <!-- Forum Feed container -->
+                <div id="forum-feed" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                    <!-- Dynamic comments populated here -->
+                </div>
+
+                <!-- Post Comment Form -->
+                <div class="bg-white rounded-2xl shadow-md border border-slate-100 p-5 space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-paper-plane text-emerald-600"></i> Post as Stakeholder
+                    </h3>
+                    <div id="forum-input-disabled-msg" class="bg-slate-50 text-slate-500 text-xs p-4 rounded-xl text-center border border-dashed border-slate-200">
+                        <p>⚠️ Please select your stakeholder identity in the sidebar or menu before posting.</p>
+                        <button onclick="openPersonaModal()" class="mt-2 bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">Choose Role Now</button>
+                    </div>
+                    <form id="forum-form" class="hidden space-y-3" onsubmit="handlePostSubmit(event)">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1" id="forum-form-active-as">Post as: Guest</label>
+                            <textarea id="forum-message" rows="3" required placeholder="Type your response from your persona's perspective. Support your neighbors, critique the transit changes, or challenge developers..." class="w-full text-xs p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50"></textarea>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-slate-400 italic">Be authentic, persuasive, and civil. Avoid generic answers.</span>
+                            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition duration-200 shadow-sm">
+                                <i class="fa-solid fa-paper-plane"></i> Send to Forum
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB 3: JOINT CITY PROPOSAL -->
+            <div id="view-document" class="tab-view hidden space-y-6">
+                <!-- Proposal Overview Header -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-file-signature text-emerald-600"></i> Joint City Council Proposal
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-1">This is a dynamic collaborative draft. Review and update sections of the proposal addressing Charlotte City Council.</p>
+                        </div>
+                        <span class="bg-amber-100 text-amber-900 border border-amber-200 text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shrink-0">
+                            <i class="fa-solid fa-users-viewfinder"></i> Live Collaboratively Drafted
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Collaborative Editor Sections -->
+                <div class="space-y-6">
+
+                    <!-- Section 1: Introduction (Ethos & Shared Heritage) -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 space-y-4">
+                        <div class="flex justify-between items-start">
+                            <div class="space-y-1">
+                                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Section I: Ethos & Identity</span>
+                                <h3 class="font-bold text-slate-800 text-sm">Community Background & The Beatties Ford Legacy</h3>
+                                <p class="text-xs text-slate-400">Introduce who you are as a unified West End Coalition. Make council members understand the history they are threatening to dismantle.</p>
+                            </div>
+                            <button onclick="editDocSection('section1', 'Community Background & Beatties Ford Legacy')" class="bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1 shrink-0">
+                                <i class="fa-solid fa-pen-nib"></i> Edit Section
+                            </button>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                            <div id="doc-section1-content" class="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap italic">
+                                Loading shared proposal content...
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-slate-200/50 flex justify-between items-center text-[10px] text-slate-400">
+                                <span id="doc-section1-meta">Last updated: N/A</span>
+                                <span class="text-emerald-700 font-medium flex items-center gap-0.5"><i class="fa-solid fa-shield"></i> Ethos Focus</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Pathos (Human-Centered Impact) -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 space-y-4">
+                        <div class="flex justify-between items-start">
+                            <div class="space-y-1">
+                                <span class="text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Section II: Pathos & Human Cost</span>
+                                <h3 class="font-bold text-slate-800 text-sm">The Human-Centered Cost of Forced Displacement</h3>
+                                <p class="text-xs text-slate-400">Describe the emotional, physical, and community health toll this zoning change will create for families and elder residents.</p>
+                            </div>
+                            <button onclick="editDocSection('section2', 'The Human-Centered Cost of Forced Displacement')" class="bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1 shrink-0">
+                                <i class="fa-solid fa-pen-nib"></i> Edit Section
+                            </button>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                            <div id="doc-section2-content" class="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap italic">
+                                Loading shared proposal content...
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-slate-200/50 flex justify-between items-center text-[10px] text-slate-400">
+                                <span id="doc-section2-meta">Last updated: N/A</span>
+                                <span class="text-rose-700 font-medium flex items-center gap-0.5"><i class="fa-solid fa-heart"></i> Pathos Focus</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Logos (Zoning Alternatives & Policy Plan) -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 space-y-4">
+                        <div class="flex justify-between items-start">
+                            <div class="space-y-1">
+                                <span class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Section III: Logos & Alternatives</span>
+                                <h3 class="font-bold text-slate-800 text-sm">Zoning Proposals, Transit Integration & Feasible Policy</h3>
+                                <p class="text-xs text-slate-400">Provide specific policy proposals. Suggest compromises like inclusionary zoning, public land preservation, or community land trusts.</p>
+                            </div>
+                            <button onclick="editDocSection('section3', 'Zoning Proposals, Transit Integration & Policy')" class="bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1 shrink-0">
+                                <i class="fa-solid fa-pen-nib"></i> Edit Section
+                            </button>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                            <div id="doc-section3-content" class="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap italic">
+                                Loading shared proposal content...
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-slate-200/50 flex justify-between items-center text-[10px] text-slate-400">
+                                <span id="doc-section3-meta">Last updated: N/A</span>
+                                <span class="text-blue-700 font-medium flex items-center gap-0.5"><i class="fa-solid fa-brain"></i> Logos Focus</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB 4: FACILITATOR INJECT PANEL -->
+            <div id="view-facilitator" class="tab-view hidden space-y-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-4">
+                    <div class="flex items-center space-x-2 text-slate-800">
+                        <i class="fa-solid fa-chalkboard-user text-xl text-emerald-600"></i>
+                        <h2 class="text-lg font-bold">Facilitator / Instructor Control Room</h2>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Use this panel to introduce real-time "Injects" (critical twists, city actions, developer compromises) that will force students to adapt their strategies, change writing directions, and negotiate dynamically on the fly.
+                    </p>
+
+                    <!-- Instructor Settings Form -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-4">
+                        <h3 class="font-bold text-xs text-slate-700 uppercase tracking-wider">Trigger New Crisis Twist</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="facilitator-title" class="block text-xs text-slate-600 font-medium mb-1">Inject Title</label>
+                                <input type="text" id="facilitator-title" placeholder="e.g., Transit Cuts Approved early!" class="w-full text-xs p-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                            </div>
+                            <div>
+                                <label for="facilitator-preset" class="block text-xs text-slate-600 font-medium mb-1">Load Preset Crisis Template</label>
+                                <select id="facilitator-preset" onchange="loadPresetInject()" class="w-full text-xs p-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                    <option value="">-- Custom (Write below) --</option>
+                                    <option value="compromise">The Hybrid Redevelopment Compromise Offer</option>
+                                    <option value="transit">CATS Bus Cancelation Alert</option>
+                                    <option value="investor">Mystery Investor Fund Match</option>
+                                    <option value="lawsuit">Tenant Coalition Legal Blockade</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="facilitator-text" class="block text-xs text-slate-600 font-medium mb-1">Crisis Description Context</label>
+                            <textarea id="facilitator-text" rows="3" placeholder="Explain the new development detail, the challenge it introduces, or a deadline shift. How will this alter their writing logic?" class="w-full text-xs p-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"></textarea>
+                        </div>
+
+                        <div class="flex justify-end gap-2 pt-2">
+                            <button onclick="clearActiveInject()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2 rounded-lg text-xs transition">
+                                Clear Active Inject
+                            </button>
+                            <button onclick="publishInject()" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition shadow-sm">
+                                <i class="fa-solid fa-bullhorn"></i> Broadcast Inject Live
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Scenario Reset / Clear Dashboard data -->
+                    <div class="p-4 bg-red-50/50 rounded-2xl border border-red-100 space-y-2">
+                        <h4 class="font-bold text-xs text-red-800 uppercase tracking-wider">Danger Zone</h4>
+                        <p class="text-[11px] text-slate-500">Need to clear mock postings or reset collective documents for another class section or assignment period?</p>
+                        <button onclick="resetSimulationDatabase()" class="bg-red-50 border border-red-200 hover:bg-red-100 text-red-700 text-xs px-3 py-1.5 rounded-xl font-semibold transition">
+                            Reset Entire Simulation Progress
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p>&copy; 2026 UNCC First-Year Writing Collaborative Classroom. Immersive Engagement Tool.</p>
+            <div class="flex space-x-4">
+                <span class="hover:text-slate-200">Empathy Engine</span>
+                <span class="text-slate-700">|</span>
+                <span class="hover:text-slate-200">Constructive Writing</span>
+                <span class="text-slate-700">|</span>
+                <span class="hover:text-slate-200">Local Engagement</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: CHOOSE PERSONA -->
+    <div id="modal-persona" class="fixed inset-0 bg-slate-950/65 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden flex flex-col">
+            <!-- Modal Header -->
+            <div class="bg-emerald-900 text-white p-5 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-user-tag text-lg text-amber-400"></i>
+                    <h3 class="font-bold text-sm serif-title">Choose Your Citizen Identity</h3>
+                </div>
+                <button onclick="closePersonaModal()" class="text-white/80 hover:text-white transition text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <!-- Modal Body (List of Personas) -->
+            <div class="p-5 overflow-y-auto max-h-[350px] space-y-4">
+                <p class="text-xs text-slate-500 leading-relaxed mb-2">Select a persona below. Your forum postings and edits to the City Council proposal will be saved under this stakeholder's perspective.</p>
+                
+                <!-- Persona Selection Buttons -->
+                <div class="space-y-3">
+                    <div onclick="selectPersona('Maeve Baldwin', 'Elder & Community Historian', 'Keep the community connected to its historic roots, preserving legacy stories over market metrics.')" class="p-4 rounded-2xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 cursor-pointer transition flex items-start space-x-3">
+                        <span class="w-10 h-10 bg-amber-100 text-amber-800 rounded-xl font-bold flex items-center justify-center text-sm shrink-0">MB</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs">Maeve Baldwin</h4>
+                            <p class="text-[10px] text-emerald-800 font-semibold mb-1">Elder & Community Historian</p>
+                            <p class="text-[11px] text-slate-500">"Protect the memories, the old homes, and the stories. Charlotte should not erase its foundations."</p>
+                        </div>
+                    </div>
+
+                    <div onclick="selectPersona('Marcus Vance', 'Urban Farmer & Food Coordinator', 'Ensure nutritional independence and protect public green spaces.')" class="p-4 rounded-2xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 cursor-pointer transition flex items-start space-x-3">
+                        <span class="w-10 h-10 bg-emerald-100 text-emerald-800 rounded-xl font-bold flex items-center justify-center text-sm shrink-0">MV</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs">Marcus Vance</h4>
+                            <p class="text-[10px] text-emerald-800 font-semibold mb-1">Urban Farmer & Food Coordinator</p>
+                            <p class="text-[11px] text-slate-500">"The garden is food justice. It produces 4,000 lbs of organic produce. We are fighting a food desert."</p>
+                        </div>
+                    </div>
+
+                    <div onclick="selectPersona('Carlos Mendoza', 'Local Bodega Owner', 'Secure reliable transportation access and economic protection for local merchants.')" class="p-4 rounded-2xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 cursor-pointer transition flex items-start space-x-3">
+                        <span class="w-10 h-10 bg-blue-100 text-blue-800 rounded-xl font-bold flex items-center justify-center text-sm shrink-0">CM</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs">Carlos Mendoza</h4>
+                            <p class="text-[10px] text-emerald-800 font-semibold mb-1">Local Bodega Owner & Transit Advocate</p>
+                            <p class="text-[11px] text-slate-500">"Without the express bus line and the community crowd, neighborhood bodegas like mine will fail."</p>
+                        </div>
+                    </div>
+
+                    <div onclick="selectPersona('Jada Brooks', 'JCSU Student Organizer', 'Bridge student activism with community elders to amplify grassroots messaging.')" class="p-4 rounded-2xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 cursor-pointer transition flex items-start space-x-3">
+                        <span class="w-10 h-10 bg-purple-100 text-purple-800 rounded-xl font-bold flex items-center justify-center text-sm shrink-0">JB</span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs">Jada Brooks</h4>
+                            <p class="text-[10px] text-emerald-800 font-semibold mb-1">JCSU Student Organizer</p>
+                            <p class="text-[11px] text-slate-500">"We are organizing digital strategies and campus walkouts. Charlotte developers cannot push us out."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: EDIT COLLABORATIVE DOCUMENT SECTION -->
+    <div id="modal-edit-doc" class="fixed inset-0 bg-slate-950/65 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-xl w-full shadow-2xl overflow-hidden flex flex-col">
+            <!-- Modal Header -->
+            <div class="bg-emerald-900 text-white p-5 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-file-pen text-lg text-amber-400"></i>
+                    <h3 id="edit-doc-modal-title" class="font-bold text-sm">Edit Proposal Section</h3>
+                </div>
+                <button onclick="closeEditDocModal()" class="text-white/80 hover:text-white transition text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-5 space-y-4">
+                <p id="edit-doc-section-instructions" class="text-xs text-slate-400 leading-relaxed"></p>
+                <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100 flex items-center gap-1.5 text-[11px] text-slate-500">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Editing as: <strong id="edit-doc-role-display">Role Unselected</strong></span>
+                </div>
+                <textarea id="edit-doc-textarea" rows="8" placeholder="Develop your persuasive response argument here..." class="w-full text-xs p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50 font-serif leading-relaxed"></textarea>
+                
+                <div class="flex justify-end gap-2">
+                    <button onclick="closeEditDocModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2 rounded-xl text-xs transition">
+                        Cancel
+                    </button>
+                    <button id="save-doc-button" onclick="saveDocSectionContent()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition duration-200 shadow-sm">
+                        <i class="fa-solid fa-floppy-disk"></i> Save & Sync Proposal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: NOTIFICATION ALERTS -->
+    <div id="modal-alert" class="fixed inset-0 bg-slate-950/65 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl p-6 space-y-4 border border-slate-100">
+            <h4 id="alert-title" class="font-bold text-slate-800 text-sm flex items-center gap-2">Detail File Info</h4>
+            <p id="alert-body" class="text-xs text-slate-600 leading-relaxed"></p>
+            <div class="flex justify-end">
+                <button onclick="closeAlertInline()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2 rounded-xl font-bold transition">OK, Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: EDIT REAL USER NAME -->
+    <div id="modal-name-edit" class="fixed inset-0 bg-slate-950/65 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl p-6 space-y-4 border border-slate-100">
+            <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-pen text-emerald-600"></i> Edit Student Name
+            </h4>
+            <p class="text-xs text-slate-500">Update your real name for grading visibility in edits and messages.</p>
+            <input type="text" id="input-real-name" placeholder="Enter your actual name..." class="w-full text-xs p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+            <div class="flex justify-end gap-2">
+                <button onclick="closeRealNameModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs px-4 py-2 rounded-xl font-semibold transition">Cancel</button>
+                <button onclick="saveRealName()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2 rounded-xl font-semibold transition">Save Name</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- PRESETS FOR FACILITATOR INJECT PANEL ---
+        const INJECT_PRESETS = {
+            compromise: {
+                title: "The Mixed Redevelopment Compromise Offer",
+                text: "The primary developer of the 'Queen City Luxury High-Rise' just sent a public memo offering to relocate 20% of the displaced families into units in other parts of Charlotte, but insists that the historical urban farm must be replaced by parking garage structures. How will your Coalition address this compromise in Section III (Logistics & Alternatives) of your proposal?"
+            },
+            transit: {
+                title: "CATS Bus Route #7 & #8 Service Cancelation Alert",
+                text: "The local Charlotte Area Transit System (CATS) board is reviewing early cancelation of the Beatties Ford corridor routes by next Tuesday. This creates immediate transportation emergencies for residents and grocery store access. Students need to prioritize transit equity in their written sections!"
+            },
+            investor: {
+                title: "An Anonymous Philanthropic Matching Grant",
+                text: "A prominent philanthropist and local JCSU alum has stepped forward offering a $1.2 Million match fund if the neighborhood coalition can successfully persuade the City Council to classify the farm cooperative as land-trust protected parkland. The stakes are raised!"
+            },
+            lawsuit: {
+                title: "Tenant Coalition Legal Injunction Threat",
+                text: "A local pro-bono law clinic has offered to file an immediate environmental zoning injunction. However, to file, they need a robust, unified Resident Manifesto drafted. The Proposal draft on Section II must serve as the primary emotional rationale."
+            }
+        };
+
+        // --- IN-MEMORY SESSION FALLBACKS ---
+        let localForumComments = [
+            {
+                id: "initial-1",
+                roleName: "Maeve Baldwin",
+                roleTitle: "Elder & Community Historian",
+                realName: "System Template",
+                message: "This neighborhood garden was carved out during the 1960s civil rights movement in Charlotte. We cannot allow high-rises to bulldoze our legacy just for profit. Let's unite on this forum and compose a proposal with a powerful emotional baseline.",
+                timestamp: new Date().getTime() - (1000 * 60 * 30), // 30 mins ago
+                avatarInitials: "MB"
+            },
+            {
+                id: "initial-2",
+                roleName: "Marcus Vance",
+                roleTitle: "Urban Farmer & Food Coordinator",
+                realName: "System Template",
+                message: "Maeve is exactly correct. Losing this space cuts off Charlotte's West End families from critical, organic food access in this historical food desert. Section III of our proposal needs concrete food policy logic.",
+                timestamp: new Date().getTime() - (1000 * 60 * 15), // 15 mins ago
+                avatarInitials: "MV"
+            }
+        ];
+
+        let localDocSections = {
+            section1: {
+                content: "To the Charlotte City Council,\n\nWe represent the unified voice of the Historic Beatties Ford Road Corridor Coalition. Our neighborhood is not merely an assemblage of vacant acres ripe for urban displacement; it is a repository of shared identity, generational memories, and a crucial safety net for underrepresented citizens...\n\n[PROMPT: Use this section to establish a profound Ethos (credibility) arguments for the West End. Incorporate cultural heritage details and local history elements!]",
+                updatedBy: "System Setup",
+                timestamp: new Date().toLocaleDateString()
+            },
+            section2: {
+                content: "The displacement of the Beatties Ford Green & Cooperative is more than a geographic relocation—it represents a psychological and health hazard to our vulnerable families.\n\n[PROMPT: Incorporate powerful narrative pathos appeals here. Speak from the perspective of low-income families, elderly tenants facing sudden homelessness, and children dependent on community programs.]",
+                updatedBy: "System Setup",
+                timestamp: new Date().toLocaleDateString()
+            },
+            section3: {
+                content: "We propose alternative, logical pathways to development that do not depend on resident relocation:\n\n1. Enforce inclusionary zoning parameters protecting the cooperative lands.\n2. Re-route the local CATS Bus lines through community-guided models.\n\n[PROMPT: Build a highly logical (Logos) argument here with concrete community-land-trust options, funding models, or urban plan compromises.]",
+                updatedBy: "System Setup",
+                timestamp: new Date().toLocaleDateString()
+            }
+        };
+
+        let localInject = {
+            active: false,
+            title: "",
+            text: "",
+            timestamp: ""
+        };
+
+        // --- APP STATE ---
+        let appConfig = {
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'default-charlotte-crisis',
+            isFirebaseActive: false,
+            userPersona: null,
+            realName: "Guest Student"
+        };
+
+        // --- FIREBASE GLOBAL INITIALIZATIONS ---
+        let db, auth;
+        let unsubscribeForum = null;
+        let unsubscribeDoc = null;
+        let unsubscribeInject = null;
+
+        // --- ONLOAD INITIALIZATION ---
+        window.onload = function() {
+            // Check if Firebase compatibility bundle is available
+            if (typeof firebase !== 'undefined') {
+                try {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    firebase.initializeApp(firebaseConfig);
+                    auth = firebase.auth();
+                    db = firebase.firestore();
+                    appConfig.isFirebaseActive = true;
+                    console.log("Firebase compatibility SDK initialized successfully inside classroom scenario.");
+                } catch (e) {
+                    console.error("Failed to parse Firebase configurations, using local storage state fallback:", e);
+                }
+            } else {
+                console.log("No Firebase libraries detected on window global, using local-storage mockup engine.");
+            }
+
+            // Init Authentication & Data streams
+            initializeSimulationData();
+            loadUserDataFromStorage();
+            renderActivePersonaUI();
+        };
+
+        // --- SECURITY / AUTHENTICATION ACCORDING TO RULE 3 ---
+        async function initializeSimulationData() {
+            if (appConfig.isFirebaseActive && auth) {
+                try {
+                    document.getElementById('connection-notification').classList.remove('hidden');
+                    document.getElementById('active-players-count').innerText = "Authenticating...";
+
+                    // Auth Step (Using the Compat API style)
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await auth.signInWithCustomToken(__initial_auth_token);
+                    } else {
+                        await auth.signInAnonymously();
+                    }
+
+                    // Listen for state changes before running Firestore queries
+                    auth.onAuthStateChanged((user) => {
+                        if (user) {
+                            document.getElementById('active-players-count').innerText = "Classroom Database Online";
+                            document.getElementById('connection-notification').classList.add('hidden');
+                            
+                            // Setup Subscriptions
+                            setupFirebaseForumSubscription();
+                            setupFirebaseDocSubscription();
+                            setupFirebaseInjectSubscription();
+                        } else {
+                            document.getElementById('active-players-count').innerText = "Offline Simulator Mode";
+                            renderForum();
+                            renderDocContent();
+                        }
+                    });
+                } catch (error) {
+                    console.error("Auth Failure in simulation initialization:", error);
+                    document.getElementById('active-players-count').innerText = "Offline Simulator Mode";
+                    document.getElementById('connection-notification').innerHTML = `⚠️ Workspace synced locally (Database connection bypassed).`;
+                    appConfig.isFirebaseActive = false;
+                    renderForum();
+                    renderDocContent();
+                }
+            } else {
+                // In-memory Fallback init
+                document.getElementById('active-players-count').innerText = "Offline Simulator Mode";
+                renderForum();
+                renderDocContent();
+            }
+        }
+
+        // --- LOCAL USER STATE CONTROLS ---
+        function loadUserDataFromStorage() {
+            const storedPersona = localStorage.getItem('crisis_persona_name');
+            const storedTitle = localStorage.getItem('crisis_persona_title');
+            const storedGoal = localStorage.getItem('crisis_persona_goal');
+            const storedRealName = localStorage.getItem('crisis_real_name');
+
+            if (storedPersona) {
+                appConfig.userPersona = {
+                    name: storedPersona,
+                    title: storedTitle,
+                    goal: storedGoal
+                };
+            }
+            if (storedRealName) {
+                appConfig.realName = storedRealName;
+            }
+        }
+
+        function renderActivePersonaUI() {
+            const personaSelectedDiv = document.getElementById('persona-selected');
+            const personaUnselectedDiv = document.getElementById('persona-unselected');
+            const forumForm = document.getElementById('forum-form');
+            const forumDisabledMsg = document.getElementById('forum-input-disabled-msg');
+
+            if (appConfig.userPersona) {
+                personaUnselectedDiv.classList.add('hidden');
+                personaSelectedDiv.classList.remove('hidden');
+                
+                // Set text fields
+                document.getElementById('user-role-name').innerText = appConfig.userPersona.name;
+                document.getElementById('user-role-title').innerText = appConfig.userPersona.title;
+                document.getElementById('user-role-goal').innerText = `"${appConfig.userPersona.goal}"`;
+                document.getElementById('user-real-name').innerText = `Playing as: ${appConfig.realName}`;
+                
+                // Create initials for avatar
+                const initials = appConfig.userPersona.name.split(' ').map(n => n[0]).join('');
+                const avatar = document.getElementById('user-avatar');
+                avatar.innerText = initials;
+                
+                // Update avatar style classes based on roles
+                avatar.className = "w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold shrink-0 shadow-inner " + getPersonaColorClass(appConfig.userPersona.name);
+
+                // Open Form
+                forumForm.classList.remove('hidden');
+                forumDisabledMsg.classList.add('hidden');
+                document.getElementById('forum-form-active-as').innerText = `Posting on board as: ${appConfig.userPersona.name} (${appConfig.realName})`;
+            } else {
+                personaUnselectedDiv.classList.remove('hidden');
+                personaSelectedDiv.classList.add('hidden');
+                forumForm.classList.add('hidden');
+                forumDisabledMsg.classList.remove('hidden');
+            }
+        }
+
+        function getPersonaColorClass(name) {
+            if (name.includes('Maeve')) return "bg-amber-100 text-amber-800";
+            if (name.includes('Marcus')) return "bg-emerald-100 text-emerald-800";
+            if (name.includes('Carlos')) return "bg-blue-100 text-blue-800";
+            if (name.includes('Jada')) return "bg-purple-100 text-purple-800";
+            return "bg-slate-100 text-slate-800";
+        }
+
+        // --- NAVIGATION TABS CONTROLLER ---
+        function switchTab(tabId) {
+            // Hide all views
+            document.querySelectorAll('.tab-view').forEach(view => {
+                view.classList.add('hidden');
+            });
+            // Show requested view
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+            // Reset tab button stylings
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left font-medium text-xs transition duration-150 text-slate-600 hover:bg-slate-50";
+                // Restore icon styling color tags inside button spans
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = icon.className.replace('text-emerald-600', 'text-slate-400');
+            });
+
+            // Set active styling on active button
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left font-medium text-xs transition duration-150 bg-emerald-50 text-emerald-800";
+                const icon = activeBtn.querySelector('i');
+                if (icon) {
+                    icon.className = icon.className.replace('text-slate-400', 'text-emerald-600');
+                }
+            }
+
+            // Specific tab operations
+            if (tabId === 'forum') {
+                document.getElementById('forum-badge').innerText = "0";
+            }
+        }
+
+        // --- STAKEHOLDER SELECTION CONTROL ---
+        function openPersonaModal() {
+            document.getElementById('modal-persona').classList.remove('hidden');
+        }
+
+        // --- REAL NAME EDITING CONTROLLER ---
+        function openRealNameModal() {
+            document.getElementById('input-real-name').value = appConfig.realName === "Guest Student" ? "" : appConfig.realName;
+            document.getElementById('modal-name-edit').classList.remove('hidden');
+        }
+
+        function closePersonaModal() {
+            document.getElementById('modal-persona').classList.add('hidden');
+        }
+
+        function selectPersona(name, title, goal) {
+            appConfig.userPersona = { name, title, goal };
+            localStorage.setItem('crisis_persona_name', name);
+            localStorage.setItem('crisis_persona_title', title);
+            localStorage.setItem('crisis_persona_goal', goal);
+            
+            closePersonaModal();
+            renderActivePersonaUI();
+            
+            // Auto open user real name update for initial configuration
+            if (appConfig.realName === "Guest Student") {
+                openRealNameModal();
+            }
+        }
+
+        function editRealNameModal() {
+            openRealNameModal();
+        }
+
+        function closeRealNameModal() {
+            document.getElementById('modal-name-edit').classList.add('hidden');
+        }
+
+        function saveRealName() {
+            const inputVal = document.getElementById('input-real-name').value.trim();
+            if (inputVal.length > 0) {
+                appConfig.realName = inputVal;
+                localStorage.setItem('crisis_real_name', inputVal);
+                closeRealNameModal();
+                renderActivePersonaUI();
+            }
+        }
+
+        // --- COLLABORATIVE FORUM SUBSCRIPTION & WRITING ENGINE ---
+        function setupFirebaseForumSubscription() {
+            if (!db || !appConfig.isFirebaseActive || !auth.currentUser) return;
+            
+            // Strictly follow path rules using correct compatibility syntax
+            const collectionRef = db.collection('artifacts/' + appConfig.appId + '/public/data/forum');
+            
+            // Simple query only (Rule 2)
+            unsubscribeForum = collectionRef.onSnapshot((snapshot) => {
+                let posts = [];
+                snapshot.forEach((doc) => {
+                    posts.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Sort in memory (Rule 2)
+                posts.sort((a, b) => b.timestamp - a.timestamp);
+                
+                localForumComments = posts;
+                renderForum();
+
+                // Simple alert counts for inactive view tabs
+                if (document.getElementById('view-forum').classList.contains('hidden') && posts.length > 2) {
+                    document.getElementById('forum-badge').innerText = "New";
+                }
+            }, (error) => {
+                console.error("Forum live synchronization database stream failed:", error);
+            });
+        }
+
+        function renderForum() {
+            const feedContainer = document.getElementById('forum-feed');
+            const filterVal = document.getElementById('forum-filter').value;
+            feedContainer.innerHTML = "";
+
+            const displayedComments = filterVal === 'all' 
+                ? localForumComments 
+                : localForumComments.filter(post => post.roleName === filterVal);
+
+            if (displayedComments.length === 0) {
+                feedContainer.innerHTML = `
+                    <div class="bg-white rounded-2xl p-6 text-center text-slate-400 border border-slate-100">
+                        <i class="fa-regular fa-comments text-4xl block mb-2 text-slate-300"></i>
+                        <p class="text-xs">No community debates matches this filter yet. Be the first to speak out!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            displayedComments.forEach(comment => {
+                const dateString = new Date(comment.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " - " + new Date(comment.timestamp).toLocaleDateString();
+                const avatarBg = getPersonaColorClass(comment.roleName);
+                
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-5 border border-slate-100 shadow-sm space-y-3 relative";
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl ${avatarBg} font-bold flex items-center justify-center text-xs shrink-0 shadow-inner">
+                                ${comment.avatarInitials || comment.roleName.substring(0, 2)}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-xs">${comment.roleName}</h4>
+                                <p class="text-[10px] text-emerald-800 font-semibold">${comment.roleTitle}</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-mono">${dateString}</span>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed font-serif pl-1">${comment.message}</p>
+                    <div class="pt-2 border-t border-slate-50 flex justify-between items-center text-[9px] text-slate-400">
+                        <span>Signed: <strong>${comment.realName || 'Anonymous Student'}</strong></span>
+                        <button onclick="replyPersonaText('${comment.roleName}')" class="text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-0.5"><i class="fa-solid fa-reply"></i> Reference Perspective</button>
+                    </div>
+                `;
+                feedContainer.appendChild(card);
+            });
+        }
+
+        async function handlePostSubmit(event) {
+            event.preventDefault();
+            if (!appConfig.userPersona) return;
+
+            const textarea = document.getElementById('forum-message');
+            const messageText = textarea.value.trim();
+            if (messageText.length === 0) return;
+
+            const initials = appConfig.userPersona.name.split(' ').map(n => n[0]).join('');
+            const newPost = {
+                roleName: appConfig.userPersona.name,
+                roleTitle: appConfig.userPersona.title,
+                realName: appConfig.realName,
+                message: messageText,
+                timestamp: new Date().getTime(),
+                avatarInitials: initials
+            };
+
+            if (appConfig.isFirebaseActive && auth.currentUser) {
+                try {
+                    const collectionRef = db.collection('artifacts/' + appConfig.appId + '/public/data/forum');
+                    await collectionRef.add(newPost);
+                } catch (e) {
+                    console.error("Firebase save failed, falling back to local simulation save:", e);
+                    localForumComments.unshift({ id: crypto.randomUUID(), ...newPost });
+                    renderForum();
+                }
+            } else {
+                localForumComments.unshift({ id: crypto.randomUUID(), ...newPost });
+                renderForum();
+            }
+
+            textarea.value = "";
+        }
+
+        function replyPersonaText(targetPersona) {
+            const textarea = document.getElementById('forum-message');
+            textarea.value = `@${targetPersona} - Respecting your stakeholder goals, here is my response: ` + textarea.value;
+            textarea.focus();
+        }
+
+        // --- COLLABORATIVE PROPOSAL WRITING SECTION ENGINE ---
+        let editingSectionId = null;
+
+        function setupFirebaseDocSubscription() {
+            if (!db || !appConfig.isFirebaseActive || !auth.currentUser) return;
+
+            const collectionRef = db.collection('artifacts/' + appConfig.appId + '/public/data/document');
+            
+            unsubscribeDoc = collectionRef.onSnapshot((snapshot) => {
+                snapshot.forEach((doc) => {
+                    const id = doc.id;
+                    if (localDocSections[id]) {
+                        localDocSections[id] = doc.data();
+                    }
+                });
+                renderDocContent();
+            }, (error) => {
+                console.error("Live collaborative document connection failed:", error);
+            });
+        }
+
+        function renderDocContent() {
+            for (const [sectionKey, sectionObj] of Object.entries(localDocSections)) {
+                const textDiv = document.getElementById(`doc-${sectionKey}-content`);
+                const metaSpan = document.getElementById(`doc-${sectionKey}-meta`);
+                
+                if (textDiv) {
+                    textDiv.innerText = sectionObj.content;
+                }
+                if (metaSpan) {
+                    metaSpan.innerText = `Last updated by: ${sectionObj.updatedBy || 'System Setup'} on ${sectionObj.timestamp || 'N/A'}`;
+                }
+            }
+        }
+
+        function editDocSection(sectionId, sectionTitle) {
+            if (!appConfig.userPersona) {
+                alertInline("Action Restricted", "You must select a Citizen Stakeholder identity in the sidebar before you can collaboratively edit sections of the proposal.");
+                return;
+            }
+
+            editingSectionId = sectionId;
+            document.getElementById('edit-doc-modal-title').innerText = `Editing: ${sectionTitle}`;
+            document.getElementById('edit-doc-role-display').innerText = `${appConfig.userPersona.name} (${appConfig.realName})`;
+            document.getElementById('edit-doc-textarea').value = localDocSections[sectionId].content;
+            
+            // Set writing prompt contexts based on section
+            let instructions = "";
+            if (sectionId === 'section1') {
+                instructions = "Incorporate direct statements asserting Maeve Baldwin's oral histories or student organizing frameworks. Focus heavily on character credibility (Ethos) appeals.";
+            } else if (sectionId === 'section2') {
+                instructions = "Use powerful narratives concerning displacement, lack of security, and the community heart. Focus heavily on human storytelling (Pathos).";
+            } else if (sectionId === 'section3') {
+                instructions = "Detail practical urban planning compromises, transit policies, and garden match funding. Focus heavily on logistical frameworks (Logos).";
+            }
+            document.getElementById('edit-doc-section-instructions').innerText = instructions;
+
+            document.getElementById('modal-edit-doc').classList.remove('hidden');
+        }
+
+        function closeEditDocModal() {
+            document.getElementById('modal-edit-doc').classList.add('hidden');
+            editingSectionId = null;
+        }
+
+        async function saveDocSectionContent() {
+            if (!editingSectionId || !appConfig.userPersona) return;
+
+            const newContent = document.getElementById('edit-doc-textarea').value.trim();
+            if (newContent.length === 0) return;
+
+            const updatedObj = {
+                content: newContent,
+                updatedBy: `${appConfig.userPersona.name} (${appConfig.realName})`,
+                timestamp: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            if (appConfig.isFirebaseActive && auth.currentUser) {
+                try {
+                    const docDocRef = db.doc('artifacts/' + appConfig.appId + '/public/data/document/' + editingSectionId);
+                    await docDocRef.set(updatedObj);
+                } catch (e) {
+                    console.error("Firebase Proposal sync failed, editing locally:", e);
+                    localDocSections[editingSectionId] = updatedObj;
+                    renderDocContent();
+                }
+            } else {
+                localDocSections[editingSectionId] = updatedObj;
+                renderDocContent();
+            }
+
+            closeEditDocModal();
+        }
+
+        // --- FACILITATOR / CRISIS INJECT CHANNELS ---
+        function loadPresetInject() {
+            const presetVal = document.getElementById('facilitator-preset').value;
+            if (presetVal && INJECT_PRESETS[presetVal]) {
+                document.getElementById('facilitator-title').value = INJECT_PRESETS[presetVal].title;
+                document.getElementById('facilitator-text').value = INJECT_PRESETS[presetVal].text;
+            } else {
+                document.getElementById('facilitator-title').value = "";
+                document.getElementById('facilitator-text').value = "";
+            }
+        }
+
+        function setupFirebaseInjectSubscription() {
+            if (!db || !appConfig.isFirebaseActive || !auth.currentUser) return;
+
+            const docRef = db.doc('artifacts/' + appConfig.appId + '/public/data/inject/activeInject');
+            
+            unsubscribeInject = docRef.onSnapshot((doc) => {
+                if (doc.exists) {
+                    localInject = doc.data();
+                    renderActiveInject();
+                } else {
+                    localInject = { active: false };
+                    renderActiveInject();
+                }
+            }, (error) => {
+                console.error("Crisis Inject notification channel errored:", error);
+            });
+        }
+
+        function renderActiveInject() {
+            const banner = document.getElementById('live-inject-banner');
+            const title = document.getElementById('inject-title');
+            const text = document.getElementById('inject-text');
+            const stamp = document.getElementById('inject-timestamp');
+
+            if (localInject && localInject.active) {
+                title.innerText = localInject.title;
+                text.innerText = localInject.text;
+                stamp.innerText = localInject.timestamp || 'Active';
+                banner.classList.remove('hidden');
+            } else {
+                banner.classList.add('hidden');
+            }
+        }
+
+        async function publishInject() {
+            const injectTitle = document.getElementById('facilitator-title').value.trim();
+            const injectText = document.getElementById('facilitator-text').value.trim();
+
+            if (injectTitle.length === 0 || injectText.length === 0) {
+                alertInline("Incomplete Details", "Please fill in a Title and Description for the classroom scenario inject.");
+                return;
+            }
+
+            const activeObj = {
+                active: true,
+                title: injectTitle,
+                text: injectText,
+                timestamp: "Broadcast: " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            if (appConfig.isFirebaseActive && auth.currentUser) {
+                try {
+                    const docDocRef = db.doc('artifacts/' + appConfig.appId + '/public/data/inject/activeInject');
+                    await docDocRef.set(activeObj);
+                    alertInline("Broadcast Sent", "Success! The scenario twist was pushed live to all active student screens.");
+                } catch (e) {
+                    console.error("Failed to broadcast twist live to firebase:", e);
+                    localInject = activeObj;
+                    renderActiveInject();
+                }
+            } else {
+                localInject = activeObj;
+                renderActiveInject();
+                alertInline("Local Broadcast Mode Active", "Success! Twist updated in your local browser workspace. (Enable Firestore cloud settings for real-time classroom sync).");
+            }
+
+            // Auto-redirect user to Scenario brief tab to inspect new twist
+            switchTab('brief');
+        }
+
+        async function clearActiveInject() {
+            const cleared = { active: false, title: "", text: "", timestamp: "" };
+            if (appConfig.isFirebaseActive && auth.currentUser) {
+                try {
+                    const docDocRef = db.doc('artifacts/' + appConfig.appId + '/public/data/inject/activeInject');
+                    await docDocRef.set(cleared);
+                } catch (e) {
+                    console.error("Firebase clear failed:", e);
+                    localInject = cleared;
+                    renderActiveInject();
+                }
+            } else {
+                localInject = cleared;
+                renderActiveInject();
+            }
+            document.getElementById('facilitator-preset').value = "";
+            document.getElementById('facilitator-title').value = "";
+            document.getElementById('facilitator-text').value = "";
+        }
+
+        // --- ENTIRE SIMULATION RESET ENGINE ---
+        async function resetSimulationDatabase() {
+            const proceed = confirm("WARNING: This will completely erase all student comments and collaborative proposal drafts in this workspace. Are you sure you want to proceed?");
+            if (!proceed) return;
+
+            if (appConfig.isFirebaseActive && auth.currentUser) {
+                try {
+                    // Reset document sections on Firebase
+                    for (const key of ['section1', 'section2', 'section3']) {
+                        const initObj = {
+                            content: key === 'section1' 
+                                ? "To the Charlotte City Council,\n\nWe represent the unified voice of the Historic Beatties Ford Road Corridor Coalition...\n\n[PROMPT: Use this section to establish a profound Ethos (credibility) arguments for the West End. Incorporate cultural heritage details and local history elements!]"
+                                : (key === 'section2' 
+                                    ? "The displacement of the Beatties Ford Green & Cooperative is more than a geographic relocation...\n\n[PROMPT: Incorporate powerful narrative pathos appeals here. Speak from the perspective of low-income families, elderly tenants facing sudden homelessness, and children dependent on community programs.]"
+                                    : "We propose alternative, logical pathways to development that do not depend on resident relocation...\n\n[PROMPT: Build a highly logical (Logos) argument here with concrete community-land-trust options, funding models, or urban plan compromises.]"),
+                            updatedBy: "System Setup",
+                            timestamp: new Date().toLocaleDateString()
+                        };
+                        const docDocRef = db.doc('artifacts/' + appConfig.appId + '/public/data/document/' + key);
+                        await docDocRef.set(initObj);
+                    }
+                    // Reset Inject
+                    const injectDoc = db.doc('artifacts/' + appConfig.appId + '/public/data/inject/activeInject');
+                    await injectDoc.set({ active: false });
+
+                    alertInline("Database Cleared", "The class cooperative database has been reset successfully back to clean prompts.");
+                } catch (e) {
+                    console.error("Failed resetting remote database:", e);
+                }
+            } else {
+                // Local reset
+                localStorage.clear();
+                alertInline("Workspace Local Storage Reset", "Successfully cleared local storage and resets components.");
+                window.location.reload();
+            }
+        }
+
+        // --- MODAL ALERT BOX REPLACING BROWSER ALERT (Rule-mandated) ---
+        function alertInline(title, text) {
+            document.getElementById('alert-title').innerHTML = `<i class="fa-solid fa-circle-info text-emerald-600"></i> ${title}`;
+            document.getElementById('alert-body').innerText = text;
+            document.getElementById('modal-alert').classList.remove('hidden');
+        }
+
+        function closeAlertInline() {
+            document.getElementById('modal-alert').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
