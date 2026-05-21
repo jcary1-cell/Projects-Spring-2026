@@ -5,7 +5,7 @@ import plotly.express as px
 @st.cache_data(ttl=60) # Refreshes the data every 60 seconds
 def load_data():
     # Replace this URL with your published CSV link
-    sheet_url = "https://docs.google.com/spreadsheets/d/e/YOUR_PUBLISHED_LINK_HERE/pub?output=csv"
+    sheet_url = "https://docs.google.com/spreadsheets/d/1P8l0C02emhLBxukWogeL_5dULgk4IeKWmNr-4QOYukE/edit?resourcekey=&gid=954722165#gid=954722165"
     
     # Pandas can read directly from a CSV URL!
     df = pd.read_csv(sheet_url)
