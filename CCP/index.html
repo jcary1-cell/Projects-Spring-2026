@@ -1,0 +1,22 @@
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+@st.cache_data(ttl=60) # Refreshes the data every 60 seconds
+def load_data():
+    # Replace this URL with your published CSV link
+    sheet_url = "https://docs.google.com/spreadsheets/d/e/YOUR_PUBLISHED_LINK_HERE/pub?output=csv"
+    
+    # Pandas can read directly from a CSV URL!
+    df = pd.read_csv(sheet_url)
+    
+    # Rename columns to match the dashboard code (adjust these to match your Google Form exact column headers)
+    df = df.rename(columns={
+        "Timestamp": "timestamp",
+        "Student ID (or UNC Charlotte Email)": "student_id",
+        "Recommended Career Pathway": "recommended_pathway",
+        "Confidence Score (1-10)": "confidence_score"
+    })
+    return df
+
+# ... (the rest of the Streamlit dashboard code from the previous response remains exactly the same)
