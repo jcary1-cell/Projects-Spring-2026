@@ -148,4 +148,65 @@
         seashells += 5;
         
         let pain = document.getElementById('shark-pain').value;
-        let
+        let thoughts = document.getElementById('siren-thoughts').value || "Just floating along...";
+        let calcTaken = document.getElementById('potion-calc').checked ? "✅" : "❌";
+        let painTaken = document.getElementById('potion-pain').checked ? "✅" : "❌";
+
+        // Add new log to array
+        let newLog = `<strong>Day ${days - 1}:</strong> ${pain} | 🦴:${calcTaken} 💊:${painTaken}<br><em>"${thoughts}"</em>`;
+        logs.unshift(newLog); // Put newest first
+
+        // Save to LocalStorage
+        localStorage.setItem('mermaid_days', days);
+        localStorage.setItem('mermaid_shells', seashells);
+        localStorage.setItem('mermaid_logs', JSON.stringify(logs));
+
+        // Update UI
+        updateUI();
+        renderLogs();
+
+        // Reset inputs
+        document.getElementById('siren-thoughts').value = "";
+        document.getElementById('potion-calc').checked = false;
+        document.getElementById('potion-pain').checked = false;
+        document.getElementById('shark-pain').selectedIndex = 0;
+    }
+
+    function updateUI() {
+        document.getElementById('day-count').innerText = days;
+        document.getElementById('shell-count').innerText = seashells;
+        
+        let status = document.getElementById('status-text');
+        if (days >= 7 && days < 21) {
+            status.innerHTML = "🪸 Tide Pool Wader<br><small>(Light Mobilizing)</small>";
+        } else if (days >= 21) {
+            status.innerHTML = "🌊 Deep Sea Diver<br><small>(Fully Healed Tail!)</small>";
+        } else {
+            status.innerHTML = "🏝️ Beached Starfish<br><small>(Rest & Elevate)</small>";
+        }
+    }
+
+    function renderLogs() {
+        let logContainer = document.getElementById('journal-log');
+        if (logs.length === 0) {
+            logContainer.innerHTML = '<div class="journal-entry"><em>No logs recorded yet. Cast a spell above!</em></div>';
+            return;
+        }
+        
+        logContainer.innerHTML = logs.map(log => `<div class="journal-entry">${log}</div>`).join('');
+    }
+
+    function resetApp() {
+        if (confirm("Are you sure you want to wash away all your recovery records?")) {
+            localStorage.clear();
+            days = 1;
+            seashells = 0;
+            logs = [];
+            updateUI();
+            renderLogs();
+        }
+    }
+</script>
+
+</body>
+</html>
