@@ -3,315 +3,795 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fin on the Mend — A Mermaid's Recovery Journal</title>
+    <title>The Siren's Broken Fin Tracker 🧜‍♀️🩹</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ocean: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        },
+                        sirenPink: {
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                        },
+                        lagoonBlue: {
+                            900: '#0c1a30',
+                            950: '#050c18'
+                        }
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        swim: {
+                            '0%, 100%': { transform: 'rotate(-5deg)' },
+                            '50%': { transform: 'rotate(5deg)' },
+                        },
+                        bubble: {
+                            '0%': { transform: 'translateY(100vh) scale(0.5)', opacity: 0 },
+                            '50%': { opacity: 0.8 },
+                            '100%': { transform: 'translateY(-10vh) scale(1.2)', opacity: 0 },
+                        }
+                    },
+                    animation: {
+                        float: 'float 4s ease-in-out infinite',
+                        swim: 'swim 3s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --seafoam: #86e3ce;
-            --coral: #e07a5f;
-            --ocean-blue: #3d5a80;
-            --sand: #f4fbf9;
-            --deep-sea: #2c5d63;
-        }
-
-        body {
-            background: linear-gradient(135deg, #bbf2f6 0%, #cfeee7 50%, #fff4ec 100%);
-            font-family: 'Segoe UI', Georgia, serif;
-            color: var(--deep-sea);
-            padding: 40px 20px;
-            margin: 0;
-            min-height: 100vh;
-        }
-
-        .header-castle {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header-castle h1 { 
-            color: var(--coral); 
-            font-size: 3em; 
-            margin: 0 0 10px 0;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap');
         
-        .subtitle { 
-            font-style: italic; 
-            color: #618288; 
-            font-size: 1.2em;
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #0d9488 0%, #050c18 70%);
+            min-height: 100vh;
+            color: #e2e8f0;
         }
 
-        /* Full website grid layout */
-        .website-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-            max-width: 1100px;
-            margin: 0 auto;
+        h1, h2, h3, .serif-font {
+            font-family: 'Playfair Display', serif;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(5px);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 12px 32px rgba(44, 93, 99, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            margin-bottom: 30px;
+        /* Custom scrollbar to keep up the ocean vibes */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        h2, h3 { color: var(--ocean-blue); margin-top: 0; }
-
-        /* Stats Strip */
-        .stats-banner {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            text-align: center;
-            margin-bottom: 30px;
+        ::-webkit-scrollbar-track {
+            background: #050c18;
         }
-
-        .stat-node {
-            background: white;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        ::-webkit-scrollbar-thumb {
+            background: #0d9488;
+            border-radius: 4px;
         }
-
-        .stat-node h2 { font-size: 2.5em; margin: 5px 0; color: var(--coral); }
-
-        /* Inputs */
-        label { display: block; font-weight: 600; margin: 15px 0 8px; }
-        select, textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #cbd5e1;
-            background: white;
-            font-size: 1em;
-            box-sizing: border-box;
-        }
-        textarea { height: 100px; resize: none; }
-
-        .checkbox-group { margin: 15px 0; }
-        .checkbox-group div { margin-bottom: 8px; }
-
-        /* Buttons */
-        .btn {
-            background: linear-gradient(135deg, #e07a5f 0%, #d46a4e 100%);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 1.1em;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.2s, box-shadow 0.2s;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(224, 122, 95, 0.3);
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(224, 122, 95, 0.4);
-        }
-
-        /* Journal Log Style */
-        .journal-container {
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-        .journal-entry {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border-left: 4px solid var(--seafoam);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
-
-        .reef-tips {
-            background: #eefcf8;
-            border-radius: 16px;
-            padding: 20px;
-            font-size: 0.95em;
-        }
-        .reef-tips ul { padding-left: 20px; margin: 10px 0 0 0; }
-        .reef-tips li { margin-bottom: 8px; }
-
-        .btn-reset {
-            background: transparent;
-            color: #94a3b8;
-            border: 1px dashed #cbd5e1;
-            font-size: 0.85em;
-            padding: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: auto;
-            margin-top: 20px;
-        }
-        .btn-reset:hover { color: var(--coral); border-color: var(--coral); }
-
-        @media (max-width: 768px) {
-            .website-grid { grid-template-columns: 1fr; }
-            .stats-banner { grid-template-columns: 1fr; }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #14b8a6;
         }
     </style>
 </head>
-<body>
+<body class="overflow-x-hidden relative pb-12 selection:bg-teal-500 selection:text-white">
 
-<div class="header-castle">
-    <h1>Fin on the Mend 🐚</h1>
-    <div class="subtitle">The Chronicles of a Grounded Mermaid's Re-Sprouting Tail</div>
-</div>
+    <!-- Floating Background Bubbles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute w-4 h-4 bg-teal-300/20 rounded-full bottom-0 left-10 animate-[bubble_12s_infinite_linear]"></div>
+        <div class="absolute w-8 h-8 bg-teal-300/10 rounded-full bottom-0 left-1/4 animate-[bubble_18s_infinite_linear_2s]"></div>
+        <div class="absolute w-6 h-6 bg-rose-300/15 rounded-full bottom-0 left-2/4 animate-[bubble_15s_infinite_linear_5s]"></div>
+        <div class="absolute w-10 h-10 bg-teal-300/10 rounded-full bottom-0 right-10 animate-[bubble_22s_infinite_linear_1s]"></div>
+        <div class="absolute w-5 h-5 bg-rose-300/20 rounded-full bottom-0 right-1/3 animate-[bubble_16s_infinite_linear_8s]"></div>
+    </div>
 
-<div class="website-grid">
-    
-    <main>
-        <div class="stats-banner">
-            <div class="stat-node">
-                <h3>Flipper Status</h3>
-                <p id="status-text" style="font-weight: bold; margin: 10px 0 0 0;">🏝️ Beached Starfish</p>
-            </div>
-            <div class="stat-node">
-                <h3>Days Ashore</h3>
-                <h2 id="day-count">1</h2>
-            </div>
-            <div class="stat-node">
-                <h3>Shell Bank</h3>
-                <h2 id="shell-count">0</h2>
+    <div class="max-w-5xl mx-auto px-4 pt-8 relative z-10">
+        <!-- Floating Header/Banner -->
+        <header class="text-center mb-10 mt-4 relative">
+            <span class="inline-block bg-teal-950/80 border border-teal-500/30 text-teal-300 text-xs uppercase tracking-widest px-4 py-1.5 rounded-full backdrop-blur-md mb-3 animate-pulse">
+                🧜‍♀️ Under-The-Sea Recovery Lounge
+            </span>
+            <h1 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-200 via-emerald-300 to-rose-300 mb-2 drop-shadow">
+                The Siren's Broken Fin Tracker
+            </h1>
+            <p class="text-teal-100 max-w-lg mx-auto text-sm md:text-base opacity-90">
+                You stubbed your precious tail digit on a reef! Fear not, beached mermaid. Track your 6-week bone matrix synthesis with nautical wisdom.
+            </p>
+        </header>
+
+        <!-- Quick Set Date Configuration Card -->
+        <div class="bg-slate-900/80 border border-teal-500/20 rounded-3xl p-6 backdrop-blur-md shadow-2xl mb-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-teal-200 flex items-center gap-2">
+                        <span>📅</span> When did the shipwreck occur?
+                    </h3>
+                    <p class="text-slate-400 text-xs mt-1">Set the day your toe collided with an unexpected treasure chest or coral block.</p>
+                </div>
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <input type="date" id="injury-date-input" 
+                        class="bg-teal-950/60 border border-teal-500/40 text-teal-100 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent flex-grow md:flex-grow-0" />
+                    <button onclick="saveInjuryDate()" 
+                        class="bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-bold px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 whitespace-nowrap">
+                        Cast Anchor
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <h2>📝 Log Today's Ocean Tide</h2>
+        <!-- Main Recovery Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
             
-            <label for="shark-pain">Shark Attack Assessment (Pain Level):</label>
-            <select id="shark-pain">
-                <option value="🦈 Calm Waters (No Pain)">🦈 Calm Waters (No Pain)</option>
-                <option value="🦈 Reef Shark Nibble (Mild Pain)">🦈 Reef Shark Nibble (Mild Pain)</option>
-                <option value="🦈 Great White Chomp (Intense Pain)">🦈 Great White Chomp (Intense Pain)</option>
-            </select>
+            <!-- LEFT COLUMN: The Visual Tail-O-Meter & Core Stats -->
+            <div class="lg:col-span-1 flex flex-col gap-6">
+                
+                <!-- The Live Status Card -->
+                <div class="bg-slate-900/80 border border-teal-500/20 rounded-3xl p-6 backdrop-blur-md shadow-2xl flex flex-col items-center text-center relative overflow-hidden">
+                    <div class="absolute -top-12 -right-12 w-24 h-24 bg-rose-500/10 rounded-full blur-xl"></div>
+                    <div class="absolute -bottom-12 -left-12 w-24 h-24 bg-teal-500/10 rounded-full blur-xl"></div>
+                    
+                    <h3 class="text-xs uppercase tracking-widest text-slate-400 mb-2">Current Mermaid Condition</h3>
+                    <div id="status-badge" class="px-3 py-1 rounded-full text-xs font-semibold border mb-4">
+                        Retrieving logs...
+                    </div>
 
-            <label>🧪 Alchemist's Potion Check:</label>
-            <div class="checkbox-group">
-                <div>
-                    <input type="checkbox" id="potion-calc"> 
-                    <label for="potion-calc" style="display:inline; font-weight:normal;">Coral Bone Builder (Calcium & Vit D)</label>
+                    <!-- Interactive Tail Canvas/SVG -->
+                    <div class="w-full h-48 flex items-center justify-center relative mb-4">
+                        <!-- Mermaid Tail Graphic -->
+                        <svg id="mermaid-tail-svg" class="w-40 h-40 animate-swim origin-bottom" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Swishing Seaweed Background behind tail -->
+                            <path d="M10 90 Q 20 80, 15 70 T 25 50" stroke="#0f766e" stroke-width="2" stroke-linecap="round" />
+                            <path d="M85 95 Q 75 80, 80 65 T 70 45" stroke="#0f766e" stroke-width="2" stroke-linecap="round" />
+                            
+                            <!-- Tail Stem (Waist to Fin transition) -->
+                            <path d="M40 10 Q 50 40, 42 70 Q 48 80, 50 85 Q 52 80, 58 70 Q 50 40, 60 10 Z" fill="url(#tailGrad)" class="transition-all duration-1000"/>
+                            
+                            <!-- Healed Scale Details overlay (grows with progress) -->
+                            <path id="tail-scales" d="M44 30 Q50 32, 56 30 M43 40 Q50 42, 57 40 M42 50 Q50 52, 58 50 M43 60 Q50 62, 57 60 M46 70 Q50 71, 54 70" 
+                                  stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" class="opacity-40 transition-all duration-1000" />
+                            
+                            <!-- Fin / Flukes -->
+                            <path id="left-fin" d="M50 85 Q 35 78, 20 90 Q 30 75, 48 84.5 Z" fill="url(#finGradLeft)" />
+                            <path id="right-fin" d="M50 85 Q 65 78, 80 90 Q 70 75, 52 84.5 Z" fill="url(#finGradRight)" />
+
+                            <!-- Bandage on the "Toe" fluke (Left Tip) -->
+                            <g id="toe-bandage" class="transition-all duration-1000">
+                                <rect x="23" y="81" width="8" height="3" transform="rotate(25 23 81)" fill="#fed7aa" rx="1" />
+                                <rect x="25" y="80" width="4" height="5" transform="rotate(25 25 80)" fill="#ffedd5" rx="0.5" />
+                                <circle cx="21" cy="85" r="2" fill="#ef4444" class="animate-pulse" />
+                            </g>
+
+                            <!-- Gradient Definitions -->
+                            <defs>
+                                <linearGradient id="tailGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop id="tail-grad-start" offset="0%" stop-color="#14b8a6" />
+                                    <stop id="tail-grad-end" offset="100%" stop-color="#0f766e" />
+                                </linearGradient>
+                                <linearGradient id="finGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop id="fin-left-start" offset="0%" stop-color="#fdba74" />
+                                    <stop id="fin-left-end" offset="100%" stop-color="#f97316" />
+                                </linearGradient>
+                                <linearGradient id="finGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop id="fin-right-start" offset="0%" stop-color="#14b8a6" />
+                                    <stop id="fin-right-end" offset="100%" stop-color="#0d9488" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
+                        <!-- Tap-to-Wiggle Toe Interactivity -->
+                        <button onclick="wiggleToeTest()" class="absolute bottom-1 bg-teal-950/90 border border-teal-400/40 text-teal-300 text-[10px] px-2 py-1 rounded-md hover:bg-teal-900 transition active:scale-95">
+                            💥 Gently Test Wiggle
+                        </button>
+                    </div>
+
+                    <div id="wiggle-msg" class="h-6 text-xs text-rose-300 italic mb-2 opacity-0 transition-opacity duration-300">
+                        Ouch! Gentle, siren!
+                    </div>
+
+                    <!-- Countdown Metric -->
+                    <div class="w-full bg-slate-950/60 border border-teal-500/10 rounded-2xl p-4 mt-2">
+                        <div class="text-3xl font-black text-teal-300" id="countdown-days">--</div>
+                        <div class="text-[11px] uppercase tracking-wider text-slate-400 mt-1">Days Until Full Siren Return</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2.5 mt-3 overflow-hidden border border-teal-950">
+                            <div id="progress-bar-fill" class="bg-gradient-to-r from-rose-400 via-teal-400 to-emerald-400 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1.5">
+                            <span id="elapsed-counter">Day 0 elapsed</span>
+                            <span>42 Days Total (6 Wks)</span>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <input type="checkbox" id="potion-pain"> 
-                    <label for="potion-pain" style="display:inline; font-weight:normal;">Siren’s Soothing Elixir (Anti-inflammatory)</label>
+
+                <!-- Custom Grotto Note/Journal Feature -->
+                <div class="bg-slate-900/80 border border-teal-500/20 rounded-3xl p-6 backdrop-blur-md shadow-2xl flex flex-col gap-3">
+                    <h3 class="text-lg font-bold text-teal-200 flex items-center gap-2">
+                        <span>📝</span> Captain's Lagoon Log
+                    </h3>
+                    <p class="text-slate-400 text-xs">Jot down how your fin is feeling today (swelling level, color, or general mood).</p>
+                    <textarea id="journal-input" placeholder="Today my fin feels somewhat like soggy kelp..." class="w-full h-24 bg-slate-950/80 border border-teal-500/20 text-teal-100 rounded-xl p-3 text-xs focus:outline-none focus:ring-1 focus:ring-teal-400 resize-none"></textarea>
+                    <button onclick="saveJournalEntry()" class="w-full bg-teal-950/80 hover:bg-teal-900 border border-teal-500/30 text-teal-200 text-xs font-semibold py-2 rounded-xl transition">
+                        Seal Note in Bottle 🍾
+                    </button>
+                    <div id="saved-logs" class="max-h-24 overflow-y-auto flex flex-col gap-2 mt-1">
+                        <!-- Dynamic saved notes -->
+                    </div>
                 </div>
             </div>
 
-            <label for="siren-thoughts">Siren's Message in a Bottle (Daily Notes):</label>
-            <textarea id="siren-thoughts" placeholder="What did the sea breeze bring you today? Notes on swelling, mood, or terrestrial frustrations..."></textarea>
+            <!-- MIDDLE COLUMN: The Dynamic Medical Guidelines (Cleveland Clinic) -->
+            <div class="lg:col-span-2 flex flex-col gap-6">
+                
+                <!-- Dynamic Phase Content Card -->
+                <div id="phase-container" class="bg-slate-900/80 border border-teal-500/20 rounded-3xl p-6 backdrop-blur-md shadow-2xl transition-all duration-300">
+                    <div class="flex items-start justify-between flex-wrap gap-4 mb-4 border-b border-teal-500/10 pb-4">
+                        <div>
+                            <span id="phase-subtitle" class="text-rose-400 text-xs font-semibold tracking-wider uppercase">Evaluating Reef damage...</span>
+                            <h2 id="phase-title" class="text-2xl md:text-3xl font-bold text-teal-100 mt-1">Siren Recovery Stage</h2>
+                        </div>
+                        <div id="phase-timeline-tag" class="bg-teal-950 border border-teal-400/40 text-teal-300 text-xs px-3 py-1 rounded-full">
+                            Week --
+                        </div>
+                    </div>
+                    
+                    <!-- Fun Lore Meets Clinical Reality Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-teal-500/5">
+                            <h4 class="text-xs font-semibold uppercase text-rose-300 mb-2">🧜‍♀️ Siren Lore Diagnosis</h4>
+                            <p id="phase-lore" class="text-slate-300 text-xs leading-relaxed">Calculating the current tides to see which deep-sea hex has bound your swim flukes.</p>
+                        </div>
+                        <div class="bg-slate-950/40 p-4 rounded-2xl border border-teal-500/5">
+                            <h4 class="text-xs font-semibold uppercase text-teal-300 mb-2">🩺 Clinical Reality (Cleveland Clinic)</h4>
+                            <p id="phase-medical" class="text-slate-300 text-xs leading-relaxed">Most broken toes heal with rest. Let's look at exactly what the medical science recommends for your current week.</p>
+                        </div>
+                    </div>
 
-            <button class="btn" onclick="submitDailyLog()" style="margin-top: 20px;">Cast Logging Spell 🪄</button>
-        </div>
+                    <!-- Daily Rituals Checkbox Section (RICE / Buddy Taping / Footwear) -->
+                    <div class="bg-teal-950/30 border border-teal-500/20 rounded-2xl p-5 mb-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-semibold text-teal-200 flex items-center gap-2">
+                                🧼 Daily Grotto Rituals <span class="text-xs font-normal text-slate-400">(Tap items to perform)</span>
+                            </h4>
+                            <span id="completion-stamp" class="text-[10px] text-teal-400 bg-teal-900/60 px-2 py-0.5 rounded border border-teal-500/30">
+                                Finished 0/4
+                            </span>
+                        </div>
+                        
+                        <div id="ritual-list" class="flex flex-col gap-2.5">
+                            <!-- Dynamic Checkbox rituals based on the current phase -->
+                        </div>
+                    </div>
 
-        <div class="card">
-            <h2>📜 Captain's Log History</h2>
-            <div class="journal-container" id="journal-log">
+                    <!-- Footwear Warning banner inside phase -->
+                    <div id="footwear-alert" class="bg-rose-950/20 border border-rose-500/20 rounded-2xl p-4 flex items-center gap-3">
+                        <span class="text-2xl">👡</span>
+                        <div class="text-xs text-slate-300">
+                            <strong class="text-rose-300 block mb-0.5">Siren Shoe Warning:</strong>
+                            <span id="footwear-text">Avoid narrow, high-pressure glass slippers or flimsy fins! Stick to rigid, wide-box footwear.</span>
+                        </div>
+                    </div>
                 </div>
-        </div>
-    </main>
 
-    <aside>
-        <div class="card reef-tips">
-            <h3>🪸 The Healer's Reef Guidelines</h3>
-            <p>Every mermaid must remember the ancient recovery scrolls (R.I.C.E.):</p>
-            <ul>
-                <li><strong>Rest:</strong> Keep off your land legs. Swimming tails take time to grow back!</li>
-                <li><strong>Ice:</strong> Apply frozen ocean packs for 15-20 minutes to soothe the swell.</li>
-                <li><strong>Compress:</strong> Keep your neighbor-fins buddy-taped if recommended by the local shaman.</li>
-                <li><strong>Elevate:</strong> Prop that flipper high above your heart upon a stack of plush sea sponges.</li>
-            </ul>
-        </div>
+                <!-- Pearl of Wisdom Dispenser Widget -->
+                <div class="bg-gradient-to-r from-teal-950/90 to-slate-900 border border-teal-500/20 rounded-3xl p-6 backdrop-blur-md shadow-2xl relative overflow-hidden">
+                    <div class="absolute right-0 bottom-0 opacity-10">
+                        <svg class="w-32 h-32 text-teal-100" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10Z" />
+                        </svg>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="bg-teal-900/60 p-3 rounded-2xl border border-teal-400/30 text-2xl">🔮</div>
+                        <div>
+                            <h4 class="text-sm font-semibold text-rose-300 uppercase tracking-wider mb-1">Clam of Wisdom / Podiatry Pearl</h4>
+                            <p id="wisdom-bubble" class="text-slate-300 text-xs italic leading-relaxed">"The bones in your toes are small, but they work seamlessly with your entire foot's mechanical current. Treat them with respect!"</p>
+                            <button onclick="crackNewPearl()" class="text-[11px] text-teal-300 hover:text-teal-200 mt-3 font-semibold flex items-center gap-1 transition">
+                                🐚 Pry Open Another Clam →
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="card">
-            <h3>🐚 Shell Exchange Marketplace</h3>
-            <p>Cash in your earned shell tokens with your land companions:</p>
-            <ul style="padding-left: 20px; font-size: 0.9em; line-height: 1.6;">
-                <li><strong>10 Shells:</strong> Command a human to bring you a cold elixir.</li>
-                <li><strong>25 Shells:</strong> One hour of luxury lagoon resting (Guilt-free movie/game).</li>
-                <li><strong>50 Shells:</strong> Order a rare delivery feast from across the dunes.</li>
-            </ul>
+            </div>
         </div>
 
-        <button class="btn-reset" onclick="resetApp()">Wipe Shoreline Clean (Reset Website Data)</button>
-    </aside>
+        <!-- LOWER SECTION: Warning/Safety Guide & Clinical Disclaimers -->
+        <footer class="bg-rose-950/25 border border-rose-500/20 rounded-3xl p-6 backdrop-blur-md mb-8">
+            <h3 class="text-xl font-bold text-rose-300 mb-3 flex items-center gap-2">
+                <span>🐙</span> Ursula's Sea Witch Warnings (Red Flags)
+            </h3>
+            <p class="text-slate-300 text-xs mb-4 leading-relaxed">
+                While most broken toes heal nicely on their own with at-home care, a traumatic fracture can turn nasty if you ignore complications. Cleveland Clinic advises swimming directly to an emergency grotto (healthcare provider) immediately if you experience:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="bg-slate-950/60 p-3.5 rounded-xl border border-rose-500/10 flex items-start gap-2.5">
+                    <span class="text-rose-400">🥶</span>
+                    <div>
+                        <strong class="text-xs text-slate-200 block">Circulation Cut-Off</strong>
+                        <span class="text-[11px] text-slate-400 block mt-0.5">Sudden numbness, tingling, or if the fin turns abnormally pale or deep dark blue.</span>
+                    </div>
+                </div>
+                <div class="bg-slate-950/60 p-3.5 rounded-xl border border-rose-500/10 flex items-start gap-2.5">
+                    <span class="text-rose-400">🌊</span>
+                    <div>
+                        <strong class="text-xs text-slate-200 block">Swelling Surge</strong>
+                        <span class="text-[11px] text-slate-400 block mt-0.5">A sudden, extreme spike in throbbing pain or swelling that persists after elevate & ice.</span>
+                    </div>
+                </div>
+                <div class="bg-slate-950/60 p-3.5 rounded-xl border border-rose-500/10 flex items-start gap-2.5">
+                    <span class="text-rose-400">🩸</span>
+                    <div>
+                        <strong class="text-xs text-slate-200 block">Open Reef Cuts</strong>
+                        <span class="text-[11px] text-slate-400 block mt-0.5">Bleeding or an open wound extending down to the bone (open fractures require urgent care).</span>
+                    </div>
+                </div>
+                <div class="bg-slate-950/60 p-3.5 rounded-xl border border-rose-500/10 flex items-start gap-2.5">
+                    <span class="text-rose-400">🌡️</span>
+                    <div>
+                        <strong class="text-xs text-slate-200 block">Siren Fever</strong>
+                        <span class="text-[11px] text-slate-400 block mt-0.5">Chills, fever, or red streaks branching from your toe, indicating a severe deep tissue infection.</span>
+                    </div>
+                </div>
+                <div class="bg-slate-950/60 p-3.5 rounded-xl border border-rose-500/10 flex items-start gap-2.5">
+                    <span class="text-rose-400">🔱</span>
+                    <div>
+                        <strong class="text-xs text-slate-200 block">Crooked/Deformed</strong>
+                        <span class="text-[11px] text-slate-400 block mt-0.5">If the toe is pointing sideways, overlapping another, or looks visibly displaced.</span>
+                    </div>
+                </div>
+                <div class="bg-slate-950/60 p-3.5 rounded-xl border border-rose-500/10 flex items-start gap-2.5">
+                    <span class="text-rose-400">⏳</span>
+                    <div>
+                        <strong class="text-xs text-slate-200 block">Stuck at Sea</strong>
+                        <span class="text-[11px] text-slate-400 block mt-0.5">No signs of improvement after several weeks. Remember: normal healing is 6 to 8 weeks.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4 pt-4 border-t border-rose-500/10 text-[10px] text-slate-500 italic">
+                Disclaimer: This app is for encouragement, amusement, and self-tracking. It relies on Cleveland Clinic data, but does not replace personalized instructions from your medical shaman!
+            </div>
+        </footer>
+    </div>
 
-</div>
+    <!-- Custom Modal instead of window.alert() -->
+    <div id="custom-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-teal-500/30 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl">
+            <span id="modal-emoji" class="text-4xl block mb-2">🐚</span>
+            <h3 id="modal-title" class="text-xl font-bold text-teal-200 mb-2">Message in a Bottle</h3>
+            <p id="modal-body" class="text-slate-300 text-xs leading-relaxed mb-5">Watery details go here...</p>
+            <button onclick="closeCustomModal()" class="w-full bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl transition duration-300 hover:brightness-110">
+                Acknowledge Wave
+            </button>
+        </div>
+    </div>
 
-<script>
-    let days = parseInt(localStorage.getItem('web_mermaid_days')) || 1;
-    let seashells = parseInt(localStorage.getItem('web_mermaid_shells')) || 0;
-    let logs = JSON.parse(localStorage.getItem('web_mermaid_logs')) || [];
-
-    updateUI();
-    renderLogs();
-
-    function submitDailyLog() {
-        days++;
-        seashells += 5; 
+    <script>
+        // --- Core Application State & Storage ---
+        const LOCAL_STORAGE_KEY = "mermaid_broken_fin_tracker_state";
         
-        let pain = document.getElementById('shark-pain').value;
-        let thoughts = document.getElementById('siren-thoughts').value || "Just floating along...";
-        let calcTaken = document.getElementById('potion-calc').checked ? "✨ Drunk" : "❌ Missed";
-        let painTaken = document.getElementById('potion-pain').checked ? "✨ Drunk" : "❌ Missed";
+        let state = {
+            injuryDate: null,
+            checklist: {}, // key: date string, value: array of completed check ids
+            logs: [] // array of { date, text }
+        };
 
-        let newLog = `<strong>Day ${days - 1}:</strong> ${pain}<br>🧪 <em>Potions:</em> Bone Builder: ${calcTaken} | Elixir: ${painTaken}<br><span style="color:#555;">"${thoughts}"</span>`;
-        logs.unshift(newLog); 
+        // Initialize state
+        function initApp() {
+            const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (savedState) {
+                try {
+                    state = JSON.parse(savedState);
+                } catch(e) {
+                    console.error("Failed to parse local storage, starting fresh", e);
+                }
+            }
 
-        localStorage.setItem('web_mermaid_days', days);
-        localStorage.setItem('web_mermaid_shells', seashells);
-        localStorage.setItem('web_mermaid_logs', JSON.stringify(logs));
+            // Default injury date to today if nothing is configured
+            if (!state.injuryDate) {
+                const today = new Date();
+                state.injuryDate = today.toISOString().split('T')[0];
+            }
 
-        updateUI();
-        renderLogs();
-
-        // Clear Inputs
-        document.getElementById('siren-thoughts').value = "";
-        document.getElementById('potion-calc').checked = false;
-        document.getElementById('potion-pain').checked = false;
-        document.getElementById('shark-pain').selectedIndex = 0;
-    }
-
-    function updateUI() {
-        document.getElementById('day-count').innerText = days;
-        document.getElementById('shell-count').innerText = seashells;
-        
-        let status = document.getElementById('status-text');
-        if (days >= 7 && days < 21) {
-            status.innerHTML = "🪸 Tide Pool Wader <br><small style='font-weight:normal;color:#666;'>(Light movement allowed)</small>";
-        } else if (days >= 21) {
-            status.innerHTML = "🌊 Deep Sea Diver <br><small style='font-weight:bold;color:var(--coral);'>(Tail Fully Restored!)</small>";
-        } else {
-            status.innerHTML = "🏝️ Beached Starfish <br><small style='font-weight:normal;color:#666;'>(Strict Rest & Elevation)</small>";
+            document.getElementById('injury-date-input').value = state.injuryDate;
+            
+            // Build the initial display
+            renderDashboard();
+            crackNewPearl();
         }
-    }
 
-    function renderLogs() {
-        let logContainer = document.getElementById('journal-log');
-        if (logs.length === 0) {
-            logContainer.innerHTML = '<div class="journal-entry" style="text-align:center; color:#888;"><em>The captain\'s log is empty. Cast a log spell above to begin your history!</em></div>';
-            return;
+        function saveStateToStorage() {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
         }
-        logContainer.innerHTML = logs.map(log => `<div class="journal-entry">${log}</div>`).join('');
-    }
 
-    function resetApp() {
-        if (confirm("Are you sure you want to wash away all your records from the shore?")) {
-            localStorage.clear();
-            days = 1;
-            seashells = 0;
-            logs = [];
-            updateUI();
-            renderLogs();
+        // --- Custom Modal helper ---
+        function showCustomModal(title, body, emoji = "🐚") {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').textContent = body;
+            document.getElementById('modal-emoji').textContent = emoji;
+            document.getElementById('custom-modal').classList.remove('hidden');
         }
-    }
-</script>
 
+        function closeCustomModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Save injury date when the user triggers it
+        function saveInjuryDate() {
+            const dateVal = document.getElementById('injury-date-input').value;
+            if (!dateVal) {
+                showCustomModal("Sea Witch Scolds", "You must input a valid calendar date!", "🐙");
+                return;
+            }
+            state.injuryDate = dateVal;
+            saveStateToStorage();
+            renderDashboard();
+            showCustomModal("Anchor Dropped!", "Your wreckage date has been set successfully. Let the healing currents flow!", "⚓");
+        }
+
+        // Dynamic Pearl of Wisdom generator (Cleveland Clinic facts packaged as sea-lore)
+        const pearls = [
+            "The 14 tiny bones in your toes are called phalanges. Though small, they function like rudder pins for steering your path!",
+            "Did you hear a pop when you banged your toe? That's a common trait of a traumatic, acute fracture. Be sure to check with your medical shaman to confirm alignment.",
+            "Buddy taping holds the broken toe securely to its neighbor, letting the healthy bone act as a natural splint. An ingenious ocean alliance!",
+            "Never stick tape directly skin-to-skin. Sweat or saltwater buildup causes moisture issues. Always sandwich a soft wad of gauze or cotton between your digits first!",
+            "Swelling space is key: When bone cells are busy reconstructing, narrow footwear acts like an encroaching kraken. Stiff-soled or wide-box shoes are your safe harbors.",
+            "If your toe pain gets better while resting but spikes whenever you put weight on it, you might have a hairline stress fracture from excessive marching or dancing.",
+            "Your body undergoes bone remodeling for up to 6-8 weeks, but residual ocean swelling in your soft tissues can last for several months. Keep calm and float high!",
+            "Do not play through the pain! If a seaweed digit protests, immediate stop and rest is your golden protocol.",
+            "Vitamin D3 is the calcium-attracting beacon that signals your cells to calcify and fuse the crack in your bone. Keep up your sunlit basking!",
+            "Never wrap buddy tape so tightly that blood cannot surge. If your toe loses its pink scale hue, immediately release the starfish companion."
+        ];
+
+        function crackNewPearl() {
+            const idx = Math.floor(Math.random() * pearls.length);
+            document.getElementById('wisdom-bubble').textContent = `"${pearls[idx]}"`;
+        }
+
+        // --- Core Business Logic: Rendering Dashboard Phases based on exact timeline ---
+        function renderDashboard() {
+            const today = new Date();
+            const injury = new Date(state.injuryDate);
+            
+            // Calculate actual days passed (setting hours to noon to avoid timezone shift quirks)
+            today.setHours(12,0,0,0);
+            injury.setHours(12,0,0,0);
+            
+            const timeDiff = today - injury;
+            const daysElapsed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            
+            // Limit displays to standard 6-week timeline (42 days)
+            const daysRemaining = Math.max(0, 42 - daysElapsed);
+            const rawProgressPercent = Math.min(100, Math.max(0, (daysElapsed / 42) * 100));
+            const progressPercent = Math.round(rawProgressPercent);
+
+            // Render stats
+            document.getElementById('countdown-days').textContent = daysRemaining > 0 ? `${daysRemaining} Days` : "FREE!";
+            document.getElementById('elapsed-counter').textContent = `Day ${daysElapsed} elapsed`;
+            document.getElementById('progress-bar-fill').style.width = `${progressPercent}%`;
+
+            // Adjust Visual Tail-O-Meter depending on progress
+            updateVisualTail(progressPercent, daysElapsed);
+
+            // Determine Phase data (using accurate 6-week medical boundaries)
+            let phaseTitle = "";
+            let phaseSubtitle = "";
+            let phaseTimeline = "";
+            let phaseLore = "";
+            let phaseMedical = "";
+            let footwearAdvice = "";
+            let rituals = [];
+
+            if (daysElapsed < 0) {
+                // Future Date Configuration Warning
+                phaseSubtitle = "Time Travel Anomaly";
+                phaseTitle = "The Shipwreck has Not Happened Yet!";
+                phaseTimeline = "Future-Bound";
+                phaseLore = "The tides are warped. Your date of injury rests in the future. Are you warning us of a future stub?";
+                phaseMedical = "Please adjust your calendar date above to today or a past date to accurately calculate your recovery.";
+                footwearAdvice = "Enjoy your intact fins while they still splash!";
+                rituals = ["Correct your injury date setting"];
+            } 
+            else if (daysElapsed <= 7) {
+                // WEEK 1: Peak Swelling & Bruising (Acute Phase)
+                phaseSubtitle = "Beached Siren (Acute Recovery)";
+                phaseTitle = "Phase 1: The Reef Shipwreck";
+                phaseTimeline = "Week 1 (Day 1 - 7)";
+                phaseLore = "Oh, the agony! The sea-switches have cast a heavy hex upon your fin tip. It throbs like a storm-battered reef. You must drop anchor on dry land.";
+                phaseMedical = "Cleveland Clinic highlights that peak throbbing pain and swelling happen here. Focus completely on the R.I.C.E protocol to reduce immediate fluid pooling and ease discomfort.";
+                footwearAdvice = "Go completely barefoot inside your cave if possible, or use a rigid surgical boot. No narrow fins or tight glass shoes!";
+                
+                rituals = [
+                    { id: "rice_r", label: "🐚 Rest: Stop all swimming, dancing, and marching; keep the fin quiet" },
+                    { id: "rice_i", label: "🧊 Ice: Pack the scales in wrapped ice for 20 mins to calm the heat" },
+                    { id: "rice_c", label: "🩹 Compress: Gently wrap with soft gauze to keep the bone stable" },
+                    { id: "rice_e", label: "🔼 Elevate: Prop the fin high above your heart level on coral cushions" }
+                ];
+            } 
+            else if (daysElapsed <= 28) {
+                // WEEKS 2-4: Sub-Acute, Pain fades, Buddy Taping/Rigid shoes take focus
+                phaseSubtitle = "The Buddy-System Shoal (Stabilization)";
+                phaseTitle = "Phase 2: The Clam-panion Alliance";
+                phaseTimeline = "Weeks 2 - 4 (Day 8 - 28)";
+                phaseLore = "The storm is quiet, but the split bone is still fragile. It needs a loyal ocean buddy. You must bond your injured digit to its neighbor with ancient bindings!";
+                phaseMedical = "Pain starts descending. Now is key for buddy-taping to stabilize the toe. Be absolutely sure to swap your cotton cushion daily to prevent moisture issues, and wear supportive shoes.";
+                footwearAdvice = "Switch to rigid, stiff-bottomed sandals or wide-box sneakers. If your shoe compresses your buddy-tape alliance, toss it into the abyss!";
+                
+                rituals = [
+                    { id: "buddy_tape", label: "🤝 Check Buddy-Tape: Re-secure your toe safely to its neighbor" },
+                    { id: "cotton_swap", label: "🧼 Fresh Cotton: Swap the soft wad between your toes (essential daily hygiene)" },
+                    { id: "circ_check", label: "🎨 Scale Color Check: Verify toes aren't pale, cold, or tingling from tight tape" },
+                    { id: "rigid_footwear", label: "👟 Strong Clamshells: Wear only rigid, stiff-soled shoes for walking" }
+                ];
+            } 
+            else if (daysElapsed <= 42) {
+                // WEEKS 5-6: Active Bone Reconstruction (Remodeling/Testing)
+                phaseSubtitle = "Testing the Depths (Remodeling)";
+                phaseTitle = "Phase 3: The Soft Swish";
+                phaseTimeline = "Weeks 5 - 6 (Day 29 - 42)";
+                phaseLore = "Your calcium matrix is mostly fused! The sirens are singing from the deep reef. Your fin is preparing for its magnificent return, but your joints are stiff as coral.";
+                phaseMedical = "The 6-week marks complete bone fusion for most standard fractures. Gradually increase your physical range, but stop immediately if you feel fresh, sharp protests.";
+                footwearAdvice = "You can transition back to supportive regular shoes. Keep high-heel fins tucked away in your treasure chest until stiffness fully vanishes.";
+                
+                rituals = [
+                    { id: "seaweed_stretch", label: "🌿 Seaweed Stretch: Gently flex your toe back and forth to loosen joints" },
+                    { id: "gradual_step", label: "🚶 Gradual Stepping: Slowly increase walking distance, testing your swim" },
+                    { id: "pain_listen", label: "👂 Listen to the Tide: Instantly rest if pain surges during movement" },
+                    { id: "vit_d3", label: "☀️ Sunlit Basking: Take your daily Vitamin D3 or enjoy a safe dose of sunshine" }
+                ];
+            } 
+            else {
+                // POST WEEK 6: Fully Healed (Residual swelling is normal)
+                phaseSubtitle = "The Deep Blue Return (Healed)";
+                phaseTitle = "Phase 4: Regained Siren Swish!";
+                phaseTimeline = "Week 6+ (Healed)";
+                phaseLore = "The hex is broken! Release the buddy-companion back into the wild. Splash your tail and leap through the waves with supreme confidence!";
+                phaseMedical = "Your bone is fully fused now! Keep in mind: Cleveland Clinic notes that minor residual 'sea-foam swelling' can occasionally linger for several months. That is entirely normal!";
+                footwearAdvice = "Your tail is ready. Go forth and wear whatever beautiful footwear your grotto desires!";
+                
+                rituals = [
+                    { id: "splash_free", label: "🐬 Splash Free: Rejoice and test your tail in the open ocean!" },
+                    { id: "seaweed_massage", label: "💆 Wave Massage: Rub some soothing oil to ease any remaining stiff muscles" }
+                ];
+            }
+
+            // Bind values to UI elements
+            document.getElementById('phase-subtitle').textContent = phaseSubtitle;
+            document.getElementById('phase-title').textContent = phaseTitle;
+            document.getElementById('phase-timeline-tag').textContent = phaseTimeline;
+            document.getElementById('phase-lore').textContent = phaseLore;
+            document.getElementById('phase-medical').textContent = phaseMedical;
+            document.getElementById('footwear-text').textContent = footwearAdvice;
+
+            // Render Checklist for Today
+            const todayStr = today.toISOString().split('T')[0];
+            const completedToday = state.checklist[todayStr] || [];
+
+            let listHTML = "";
+            rituals.forEach(ritual => {
+                if (typeof ritual === 'string') {
+                    listHTML += `<div class="text-xs text-slate-400 italic">${ritual}</div>`;
+                    return;
+                }
+                const isChecked = completedToday.includes(ritual.id);
+                listHTML += `
+                    <label class="flex items-center gap-3 bg-slate-950/40 hover:bg-slate-950/60 p-3 rounded-xl border border-teal-500/10 cursor-pointer transition">
+                        <input type="checkbox" 
+                               ${isChecked ? 'checked' : ''} 
+                               onclick="toggleRitual('${todayStr}', '${ritual.id}')"
+                               class="w-4 h-4 rounded border-teal-500/30 text-teal-500 bg-slate-950 focus:ring-teal-400 focus:ring-offset-slate-900 focus:ring-2">
+                        <span class="text-xs md:text-sm text-slate-200 select-none ${isChecked ? 'line-through text-slate-500' : ''}">${ritual.label}</span>
+                    </label>
+                `;
+            });
+            document.getElementById('ritual-list').innerHTML = listHTML;
+            document.getElementById('completion-stamp').textContent = `Finished ${completedToday.length}/${rituals.filter(r => typeof r !== 'string').length}`;
+
+            // Render saved logs
+            renderJournalLogs();
+        }
+
+        // Handle Checklist State Toggling
+        function toggleRitual(dateStr, ritualId) {
+            if (!state.checklist[dateStr]) {
+                state.checklist[dateStr] = [];
+            }
+            const index = state.checklist[dateStr].indexOf(ritualId);
+            if (index > -1) {
+                state.checklist[dateStr].splice(index, 1);
+            } else {
+                state.checklist[dateStr].push(ritualId);
+            }
+            saveStateToStorage();
+            renderDashboard();
+        }
+
+        // Update the tail vector colors & status indicators depending on progress
+        function updateVisualTail(percentage, daysElapsed) {
+            const statusBadge = document.getElementById('status-badge');
+            const scales = document.getElementById('tail-scales');
+            const bandage = document.getElementById('toe-bandage');
+
+            // Tail Gradients shifts from warning red/orange to healthy teal/emerald as weeks pass
+            const startCol = document.getElementById('tail-grad-start');
+            const endCol = document.getElementById('tail-grad-end');
+            const leftFinStart = document.getElementById('fin-left-start');
+            const leftFinEnd = document.getElementById('fin-left-end');
+
+            if (daysElapsed < 0) {
+                statusBadge.textContent = "Time-Warp Siren";
+                statusBadge.className = "px-3 py-1 rounded-full text-xs font-semibold border mb-4 bg-slate-800 border-slate-500 text-slate-300";
+                bandage.style.opacity = "0.2";
+            }
+            else if (daysElapsed <= 7) {
+                // Phase 1 (Week 1)
+                statusBadge.textContent = "🩹 Beached Siren";
+                statusBadge.className = "px-3 py-1 rounded-full text-xs font-semibold border mb-4 bg-rose-950/50 border-rose-500/30 text-rose-300";
+                
+                // Red/pink bruised look
+                startCol.setAttribute('stop-color', '#fda4af');
+                endCol.setAttribute('stop-color', '#be123c');
+                leftFinStart.setAttribute('stop-color', '#fca5a5');
+                leftFinEnd.setAttribute('stop-color', '#991b1b');
+                
+                scales.style.opacity = "0.1";
+                bandage.style.opacity = "1";
+            } 
+            else if (daysElapsed <= 28) {
+                // Phase 2 (Week 2-4)
+                statusBadge.textContent = "🤝 Stabilized Sea Siren";
+                statusBadge.className = "px-3 py-1 rounded-full text-xs font-semibold border mb-4 bg-amber-950/40 border-amber-500/30 text-amber-300";
+                
+                // Coral sunset orange/peach healing look
+                startCol.setAttribute('stop-color', '#fcd34d');
+                endCol.setAttribute('stop-color', '#b45309');
+                leftFinStart.setAttribute('stop-color', '#fed7aa');
+                leftFinEnd.setAttribute('stop-color', '#c2410c');
+                
+                scales.style.opacity = "0.4";
+                bandage.style.opacity = "0.9";
+            } 
+            else if (daysElapsed <= 42) {
+                // Phase 3 (Week 5-6)
+                statusBadge.textContent = "🧜‍♀️ Re-learning to Swim";
+                statusBadge.className = "px-3 py-1 rounded-full text-xs font-semibold border mb-4 bg-teal-950/50 border-teal-500/30 text-teal-300";
+                
+                // Deep clean teal healing look
+                startCol.setAttribute('stop-color', '#2dd4bf');
+                endCol.setAttribute('stop-color', '#0f766e');
+                leftFinStart.setAttribute('stop-color', '#34d399');
+                leftFinEnd.setAttribute('stop-color', '#064e3b');
+                
+                scales.style.opacity = "0.8";
+                bandage.style.opacity = "0.4";
+            } 
+            else {
+                // Phase 4 (Fully Healed)
+                statusBadge.textContent = "🐬 Fully Restored Siren";
+                statusBadge.className = "px-3 py-1 rounded-full text-xs font-semibold border mb-4 bg-emerald-950/50 border-emerald-500/30 text-emerald-300";
+                
+                // Bright emerald, healthy ocean colors
+                startCol.setAttribute('stop-color', '#34d399');
+                endCol.setAttribute('stop-color', '#047857');
+                leftFinStart.setAttribute('stop-color', '#059669');
+                leftFinEnd.setAttribute('stop-color', '#064e3b');
+                
+                scales.style.opacity = "1.0";
+                bandage.style.opacity = "0"; // Bandage completely gone!
+            }
+        }
+
+        // Tap-to-Wiggle Interactive Action
+        function wiggleToeTest() {
+            const today = new Date();
+            const injury = new Date(state.injuryDate);
+            today.setHours(12,0,0,0);
+            injury.setHours(12,0,0,0);
+            const daysElapsed = Math.floor((today - injury) / (1000 * 60 * 60 * 24));
+
+            const svg = document.getElementById('mermaid-tail-svg');
+            const msg = document.getElementById('wiggle-msg');
+
+            // Trigger animation wiggle
+            svg.classList.remove('animate-swim');
+            void svg.offsetWidth; // Force redraw
+            svg.classList.add('animate-[swim_0.5s_ease-in-out_infinite]');
+
+            // Display message based on phase
+            msg.classList.remove('opacity-0');
+            if (daysElapsed < 0) {
+                msg.textContent = "⏳ You can't wiggle a tail that hasn't crashed yet!";
+            }
+            else if (daysElapsed <= 7) {
+                msg.textContent = "💥 Ow! Don't do that yet! Keep the reef rest strict.";
+            } 
+            else if (daysElapsed <= 28) {
+                msg.textContent = "🩹 Feels a little stiff and achy. Good buddy tape support.";
+            } 
+            else if (daysElapsed <= 42) {
+                msg.textContent = "🌊 Getting better! Mild stiffness is normal, stretch gently.";
+            } 
+            else {
+                msg.textContent = "🐬 Free flow! Full siren swish restored!";
+            }
+
+            // Restore standard swish swim state after 2 seconds
+            setTimeout(() => {
+                svg.classList.remove('animate-[swim_0.5s_ease-in-out_infinite]');
+                svg.classList.add('animate-swim');
+                msg.classList.add('opacity-0');
+            }, 2000);
+        }
+
+        // --- Grotto Journal Management ---
+        function saveJournalEntry() {
+            const text = document.getElementById('journal-input').value.trim();
+            if (!text) {
+                showCustomModal("Empty Bottle", "You can't cast an empty scroll! Jot down a few magical details.", "🍾");
+                return;
+            }
+
+            const today = new Date();
+            const dateStr = today.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+
+            state.logs.unshift({ date: dateStr, text: text });
+            document.getElementById('journal-input').value = "";
+            saveStateToStorage();
+            renderJournalLogs();
+            showCustomModal("Note Sealed!", "Your log has been sealed in glass and added to the grotto collection.", "✅");
+        }
+
+        function deleteLog(index) {
+            state.logs.splice(index, 1);
+            saveStateToStorage();
+            renderJournalLogs();
+        }
+
+        function renderJournalLogs() {
+            const container = document.getElementById('saved-logs');
+            if (state.logs.length === 0) {
+                container.innerHTML = `
+                    <div class="text-[11px] text-slate-500 italic text-center py-4">
+                        No logs saved in this lagoon yet.
+                    </div>
+                `;
+                return;
+            }
+
+            let html = "";
+            state.logs.forEach((log, index) => {
+                html += `
+                    <div class="bg-slate-950/80 p-2.5 rounded-lg border border-teal-500/10 flex justify-between items-start gap-2 text-[11px]">
+                        <div>
+                            <span class="text-teal-400 font-bold block mb-0.5">${log.date}</span>
+                            <span class="text-slate-300 block leading-relaxed break-all">${log.text}</span>
+                        </div>
+                        <button onclick="deleteLog(${index})" class="text-rose-400 hover:text-rose-300 font-bold text-xs p-1">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // On document ready
+        window.onload = function() {
+            initApp();
+        };
+    </script>
 </body>
 </html>
