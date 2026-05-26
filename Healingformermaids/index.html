@@ -39,7 +39,6 @@
         }
         .full-width { grid-column: span 2; }
 
-        /* Form elements */
         label { display: block; font-weight: bold; margin: 10px 0 5px; text-align: left; }
         select, textarea {
             width: 100%;
@@ -64,10 +63,11 @@
             transition: 0.3s;
             width: 100%;
             font-weight: bold;
+            margin-bottom: 10px;
         }
         .btn:hover { background-color: #3d5a80; }
+        .btn-reset { background-color: #94a3b8; font-size: 12px; padding: 5px 10px; width: auto; }
 
-        /* Journal Log Style */
         .journal-log {
             max-height: 150px;
             overflow-y: auto;
@@ -115,70 +115,37 @@
         <option value="🦈 Great White Bite (Ouch!)">🦈 Great White Bite (Ouch!)</option>
     </select>
 
-    <label>🧪 Potion Cabinet (Check what you took):</label>
+    <label>🧪 Potion Cabinet:</label>
     <div class="checkbox-group">
         <input type="checkbox" id="potion-calc"> <label for="potion-calc">Coral Bone Builder (Calcium/Vit D)</label><br>
-        <input type="checkbox" id="potion-pain"> <label for="potion-pain">Pearl Powder (Pain Relief/Anti-inflammatory)</label>
+        <input type="checkbox" id="potion-pain"> <label for="potion-pain">Pearl Powder (Pain Relief)</label>
     </div>
 
-    <label for="siren-thoughts">Siren Thoughts (Daily Journal):</label>
-    <textarea id="siren-thoughts" placeholder="How is the terrestrial life treating you today?"></textarea>
+    <label for="siren-thoughts">Siren Thoughts:</label>
+    <textarea id="siren-thoughts" placeholder="How is terrestrial life today?"></textarea>
 
-    <button class="btn" onclick="submitDailyLog()" style="margin-top: 15px;">Cast Log Spell 🪄</button>
+    <button class="btn" onclick="submitDailyLog()">Cast Log Spell 🪄</button>
 
-    <h3 style="margin-top: 30px;">📜 Captain's Log History</h3>
-    <div class="journal-log" id="journal-log">
-        <div class="journal-entry"><em>No logs recorded yet. Cast a spell above!</em></div>
-    </div>
+    <h3>📜 Captain's Log History</h3>
+    <div class="journal-log" id="journal-log"></div>
+    
+    <br>
+    <button class="btn btn-reset" onclick="resetApp()">Wipe Shore Clean (Reset Data)</button>
 </div>
 
 <script>
-    let days = 1;
-    let seashells = 0;
+    // Load data from LocalStorage or use defaults
+    let days = parseInt(localStorage.getItem('mermaid_days')) || 1;
+    let seashells = parseInt(localStorage.getItem('mermaid_shells')) || 0;
+    let logs = JSON.parse(localStorage.getItem('mermaid_logs')) || [];
+
+    // Initialize UI on load
+    updateUI();
+    renderLogs();
 
     function submitDailyLog() {
-        // Increment Days & Shells
         days++;
-        seashells += 5; // Earn 5 shells per log!
+        seashells += 5;
         
-        // Update DOM elements
-        document.getElementById('day-count').innerText = days;
-        document.getElementById('shell-count').innerText = seashells;
-        
-        // Update Recovery Status based on days
-        let status = document.getElementById('status-text');
-        if (days >= 7 && days < 21) {
-            status.innerHTML = "🪸 Tide Pool Wader<br><small>(Light Mobilizing)</small>";
-        } else if (days >= 21) {
-            status.innerHTML = "🌊 Deep Sea Diver<br><small>(Fully Healed Tail!)</small>";
-        }
-
-        // Grab values for the log history
         let pain = document.getElementById('shark-pain').value;
-        let thoughts = document.getElementById('siren-thoughts').value || "Just floating along...";
-        
-        // Check if potions were taken
-        let calcTaken = document.getElementById('potion-calc').checked ? "✅" : "❌";
-        let painTaken = document.getElementById('potion-pain').checked ? "✅" : "❌";
-
-        // Create new log entry html
-        let logContainer = document.getElementById('journal-log');
-        if(days === 2) { logContainer.innerHTML = ""; } // Clear the placeholder on first log
-
-        let entry = document.createElement('div');
-        entry.className = "journal-entry";
-        entry.innerHTML = `<strong>Day ${days - 1}:</strong> ${pain} | 🦴:${calcTaken} 💊:${painTaken}<br><em>"${thoughts}"</em>`;
-        
-        // Prepend so newest is on top
-        logContainer.insertBefore(entry, logContainer.firstChild);
-
-        // Reset form inputs for next time
-        document.getElementById('siren-thoughts').value = "";
-        document.getElementById('potion-calc').checked = false;
-        document.getElementById('potion-pain').checked = false;
-        document.getElementById('shark-pain').selectedIndex = 0;
-    }
-</script>
-
-</body>
-</html>
+        let
