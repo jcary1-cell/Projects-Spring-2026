@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fin on the Mend 🧜‍♀️</title>
+    <style>
+        body {
+            background: linear-gradient(180deg, #bbf2f6 0%, #86e3ce 50%, #d1fff3 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c5d63;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 2px solid #a4b3b6;
+        }
+        h1 { color: #e07a5f; font-size: 2.2em; margin-bottom: 5px; }
+        h2, h3 { color: #3d5a80; }
+        .subtitle { font-style: italic; color: #718f94; margin-bottom: 25px; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-box { 
+            background: #fff; 
+            border-radius: 12px; 
+            padding: 15px; 
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+        .full-width { grid-column: span 2; }
+
+        /* Form elements */
+        label { display: block; font-weight: bold; margin: 10px 0 5px; text-align: left; }
+        select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            box-sizing: border-box;
+        }
+        textarea { height: 70px; resize: none; }
+        
+        .checkbox-group { text-align: left; margin: 10px 0; }
+        .checkbox-group label { display: inline; font-weight: normal; margin-left: 5px; }
+
+        .btn {
+            background-color: #e07a5f;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            font-weight: bold;
+        }
+        .btn:hover { background-color: #3d5a80; }
+
+        /* Journal Log Style */
+        .journal-log {
+            max-height: 150px;
+            overflow-y: auto;
+            background: #f4fbf9;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        .journal-entry {
+            border-bottom: 1px dashed #86e3ce;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Fin on the Mend 🧜‍♀️</h1>
+    <div class="subtitle">A Mermaid's Guide to Broken Toe Recovery</div>
+    
+    <div class="grid">
+        <div class="stat-box">
+            <h3>Flipper Status</h3>
+            <p id="status-text">🏝️ Beached Starfish<br><small>(Rest & Elevate)</small></p>
+        </div>
+        <div class="stat-box">
+            <h3>Days at Sea</h3>
+            <h2 id="day-count">1</h2>
+        </div>
+        <div class="stat-box full-width" style="background: #eefcf8;">
+            <h3>🐚 Pearl & Shell Bank</h3>
+            <p>You have earned: <strong id="shell-count">0</strong> Seashells</p>
+        </div>
+    </div>
+
+    <hr style="border: 1px solid #e2ece9; margin: 25px 0;">
+
+    <h2>Log Today's Tide</h2>
+    
+    <label for="shark-pain">Shark Attack Level (Pain):</label>
+    <select id="shark-pain">
+        <option value="🦈 Friendly Guppy (No Pain)">🦈 Friendly Guppy (No Pain)</option>
+        <option value="🦈 Reef Shark Nip (Mild)">🦈 Reef Shark Nip (Mild)</option>
+        <option value="🦈 Great White Bite (Ouch!)">🦈 Great White Bite (Ouch!)</option>
+    </select>
+
+    <label>🧪 Potion Cabinet (Check what you took):</label>
+    <div class="checkbox-group">
+        <input type="checkbox" id="potion-calc"> <label for="potion-calc">Coral Bone Builder (Calcium/Vit D)</label><br>
+        <input type="checkbox" id="potion-pain"> <label for="potion-pain">Pearl Powder (Pain Relief/Anti-inflammatory)</label>
+    </div>
+
+    <label for="siren-thoughts">Siren Thoughts (Daily Journal):</label>
+    <textarea id="siren-thoughts" placeholder="How is the terrestrial life treating you today?"></textarea>
+
+    <button class="btn" onclick="submitDailyLog()" style="margin-top: 15px;">Cast Log Spell 🪄</button>
+
+    <h3 style="margin-top: 30px;">📜 Captain's Log History</h3>
+    <div class="journal-log" id="journal-log">
+        <div class="journal-entry"><em>No logs recorded yet. Cast a spell above!</em></div>
+    </div>
+</div>
+
+<script>
+    let days = 1;
+    let seashells = 0;
+
+    function submitDailyLog() {
+        // Increment Days & Shells
+        days++;
+        seashells += 5; // Earn 5 shells per log!
+        
+        // Update DOM elements
+        document.getElementById('day-count').innerText = days;
+        document.getElementById('shell-count').innerText = seashells;
+        
+        // Update Recovery Status based on days
+        let status = document.getElementById('status-text');
+        if (days >= 7 && days < 21) {
+            status.innerHTML = "🪸 Tide Pool Wader<br><small>(Light Mobilizing)</small>";
+        } else if (days >= 21) {
+            status.innerHTML = "🌊 Deep Sea Diver<br><small>(Fully Healed Tail!)</small>";
+        }
+
+        // Grab values for the log history
+        let pain = document.getElementById('shark-pain').value;
+        let thoughts = document.getElementById('siren-thoughts').value || "Just floating along...";
+        
+        // Check if potions were taken
+        let calcTaken = document.getElementById('potion-calc').checked ? "✅" : "❌";
+        let painTaken = document.getElementById('potion-pain').checked ? "✅" : "❌";
+
+        // Create new log entry html
+        let logContainer = document.getElementById('journal-log');
+        if(days === 2) { logContainer.innerHTML = ""; } // Clear the placeholder on first log
+
+        let entry = document.createElement('div');
+        entry.className = "journal-entry";
+        entry.innerHTML = `<strong>Day ${days - 1}:</strong> ${pain} | 🦴:${calcTaken} 💊:${painTaken}<br><em>"${thoughts}"</em>`;
+        
+        // Prepend so newest is on top
+        logContainer.insertBefore(entry, logContainer.firstChild);
+
+        // Reset form inputs for next time
+        document.getElementById('siren-thoughts').value = "";
+        document.getElementById('potion-calc').checked = false;
+        document.getElementById('potion-pain').checked = false;
+        document.getElementById('shark-pain').selectedIndex = 0;
+    }
+</script>
+
+</body>
+</html>
