@@ -3,169 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fin on the Mend 🧜‍♀️</title>
+    <title>Fin on the Mend — A Mermaid's Recovery Journal</title>
     <style>
-        body {
-            background: linear-gradient(180deg, #bbf2f6 0%, #86e3ce 50%, #d1fff3 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #2c5d63;
-            padding: 20px;
-            margin: 0;
+        :root {
+            --seafoam: #86e3ce;
+            --coral: #e07a5f;
+            --ocean-blue: #3d5a80;
+            --sand: #f4fbf9;
+            --deep-sea: #2c5d63;
         }
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 600px;
-            margin: 20px auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border: 2px solid #a4b3b6;
-        }
-        h1 { color: #e07a5f; font-size: 2.2em; margin-bottom: 5px; }
-        h2, h3 { color: #3d5a80; }
-        .subtitle { font-style: italic; color: #718f94; margin-bottom: 25px; }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .stat-box { 
-            background: #fff; 
-            border-radius: 12px; 
-            padding: 15px; 
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
-        }
-        .full-width { grid-column: span 2; }
 
-        label { display: block; font-weight: bold; margin: 10px 0 5px; text-align: left; }
+        body {
+            background: linear-gradient(135deg, #bbf2f6 0%, #cfeee7 50%, #fff4ec 100%);
+            font-family: 'Segoe UI', Georgia, serif;
+            color: var(--deep-sea);
+            padding: 40px 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .header-castle {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-castle h1 { 
+            color: var(--coral); 
+            font-size: 3em; 
+            margin: 0 0 10px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle { 
+            font-style: italic; 
+            color: #618288; 
+            font-size: 1.2em;
+        }
+
+        /* Full website grid layout */
+        .website-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 12px 32px rgba(44, 93, 99, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+
+        h2, h3 { color: var(--ocean-blue); margin-top: 0; }
+
+        /* Stats Strip */
+        .stats-banner {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .stat-node {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .stat-node h2 { font-size: 2.5em; margin: 5px 0; color: var(--coral); }
+
+        /* Inputs */
+        label { display: block; font-weight: 600; margin: 15px 0 8px; }
         select, textarea {
             width: 100%;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 12px;
             border: 1px solid #cbd5e1;
+            background: white;
+            font-size: 1em;
             box-sizing: border-box;
         }
-        textarea { height: 70px; resize: none; }
-        
-        .checkbox-group { text-align: left; margin: 10px 0; }
-        .checkbox-group label { display: inline; font-weight: normal; margin-left: 5px; }
+        textarea { height: 100px; resize: none; }
 
+        .checkbox-group { margin: 15px 0; }
+        .checkbox-group div { margin-bottom: 8px; }
+
+        /* Buttons */
         .btn {
-            background-color: #e07a5f;
+            background: linear-gradient(135deg, #e07a5f 0%, #d46a4e 100%);
             color: white;
             border: none;
-            padding: 12px 25px;
-            font-size: 16px;
+            padding: 14px 28px;
+            font-size: 1.1em;
             border-radius: 50px;
             cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
             font-weight: bold;
-            margin-bottom: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(224, 122, 95, 0.3);
         }
-        .btn:hover { background-color: #3d5a80; }
-        .btn-reset { background-color: #94a3b8; font-size: 12px; padding: 5px 10px; width: auto; }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(224, 122, 95, 0.4);
+        }
 
-        .journal-log {
-            max-height: 150px;
+        /* Journal Log Style */
+        .journal-container {
+            max-height: 400px;
             overflow-y: auto;
-            background: #f4fbf9;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: left;
-            font-size: 0.9em;
+            padding-right: 10px;
         }
         .journal-entry {
-            border-bottom: 1px dashed #86e3ce;
-            padding: 5px 0;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--seafoam);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .reef-tips {
+            background: #eefcf8;
+            border-radius: 16px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+        .reef-tips ul { padding-left: 20px; margin: 10px 0 0 0; }
+        .reef-tips li { margin-bottom: 8px; }
+
+        .btn-reset {
+            background: transparent;
+            color: #94a3b8;
+            border: 1px dashed #cbd5e1;
+            font-size: 0.85em;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: auto;
+            margin-top: 20px;
+        }
+        .btn-reset:hover { color: var(--coral); border-color: var(--coral); }
+
+        @media (max-width: 768px) {
+            .website-grid { grid-template-columns: 1fr; }
+            .stats-banner { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Fin on the Mend 🧜‍♀️</h1>
-    <div class="subtitle">A Mermaid's Guide to Broken Toe Recovery</div>
+<div class="header-castle">
+    <h1>Fin on the Mend 🐚</h1>
+    <div class="subtitle">The Chronicles of a Grounded Mermaid's Re-Sprouting Tail</div>
+</div>
+
+<div class="website-grid">
     
-    <div class="grid">
-        <div class="stat-box">
-            <h3>Flipper Status</h3>
-            <p id="status-text">🏝️ Beached Starfish<br><small>(Rest & Elevate)</small></p>
+    <main>
+        <div class="stats-banner">
+            <div class="stat-node">
+                <h3>Flipper Status</h3>
+                <p id="status-text" style="font-weight: bold; margin: 10px 0 0 0;">🏝️ Beached Starfish</p>
+            </div>
+            <div class="stat-node">
+                <h3>Days Ashore</h3>
+                <h2 id="day-count">1</h2>
+            </div>
+            <div class="stat-node">
+                <h3>Shell Bank</h3>
+                <h2 id="shell-count">0</h2>
+            </div>
         </div>
-        <div class="stat-box">
-            <h3>Days at Sea</h3>
-            <h2 id="day-count">1</h2>
+
+        <div class="card">
+            <h2>📝 Log Today's Ocean Tide</h2>
+            
+            <label for="shark-pain">Shark Attack Assessment (Pain Level):</label>
+            <select id="shark-pain">
+                <option value="🦈 Calm Waters (No Pain)">🦈 Calm Waters (No Pain)</option>
+                <option value="🦈 Reef Shark Nibble (Mild Pain)">🦈 Reef Shark Nibble (Mild Pain)</option>
+                <option value="🦈 Great White Chomp (Intense Pain)">🦈 Great White Chomp (Intense Pain)</option>
+            </select>
+
+            <label>🧪 Alchemist's Potion Check:</label>
+            <div class="checkbox-group">
+                <div>
+                    <input type="checkbox" id="potion-calc"> 
+                    <label for="potion-calc" style="display:inline; font-weight:normal;">Coral Bone Builder (Calcium & Vit D)</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="potion-pain"> 
+                    <label for="potion-pain" style="display:inline; font-weight:normal;">Siren’s Soothing Elixir (Anti-inflammatory)</label>
+                </div>
+            </div>
+
+            <label for="siren-thoughts">Siren's Message in a Bottle (Daily Notes):</label>
+            <textarea id="siren-thoughts" placeholder="What did the sea breeze bring you today? Notes on swelling, mood, or terrestrial frustrations..."></textarea>
+
+            <button class="btn" onclick="submitDailyLog()" style="margin-top: 20px;">Cast Logging Spell 🪄</button>
         </div>
-        <div class="stat-box full-width" style="background: #eefcf8;">
-            <h3>🐚 Pearl & Shell Bank</h3>
-            <p>You have earned: <strong id="shell-count">0</strong> Seashells</p>
+
+        <div class="card">
+            <h2>📜 Captain's Log History</h2>
+            <div class="journal-container" id="journal-log">
+                </div>
         </div>
-    </div>
+    </main>
 
-    <hr style="border: 1px solid #e2ece9; margin: 25px 0;">
+    <aside>
+        <div class="card reef-tips">
+            <h3>🪸 The Healer's Reef Guidelines</h3>
+            <p>Every mermaid must remember the ancient recovery scrolls (R.I.C.E.):</p>
+            <ul>
+                <li><strong>Rest:</strong> Keep off your land legs. Swimming tails take time to grow back!</li>
+                <li><strong>Ice:</strong> Apply frozen ocean packs for 15-20 minutes to soothe the swell.</li>
+                <li><strong>Compress:</strong> Keep your neighbor-fins buddy-taped if recommended by the local shaman.</li>
+                <li><strong>Elevate:</strong> Prop that flipper high above your heart upon a stack of plush sea sponges.</li>
+            </ul>
+        </div>
 
-    <h2>Log Today's Tide</h2>
-    
-    <label for="shark-pain">Shark Attack Level (Pain):</label>
-    <select id="shark-pain">
-        <option value="🦈 Friendly Guppy (No Pain)">🦈 Friendly Guppy (No Pain)</option>
-        <option value="🦈 Reef Shark Nip (Mild)">🦈 Reef Shark Nip (Mild)</option>
-        <option value="🦈 Great White Bite (Ouch!)">🦈 Great White Bite (Ouch!)</option>
-    </select>
+        <div class="card">
+            <h3>🐚 Shell Exchange Marketplace</h3>
+            <p>Cash in your earned shell tokens with your land companions:</p>
+            <ul style="padding-left: 20px; font-size: 0.9em; line-height: 1.6;">
+                <li><strong>10 Shells:</strong> Command a human to bring you a cold elixir.</li>
+                <li><strong>25 Shells:</strong> One hour of luxury lagoon resting (Guilt-free movie/game).</li>
+                <li><strong>50 Shells:</strong> Order a rare delivery feast from across the dunes.</li>
+            </ul>
+        </div>
 
-    <label>🧪 Potion Cabinet:</label>
-    <div class="checkbox-group">
-        <input type="checkbox" id="potion-calc"> <label for="potion-calc">Coral Bone Builder (Calcium/Vit D)</label><br>
-        <input type="checkbox" id="potion-pain"> <label for="potion-pain">Pearl Powder (Pain Relief)</label>
-    </div>
+        <button class="btn-reset" onclick="resetApp()">Wipe Shoreline Clean (Reset Website Data)</button>
+    </aside>
 
-    <label for="siren-thoughts">Siren Thoughts:</label>
-    <textarea id="siren-thoughts" placeholder="How is terrestrial life today?"></textarea>
-
-    <button class="btn" onclick="submitDailyLog()">Cast Log Spell 🪄</button>
-
-    <h3>📜 Captain's Log History</h3>
-    <div class="journal-log" id="journal-log"></div>
-    
-    <br>
-    <button class="btn btn-reset" onclick="resetApp()">Wipe Shore Clean (Reset Data)</button>
 </div>
 
 <script>
-    // Load data from LocalStorage or use defaults
-    let days = parseInt(localStorage.getItem('mermaid_days')) || 1;
-    let seashells = parseInt(localStorage.getItem('mermaid_shells')) || 0;
-    let logs = JSON.parse(localStorage.getItem('mermaid_logs')) || [];
+    let days = parseInt(localStorage.getItem('web_mermaid_days')) || 1;
+    let seashells = parseInt(localStorage.getItem('web_mermaid_shells')) || 0;
+    let logs = JSON.parse(localStorage.getItem('web_mermaid_logs')) || [];
 
-    // Initialize UI on load
     updateUI();
     renderLogs();
 
     function submitDailyLog() {
         days++;
-        seashells += 5;
+        seashells += 5; 
         
         let pain = document.getElementById('shark-pain').value;
         let thoughts = document.getElementById('siren-thoughts').value || "Just floating along...";
-        let calcTaken = document.getElementById('potion-calc').checked ? "✅" : "❌";
-        let painTaken = document.getElementById('potion-pain').checked ? "✅" : "❌";
+        let calcTaken = document.getElementById('potion-calc').checked ? "✨ Drunk" : "❌ Missed";
+        let painTaken = document.getElementById('potion-pain').checked ? "✨ Drunk" : "❌ Missed";
 
-        // Add new log to array
-        let newLog = `<strong>Day ${days - 1}:</strong> ${pain} | 🦴:${calcTaken} 💊:${painTaken}<br><em>"${thoughts}"</em>`;
-        logs.unshift(newLog); // Put newest first
+        let newLog = `<strong>Day ${days - 1}:</strong> ${pain}<br>🧪 <em>Potions:</em> Bone Builder: ${calcTaken} | Elixir: ${painTaken}<br><span style="color:#555;">"${thoughts}"</span>`;
+        logs.unshift(newLog); 
 
-        // Save to LocalStorage
-        localStorage.setItem('mermaid_days', days);
-        localStorage.setItem('mermaid_shells', seashells);
-        localStorage.setItem('mermaid_logs', JSON.stringify(logs));
+        localStorage.setItem('web_mermaid_days', days);
+        localStorage.setItem('web_mermaid_shells', seashells);
+        localStorage.setItem('web_mermaid_logs', JSON.stringify(logs));
 
-        // Update UI
         updateUI();
         renderLogs();
 
-        // Reset inputs
+        // Clear Inputs
         document.getElementById('siren-thoughts').value = "";
         document.getElementById('potion-calc').checked = false;
         document.getElementById('potion-pain').checked = false;
@@ -178,26 +284,25 @@
         
         let status = document.getElementById('status-text');
         if (days >= 7 && days < 21) {
-            status.innerHTML = "🪸 Tide Pool Wader<br><small>(Light Mobilizing)</small>";
+            status.innerHTML = "🪸 Tide Pool Wader <br><small style='font-weight:normal;color:#666;'>(Light movement allowed)</small>";
         } else if (days >= 21) {
-            status.innerHTML = "🌊 Deep Sea Diver<br><small>(Fully Healed Tail!)</small>";
+            status.innerHTML = "🌊 Deep Sea Diver <br><small style='font-weight:bold;color:var(--coral);'>(Tail Fully Restored!)</small>";
         } else {
-            status.innerHTML = "🏝️ Beached Starfish<br><small>(Rest & Elevate)</small>";
+            status.innerHTML = "🏝️ Beached Starfish <br><small style='font-weight:normal;color:#666;'>(Strict Rest & Elevation)</small>";
         }
     }
 
     function renderLogs() {
         let logContainer = document.getElementById('journal-log');
         if (logs.length === 0) {
-            logContainer.innerHTML = '<div class="journal-entry"><em>No logs recorded yet. Cast a spell above!</em></div>';
+            logContainer.innerHTML = '<div class="journal-entry" style="text-align:center; color:#888;"><em>The captain\'s log is empty. Cast a log spell above to begin your history!</em></div>';
             return;
         }
-        
         logContainer.innerHTML = logs.map(log => `<div class="journal-entry">${log}</div>`).join('');
     }
 
     function resetApp() {
-        if (confirm("Are you sure you want to wash away all your recovery records?")) {
+        if (confirm("Are you sure you want to wash away all your records from the shore?")) {
             localStorage.clear();
             days = 1;
             seashells = 0;
