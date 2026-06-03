@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executive Briefing: Human-Centered AI (HCAI)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            uncc: {
+              green: '#005035',      /* Official Charlotte Green (PMS 7484) */
+              gold: '#A49665',       /* Official Niner Gold (PMS 7503) */
+              jasper: '#F1E6B2',     /* Official Jasper Accent (PMS 7499) */
+              black: '#101820'       /* Official Ore Black (PMS Black 6C) */
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap');
+    
+    body {
+      font-family: 'Lora', Georgia, serif;
+      color: #101820; /* Primary Ore Black for crisp readability */
+    }
+    .header-title {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .institution-header {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.12em;
+    }
+
+    /* Print styling to guarantee a flawless, single-page PDF output */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #101820 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .page-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-stone-50 min-h-screen py-10 px-4 flex flex-col items-center">
+
+  <!-- Interactive Action Bar (Hidden when printed) -->
+  <div class="no-print max-w-4xl w-full mb-6 flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-stone-200">
+    <div>
+      <h1 class="text-xs font-semibold uppercase tracking-wider text-stone-500 font-sans">Document Preview</h1>
+      <p class="text-sm text-stone-700 font-sans">Adhering to official UNC Charlotte brand colors and visual guidelines.</p>
+    </div>
+    <button onclick="window.print()" class="bg-uncc-green hover:bg-opacity-95 text-white font-sans text-xs uppercase tracking-wider font-semibold px-4 py-2.5 rounded transition-all shadow-sm">
+      Print / Save as PDF
+    </button>
+  </div>
+
+  <!-- Main Document Container (Maintains portrait aspect ratio) -->
+  <div class="page-container bg-white max-w-4xl w-full p-12 md:p-16 shadow-md border border-stone-200/80 flex flex-col justify-start" style="aspect-ratio: 1 / 1.414; min-height: 297mm;">
+    
+    <!-- ACADEMIC HEADER -->
+    <div class="text-center pb-6 mb-8 border-b-2 border-uncc-gold">
+      <p class="institution-header text-xs text-uncc-green font-bold uppercase">University of North Carolina at Charlotte</p>
+      <p class="text-[11px] uppercase tracking-widest text-uncc-gold font-semibold mt-1">College of Humanities & Earth and Social Sciences</p>
+      <h1 class="header-title text-3xl md:text-4xl font-bold text-uncc-green mt-4 tracking-tight">Human-Centered AI (HCAI)</h1>
+      <p class="text-sm md:text-base italic text-stone-500 mt-2">Program Launch Status & Curricular Framework</p>
+    </div>
+
+    <!-- EXECUTIVE OVERVIEW -->
+    <div class="mb-8">
+      <p class="text-sm md:text-base text-uncc-black leading-relaxed text-justify">
+        The <strong>Office of Interdisciplinary Studies</strong> is pleased to announce that both the <strong>B.A. Concentration in Human-Centered AI</strong> and the <strong>Minor in Artificial Intelligence Fundamentals</strong> have successfully cleared the Curriculog process and are officially active within Banner. Registration will go live for the student body next week, initiating our official Fall 2026 launch.
+      </p>
+    </div>
+
+    <!-- TWO COLUMN EDITORIAL LAYOUT -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pt-2">
+      
+      <!-- LEFT COLUMN: CURRICULAR LAUNCH & SCHEDULE (7 cols) -->
+      <div class="md:col-span-7 space-y-6">
+        
+        <div>
+          <h2 class="header-title text-lg font-bold text-uncc-green border-b border-stone-200 pb-1.5 mb-3">Fall 2026 Inaugural Course Offerings</h2>
+          <p class="text-xs text-stone-500 italic mb-4">To support immediate student demand, we are offering two sections of each core course:</p>
+          
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-uncc-green font-sans">HCAI 1100 &middot; AI Fundamentals and Literacy for All <span class="font-normal lowercase italic text-stone-500">(3 credits)</span></h3>
+              <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                Develops critical engagement with intelligent systems, evaluating computational frameworks from early thinking machines through to modern generative models.
+              </p>
+            </div>
+
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-uncc-green font-sans">HCAI 2100 &middot; Computing, Labor, and Power in History and Society <span class="font-normal lowercase italic text-stone-500">(3 credits)</span></h3>
+              <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                An examination of labor dynamics, structural biases, and institutional frameworks through a humanistic and social-science lens.
+              </p>
+            </div>
+
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-uncc-green font-sans">HCAI 2101 &middot; AI Application and Impact Across Disciplines <span class="font-normal lowercase italic text-stone-500">(3 credits)</span></h3>
+              <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                Equips students with the framework to utilize artificial intelligence safely and responsibly while evaluating cross-disciplinary consequences.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advanced Cross-Listings -->
+        <div>
+          <h2 class="header-title text-base font-bold text-uncc-green border-b border-stone-200 pb-1.5 mb-2.5">Advanced & Interdisciplinary Pathways</h2>
+          <p class="text-xs text-stone-600 leading-relaxed text-justify">
+            Beyond the core sequences, students have immediate access to specialized, cross-listed courses. These include <span class="font-semibold text-uncc-green">HCAI 3111</span> (Social Sciences Applied) and <span class="font-semibold text-uncc-green">HCAI 3112</span> (Humanities Applied), designed in coordination with departments across The College of Humanities & Earth and Social Sciences to anchor AI Literacy with the core human-centered skills of an AI ready graduate.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: STRUCTURE & NEXT STEPS (5 cols) -->
+      <div class="md:col-span-5 space-y-6 md:border-l md:border-stone-200/80 md:pl-6">
+        
+        <!-- Curricular Framework -->
+        <div>
+          <h2 class="header-title text-base font-bold text-uncc-green border-b border-stone-200 pb-1.5 mb-3">Degree Architecture</h2>
+          <p class="text-xs text-stone-500 italic mb-3">Total Degree Requirement: 120 Credit Hours</p>
+          
+          <ul class="space-y-3 text-xs text-uncc-black">
+            <li class="leading-relaxed">
+              <strong class="text-uncc-green uppercase font-sans tracking-wide text-[10px] block">Concentration Core (21 hrs)</strong>
+              Includes foundational sequences, interdisciplinary applications, research methods (IDST 3100), and the final Capstone (HCAI 4600).
+            </li>
+            <li class="leading-relaxed">
+              <strong class="text-uncc-green uppercase font-sans tracking-wide text-[10px] block">Disciplinary Depth (18 hrs)</strong>
+              Designed to build complementary expertise. A minor is preferred; a maximum of 6 hours can double-count between major and minor.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Future Planning Space -->
+        <div>
+          <h2 class="header-title text-base font-bold text-uncc-green border-b border-stone-200 pb-1.5 mb-3">Upcoming Milestones</h2>
+          <div class="space-y-3 text-xs text-stone-600">
+            <div class="relative pl-3 border-l-2 border-uncc-gold">
+              <strong class="text-uncc-black block">Advising & Onboarding</strong>
+              <p class="text-[11px] text-stone-500 mt-1 text-justify leading-normal">
+                All NSO and Open House events were attended in Spring 2026 to promote HCAI. We have been working with CHESS Advisors from the beginning to provide them with curricular details, and Summer NSO events will be attended by HCAI steering committee members.
+              </p>
+            </div>
+            <div class="relative pl-3 border-l-2 border-uncc-gold">
+              <strong class="text-uncc-black block">Faculty Collaborations</strong>
+              <p class="text-[11px] text-stone-500 mt-1 text-justify leading-normal">
+                Fall 2026 HCAI Faculty: HCAI 1101 Yash Tadimalla and Aileen Benedict (CCI), HCAI 2101 Justin Cary (CHESS), HCAI 2100 Jim Damron* (CHHS)
+              </p>
+            </div>
+            <div class="relative pl-3 border-l-2 border-uncc-gold">
+              <strong class="text-uncc-black block">Program Promotion</strong>
+              <p class="text-[11px] text-stone-500 mt-1 text-justify leading-normal">
+                Film Screening and Panel Discussion on Tuesday, August 18: "The AI Doc-or How I Became an Apocaloptimist" featuring a student, faculty, and industry panel discussion after the film.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
