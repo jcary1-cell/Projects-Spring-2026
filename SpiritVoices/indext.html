@@ -35,7 +35,16 @@
 </head>
 <body class="m-0 p-0 w-screen h-screen overflow-hidden font-sans select-none transition-all duration-75" id="wall">
 
-    <!-- Subtle, Almost Hidden Toggle Button (Bottom-Right Corner) -->
+    <!-- Subtle, Almost Hidden Quick Play/Pause Button (Bottom-Right, left of Menu) -->
+    <button 
+        id="btnWallPlayPause" 
+        class="fixed bottom-4 right-16 z-50 p-3 rounded-full bg-black/5 hover:bg-black/30 text-white/10 hover:text-white/80 transition-all duration-300 focus:outline-none" 
+        title="Play / Pause"
+    >
+        <i id="wallPlayIcon" data-lucide="pause" class="w-5 h-5"></i>
+    </button>
+
+    <!-- Subtle, Almost Hidden Toggle Menu Button (Bottom-Right Corner) -->
     <button 
         id="btnToggleMenu" 
         class="fixed bottom-4 right-4 z-50 p-3 rounded-full bg-black/5 hover:bg-black/30 text-white/10 hover:text-white/80 transition-all duration-300 focus:outline-none" 
@@ -47,10 +56,10 @@
     <!-- Controls Overlay (Hidden by Default) -->
     <div 
         id="controlsContainer" 
-        class="fixed inset-0 z-40 flex flex-col justify-between p-6 opacity-0 pointer-events-none transition-opacity duration-300"
+        class="fixed inset-0 z-40 flex flex-col justify-between p-6 opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto"
     >
         <!-- Header Stats Area -->
-        <header class="w-full flex justify-between items-start pointer-events-none">
+        <header class="w-full flex flex-col sm:flex-row justify-between gap-4 items-start pointer-events-none">
             <div class="glass-panel text-white p-4 rounded-2xl flex flex-col gap-1 shadow-2xl pointer-events-auto">
                 <h1 class="text-lg font-bold tracking-wider uppercase opacity-90">Color Morphing Wall</h1>
                 <p class="text-xs text-gray-300">4 Minutes 5 Seconds Cycle (Red ⇄ Blue)</p>
@@ -66,7 +75,7 @@
         </header>
 
         <!-- Main Visualizer Focus / Big Clock -->
-        <main class="flex-1 flex flex-col justify-center items-center pointer-events-none">
+        <main class="flex-1 flex flex-col justify-center items-center pointer-events-none my-6">
             <div class="glass-panel text-white px-10 py-8 rounded-3xl shadow-2xl flex flex-col items-center justify-center gap-2 pointer-events-auto max-w-sm text-center">
                 <div id="statusLabel" class="text-xs uppercase tracking-widest text-red-400 font-bold animate-pulse">Fading to Blue</div>
                 <div id="timeDisplay" class="font-mono text-5xl font-extrabold tracking-tight select-all">00:00.000</div>
@@ -80,6 +89,66 @@
         <!-- Bottom Controls & Timeline Panel -->
         <footer class="w-full flex justify-center pointer-events-none">
             <div class="glass-panel text-white p-6 rounded-3xl shadow-2xl w-full max-w-2xl flex flex-col gap-5 pointer-events-auto">
+                
+                <!-- Audio Controls Section -->
+                <div class="border-b border-white/10 pb-4 flex flex-col gap-3">
+                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-300">
+                        <i data-lucide="music" class="w-4 h-4"></i>
+                        <span>Audio System Settings</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Mode 1: Generative Ambient Drone -->
+                        <div class="bg-white/5 hover:bg-white/10 transition p-3 rounded-xl flex flex-col gap-2">
+                            <label class="flex items-center gap-2 cursor-pointer w-full">
+                                <input type="checkbox" id="chkAmbient" class="rounded text-blue-600 focus:ring-0 bg-black/40 border-white/20 w-4 h-4" />
+                                <span class="text-xs font-bold">Generative Ambient Drone</span>
+                            </label>
+                            <p class="text-[10px] text-gray-400">Generates dynamic synth frequencies matching the wall color shifts.</p>
+                        </div>
+
+                        <!-- Mode 2: Preloaded Soundtrack Stream -->
+                        <div class="bg-white/5 hover:bg-white/10 transition p-3 rounded-xl flex flex-col gap-2">
+                            <label class="flex items-center gap-2 cursor-pointer w-full">
+                                <input type="checkbox" id="chkSoundtrack" checked class="rounded text-blue-600 focus:ring-0 bg-black/40 border-white/20 w-4 h-4" />
+                                <span class="text-xs font-bold flex items-center gap-1">
+                                    Original Soundtrack
+                                </span>
+                            </label>
+                            <div class="flex flex-col gap-1">
+                                <p class="text-[10px] text-gray-400 truncate animate-pulse text-emerald-400" id="audioStatusText">
+                                    Syncing track...
+                                </p>
+                                <input 
+                                    type="file" 
+                                    id="manualAudioLoader" 
+                                    accept="audio/*" 
+                                    class="text-[9px] text-gray-400 file:mr-1 file:py-0.5 file:px-1.5 file:rounded file:border-0 file:text-[9px] file:bg-white/10 file:text-white hover:file:bg-white/20 file:cursor-pointer mt-1"
+                                    title="Choose local file manually if sandbox blocks streaming"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vol/Mute Controller -->
+                    <div class="flex items-center gap-3 mt-1">
+                        <button id="btnMute" class="text-gray-300 hover:text-white transition">
+                            <i id="muteIcon" data-lucide="volume-2" class="w-4 h-4"></i>
+                        </button>
+                        <input 
+                            type="range" 
+                            id="volSlider" 
+                            min="0" 
+                            max="1" 
+                            step="0.05" 
+                            value="0.5" 
+                            class="w-24 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white"
+                        />
+                        <span id="volPercent" class="text-[10px] font-mono text-gray-400">50%</span>
+                        <span id="trackLabel" class="text-[10px] text-emerald-400 ml-auto font-mono truncate max-w-[240px]">Syncing soundtrack</span>
+                    </div>
+                </div>
+
                 <!-- Timeline scrubbing Slider -->
                 <div class="flex flex-col gap-2">
                     <div class="flex justify-between text-xs font-mono text-gray-300">
@@ -144,6 +213,15 @@
         </footer>
     </div>
 
+    <!-- Hidden HTML5 Audio Element utilizing native multiline source fallbacks -->
+    <audio id="bgPlayer" loop>
+        <source src="You Don't Live Here (Anymore).mp3" type="audio/mpeg">
+        <source src="You%20Don't%20Live%20Here%20(Anymore).mp3" type="audio/mpeg">
+        <source src="You%20Don%27t%20Live%20Here%20%28Anymore%29.mp3" type="audio/mpeg">
+        <source src="You%20Don%27t%20Live%20Here%20(Anymore).mp3" type="audio/mpeg">
+        <source src="You Don't Live Here %28Anymore%29.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
@@ -153,14 +231,22 @@
         let currentTime = 0; // Current progress in seconds
         let isPlaying = false;
         let isLooping = true;
-        let playbackRate = 1.0; // Speed modifier (0.5x, 1x, 5x, 10x)
+        let playbackRate = 1.0; 
         let lastFrameTime = null;
         let animationFrameId = null;
         let showControls = false;
 
-        // Colors
+        // Color Spectrum Constants
         const START_COLOR = { r: 220, g: 38, b: 38 }; // Red-600
         const END_COLOR = { r: 37, g: 99, b: 235 };   // Blue-600
+
+        // Web Audio API State Variables for Ambient Drone
+        let audioCtx = null;
+        let mainVolumeNode = null;
+        let synthOscillators = [];
+        let synthFilters = [];
+        let isMuted = false;
+        let lastSavedVol = 0.5;
 
         // DOM elements
         const wall = document.getElementById('wall');
@@ -172,11 +258,25 @@
         const colorHex = document.getElementById('colorHex');
         const colorRgb = document.getElementById('colorRgb');
         const btnToggleMenu = document.getElementById('btnToggleMenu');
+        const btnWallPlayPause = document.getElementById('btnWallPlayPause');
         const controlsContainer = document.getElementById('controlsContainer');
 
-        // Buttons and control icons
+        // Audio DOM controls
+        const bgPlayer = document.getElementById('bgPlayer');
+        const chkAmbient = document.getElementById('chkAmbient');
+        const chkSoundtrack = document.getElementById('chkSoundtrack');
+        const btnMute = document.getElementById('btnMute');
+        const muteIcon = document.getElementById('muteIcon');
+        const volSlider = document.getElementById('volSlider');
+        const volPercent = document.getElementById('volPercent');
+        const trackLabel = document.getElementById('trackLabel');
+        const audioStatusText = document.getElementById('audioStatusText');
+        const manualAudioLoader = document.getElementById('manualAudioLoader');
+
+        // Playback Buttons and icons
         const btnPlayPause = document.getElementById('btnPlayPause');
         const playIcon = document.getElementById('playIcon');
+        const wallPlayIcon = document.getElementById('wallPlayIcon');
         const btnReset = document.getElementById('btnReset');
         const btnToggleCycle = document.getElementById('btnToggleCycle');
         const loopIcon = document.getElementById('loopIcon');
@@ -188,6 +288,50 @@
             5.0: document.getElementById('speed5x'),
             10.0: document.getElementById('speed10x')
         };
+
+        // Initialize background player volume
+        bgPlayer.volume = parseFloat(volSlider.value);
+
+        // Track loading status cleanly
+        bgPlayer.addEventListener('canplaythrough', () => {
+            audioStatusText.textContent = "You Don't Live Here (Anymore).mp3";
+            audioStatusText.classList.remove('animate-pulse', 'text-emerald-400');
+            audioStatusText.classList.add('text-white');
+            trackLabel.textContent = "Track: Loaded";
+        });
+
+        // Set up error listener for the last source option fallback
+        const audioSources = bgPlayer.getElementsByTagName('source');
+        if (audioSources.length > 0) {
+            const finalSource = audioSources[audioSources.length - 1];
+            finalSource.addEventListener('error', (e) => {
+                // If it isn't a loaded blob, trigger the UI failure notice
+                if (!bgPlayer.src.startsWith('blob:')) {
+                    console.warn("Preloaded audio file could not resolve automatically inside sandbox frame.");
+                    audioStatusText.textContent = "Sandbox blocked loading. Select file manually:";
+                    audioStatusText.classList.remove('text-emerald-400');
+                    audioStatusText.classList.add('text-amber-400');
+                    trackLabel.textContent = "Track: Error loading";
+                }
+            });
+        }
+
+        // Manual backup file picker if stream fails inside sandboxed frame
+        manualAudioLoader.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                bgPlayer.src = url;
+                audioStatusText.textContent = file.name;
+                audioStatusText.classList.remove('text-amber-400', 'animate-pulse');
+                audioStatusText.classList.add('text-white');
+                trackLabel.textContent = "Track: Custom Upload";
+                
+                if (isPlaying && chkSoundtrack.checked) {
+                    bgPlayer.play().catch(err => console.log("Manual play triggered successfully"));
+                }
+            }
+        });
 
         // Toggle UI Menu Visibility
         btnToggleMenu.addEventListener('click', () => {
@@ -203,6 +347,151 @@
                 btnToggleMenu.classList.remove('bg-black/30', 'text-white/80');
                 btnToggleMenu.classList.add('bg-black/5', 'text-white/10');
             }
+        });
+
+        // Web Audio API Setup for Synthesizer
+        function initSynth() {
+            if (audioCtx) return; 
+
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            mainVolumeNode = audioCtx.createGain();
+            mainVolumeNode.gain.setValueAtTime(isMuted ? 0 : volSlider.value, audioCtx.currentTime);
+            mainVolumeNode.connect(audioCtx.destination);
+
+            const baseNotes = [65.41, 130.81, 196.00]; // C2, C3, G3
+            
+            baseNotes.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                const filter = audioCtx.createBiquadFilter();
+
+                osc.type = idx === 0 ? 'sawtooth' : 'triangle';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                filter.type = 'lowpass';
+                filter.Q.setValueAtTime(4, audioCtx.currentTime);
+
+                gainNode.gain.setValueAtTime(idx === 0 ? 0.15 : 0.25, audioCtx.currentTime);
+
+                osc.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(mainVolumeNode);
+
+                osc.start();
+
+                synthOscillators.push(osc);
+                synthFilters.push(filter);
+            });
+        }
+
+        // Adjust Web Audio synth parameters dynamically based on current color percentage
+        function updateSynthParameters(progressRatio) {
+            if (!audioCtx || synthFilters.length === 0) return;
+
+            let interpolationFactor = progressRatio <= 0.5 ? progressRatio * 2 : 2 - (progressRatio * 2);
+
+            const cutoffFreqRed = 200;  
+            const cutoffFreqBlue = 750; 
+            const targetCutoff = cutoffFreqRed + (cutoffFreqBlue - cutoffFreqRed) * interpolationFactor;
+
+            synthFilters.forEach((filter, idx) => {
+                const frequencyOffset = idx * 100;
+                filter.frequency.setTargetAtTime(targetCutoff + frequencyOffset, audioCtx.currentTime, 0.1);
+            });
+        }
+
+        // Toggle Sound Option Checkboxes
+        chkAmbient.addEventListener('change', () => {
+            if (chkAmbient.checked) {
+                chkSoundtrack.checked = false;
+                toggleSoundtrack(false);
+                toggleAmbientSynth(true);
+            } else {
+                toggleAmbientSynth(false);
+            }
+        });
+
+        chkSoundtrack.addEventListener('change', () => {
+            if (chkSoundtrack.checked) {
+                chkAmbient.checked = false;
+                toggleAmbientSynth(false);
+                toggleSoundtrack(true);
+            } else {
+                toggleSoundtrack(false);
+            }
+        });
+
+        function toggleAmbientSynth(enable) {
+            if (enable) {
+                initSynth();
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                if (mainVolumeNode) {
+                    mainVolumeNode.gain.setTargetAtTime(isMuted ? 0 : volSlider.value * 0.4, audioCtx.currentTime, 0.1);
+                }
+                trackLabel.textContent = "Synthesizing Ambient Drone";
+            } else {
+                if (mainVolumeNode) {
+                    mainVolumeNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+                }
+            }
+        }
+
+        function toggleSoundtrack(enable) {
+            if (enable) {
+                trackLabel.textContent = "Soundtrack: You Don't Live Here...";
+                if (isPlaying) {
+                    const ratio = currentTime / TOTAL_DURATION_SECONDS;
+                    if (isFinite(bgPlayer.duration) && bgPlayer.duration > 0) {
+                        bgPlayer.currentTime = ratio * bgPlayer.duration;
+                    }
+                    bgPlayer.play().catch(err => console.log("Audio waiting for user gesture..."));
+                }
+            } else {
+                bgPlayer.pause();
+            }
+        }
+
+        // Volume slider controller
+        volSlider.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            volPercent.textContent = `${Math.round(val * 100)}%`;
+            
+            if (val === 0) {
+                isMuted = true;
+                muteIcon.setAttribute('data-lucide', 'volume-x');
+            } else {
+                isMuted = false;
+                muteIcon.setAttribute('data-lucide', 'volume-2');
+            }
+            lucide.createIcons();
+
+            bgPlayer.volume = val;
+
+            if (mainVolumeNode) {
+                mainVolumeNode.gain.setValueAtTime(isMuted ? 0 : val * 0.4, audioCtx.currentTime);
+            }
+        });
+
+        // Mute/Unmute toggle button click event
+        btnMute.addEventListener('click', () => {
+            isMuted = !isMuted;
+            if (isMuted) {
+                lastSavedVol = parseFloat(volSlider.value);
+                volSlider.value = 0;
+                volPercent.textContent = "0%";
+                bgPlayer.volume = 0;
+                if (mainVolumeNode) mainVolumeNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                muteIcon.setAttribute('data-lucide', 'volume-x');
+            } else {
+                volSlider.value = lastSavedVol;
+                volPercent.textContent = `${Math.round(lastSavedVol * 100)}%`;
+                bgPlayer.volume = lastSavedVol;
+                if (mainVolumeNode) mainVolumeNode.gain.setValueAtTime(lastSavedVol * 0.4, audioCtx.currentTime);
+                muteIcon.setAttribute('data-lucide', 'volume-2');
+            }
+            lucide.createIcons();
         });
 
         // Utility: Convert RGB components to Hex String
@@ -232,12 +521,10 @@
             
             let interpolationFactor = 0;
             if (progressRatio <= 0.5) {
-                // Going from Red (0.0) to Blue (1.0)
                 interpolationFactor = progressRatio * 2; 
                 statusLabel.textContent = "Fading to Blue";
                 statusLabel.className = "text-xs uppercase tracking-widest text-blue-400 font-bold animate-pulse";
             } else {
-                // Going from Blue (1.0) to Red (0.0)
                 interpolationFactor = 2 - (progressRatio * 2);
                 statusLabel.textContent = "Returning to Red";
                 statusLabel.className = "text-xs uppercase tracking-widest text-red-400 font-bold animate-pulse";
@@ -266,6 +553,9 @@
 
             // Sync Timeline Slider without triggering loops
             timelineSlider.value = currentTime;
+
+            // Sync ambient synthesizer cutoff frequencies
+            updateSynthParameters(progressRatio);
         }
 
         // Standard requestAnimationFrame loop
@@ -280,6 +570,9 @@
                 if (currentTime >= TOTAL_DURATION_SECONDS) {
                     if (isLooping) {
                         currentTime = 0; 
+                        if (chkSoundtrack.checked) {
+                            bgPlayer.currentTime = 0;
+                        }
                     } else {
                         currentTime = TOTAL_DURATION_SECONDS;
                         pause();
@@ -305,13 +598,47 @@
         function play() {
             if (currentTime >= TOTAL_DURATION_SECONDS) {
                 currentTime = 0; 
+                if (chkSoundtrack.checked) bgPlayer.currentTime = 0;
             }
             isPlaying = true;
             lastFrameTime = performance.now();
             animationFrameId = requestAnimationFrame(animationLoop);
             
             playIcon.setAttribute('data-lucide', 'pause');
+            wallPlayIcon.setAttribute('data-lucide', 'pause');
             lucide.createIcons();
+
+            // Handle Web Audio synth resume
+            if (chkAmbient.checked) {
+                initSynth();
+                if (audioCtx) {
+                    audioCtx.resume();
+                    if (mainVolumeNode) mainVolumeNode.gain.setTargetAtTime(isMuted ? 0 : volSlider.value * 0.4, audioCtx.currentTime, 0.1);
+                }
+            }
+
+            // Handle background media play
+            if (chkSoundtrack.checked) {
+                if (isFinite(bgPlayer.duration) && bgPlayer.duration > 0) {
+                    const ratio = currentTime / TOTAL_DURATION_SECONDS;
+                    bgPlayer.currentTime = ratio * bgPlayer.duration;
+                }
+                bgPlayer.play().catch(err => {
+                    console.log("Autoplay is waiting for a user gesture interaction to play.");
+                    const unlockAudioOnGesture = () => {
+                        if (isPlaying && chkSoundtrack.checked) {
+                            bgPlayer.play().catch(e => console.log("Interaction play delayed:", e));
+                        }
+                        if (chkAmbient.checked && audioCtx) {
+                            audioCtx.resume();
+                        }
+                        document.removeEventListener('click', unlockAudioOnGesture);
+                        document.removeEventListener('touchstart', unlockAudioOnGesture);
+                    };
+                    document.addEventListener('click', unlockAudioOnGesture);
+                    document.addEventListener('touchstart', unlockAudioOnGesture);
+                });
+            }
         }
 
         function pause() {
@@ -322,12 +649,22 @@
             }
             
             playIcon.setAttribute('data-lucide', 'play');
+            wallPlayIcon.setAttribute('data-lucide', 'play');
             lucide.createIcons();
+
+            // Quiet down synthesizers when pausing
+            if (audioCtx && mainVolumeNode) {
+                mainVolumeNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+            }
+
+            // Pause media track
+            bgPlayer.pause();
         }
 
         function reset() {
             currentTime = 0;
             updateScene();
+            bgPlayer.currentTime = 0;
             if (!isPlaying) {
                 lastFrameTime = null;
             }
@@ -347,6 +684,9 @@
                     btn.classList.add('text-gray-300');
                 }
             });
+
+            // Adjust soundtrack speed to match visual speed!
+            bgPlayer.playbackRate = rate;
         }
 
         // Toggle Loop/Restart cycle
@@ -366,6 +706,7 @@
 
         // Setup Event Listeners
         btnPlayPause.addEventListener('click', togglePlay);
+        btnWallPlayPause.addEventListener('click', togglePlay);
         btnReset.addEventListener('click', reset);
         btnToggleCycle.addEventListener('click', toggleLoop);
 
@@ -376,6 +717,12 @@
             
             currentTime = parseFloat(e.target.value);
             updateScene();
+
+            // Keep audio synced with play scrub
+            if (chkSoundtrack.checked && isFinite(bgPlayer.duration) && bgPlayer.duration > 0) {
+                const ratio = currentTime / TOTAL_DURATION_SECONDS;
+                bgPlayer.currentTime = ratio * bgPlayer.duration;
+            }
             
             if (wasPlaying) play();
         });
@@ -396,7 +743,7 @@
             }
         });
 
-        // Start playing automatically
+        // Initialize displays and begin
         updateScene();
         play();
     </script>
