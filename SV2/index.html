@@ -116,8 +116,8 @@
                                 </span>
                             </label>
                             <div class="flex flex-col gap-1">
-                                <p class="text-[10px] text-gray-400 truncate animate-pulse text-emerald-400" id="audioStatusText">
-                                    Syncing track...
+                                <p class="text-[10px] text-emerald-400 truncate" id="audioStatusText" title="You Don't Live Here (Anymore).mp3">
+                                    You Don't Live Here (Anymore).mp3
                                 </p>
                                 <input 
                                     type="file" 
@@ -145,7 +145,7 @@
                             class="w-24 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white"
                         />
                         <span id="volPercent" class="text-[10px] font-mono text-gray-400">50%</span>
-                        <span id="trackLabel" class="text-[10px] text-emerald-400 ml-auto font-mono truncate max-w-[240px]">Syncing soundtrack</span>
+                        <span id="trackLabel" class="text-[10px] text-emerald-400 ml-auto font-mono truncate max-w-[240px]">Soundtrack: You Don't Live Here (Anymore)</span>
                     </div>
                 </div>
 
@@ -213,13 +213,11 @@
         </footer>
     </div>
 
-    <!-- Hidden HTML5 Audio Element utilizing native multiline source fallbacks -->
-    <audio id="bgPlayer" loop>
+    <!-- Hidden HTML5 Audio Element explicitly pointing to the default track -->
+    <audio id="bgPlayer" src="You Don't Live Here (Anymore).mp3" loop>
         <source src="You Don't Live Here (Anymore).mp3" type="audio/mpeg">
         <source src="You%20Don't%20Live%20Here%20(Anymore).mp3" type="audio/mpeg">
         <source src="You%20Don%27t%20Live%20Here%20%28Anymore%29.mp3" type="audio/mpeg">
-        <source src="You%20Don%27t%20Live%20Here%20(Anymore).mp3" type="audio/mpeg">
-        <source src="You Don't Live Here %28Anymore%29.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -297,24 +295,16 @@
             audioStatusText.textContent = "You Don't Live Here (Anymore).mp3";
             audioStatusText.classList.remove('animate-pulse', 'text-emerald-400');
             audioStatusText.classList.add('text-white');
-            trackLabel.textContent = "Track: Loaded";
+            trackLabel.textContent = "Track: You Don't Live Here (Anymore)";
         });
 
-        // Set up error listener for the last source option fallback
-        const audioSources = bgPlayer.getElementsByTagName('source');
-        if (audioSources.length > 0) {
-            const finalSource = audioSources[audioSources.length - 1];
-            finalSource.addEventListener('error', (e) => {
-                // If it isn't a loaded blob, trigger the UI failure notice
-                if (!bgPlayer.src.startsWith('blob:')) {
-                    console.warn("Preloaded audio file could not resolve automatically inside sandbox frame.");
-                    audioStatusText.textContent = "Sandbox blocked loading. Select file manually:";
-                    audioStatusText.classList.remove('text-emerald-400');
-                    audioStatusText.classList.add('text-amber-400');
-                    trackLabel.textContent = "Track: Error loading";
-                }
-            });
-        }
+        // Error detection configuration
+        bgPlayer.addEventListener('error', (e) => {
+            if (!bgPlayer.src.startsWith('blob:')) {
+                console.warn("Natively resolved autoplay might require a gesture bypass on sandbox start.");
+                trackLabel.textContent = "Waiting for tap to unlock audio...";
+            }
+        });
 
         // Manual backup file picker if stream fails inside sandboxed frame
         manualAudioLoader.addEventListener('change', (e) => {
@@ -325,7 +315,7 @@
                 audioStatusText.textContent = file.name;
                 audioStatusText.classList.remove('text-amber-400', 'animate-pulse');
                 audioStatusText.classList.add('text-white');
-                trackLabel.textContent = "Track: Custom Upload";
+                trackLabel.textContent = `Track: ${file.name}`;
                 
                 if (isPlaying && chkSoundtrack.checked) {
                     bgPlayer.play().catch(err => console.log("Manual play triggered successfully"));
@@ -440,13 +430,13 @@
 
         function toggleSoundtrack(enable) {
             if (enable) {
-                trackLabel.textContent = "Soundtrack: You Don't Live Here...";
+                trackLabel.textContent = "Track: You Don't Live Here (Anymore)";
                 if (isPlaying) {
                     const ratio = currentTime / TOTAL_DURATION_SECONDS;
                     if (isFinite(bgPlayer.duration) && bgPlayer.duration > 0) {
                         bgPlayer.currentTime = ratio * bgPlayer.duration;
                     }
-                    bgPlayer.play().catch(err => console.log("Audio waiting for user gesture..."));
+                    bgPlayer.play().catch(err => console.log("Audio awaiting user gesture..."));
                 }
             } else {
                 bgPlayer.pause();
