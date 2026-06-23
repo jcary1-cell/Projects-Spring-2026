@@ -1,424 +1,469 @@
-import React, { useState } from 'react';
-import { 
-  Sparkles, 
-  Compass, 
-  ClipboardCopy, 
-  ExternalLink, 
-  BookOpen, 
-  GraduationCap, 
-  CheckCircle, 
-  Target, 
-  Users, 
-  MapPin, 
-  ArrowRight, 
-  Check,
-  Building,
-  ChevronRight
-} from 'lucide-react';
-
-const ACADEMIC_DIVISIONS = [
-  {
-    id: 'humanities',
-    name: 'Humanities',
-    departments: 'English, History, Philosophy, Languages, Writing, Communication Studies',
-    icon: BookOpen,
-    accentColor: '#A49665', // Niner Gold
-    desc: 'Unlocking human narrative, ethical reflection, critical thinking, and global storytelling.'
-  },
-  {
-    id: 'earth-environmental',
-    name: 'Earth, Environmental & Social Sciences',
-    departments: 'Geography, Geological Sciences, Meteorology, Environmental Studies',
-    icon: Compass,
-    accentColor: '#005035', // Charlotte Green
-    desc: 'Exploring human-environment dynamics, sustainable systems, mapping, and ecological balance.'
-  },
-  {
-    id: 'social-sciences',
-    name: 'Social Sciences',
-    departments: 'Anthropology, Sociology, Political Science, Criminal Justice, Psychology',
-    icon: Users,
-    accentColor: '#A49665',
-    desc: 'Studying institutional dynamics, behavioral patterns, public policy, and community structures.'
-  }
-];
-
-const STAGES = [
-  { id: 'freshman', label: 'Exploring (1st-2nd Year)', desc: 'Discovering interest areas, defining targets' },
-  { id: 'junior', label: 'Deepening (3rd Year)', desc: 'Seeking internships, research, study abroad' },
-  { id: 'senior', label: 'Launching (4th Year & Postgrad)', desc: 'Transitioning to careers or graduate schools' }
-];
-
-const GOALS = [
-  { id: 'mentorship', label: 'Connecting with a Faculty Mentor', placeholder: 'finding a mentor aligned with my intellectual curiosities' },
-  { id: 'high-impact', label: 'Finding a High-Impact Experience', placeholder: 'securing an undergraduate research project, internship, or study abroad option' },
-  { id: 'career-alignment', label: 'Aligning my Degree with Careers', placeholder: 'mapping my humanities/social sciences degree to viable modern career pathways' },
-  { id: 'outreach-emails', label: 'Drafting Outreach & Icebreaker Scripts', placeholder: 'crafting confidence-boosting emails to send to professors, advisors, or alumni' }
-];
-
-export default function App() {
-  const [activeDivision, setActiveDivision] = useState('humanities');
-  const [activeStage, setActiveStage] = useState('freshman');
-  const [activeGoal, setActiveGoal] = useState('mentorship');
-  const [copied, setCopied] = useState(false);
-
-  // Helper values to assemble customized prompt payloads
-  const currentDiv = ACADEMIC_DIVISIONS.find(d => d.id === activeDivision);
-  const currentStageObj = STAGES.find(s => s.id === activeStage);
-  const currentGoalObj = GOALS.find(g => g.id === activeGoal);
-
-  const generatePrompt = () => {
-    return `Hello! I am an undergraduate student in the College of Humanities & Earth and Social Sciences (CHESS) at UNC Charlotte. 
-
-My primary area of interest is inside the "${currentDiv?.name || ''}" division (specifically looking at: ${currentDiv?.departments || ''}). 
-
-I am currently in the "${currentStageObj?.label || ''}" stage of my academic journey. 
-
-I want to leverage your guidance specifically to help me with: "${currentGoalObj?.label || ''}" (focusing on ${currentGoalObj?.placeholder || ''}). 
-
-According to the CHESS Promise, all students must have access to at least one high-impact experience flowing from a unique orientation to human, social, and environmental well-being. 
-
-Based on my details, please:
-1. Suggest 3 highly practical UNC Charlotte resources, courses, or physical locations I should check out.
-2. Outline a 3-step action plan to build my confidence to approach CHESS faculty or advisors.
-3. Write an ultra-personalized, warm, 3-sentence outreach template/script that I can copy, customize, and send to an advisor, faculty member, or alum to schedule a 15-minute coffee chat.`;
-  };
-
-  const handleCopy = async () => {
-    try {
-      // Direct copy attempt using standard copy behavior
-      await navigator.clipboard.writeText(generatePrompt());
-      setCopied(true);
-      setTimeout(() => setCopied(false), 3000);
-    } catch (err) {
-      // Fallback for isolated contexts or browsers blocking navigator.clipboard
-      try {
-        const textarea = document.createElement('textarea');
-        textarea.value = generatePrompt();
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000);
-      } catch (fallbackErr) {
-        console.error('Failed to copy prompt to clipboard', fallbackErr);
-      }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHESS Career Confidence Platform - UNC Charlotte</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React and ReactDOM CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  
+  <!-- Pinned stable Babel 7 CDN to prevent experimental Babel 8 parsing bugs -->
+  <script src="https://unpkg.com/@babel/standalone@7.24.0/babel.min.js"></script>
+  
+  <!-- Fonts -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
     }
-  };
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
 
-  const geminiLink = "https://gemini.google.com/gem/1Es9bOcNCaZ9tZJX3UoDRPxzuGwHOfbJo?usp=sharing";
+  <div id="root"></div>
 
-  return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col">
-      
-      {/* Header */}
-      <header className="bg-[#005035] border-b-4 border-[#A49665] text-white py-8 px-4 sm:px-6 shadow-md">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="bg-[#A49665] text-[#101820] text-xs font-black px-2.5 py-1 rounded uppercase tracking-wider">
-                UNC Charlotte CHESS
-              </span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-              The Career Confidence Platform
-            </h1>
-            <p className="text-[#F1E6B2] text-sm sm:text-base max-w-2xl font-light">
-              Empowering students to fearlessly explore world-class, intellectually rigorous pathways, mentorship, and high-impact experiences as promised by the College.
-            </p>
-          </div>
-          <div className="bg-emerald-950/40 p-4 rounded-xl border border-[#A49665]/35 flex flex-col space-y-2 max-w-sm w-full">
-            <p className="text-[11px] uppercase tracking-widest font-bold text-[#A49665]">The CHESS Promise</p>
-            <p className="text-xs text-slate-200 italic leading-relaxed">
-              "All CHESS undergraduate and graduate students will have the opportunity to participate in at least one high-impact experience as part of a world-class education..."
-            </p>
-          </div>
-        </div>
-      </header>
+  <!-- React Code with Babel -->
+  <script type="text/babel">
+    // Access React hooks directly from the global React object
+    const useState = React.useState;
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Left Column: Interactive Settings to craft custom prompt (7 cols) */}
-        <section className="lg:col-span-7 space-y-6">
-          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-6">
-            <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-              <div className="p-2 bg-[#005035]/10 rounded-lg text-[#005035]">
-                <Target className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="text-lg font-black text-[#101820]">Step 1: Personalize Your Goal</h2>
-                <p className="text-xs text-slate-500">Configure your parameters to dynamically construct a stellar Gemini-ready prompt template.</p>
-              </div>
-            </div>
+    // Simple SVG Icons to replace Lucide dependency gracefully in single HTML file
+    const Sparkles = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="inline mr-1"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+    );
 
-            {/* Division Selector */}
-            <div className="space-y-3">
-              <label className="block text-xs font-black uppercase tracking-wider text-slate-600">
-                1. Select Academic Division / Interest Area:
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {ACADEMIC_DIVISIONS.map((div) => {
-                  const Icon = div.icon;
-                  const isSelected = activeDivision === div.id;
-                  return (
-                    <button
-                      key={div.id}
-                      onClick={() => setActiveDivision(div.id)}
-                      className={`text-left p-3.5 rounded-xl border transition-all flex flex-col justify-between h-32 ${
-                        isSelected 
-                          ? 'border-[#005035] bg-gradient-to-br from-[#005035]/5 to-transparent ring-2 ring-[#005035]' 
-                          : 'border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50'
-                      }`}
-                    >
-                      <div className="flex justify-between items-start w-full">
-                        <div className={`p-1.5 rounded-lg ${isSelected ? 'bg-[#005035] text-white' : 'bg-slate-100 text-slate-600'}`}>
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        {isSelected && <span className="text-[10px] font-bold text-[#005035] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Active</span>}
-                      </div>
-                      <div>
-                        <h3 className="font-extrabold text-sm text-[#101820] leading-snug">{div.name}</h3>
-                        <p className="text-[10px] text-slate-400 truncate mt-0.5">{div.departments}</p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+    const Compass = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+    );
 
-            {/* Stage Selector */}
-            <div className="space-y-3 pt-2">
-              <label className="block text-xs font-black uppercase tracking-wider text-slate-600">
-                2. Select Your Current Academic Phase:
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {STAGES.map((stg) => {
-                  const isSelected = activeStage === stg.id;
-                  return (
-                    <button
-                      key={stg.id}
-                      onClick={() => setActiveStage(stg.id)}
-                      className={`text-left p-3.5 rounded-xl border transition-all ${
-                        isSelected 
-                          ? 'border-[#005035] bg-[#005035]/5 ring-1 ring-[#005035]' 
-                          : 'border-slate-200 hover:border-slate-300 bg-white'
-                      }`}
-                    >
-                      <p className="font-bold text-xs text-[#101820]">{stg.label}</p>
-                      <p className="text-[10px] text-slate-500 mt-1">{stg.desc}</p>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+    const ClipboardCopy = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+    );
 
-            {/* Target Goal Selector */}
-            <div className="space-y-3 pt-2">
-              <label className="block text-xs font-black uppercase tracking-wider text-slate-600">
-                3. Choose What You Need Help with Most:
-              </label>
-              <div className="space-y-2">
-                {GOALS.map((gl) => {
-                  const isSelected = activeGoal === gl.id;
-                  return (
-                    <button
-                      key={gl.id}
-                      onClick={() => setActiveGoal(gl.id)}
-                      className={`w-full text-left p-3 rounded-xl border flex items-center justify-between transition-all ${
-                        isSelected 
-                          ? 'border-[#A49665] bg-[#F1E6B2]/20 ring-1 ring-[#A49665]' 
-                          : 'border-slate-200 hover:border-slate-300 bg-white'
-                      }`}
-                    >
-                      <span className="font-bold text-xs text-[#101820] flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${isSelected ? 'bg-[#A49665]' : 'bg-slate-300'}`}></span>
-                        {gl.label}
-                      </span>
-                      <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${isSelected ? 'translate-x-1 text-[#A49665]' : ''}`} />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </section>
+    const ExternalLink = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 inline ml-1"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+    );
 
-        {/* Right Column: Prompter Preview & Platform Links (5 cols) */}
-        <section className="lg:col-span-5 flex flex-col gap-6">
+    const BookOpen = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    );
+
+    const Target = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+    );
+
+    const Users = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4.5 h-4.5 inline mr-1.5 text-[#A49665]"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    );
+
+    const Check = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M20 6 9 17l-5-5"/></svg>
+    );
+
+    // Re-assign parameter list to avoid inline parameter destructuring issues with Babel standalone
+    const ChevronRight = (props) => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={props.className}><path d="m9 18 6-6-6-6"/></svg>
+    );
+
+    const ACADEMIC_DIVISIONS = [
+      {
+        id: 'humanities',
+        name: 'Humanities',
+        departments: 'English, History, Philosophy, Languages, Writing, Communication Studies',
+        icon: BookOpen,
+        accentColor: '#A49665', 
+        desc: 'Unlocking human narrative, ethical reflection, critical thinking, and global storytelling.'
+      },
+      {
+        id: 'earth-environmental',
+        name: 'Earth, Environmental & Social Sciences',
+        departments: 'Geography, Geological Sciences, Meteorology, Environmental Studies',
+        icon: Compass,
+        accentColor: '#005035', 
+        desc: 'Exploring human-environment dynamics, sustainable systems, mapping, and ecological balance.'
+      },
+      {
+        id: 'social-sciences',
+        name: 'Social Sciences',
+        departments: 'Anthropology, Sociology, Political Science, Criminal Justice, Psychology',
+        icon: Users,
+        accentColor: '#A49665',
+        desc: 'Studying institutional dynamics, behavioral patterns, public policy, and community structures.'
+      }
+    ];
+
+    const STAGES = [
+      { id: 'freshman', label: 'Exploring (1st-2nd Year)', desc: 'Discovering interest areas, defining targets' },
+      { id: 'junior', label: 'Deepening (3rd Year)', desc: 'Seeking internships, research, study abroad' },
+      { id: 'senior', label: 'Launching (4th Year & Postgrad)', desc: 'Transitioning to careers or graduate schools' }
+    ];
+
+    const GOALS = [
+      { id: 'mentorship', label: 'Connecting with a Faculty Mentor', placeholder: 'finding a mentor aligned with my intellectual curiosities' },
+      { id: 'high-impact', label: 'Finding a High-Impact Experience', placeholder: 'securing an undergraduate research project, internship, or study abroad option' },
+      { id: 'career-alignment', label: 'Aligning my Degree with Careers', placeholder: 'mapping my humanities/social sciences degree to viable modern career pathways' },
+      { id: 'outreach-emails', label: 'Drafting Outreach & Icebreaker Scripts', placeholder: 'crafting confidence-boosting emails to send to professors, advisors, or alumni' }
+    ];
+
+    function App() {
+      const [activeDivision, setActiveDivision] = useState('humanities');
+      const [activeStage, setActiveStage] = useState('freshman');
+      const [activeGoal, setActiveGoal] = useState('mentorship');
+      const [copied, setCopied] = useState(false);
+
+      const currentDiv = ACADEMIC_DIVISIONS.find(d => d.id === activeDivision);
+      const currentStageObj = STAGES.find(s => s.id === activeStage);
+      const currentGoalObj = GOALS.find(g => g.id === activeGoal);
+
+      const generatePrompt = () => {
+        const divName = currentDiv ? currentDiv.name : '';
+        const divDeps = currentDiv ? currentDiv.departments : '';
+        const stageLabel = currentStageObj ? currentStageObj.label : '';
+        const goalLabel = currentGoalObj ? currentGoalObj.label : '';
+        const goalPlaceholder = currentGoalObj ? currentGoalObj.placeholder : '';
+
+        return `Hello! I am an undergraduate student in the College of Humanities & Earth and Social Sciences (CHESS) at UNC Charlotte. \n\nMy primary area of interest is inside the "${divName}" division (specifically looking at: ${divDeps}). \n\nI am currently in the "${stageLabel}" stage of my academic journey. \n\nI want to leverage your guidance specifically to help me with: "${goalLabel}" (focusing on ${goalPlaceholder}). \n\nAccording to the CHESS Promise, all students must have access to at least one high-impact experience flowing from a unique orientation to human, social, and environmental well-being. \n\nBased on my details, please:\n1. Suggest 3 highly practical UNC Charlotte resources, courses, or physical locations I should check out.\n2. Outline a 3-step action plan to build my confidence to approach CHESS faculty or advisors.\n3. Write an ultra-personalized, warm, 3-sentence outreach template/script that I can copy, customize, and send to an advisor, faculty member, or alum to schedule a 15-minute coffee chat.`;
+      };
+
+      const handleCopy = () => {
+        try {
+          const textarea = document.createElement('textarea');
+          textarea.value = generatePrompt();
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 3000);
+        } catch (err) {
+          console.error('Failed to copy prompt to clipboard', err);
+        }
+      };
+
+      const geminiLink = "https://gemini.google.com/gem/1Es9bOcNCaZ9tZJX3UoDRPxzuGwHOfbJo?usp=sharing";
+
+      return (
+        <div className="min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col">
           
-          {/* Prompt Blueprint Generator */}
-          <div className="bg-gradient-to-b from-[#101820] to-slate-900 text-white rounded-2xl p-6 shadow-xl border-t-4 border-[#A49665] flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#A49665]/10 rounded-full blur-2xl"></div>
-            
-            <div className="space-y-4 relative">
-              <div className="flex items-center justify-between">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-widest bg-[#A49665]/20 text-[#F1E6B2]">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Gemini Gem Prompter
-                </span>
-                <span className="text-[10px] text-slate-400">Step 2: Copy & Launch</span>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-black text-white">Your Tailored Guidance Strategy</h3>
-                <p className="text-slate-300 text-[11px] mt-1">
-                  Copy this custom-tailored blueprint prompt and paste it directly into the Gemini Gem to unlock your step-by-step physical pathway roadmap.
+          {/* Header */}
+          <header className="bg-[#005035] border-b-4 border-[#A49665] text-white py-8 px-4 sm:px-6 shadow-md">
+            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="bg-[#A49665] text-[#101820] text-xs font-black px-2.5 py-1 rounded uppercase tracking-wider">
+                    UNC Charlotte CHESS
+                  </span>
+                </div>
+                <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                  The Career Confidence Platform
+                </h1>
+                <p className="text-[#F1E6B2] text-sm sm:text-base max-w-2xl font-light">
+                  Empowering students to fearlessly explore world-class, intellectually rigorous pathways, mentorship, and high-impact experiences as promised by the College.
                 </p>
               </div>
-
-              {/* Prompt Box Preview */}
-              <div className="relative">
-                <textarea
-                  readOnly
-                  value={generatePrompt()}
-                  className="w-full h-56 bg-black/40 text-slate-200 text-xs font-mono p-4 rounded-xl border border-slate-700/80 focus:outline-none resize-none leading-relaxed select-all"
-                />
-                <div className="absolute bottom-3 right-3 flex items-center gap-1">
-                  <span className="text-[9px] bg-slate-800 text-slate-400 px-2 py-1 rounded">Read-Only Preview</span>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="space-y-3 pt-2">
-                <button
-                  onClick={handleCopy}
-                  className={`w-full py-3.5 px-4 rounded-xl font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md ${
-                    copied 
-                      ? 'bg-emerald-600 text-white' 
-                      : 'bg-white text-[#101820] hover:bg-slate-100 active:scale-[0.99]'
-                  }`}
-                >
-                  {copied ? (
-                    <>
-                      <Check className="w-4 h-4" />
-                      Prompt Copied to Clipboard!
-                    </>
-                  ) : (
-                    <>
-                      <ClipboardCopy className="w-4 h-4 text-slate-600" />
-                      1. Copy Crafted Prompt
-                    </>
-                  )}
-                </button>
-
-                <a
-                  href={geminiLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full bg-[#005035] hover:bg-emerald-900 border border-[#A49665] text-[#F1E6B2] font-black text-xs uppercase tracking-widest py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01] shadow-lg shadow-emerald-950/40 text-center"
-                >
-                  2. Launch Live Gemini Gem
-                  <ExternalLink className="w-4 h-4" />
-                </a>
+              <div className="bg-emerald-950/40 p-4 rounded-xl border border-[#A49665]/35 flex flex-col space-y-2 max-w-sm w-full">
+                <p className="text-[11px] uppercase tracking-widest font-bold text-[#A49665]">The CHESS Promise</p>
+                <p className="text-xs text-slate-200 italic leading-relaxed">
+                  "All CHESS undergraduate and graduate students will have the opportunity to participate in at least one high-impact experience as part of a world-class education..."
+                </p>
               </div>
             </div>
+          </header>
 
-            <div className="mt-5 pt-4 border-t border-slate-800/80 text-[10px] text-slate-400 flex justify-between items-center">
-              <span>Optimized for CHESS Students</span>
-              <span className="text-emerald-400 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                Active Gem Integration
-              </span>
+          {/* Main Content Area */}
+          <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* Left Column: Selection Options (7 cols) */}
+            <section className="lg:col-span-7 space-y-6">
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 space-y-6">
+                <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
+                  <div className="p-2 bg-[#005035]/10 rounded-lg text-[#005035]">
+                    <Target />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-black text-[#101820]">Step 1: Personalize Your Goal</h2>
+                    <p className="text-xs text-slate-500">Configure your parameters to dynamically construct a stellar Gemini-ready prompt template.</p>
+                  </div>
+                </div>
+
+                {/* Division Selector */}
+                <div className="space-y-3">
+                  <label className="block text-xs font-black uppercase tracking-wider text-slate-600">
+                    1. Select Academic Division / Interest Area:
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {ACADEMIC_DIVISIONS.map((div) => {
+                      const IconComponent = div.icon;
+                      const isSelected = activeDivision === div.id;
+                      return (
+                        <button
+                          key={div.id}
+                          onClick={() => setActiveDivision(div.id)}
+                          className={`text-left p-3.5 rounded-xl border transition-all flex flex-col justify-between h-32 ${
+                            isSelected 
+                              ? 'border-[#005035] bg-gradient-to-br from-[#005035]/5 to-transparent ring-2 ring-[#005035]' 
+                              : 'border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50'
+                          }`}
+                        >
+                          <div className="flex justify-between items-start w-full">
+                            <div className={`p-1.5 rounded-lg ${isSelected ? 'bg-[#005035] text-white' : 'bg-slate-100 text-slate-600'}`}>
+                              <IconComponent />
+                            </div>
+                            {isSelected && <span className="text-[10px] font-bold text-[#005035] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Active</span>}
+                          </div>
+                          <div>
+                            <h3 className="font-extrabold text-sm text-[#101820] leading-snug">{div.name}</h3>
+                            <p className="text-[10px] text-slate-400 truncate mt-0.5">{div.departments}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Stage Selector */}
+                <div className="space-y-3 pt-2">
+                  <label className="block text-xs font-black uppercase tracking-wider text-slate-600">
+                    2. Select Your Current Academic Phase:
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {STAGES.map((stg) => {
+                      const isSelected = activeStage === stg.id;
+                      return (
+                        <button
+                          key={stg.id}
+                          onClick={() => setActiveStage(stg.id)}
+                          className={`text-left p-3.5 rounded-xl border transition-all ${
+                            isSelected 
+                              ? 'border-[#005035] bg-[#005035]/5 ring-1 ring-[#005035]' 
+                              : 'border-slate-200 hover:border-slate-300 bg-white'
+                          }`}
+                        >
+                          <p className="font-bold text-xs text-[#101820]">{stg.label}</p>
+                          <p className="text-[10px] text-slate-500 mt-1">{stg.desc}</p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Target Goal Selector */}
+                <div className="space-y-3 pt-2">
+                  <label className="block text-xs font-black uppercase tracking-wider text-slate-600">
+                    3. Choose What You Need Help with Most:
+                  </label>
+                  <div className="space-y-2">
+                    {GOALS.map((gl) => {
+                      const isSelected = activeGoal === gl.id;
+                      return (
+                        <button
+                          key={gl.id}
+                          onClick={() => setActiveGoal(gl.id)}
+                          className={`w-full text-left p-3 rounded-xl border flex items-center justify-between transition-all ${
+                            isSelected 
+                              ? 'border-[#A49665] bg-[#F1E6B2]/20 ring-1 ring-[#A49665]' 
+                              : 'border-slate-200 hover:border-slate-300 bg-white'
+                          }`}
+                        >
+                          <span className="font-bold text-xs text-[#101820] flex items-center gap-2">
+                            <span className={`w-2 h-2 rounded-full ${isSelected ? 'bg-[#A49665]' : 'bg-slate-300'}`}></span>
+                            {gl.label}
+                          </span>
+                          <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${isSelected ? 'translate-x-1 text-[#A49665]' : ''}`} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Right Column: Prompter Generator & Action Points (5 cols) */}
+            <section className="lg:col-span-5 flex flex-col gap-6">
+              
+              {/* Prompt Blueprint Box */}
+              <div className="bg-gradient-to-b from-[#101820] to-slate-900 text-white rounded-2xl p-6 shadow-xl border-t-4 border-[#A49665] flex flex-col justify-between relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#A49665]/10 rounded-full blur-2xl"></div>
+                
+                <div className="space-y-4 relative">
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-widest bg-[#A49665]/20 text-[#F1E6B2]">
+                      <Sparkles />
+                      Gemini Gem Prompter
+                    </span>
+                    <span className="text-[10px] text-slate-400">Step 2: Copy & Launch</span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-black text-white">Your Tailored Guidance Strategy</h3>
+                    <p className="text-slate-300 text-[11px] mt-1">
+                      Copy this custom-tailored blueprint prompt and paste it directly into the Gemini Gem to unlock your step-by-step physical pathway roadmap.
+                    </p>
+                  </div>
+
+                  {/* Prompt Box Preview */}
+                  <div className="relative">
+                    <textarea
+                      readOnly
+                      value={generatePrompt()}
+                      className="w-full h-56 bg-black/40 text-slate-200 text-xs font-mono p-4 rounded-xl border border-slate-700/80 focus:outline-none resize-none leading-relaxed select-all"
+                    />
+                    <div className="absolute bottom-3 right-3 flex items-center gap-1">
+                      <span className="text-[9px] bg-slate-800 text-slate-400 px-2 py-1 rounded">Read-Only Preview</span>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="space-y-3 pt-2">
+                    <button
+                      onClick={handleCopy}
+                      className={`w-full py-3.5 px-4 rounded-xl font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md ${
+                        copied 
+                          ? 'bg-emerald-600 text-white' 
+                          : 'bg-white text-[#101820] hover:bg-slate-100 active:scale-[0.99]'
+                      }`}
+                    >
+                      {copied ? (
+                        <>
+                          <Check />
+                          Prompt Copied to Clipboard!
+                        </>
+                      ) : (
+                        <>
+                          <ClipboardCopy />
+                          1. Copy Crafted Prompt
+                        </>
+                      )}
+                    </button>
+
+                    <a
+                      href={geminiLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full bg-[#005035] hover:bg-emerald-900 border border-[#A49665] text-[#F1E6B2] font-black text-xs uppercase tracking-widest py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01] shadow-lg shadow-emerald-950/40 text-center"
+                    >
+                      2. Launch Live Gemini Gem
+                      <ExternalLink />
+                    </a>
+                  </div>
+                </div>
+
+                <div className="mt-5 pt-4 border-t border-slate-800/80 text-[10px] text-slate-400 flex justify-between items-center">
+                  <span>Optimized for CHESS Students</span>
+                  <span className="text-emerald-400 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Active Gem Integration
+                  </span>
+                </div>
+              </div>
+
+              {/* Physical Spaces List */}
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+                <h4 className="font-black text-xs text-[#005035] uppercase tracking-widest flex items-center gap-1.5">
+                  <Users />
+                  UNC Charlotte Human Connection Landing Pads
+                </h4>
+                <p className="text-slate-500 text-[11px] leading-relaxed">
+                  Armed with your generated strategy and templates from the Gem, visit these actual physical spaces to claim your high-impact experiences:
+                </p>
+
+                <div className="space-y-2 text-xs">
+                  {/* Card 1 */}
+                  <div className="p-2.5 rounded bg-slate-50 border border-slate-200/60 flex justify-between items-center gap-4">
+                    <div>
+                      <p className="font-extrabold text-[#101820]">CHESS Academic Advising Center</p>
+                      <p className="text-slate-500 text-[10px]">Fretwell Building, Room 235</p>
+                    </div>
+                    <a 
+                      href="https://chess.charlotte.edu/advising/" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="bg-[#005035] hover:bg-[#005035]/90 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all whitespace-nowrap"
+                    >
+                      Visit Portal
+                      <ExternalLink />
+                    </a>
+                  </div>
+
+                  {/* Card 2 */}
+                  <div className="p-2.5 rounded bg-slate-50 border border-slate-200/60 flex justify-between items-center gap-4">
+                    <div>
+                      <p className="font-extrabold text-[#101820]">University Career Center</p>
+                      <p className="text-slate-500 text-[10px]">Atkins Library, First Floor</p>
+                    </div>
+                    <a 
+                      href="https://career.charlotte.edu/" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="bg-[#005035] hover:bg-[#005035]/90 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all whitespace-nowrap"
+                    >
+                      Visit Portal
+                      <ExternalLink />
+                    </a>
+                  </div>
+
+                  {/* Card 3 */}
+                  <div className="p-2.5 rounded bg-slate-50 border border-slate-200/60 flex justify-between items-center gap-4">
+                    <div>
+                      <p className="font-extrabold text-[#101820]">Hire-A-Niner Portal</p>
+                      <p className="text-slate-500 text-[10px]">Your campus career hub</p>
+                    </div>
+                    <a 
+                      href="https://hireaniner.charlotte.edu/" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="bg-[#005035] hover:bg-[#005035]/90 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all whitespace-nowrap"
+                    >
+                      Visit Portal
+                      <ExternalLink />
+                    </a>
+                  </div>
+
+                  {/* Card 4 */}
+                  <div className="p-2.5 rounded bg-slate-50 border border-slate-200/60 flex justify-between items-center gap-4">
+                    <div>
+                      <p className="font-extrabold text-[#101820]">PathwayU Portal</p>
+                      <p className="text-slate-500 text-[10px]">Discover your career fit & calling</p>
+                    </div>
+                    <a 
+                      href="https://pathwayu.charlotte.edu/" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="bg-[#005035] hover:bg-[#005035]/90 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all whitespace-nowrap"
+                    >
+                      Visit Portal
+                      <ExternalLink />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </main>
+
+          {/* Footer */}
+          <footer className="bg-[#101820] border-t border-slate-800 py-6 text-center text-slate-400 text-xs mt-auto">
+            <div className="max-w-6xl mx-auto px-4 space-y-2">
+              <p>© 2026 UNC Charlotte College of Humanities & Earth and Social Sciences.</p>
+              <p className="text-slate-500 text-[11px]">
+                Designed to empower human advising, connection, and mentorship pipelines across Charlotte’s expansive campus.
+              </p>
             </div>
-          </div>
-
-          {/* UNC Charlotte Human Connection Landing Pads */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
-            <h4 className="font-black text-xs text-[#005035] uppercase tracking-widest flex items-center gap-1.5">
-              <Users className="w-4.5 h-4.5 text-[#A49665]" />
-              UNC Charlotte Human Connection Landing Pads
-            </h4>
-            <p className="text-slate-500 text-[11px] leading-relaxed">
-              Armed with your generated strategy and templates from the Gem, visit these actual physical spaces to claim your high-impact experiences:
-            </p>
-
-            <div className="space-y-2 text-xs">
-              {/* Card 1: CHESS Advising */}
-              <div className="p-2.5 rounded bg-slate-50 border border-slate-200/60 flex justify-between items-center gap-4">
-                <div>
-                  <p className="font-extrabold text-[#101820]">CHESS Academic Advising Center</p>
-                  <p className="text-slate-500 text-[10px]">Fretwell Building, Room 235</p>
-                </div>
-                <a 
-                  href="https://chess.charlotte.edu/advising/" 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="bg-[#005035] hover:bg-[#005035]/90 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all whitespace-nowrap"
-                >
-                  Visit Portal
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-
-              {/* Card 2: Career Center */}
-              <div className="p-2.5 rounded bg-slate-50 border border-slate-200/60 flex justify-between items-center gap-4">
-                <div>
-                  <p className="font-extrabold text-[#101820]">University Career Center</p>
-                  <p className="text-slate-500 text-[10px]">Atkins Library, First Floor</p>
-                </div>
-                <a 
-                  href="https://career.charlotte.edu/" 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="bg-[#005035] hover:bg-[#005035]/90 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all whitespace-nowrap"
-                >
-                  Visit Portal
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-
-              {/* Card 3: Hire-A-Niner */}
-              <div className="p-2.5 rounded bg-slate-50 border border-slate-200/60 flex justify-between items-center gap-4">
-                <div>
-                  <p className="font-extrabold text-[#101820]">Hire-A-Niner Portal</p>
-                  <p className="text-slate-500 text-[10px]">Your campus career hub</p>
-                </div>
-                <a 
-                  href="https://hireaniner.charlotte.edu/" 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="bg-[#005035] hover:bg-[#005035]/90 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all whitespace-nowrap"
-                >
-                  Visit Portal
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-
-              {/* Card 4: PathwayU */}
-              <div className="p-2.5 rounded bg-slate-50 border border-slate-200/60 flex justify-between items-center gap-4">
-                <div>
-                  <p className="font-extrabold text-[#101820]">PathwayU Portal</p>
-                  <p className="text-slate-500 text-[10px]">Discover your career fit & calling</p>
-                </div>
-                <a 
-                  href="https://pathwayu.charlotte.edu/" 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="bg-[#005035] hover:bg-[#005035]/90 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all whitespace-nowrap"
-                >
-                  Visit Portal
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-[#101820] border-t border-slate-800 py-6 text-center text-slate-400 text-xs mt-auto">
-        <div className="max-w-6xl mx-auto px-4 space-y-2">
-          <p>© 2026 UNC Charlotte College of Humanities & Earth and Social Sciences.</p>
-          <p className="text-slate-500 text-[11px]">
-            Designed to empower human advising, connection, and mentorship pipelines across Charlotte’s expansive campus.
-          </p>
+          </footer>
         </div>
-      </footer>
-    </div>
-  );
-}
+      );
+    }
+
+    // Render the React component inside the root div
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
