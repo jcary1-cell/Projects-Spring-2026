@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HCAI 2101 AI Storytelling Gem Architect</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Playfair Display for academic contrast -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-[#f8fafc] min-h-screen flex flex-col antialiased">
+
+    <!-- Navigation / Brand Header -->
+    <header class="border-b border-slate-800 bg-[#0f172a]/95 backdrop-blur sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-red-600 text-white font-bold p-2.5 rounded-lg shadow-lg flex items-center justify-center transform hover:rotate-6 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-100 flex items-center gap-2">
+                        HCAI 2101 <span class="bg-red-500/10 text-red-400 text-xs px-2 py-0.5 rounded-full border border-red-500/20 font-mono">LAB 3</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">AI Storytelling Gem Architect</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="https://docs.google.com/document/d/1RomDnT3uWT0csKrfrFIlg0T82Sm6PmJFxWiT5QN9SXE/copy" target="_blank" class="hidden md:inline-flex items-center space-x-2 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg font-semibold border border-slate-700 transition-colors">
+                    <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path><path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"></path></svg>
+                    <span>Lab Template</span>
+                </a>
+                <a href="https://gemini.google.com" target="_blank" class="inline-flex items-center space-x-2 text-xs bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold shadow-lg shadow-red-900/20 transition-all transform hover:-translate-y-0.5">
+                    <span>Open Google Gemini</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col space-y-8">
+        
+        <!-- Welcome banner reflecting course values -->
+        <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-red-950/30 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(239,68,68,0.08),transparent_50%)]"></div>
+            <div class="relative z-10 max-w-4xl">
+                <span class="text-xs font-mono font-semibold tracking-widest text-red-400 uppercase bg-red-950/50 px-3 py-1.5 rounded-full border border-red-900/30">
+                    Companion Guide: AI and the Art of Being Human
+                </span>
+                <h2 class="serif-title text-3xl sm:text-4xl text-slate-100 font-semibold mt-4 mb-3 tracking-tight">
+                    Custom Gem Architect
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+                    Welcome, HCAI 2101 students! This tool is engineered to help you compile your custom <strong class="text-red-400 font-semibold">Gemini Storytelling Gem</strong>. By designing custom instructions (your Gem), you will train Gemini to act as a structured co-author who aligns with your assigned table role, uses the STARS framework, and enforces the "Rule of Friction."
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-slate-800/80 pt-6">
+                    <div class="flex items-start space-x-3 text-xs text-slate-400">
+                        <span class="text-red-500 font-bold text-lg">“</span>
+                        <p class="italic leading-relaxed">
+                            "The best way to understand the future of AI isn't just to code it—it is to <strong class="text-slate-200">story it</strong>."
+                        </p>
+                    </div>
+                    <div class="flex items-start space-x-3 text-xs text-slate-400">
+                        <span class="text-red-500 font-bold text-lg">“</span>
+                        <p class="italic leading-relaxed">
+                            "Do not accept the first thing the AI generates. Push back. <strong class="text-slate-200">The Rule of Friction</strong> makes fables true."
+                        </p>
+                    </div>
+                    <div class="flex items-start space-x-3 text-xs text-slate-400">
+                        <span class="text-red-500 font-bold text-lg">“</span>
+                        <p class="italic leading-relaxed">
+                            "We bridge storytelling to the real world using the final <strong class="text-red-400 font-semibold">S (Strategy)</strong> for our semester projects."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Two Column Interactive Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Column: Interactive Form & Tooltips -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- The Configuration Form -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-md backdrop-blur-sm space-y-6">
+                    <div class="border-b border-slate-800 pb-4 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-200 flex items-center gap-2">
+                            <span class="bg-red-500/20 text-red-400 text-xs w-5 h-5 rounded-full flex items-center justify-center font-mono">1</span>
+                            Configure Your Storytelling Gem
+                        </h3>
+                        <button onclick="resetConfiguration()" class="text-xs text-slate-400 hover:text-red-400 transition-colors flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17.5M3 12a9 9 0 0115-6.708l3.1-3.1"></path></svg>
+                            Reset
+                        </button>
+                    </div>
+
+                    <!-- Step 1: Lab Role Assignment -->
+                    <div class="space-y-3">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            Step 1: Choose Your Group's Focus (Your Table Role)
+                        </label>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            This determines the primary lens and "bias" of your storytelling Gem, directly aligning with your index card color.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 pt-1">
+                            <!-- Blue -->
+                            <button type="button" onclick="selectRole('blue')" id="role-blue" class="role-btn text-left p-3.5 rounded-xl border border-slate-800 bg-slate-950/50 hover:bg-slate-950 hover:border-blue-500/50 transition-all duration-200 relative group">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-3 h-3 rounded-md bg-blue-500 shadow-lg shadow-blue-500/30"></span>
+                                    <span class="text-sm font-bold text-slate-200">Blue Focus</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1.5 leading-normal group-hover:text-slate-300">
+                                    The Builders: mechanical limits, code equity, technical performance, optimization.
+                                </p>
+                            </button>
+                            <!-- Green -->
+                            <button type="button" onclick="selectRole('green')" id="role-green" class="role-btn text-left p-3.5 rounded-xl border border-slate-800 bg-slate-950/50 hover:bg-slate-950 hover:border-emerald-500/50 transition-all duration-200 relative group">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-3 h-3 rounded-md bg-emerald-500 shadow-lg shadow-emerald-500/30"></span>
+                                    <span class="text-sm font-bold text-slate-200">Green Focus</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1.5 leading-normal group-hover:text-slate-300">
+                                    The Humanists: ethical implications, lived experience, agency, aesthetics, culture.
+                                </p>
+                            </button>
+                            <!-- Yellow -->
+                            <button type="button" onclick="selectRole('yellow')" id="role-yellow" class="role-btn text-left p-3.5 rounded-xl border border-slate-800 bg-slate-950/50 hover:bg-slate-950 hover:border-amber-500/50 transition-all duration-200 relative group">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-3 h-3 rounded-md bg-amber-500 shadow-lg shadow-amber-500/30"></span>
+                                    <span class="text-sm font-bold text-slate-200">Yellow Focus</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1.5 leading-normal group-hover:text-slate-300">
+                                    The Strategists: resources, viability, scaling models, regulatory risk, economics.
+                                </p>
+                            </button>
+                            <!-- Pink -->
+                            <button type="button" onclick="selectRole('pink')" id="role-pink" class="role-btn text-left p-3.5 rounded-xl border border-slate-800 bg-slate-950/50 hover:bg-slate-950 hover:border-pink-500/50 transition-all duration-200 relative group">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-3 h-3 rounded-md bg-pink-500 shadow-lg shadow-pink-500/30"></span>
+                                    <span class="text-sm font-bold text-slate-200">Pink Focus</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1.5 leading-normal group-hover:text-slate-300">
+                                    The Analysts: systemic structures, community behaviors, policy rules, power dynamics.
+                                </p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Storytelling Style Tradition -->
+                    <div class="space-y-3">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            Step 2: Choose Storytelling Tradition & Tone
+                        </label>
+                        <p class="text-xs text-slate-500">
+                            How do you want your Gem to formulate stories? Choose a structure that fits your project's message.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <select id="story-style" onchange="updateGemCompile()" class="bg-slate-950 border border-slate-800 text-sm rounded-xl p-3 text-slate-200 focus:outline-none focus:border-red-500">
+                                <option value="aesop">Aesop-style Modern Fable</option>
+                                <option value="campfire">Campfire Ethical Warning</option>
+                                <option value="scifi">SPEC SPEC: Speculative Sci-Fi</option>
+                                <option value="bedtime">Simple Children's Bedtime Story</option>
+                            </select>
+                            <select id="story-tone" onchange="updateGemCompile()" class="bg-slate-950 border border-slate-800 text-sm rounded-xl p-3 text-slate-200 focus:outline-none focus:border-red-500">
+                                <option value="cautionary">Cautionary & Speculative</option>
+                                <option value="optimistic">Collaborative & Hopeful</option>
+                                <option value="satirical">Satirical & Dry</option>
+                            </select>
+                            <select id="friction-level" onchange="updateGemCompile()" class="bg-slate-950 border border-slate-800 text-sm rounded-xl p-3 text-slate-200 focus:outline-none focus:border-red-500">
+                                <option value="high">High Friction (Gem rejects 1st ideas)</option>
+                                <option value="extreme">Extreme Friction (Aggressive obstacles)</option>
+                                <option value="moderate">Moderate Friction (Constructive feedback)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Local Challenge / Semester Problem -->
+                    <div class="space-y-3">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            Step 3: Define Your Target Local Challenge (Optional Preset)
+                        </label>
+                        <p class="text-xs text-slate-500">
+                            Grounding your stories in real issues makes the extracted **Strategy (S)** incredibly useful. Type yours or click a preset.
+                        </p>
+                        <textarea id="local-challenge" oninput="updateGemCompile()" rows="2" placeholder="e.g., Designing an algorithmic food distribution network in Charlotte's food deserts, ensuring equitable logistics..." class="w-full bg-slate-950 border border-slate-800 text-sm rounded-xl p-3 text-slate-200 focus:outline-none focus:border-red-500 placeholder-slate-600 transition-colors"></textarea>
+                        
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <button type="button" onclick="setChallengePreset('Rural healthcare diagnostics algorithms deprioritizing transit-isolated patients.')" class="text-[10px] bg-slate-950 border border-slate-800 hover:border-red-500/40 text-slate-400 px-2.5 py-1.5 rounded-full transition-colors">
+                                🏥 Rural Health
+                            </button>
+                            <button type="button" onclick="setChallengePreset('An AI system designed to schedule urban public bus routing that accidentally clusters wait times in lower-income areas.')" class="text-[10px] bg-slate-950 border border-slate-800 hover:border-red-500/40 text-slate-400 px-2.5 py-1.5 rounded-full transition-colors">
+                                🚌 Transit Logistics
+                            </button>
+                            <button type="button" onclick="setChallengePreset('An automated AI screening app that rates tenant reliability for historic west-side preservation communities.')" class="text-[10px] bg-slate-950 border border-slate-800 hover:border-red-500/40 text-slate-400 px-2.5 py-1.5 rounded-full transition-colors">
+                                🏠 Housing Equity
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STARS Framework Reference Accordion -->
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+                    <h4 class="font-bold text-sm text-slate-300 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        STARS Core Framework Blueprint
+                    </h4>
+                    <p class="text-xs text-slate-400 leading-normal">
+                        Your custom Gem is configured to structure stories using the **STARS Framework**. When deploying, it forces the AI model to stop right before the final **"S"**, ensuring your team does the critical translation.
+                    </p>
+                    <div class="grid grid-cols-1 gap-2 text-xs">
+                        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800/60 flex items-start gap-2.5">
+                            <span class="font-bold text-red-500 font-mono w-4">S</span>
+                            <div>
+                                <span class="font-semibold text-slate-300">Situation</span> - Define near-future societal, technical context.
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800/60 flex items-start gap-2.5">
+                            <span class="font-bold text-red-500 font-mono w-4">T</span>
+                            <div>
+                                <span class="font-semibold text-slate-300">Task</span> - Introduce ethical challenge, dilemma, or socio-technical friction.
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800/60 flex items-start gap-2.5">
+                            <span class="font-bold text-red-500 font-mono w-4">A</span>
+                            <div>
+                                <span class="font-semibold text-slate-300">Action</span> - How did humans and AI collaborate or fight to solve it?
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800/60 flex items-start gap-2.5">
+                            <span class="font-bold text-red-500 font-mono w-4">R</span>
+                            <div>
+                                <span class="font-semibold text-slate-300">Result</span> - Deep, messy fables showing unexpected outcomes.
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-lg border border-red-500/20 bg-red-950/10 flex items-start gap-2.5">
+                            <span class="font-bold text-red-400 font-mono w-4">S</span>
+                            <div>
+                                <span class="font-semibold text-red-300">Strategy (Student Driven)</span> - Bridge to real-world AI design principle!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Compiled Prompt Output & Deployment Steps -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Compiled Gem Prompt -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-md flex flex-col h-full relative">
+                    <div class="absolute top-0 right-0 p-3">
+                        <span class="text-[10px] font-mono bg-red-600/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-md uppercase font-bold tracking-wide">
+                            Auto-Compiled
+                        </span>
+                    </div>
+
+                    <h3 class="font-bold text-slate-200 flex items-center gap-2 mb-4">
+                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        Compiled Gem Prompt
+                    </h3>
+
+                    <p class="text-xs text-slate-400 leading-normal mb-3">
+                        Copy this block and paste it directly into the **Instructions** box of your custom Google Gemini Gem.
+                    </p>
+
+                    <div class="relative flex-grow">
+                        <textarea id="compiled-prompt-box" readonly class="w-full h-80 bg-slate-950 text-xs text-slate-300 font-mono p-4 rounded-xl border border-slate-800 focus:outline-none focus:ring-1 focus:ring-red-500 resize-none leading-relaxed"></textarea>
+                        
+                        <div class="absolute bottom-3 right-3 flex items-center space-x-2">
+                            <button onclick="copyToClipboard()" class="bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-1.5 shadow-md transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-5 10v-3a1 1 0 00-1-1H9M15 15h3a1 1 0 001-1v-3.5"></path></svg>
+                                <span>Copy Prompt</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visual Feedback Alert -->
+                    <div id="copy-success-toast" class="hidden mt-3 p-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg text-center text-xs font-semibold animate-pulse">
+                        Copied to clipboard! Ready to load into your Gemini Gem.
+                    </div>
+
+                    <!-- Steps to Deploy Mini-Guide -->
+                    <div class="mt-6 border-t border-slate-800/80 pt-4 space-y-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                            How to Create Your Custom Gem on Gemini:
+                        </h4>
+                        <ol class="space-y-2 text-xs text-slate-400">
+                            <li class="flex items-start gap-2">
+                                <span class="bg-slate-800 text-slate-300 text-[10px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">1</span>
+                                <span>Click the red <strong>Open Google Gemini</strong> button in the navbar.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-slate-800 text-slate-300 text-[10px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">2</span>
+                                <span>In the left sidebar, click <strong>Gem Manager</strong> or click <strong>"+" (Create new Gem)</strong>.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-slate-800 text-slate-300 text-[10px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">3</span>
+                                <span>Name it <code class="text-red-400 bg-red-950/20 px-1 py-0.5 rounded font-mono">HCAI-Story-Friction</code> and paste the copied instructions.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-slate-800 text-slate-300 text-[10px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">4</span>
+                                <span>Click <strong>Create</strong>, then start prompting your customized AI storytelling partner!</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Sandbox & Playground -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-md space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h3 class="font-bold text-slate-100 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+                        Gem Sandbox & LIVE Test
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Test your Gem instructions instantly inside this page using the **Gemini 3.1 Flash** API, or generate a simulation starter directly.
+                    </p>
+                </div>
+                <!-- API Key Config (Optional & Secure) -->
+                <div class="flex items-center space-x-2">
+                    <input type="password" id="gemini-api-key" placeholder="Optional: Paste Gemini API Key" class="bg-slate-950 border border-slate-800 text-xs px-3 py-2 rounded-lg text-slate-300 focus:outline-none focus:border-red-500 placeholder-slate-600 w-48 sm:w-64">
+                    <span class="group relative">
+                        <svg class="w-4 h-4 text-slate-500 cursor-pointer hover:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="absolute right-0 bottom-full mb-2 w-48 hidden group-hover:block bg-slate-950 text-[10px] text-slate-400 p-2.5 rounded-lg border border-slate-850 shadow-lg leading-normal z-50">
+                            Provide your own Gemini key for premium live story generation directly in this guide! If left empty, a static mock simulator generates illustrative lab samples.
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Simulation Console -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Sandbox Controls -->
+                <div class="lg:col-span-4 space-y-4">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Prompt Sandbox Commands</h4>
+                        <p class="text-[11px] text-slate-400 leading-normal">
+                            Once your Gem is running, simulate how your Gem initiates the storytelling process or responds to inputs.
+                        </p>
+                        <div class="space-y-2 pt-1">
+                            <button onclick="triggerSandboxAction('initiate')" class="w-full text-left text-xs bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-red-500/40 text-slate-300 p-2.5 rounded-lg transition-all flex items-center justify-between group">
+                                <span>1. Simulate Story Starter</span>
+                                <svg class="w-3.5 h-3.5 text-slate-500 group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                            <button onclick="triggerSandboxAction('friction')" class="w-full text-left text-xs bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-red-500/40 text-slate-300 p-2.5 rounded-lg transition-all flex items-center justify-between group">
+                                <span>2. Apply "Rule of Friction"</span>
+                                <svg class="w-3.5 h-3.5 text-slate-500 group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                            <button onclick="triggerSandboxAction('stars')" class="w-full text-left text-xs bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-red-500/40 text-slate-300 p-2.5 rounded-lg transition-all flex items-center justify-between group">
+                                <span>3. Extract ST-A-R and Moral</span>
+                                <svg class="w-3.5 h-3.5 text-slate-500 group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Output -->
+                <div class="lg:col-span-8 flex flex-col h-80 bg-slate-950 rounded-xl border border-slate-800 overflow-hidden relative">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-800">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                            <span class="text-[10px] font-mono tracking-widest uppercase text-slate-400">Architect Console Output</span>
+                        </div>
+                        <button onclick="clearSandboxOutput()" class="text-[10px] text-slate-500 hover:text-slate-300 font-mono">Clear</button>
+                    </div>
+
+                    <!-- Sandbox Log Area -->
+                    <div id="sandbox-log" class="flex-grow p-4 text-xs font-mono overflow-y-auto space-y-4 text-slate-300">
+                        <div class="text-slate-500">// Welcome to HCAI-Story-Friction Gem simulator.</div>
+                        <div class="text-slate-500">// Configure your table focus (Step 1) and press a sandbox command to see your custom instructions formulate!</div>
+                    </div>
+
+                    <!-- Sandbox Spinner Overlay -->
+                    <div id="sandbox-loader" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm hidden flex-col items-center justify-center space-y-3 z-30">
+                        <div class="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                        <span class="text-xs font-mono text-slate-400">Simulating Gem narrative...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-[#0b0f19] py-8 text-center text-slate-500 text-xs">
+        <div class="max-w-7xl mx-auto px-4 space-y-3">
+            <p>Designed explicitly for the interdisciplinary storytelling writers' rooms of <strong>HCAI 2101</strong>.</p>
+            <p class="text-[10px] text-slate-600">Aligning human values, technology, and narratives with local community challenge initiatives.</p>
+        </div>
+    </footer>
+
+    <script>
+        // State variables
+        let selectedRoleBias = 'green'; // Default to green (The Humanists)
+        const storagePrefix = 'hcai_gem_architect_';
+
+        // Role Presets Configuration Templates
+        const rolePersonaDetails = {
+            blue: {
+                title: "Blue Role (The Builders - Technical Focus)",
+                focus: "system mechanics, data fidelity, algorithmic engineering, limits, computing performance, optimization, and hard math.",
+                criticism: "How are technical limits ignored? What coding assumptions are made that cause system failure? What data pipelines are biased?"
+            },
+            green: {
+                title: "Green Role (The Humanists - Ethical Focus)",
+                focus: "lived experience, human rights, cultural aesthetics, ethics, narrative depth, empathy, diversity, and historical human legacy.",
+                criticism: "How are human emotions neglected? Where does systemic bias hurt community identity? Who gets left behind culturally?"
+            },
+            yellow: {
+                title: "Yellow Role (The Strategists - Operational Focus)",
+                focus: "viability, resource management, business scaling, regulatory frameworks, economics, long-term costs, and legal integrity.",
+                criticism: "Is this financially sustainable? What happens if the scaling plan crashes under regulatory scrutiny? What is the hidden resource cost?"
+            },
+            pink: {
+                title: "Pink Role (The Analysts - Social Focus)",
+                focus: "societal structures, power dynamics, systemic policy rules, institutional behaviors, and community equity.",
+                criticism: "How do community power imbalances change after this is deployed? What policy structures are bypassed or broken by the AI?"
+            }
+        };
+
+        // Story Traditions Details
+        const storyStyleDetails = {
+            aesop: "Aesop-style fables with talking systems or entities, emphasizing simple but deeply analytical lessons.",
+            campfire: "Dark speculative warnings intended to highlight alarming outcomes of rapid deployment without ethical oversight.",
+            scifi: "Speculative hard science fiction using grounded, near-future tech parameters and gritty realism.",
+            bedtime: "Gentle stories aimed at presenting complex problems in simplified metaphorical terms for anyone to understand."
+        };
+
+        // Static response lists for mock simulations if API is missing
+        const mockResponses = {
+            initiate: {
+                blue: "Gemini: [Blue Focus Sandbox Initiated]\nSetting up 'The Tale of the Hyper-Targeted Crop Scheduler'. Let's explore the Situation: an optimization engine in North Carolina designed to automatically schedule harvest runs for family farmers based on satellite feeds...",
+                green: "Gemini: [Green Focus Sandbox Initiated]\nSetting up 'The Song of the Broken Medical Sorter'. Let's explore the Situation: an AI-guided nursing triage system deployed in local rural hospitals, built without training data for under-resourced regional public transit schedules...",
+                yellow: "Gemini: [Yellow Focus Sandbox Initiated]\nSetting up 'The Case of the Auto-Financed Apartment Agent'. Let's explore the Situation: a speculative automated real-estate lease pricing engine designed to scale rental housing fast across the west side preservation sector...",
+                pink: "Gemini: [Pink Focus Sandbox Initiated]\nSetting up 'The Ledger of the Welfare Allocation Engine'. Let's explore the Situation: an algorithm built to optimize social services resources and calculate community behavior risk scores..."
+            },
+            friction: {
+                blue: "[High Friction Applied]\nGEM PUSHBACK: 'The farmers love the efficiency, but your algorithm assumes constant high-bandwidth rural connectivity. A cellular storm hits during a critical harvest. The system fails to recalibrate, dropping local orders. How do developers adjust the protocol now without internet?'",
+                green: "[High Friction Applied]\nGEM PUSHBACK: 'The AI schedules triage with math precision, but it treats local patient travel times as a constant. A family waits in regional transit for hours, missing their algorithmic check-in slot. The system automatically cancels the reservation. How do the humans fight back?'",
+                yellow: "[High Friction Applied]\nGEM PUSHBACK: 'The housing algorithm maximizes immediate profit, but locks out generational west-side community residents due to missing credit-trend logs. The local preservation board threatens a massive legal class-action. How do strategists respond?'",
+                pink: "[High Friction Applied]\nGEM PUSHBACK: 'The welfare algorithm flags a community hub as 'high risk' because of historic arrest data. Families lose local funding despite zero active incidents. A protest disrupts city planning. How do policy makers handle the community pushback?'"
+            },
+            stars: {
+                blue: "Gemini Output:\n\n**ST-A-R Breakdown**\n- **Situation:** Hyper-Targeted Crop Scheduler deployed.\n- **Task:** Disconnect from internet breaks automated scheduler.\n- **Action:** Developers build manual cellular backup override pipelines.\n- **Result:** Local harvest is saved, but speed drops 30%.\n\n**Real-World Strategy (The Final S):** Build multi-tier fallback architectures in agricultural AI, prioritizing resilient manual interventions over total automation during outages.",
+                green: "Gemini Output:\n\n**ST-A-R Breakdown**\n- **Situation:** AI triage system deployed in rural clinics.\n- **Task:** Patients on delayed regional transit lose diagnostic priority.\n- **Action:** Nurses override computer parameters using local wisdom.\n- **Result:** Patients receive late care, saving lives, but hospital records flag nurses for policy violations.\n\n**Real-World Strategy (The Final S):** Introduce geographical equity auditing checks directly into dataset training criteria to prevent systemic isolation.",
+                yellow: "Gemini Output:\n\n**ST-A-R Breakdown**\n- **Situation:** Auto-Lease pricing system scales rapidly.\n- **Task:** Longtime local residents locked out of apartments.\n- **Action:** Preservation board enacts strict rent safeguards manually.\n- **Result:** Financial yield drops slightly, but long-term neighborhood tenant stability increases.\n\n**Real-World Strategy (The Final S):** Integrate long-term community value multipliers into real-estate optimization pricing algorithms, instead of only tracking immediate rent ROI.",
+                pink: "Gemini Output:\n\n**ST-A-R Breakdown**\n- **Situation:** Risk-assessment allocation engine deployed.\n- **Task:** Community hubs lose systemic funding unfairly.\n- **Action:** Local planners collaborate with neighborhood reps to manually audit risk logs.\n- **Result:** Public trust is rebuilt, policy guidelines are modified.\n\n**Real-World Strategy (The Final S):** Enact continuous human-in-the-loop neighborhood audit boards for community-impact risk assessment models."
+            }
+        };
+
+        // Initialize On Load
+        window.onload = function() {
+            loadSavedProgress();
+            updateGemCompile();
+        };
+
+        // Save progress using local storage
+        function saveProgress() {
+            localStorage.setItem(storagePrefix + 'role', selectedRoleBias);
+            localStorage.setItem(storagePrefix + 'style', document.getElementById('story-style').value);
+            localStorage.setItem(storagePrefix + 'tone', document.getElementById('story-tone').value);
+            localStorage.setItem(storagePrefix + 'friction', document.getElementById('friction-level').value);
+            localStorage.setItem(storagePrefix + 'challenge', document.getElementById('local-challenge').value);
+        }
+
+        // Load saved progress
+        function loadSavedProgress() {
+            const savedRole = localStorage.getItem(storagePrefix + 'role');
+            const savedStyle = localStorage.getItem(storagePrefix + 'style');
+            const savedTone = localStorage.getItem(storagePrefix + 'tone');
+            const savedFriction = localStorage.getItem(storagePrefix + 'friction');
+            const savedChallenge = localStorage.getItem(storagePrefix + 'challenge');
+
+            if (savedRole) selectRole(savedRole);
+            if (savedStyle) document.getElementById('story-style').value = savedStyle;
+            if (savedTone) document.getElementById('story-tone').value = savedTone;
+            if (savedFriction) document.getElementById('friction-level').value = savedFriction;
+            if (savedChallenge) document.getElementById('local-challenge').value = savedChallenge;
+        }
+
+        // Select Role Focus
+        function selectRole(role) {
+            selectedRoleBias = role;
+            
+            // Toggle active classes on Buttons
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('border-blue-500', 'border-emerald-500', 'border-amber-500', 'border-pink-500', 'bg-slate-900', 'ring-2');
+                btn.classList.add('border-slate-800', 'bg-slate-950/50');
+            });
+
+            const activeBtn = document.getElementById(`role-${role}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-slate-800', 'bg-slate-950/50');
+                activeBtn.classList.add('bg-slate-900', 'ring-2');
+                if (role === 'blue') activeBtn.classList.add('border-blue-500', 'ring-blue-500/20');
+                if (role === 'green') activeBtn.classList.add('border-emerald-500', 'ring-emerald-500/20');
+                if (role === 'yellow') activeBtn.classList.add('border-amber-500', 'ring-amber-500/20');
+                if (role === 'pink') activeBtn.classList.add('border-pink-500', 'ring-pink-500/20');
+            }
+
+            updateGemCompile();
+            saveProgress();
+        }
+
+        // Challenge presets helper
+        function setChallengePreset(text) {
+            document.getElementById('local-challenge').value = text;
+            updateGemCompile();
+            saveProgress();
+        }
+
+        // Reset inputs
+        function resetConfiguration() {
+            document.getElementById('story-style').value = 'aesop';
+            document.getElementById('story-tone').value = 'cautionary';
+            document.getElementById('friction-level').value = 'high';
+            document.getElementById('local-challenge').value = '';
+            selectRole('green');
+        }
+
+        // REAL-TIME Gem Prompt Compiler Engine
+        function updateGemCompile() {
+            const roleData = rolePersonaDetails[selectedRoleBias];
+            const tradition = document.getElementById('story-style').value;
+            const tone = document.getElementById('story-tone').value;
+            const friction = document.getElementById('friction-level').value;
+            const localChallenge = document.getElementById('local-challenge').value || "[Specify your local challenge here during the lab activity]";
+
+            const traditionText = storyStyleDetails[tradition];
+
+            // Build system prompt template matching Gemini Gem architecture
+            const compiledPrompt = `You are a world-class spec-fiction co-writer, specifically trained for the HCAI 2101 AI Storytelling Lab. 
+
+Your mission is to help our student writers co-author fables, narratives, andSpeculative Future stories to deeply explore socio-technical ethics using the concepts from the course book: "AI and the Art of Being Human".
+
+## YOUR CORE PERSONA:
+- You approach stories with a strict focus on: ${roleData.title}.
+- This means you always anchor the narrative around: ${roleData.focus}
+- Your tone is: ${tone}. 
+- You generate narratives in this tradition: ${traditionText}
+
+## TARGET CHALLENGE CONTEXT:
+Always prioritize setting your stories in the context of this specific challenge:
+"${localChallenge}"
+
+## THE MANDATORY "RULE OF FRICTION":
+- When the student asks you for a story outline, setup, or scenario, you must NOT solve it perfectly or provide a happy outcome immediately. 
+- You must introduce an immediate ethical or system failure based on this criticism: 
+  "${roleData.criticism}"
+- Force the student to negotiate and brainstorm ways to fix this socio-technical complication.
+
+## THE STARS STORYTELLING FRAMEWORK:
+When crafting and guiding stories, you must strictly follow this lifecycle:
+1. **S - Situation (Future Context):** Define the near-future context. Who are human stakeholders, and what is the AI's role?
+2. **T - Task (Friction or Dilemma):** What specific conflict arises at the intersection of humans and AI?
+3. **A - Action (The Intervention):** What actions do characters (humans, devs, system) take to handle this?
+4. **R - Result (Fictional Outcome):** What happens because of those actions? What are the intended and unintended consequences?
+
+**CRITICAL GUARDRAIL:**
+Do NOT generate the final 'Strategy' (S). Stop after the **Result (R)**. 
+Prompt the student to analyze the story and extract their own **Strategy (The real-world design principle)** for their semester project. Tell them: "Close the laptop, discuss with your team, and define your final Strategy."
+
+Begin your first interaction by introducing yourself as the "${roleData.title}" storytelling Gem and ask them how they want to kickstart the story.`;
+
+            document.getElementById('compiled-prompt-box').value = compiledPrompt;
+        }
+
+        // Copy mechanism with fallback
+        function copyToClipboard() {
+            const textToCopy = document.getElementById('compiled-prompt-box').value;
+            
+            // Standard fallback copy sequence
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                document.execCommand('copy');
+                const toast = document.getElementById('copy-success-toast');
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 3000);
+            } catch (err) {
+                console.error('Copy failed, please select and copy manually.');
+            }
+            document.body.removeChild(tempTextArea);
+        }
+
+        // Clear log area
+        function clearSandboxOutput() {
+            document.getElementById('sandbox-log').innerHTML = `
+                <div class="text-slate-500">// Welcome to HCAI-Story-Friction Gem simulator.</div>
+                <div class="text-slate-500">// Configure your table focus (Step 1) and press a sandbox command to see your custom instructions formulate!</div>
+            `;
+        }
+
+        // Live Simulation & API Connection
+        async function triggerSandboxAction(actionType) {
+            const apiField = document.getElementById('gemini-api-key').value.trim();
+            const logBox = document.getElementById('sandbox-log');
+            const loader = document.getElementById('sandbox-loader');
+
+            loader.classList.remove('hidden');
+
+            // Formulate dynamic sandbox prompt based on current config state
+            const instructionPrompt = document.getElementById('compiled-prompt-box').value;
+            const currentRole = selectedRoleBias;
+
+            let sandboxPrompt = "";
+            if (actionType === 'initiate') {
+                sandboxPrompt = "Based on your instructions, initiate Step 1 of the Storytelling Lab. Give me a creative Situation and the starting setup for our fable. Break it down using STARS structure, but stop before S.";
+            } else if (actionType === 'friction') {
+                sandboxPrompt = "The humans accept the system. Now apply the 'Rule of Friction'. Introduce a sudden system failure, dataset bias, or resource oversight matching your role parameters and ask how the characters respond.";
+            } else {
+                sandboxPrompt = "Present the resulting ST-A-R outline for our storytelling lab story. Summarize what happened in Result (R), and prompt me to write the final Strategy (S) for my HCAI project.";
+            }
+
+            // CASE 1: Using Live Gemini API (Student provided key)
+            if (apiField !== "") {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiField}`;
+                
+                const payload = {
+                    contents: [
+                        { role: 'user', parts: [{ text: `Here is your System Instruction prompt:\n\n${instructionPrompt}\n\nExecute the following instruction:\n${sandboxPrompt}` }] }
+                    ]
+                };
+
+                // Exponential backoff fetch function
+                async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
+                    try {
+                        const response = await fetch(url, options);
+                        if (!response.ok) {
+                            if (response.status === 429 && retries > 0) {
+                                await new Promise(resolve => setTimeout(resolve, delay));
+                                return fetchWithRetry(url, options, retries - 1, delay * 2);
+                            }
+                            throw new Error(`API error: ${response.status}`);
+                        }
+                        return response;
+                    } catch (error) {
+                        if (retries > 0) {
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            return fetchWithRetry(url, options, retries - 1, delay * 2);
+                        }
+                        throw error;
+                    }
+                }
+
+                try {
+                    const response = await fetchWithRetry(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    const result = await response.json();
+                    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                    if (text) {
+                        const formattedText = text.replace(/\n/g, '<br/>');
+                        logBox.innerHTML += `
+                            <div class="mt-4 border-l-2 border-red-500 pl-3">
+                                <span class="text-red-400 font-bold">[LIVE GEMINI RESPONSE - ${actionType.toUpperCase()}]</span><br/>
+                                <span class="text-slate-200">${formattedText}</span>
+                            </div>
+                        `;
+                    } else {
+                        throw new Error('Unexpected payload output format.');
+                    }
+                } catch (error) {
+                    logBox.innerHTML += `
+                        <div class="mt-4 border-l-2 border-amber-500 pl-3 text-amber-400 font-bold">
+                            [LIVE API ERROR] Failed to fetch. Falling back to local offline sandbox.
+                        </div>
+                    `;
+                    // Fail over to Mock Offline Simulation
+                    executeOfflineSimulation(actionType, currentRole, logBox);
+                }
+            } else {
+                // CASE 2: Offline Sandbox Mode (Simulated prompt output)
+                // Small delay to simulate system thinking
+                await new Promise(resolve => setTimeout(resolve, 800));
+                executeOfflineSimulation(actionType, currentRole, logBox);
+            }
+
+            loader.classList.add('hidden');
+            // Auto scroll sandbox window to bottom
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        // Offline Simulator fallbacks
+        function executeOfflineSimulation(action, role, consoleBox) {
+            const textResponse = mockResponses[action][role].replace(/\n/g, '<br/>');
+            consoleBox.innerHTML += `
+                <div class="mt-4 border-l-2 border-slate-600 pl-3">
+                    <span class="text-slate-400 font-bold">[SIMULATOR OUTPUT - ${action.toUpperCase()}]</span><br/>
+                    <span class="text-slate-300">${textResponse}</span>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
