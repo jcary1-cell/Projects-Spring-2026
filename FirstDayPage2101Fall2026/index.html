@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threadlines: Human Connection in the Age of AI</title>
+    <!-- Tailwind CSS for modern utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter (body) & Outfit (headings) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for accessible icons and indicators -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Outfit', sans-serif;
+        }
+        /* Focus visible ring custom styling for superior keyboard accessibility */
+        *:focus-visible {
+            outline: 3px solid #4f46e5 !important;
+            outline-offset: 3px !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Skip to Content Link for keyboard/screen-reader users -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold z-50 shadow-lg">
+        Skip to main content
+    </a>
+
+    <!-- Simple Course Header Branding -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-4 py-3 sm:px-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-indigo-700 rounded-lg flex items-center justify-center shadow-md" aria-hidden="true">
+                    <i class="fa-solid fa-graduation-cap text-white text-sm"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-bold text-indigo-700 uppercase tracking-wider block">HCAI 2101</span>
+                    <span class="text-xs text-slate-700 font-medium -mt-1 block">AI Application and Impact Across Disciplines</span>
+                </div>
+            </div>
+            <div class="hidden sm:flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" aria-hidden="true"></span>
+                    Interactive Student Portal
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Screen Reader Live Region for Dynamic Announcements (Announces additions/mode switches) -->
+    <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Main Student Workspace -->
+    <main id="main-content" class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6" tabindex="-1">
+        
+        <!-- Course Welcome & Hero Banner -->
+        <section class="relative bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 rounded-2xl overflow-hidden shadow-xl border border-slate-800 p-6 sm:p-8 lg:p-10" aria-labelledby="hero-title">
+            <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]" aria-hidden="true"></div>
+            <div class="relative z-10 max-w-4xl">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-200 border border-indigo-500/30 mb-4">
+                    Day One Activity
+                </span>
+                <h1 id="hero-title" class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+                    Threadlines:
+                    <span class="block bg-gradient-to-r from-orange-400 via-rose-400 to-indigo-300 bg-clip-text text-transparent">
+                        Human Connection in the Age of AI
+                    </span>
+                </h1>
+                <p class="mt-4 text-slate-200 text-sm sm:text-base md:text-lg leading-relaxed font-normal">
+                    Welcome! On our first day of class, we are going to make connections and get to know each other. In this course, we will explore the intersection of machine algorithms, durable AI literacy, and the irreplaceable human competencies that ground our disciplines. Today, we begin this work together.
+                </p>
+            </div>
+        </section>
+
+        <!-- Interactive Navigation Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Sidebar Navigation Menu as a Semantic WAI-ARIA Tablist -->
+            <nav class="lg:col-span-4 bg-white rounded-xl p-3 shadow-sm border border-slate-200 space-y-1" aria-label="Lesson Roadmap">
+                <p class="text-xs font-bold uppercase text-slate-500 px-3 pt-2 pb-1.5 tracking-wider">Lesson Roadmap</p>
+                
+                <div role="tablist" aria-label="Lesson Stages" class="space-y-1.5" id="roadmap-tablist">
+                    <button role="tab" aria-selected="true" aria-controls="content-overview" id="tab-overview" onclick="selectTab('overview')" class="w-full text-left flex items-center justify-between p-3.5 rounded-lg transition-all duration-200 group bg-slate-50 border-l-4 border-indigo-700 min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-md bg-slate-100 text-slate-700 flex items-center justify-center group-hover:scale-105 transition-transform" aria-hidden="true">
+                                <i class="fa-solid fa-compass text-sm"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-bold text-slate-900">Overview</span>
+                                <span class="block text-[11px] text-slate-600">Day 1 Focus & Objectives</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-500 group-hover:translate-x-0.5 transition-transform" aria-hidden="true"></i>
+                    </button>
+
+                    <button role="tab" aria-selected="false" aria-controls="content-activity-1" id="tab-activity-1" onclick="selectTab('activity-1')" tabindex="-1" class="w-full text-left flex items-center justify-between p-3.5 rounded-lg transition-all duration-200 group hover:bg-slate-50 border-l-4 border-transparent min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-md bg-emerald-50 text-emerald-800 flex items-center justify-center group-hover:scale-105 transition-transform" aria-hidden="true">
+                                <i class="fa-solid fa-plane-departure text-sm"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-semibold text-slate-800">1. My Travel Story</span>
+                                <span class="block text-[11px] text-slate-600 font-medium">Icebreaker Slideshow</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-500 group-hover:translate-x-0.5 transition-transform" aria-hidden="true"></i>
+                    </button>
+
+                    <button role="tab" aria-selected="false" aria-controls="content-activity-2" id="tab-activity-2" onclick="selectTab('activity-2')" tabindex="-1" class="w-full text-left flex items-center justify-between p-3.5 rounded-lg transition-all duration-200 group hover:bg-slate-50 border-l-4 border-transparent min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-md bg-indigo-50 text-indigo-800 flex items-center justify-center group-hover:scale-105 transition-transform" aria-hidden="true">
+                                <i class="fa-solid fa-mobile-screen text-sm"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-semibold text-slate-800">2. HCAI Focus Mode</span>
+                                <span class="block text-[11px] text-slate-600">Expectations & Apps</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-500 group-hover:translate-x-0.5 transition-transform" aria-hidden="true"></i>
+                    </button>
+
+                    <button role="tab" aria-selected="false" aria-controls="content-activity-3" id="tab-activity-3" onclick="selectTab('activity-3')" tabindex="-1" class="w-full text-left flex items-center justify-between p-3.5 rounded-lg transition-all duration-200 group hover:bg-slate-50 border-l-4 border-transparent min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-md bg-rose-50 text-rose-800 flex items-center justify-center group-hover:scale-105 transition-transform" aria-hidden="true">
+                                <i class="fa-solid fa-people-arrows text-sm"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-semibold text-slate-800">3. Human vs. Data</span>
+                                <span class="block text-[11px] text-slate-600 font-medium">A Physical Data Challenge</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-500 group-hover:translate-x-0.5 transition-transform" aria-hidden="true"></i>
+                    </button>
+
+                    <button role="tab" aria-selected="false" aria-controls="content-attendance" id="tab-attendance" onclick="selectTab('attendance')" tabindex="-1" class="w-full text-left flex items-center justify-between p-3.5 rounded-lg transition-all duration-200 group hover:bg-slate-50 border-l-4 border-transparent min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-md bg-amber-50 text-amber-800 flex items-center justify-center group-hover:scale-105 transition-transform" aria-hidden="true">
+                                <i class="fa-solid fa-clipboard-user text-sm"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-semibold text-slate-800">Attendance Check</span>
+                                <span class="block text-[11px] text-slate-600 font-medium">Poll Everywhere</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-500 group-hover:translate-x-0.5 transition-transform" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Active Step Content Area -->
+            <div class="lg:col-span-8 bg-white rounded-xl p-5 sm:p-7 shadow-sm border border-slate-200 min-h-[460px] flex flex-col justify-between">
+                
+                <div class="space-y-6">
+                    <!-- CONTENT PANEL: OVERVIEW -->
+                    <div role="tabpanel" id="content-overview" aria-labelledby="tab-overview" tabindex="0" class="space-y-5 focus:outline-none">
+                        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                            <span class="w-10 h-10 bg-indigo-50 text-indigo-700 rounded-lg flex items-center justify-center shadow-sm" aria-hidden="true">
+                                <i class="fa-solid fa-compass text-lg"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900">Today's Class Goals</h2>
+                                <p class="text-xs text-slate-700 font-semibold">Day 1 Focus & Objectives</p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-slate-800 text-sm sm:text-base leading-relaxed">
+                            Our primary goal today is to get to know each other. Building these connections now will make it much easier to form fluid, interdisciplinary collaboration groups later this week. Today is dedicated to interactive, engaging activities and critical reflections on how we align our digital habits with our class goals.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex gap-3">
+                                <div class="text-indigo-600 mt-0.5" aria-hidden="true"><i class="fa-solid fa-users text-lg"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-xs text-slate-900 mb-1">Interdisciplinary Synergy</h3>
+                                    <p class="text-xs text-slate-700 leading-relaxed">Discover the diverse academic paths, backgrounds, and viewpoints in our physical space.</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex gap-3">
+                                <div class="text-amber-700 mt-0.5" aria-hidden="true"><i class="fa-solid fa-compass-drafting text-lg"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-xs text-slate-900 mb-1">Human-Driven Agency</h3>
+                                    <p class="text-xs text-slate-700 leading-relaxed">Start identifying qualities and context that automated algorithms consistently miss.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="selectTab('activity-1')" class="mt-4 inline-flex items-center gap-2 px-4.5 py-3 bg-indigo-700 hover:bg-indigo-800 text-white rounded-lg text-xs font-bold transition-all shadow-md focus-visible:ring-2 focus-visible:ring-indigo-600">
+                            Begin Activity 1 <i class="fa-solid fa-arrow-right text-[10px]" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <!-- CONTENT PANEL: ACTIVITY 1 -->
+                    <div role="tabpanel" id="content-activity-1" aria-labelledby="tab-activity-1" tabindex="0" class="hidden space-y-5 focus:outline-none">
+                        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                            <span class="w-10 h-10 bg-emerald-50 text-emerald-800 rounded-lg flex items-center justify-center shadow-sm" aria-hidden="true">
+                                <i class="fa-solid fa-plane-departure text-lg"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900">Activity 1: My Travel Story</h2>
+                                <p class="text-xs text-emerald-800 font-bold">Icebreaker Slideshow & Collaboration</p>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-800 text-sm sm:text-base leading-relaxed">
+                            Let's map out our global travel stories. In a moment, I will open a collective presentation highlighting visual landmarks and stories from my travels around the world this past year. You will pick up the current story point, introduce an imaginative next sequence, and share the stage.
+                        </p>
+
+                        <!-- Travel Slider / Sandbox Sandbox Card -->
+                        <div class="bg-gradient-to-br from-emerald-50/50 to-teal-50/50 border border-emerald-200 rounded-xl p-4 sm:p-5 space-y-4">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-emerald-200/60 pb-3">
+                                <div>
+                                    <h3 class="font-bold text-emerald-950 text-sm">Shared Visual Slide Deck</h3>
+                                    <p class="text-xs text-emerald-800 font-medium">Collaborative presentation link</p>
+                                </div>
+                                <a href="https://docs.google.com/presentation/d/16vCdBQtq0XolsTQewm2ldcVsG-udMwTuujuspVf8DtE/edit?usp=sharing" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-3 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold rounded-lg transition shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-700 min-h-[44px]">
+                                    <i class="fa-brands fa-google-drive" aria-hidden="true"></i> Open Slide Deck <i class="fa-solid fa-external-link text-[9px]" aria-hidden="true"></i>
+                                    <span class="sr-only">(opens in a new window)</span>
+                                </a>
+                            </div>
+
+                            <!-- Interactive Travel Post simulator -->
+                            <div class="bg-white rounded-xl p-4 border border-emerald-200 shadow-sm space-y-3">
+                                <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Interactive Sandbox</span>
+                                
+                                <div class="space-y-2">
+                                    <label for="travel-location" class="block text-xs font-bold text-slate-800">
+                                        Mock up and practice posting your travel path entry below:
+                                    </label>
+                                    <div class="flex flex-col sm:flex-row gap-2">
+                                        <input type="text" id="travel-location" placeholder="e.g., Tokyo, Rome, Patagonia..." class="flex-1 px-3 py-2 text-sm border-2 border-slate-300 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-0 min-h-[44px]">
+                                        <button onclick="addSimulatedTravel()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition min-h-[44px] focus-visible:ring-2 focus-visible:ring-slate-950">
+                                            Add Path
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="pt-2">
+                                    <h4 class="text-xs font-bold text-slate-800 mb-1.5">Simulated Path Registry:</h4>
+                                    <div id="travel-grid" class="flex flex-wrap gap-2">
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-950 border border-emerald-300">
+                                            <i class="fa-solid fa-map-pin text-[10px]" aria-hidden="true"></i> Instructor's Entry (Start Location)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONTENT PANEL: ACTIVITY 2 -->
+                    <div role="tabpanel" id="content-activity-2" aria-labelledby="tab-activity-2" tabindex="0" class="hidden space-y-5 focus:outline-none">
+                        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                            <span class="w-10 h-10 bg-indigo-50 text-indigo-800 rounded-lg flex items-center justify-center shadow-sm" aria-hidden="true">
+                                <i class="fa-solid fa-mobile-screen text-lg"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900">Activity 2: HCAI Focus Mode</h2>
+                                <p class="text-xs text-indigo-800 font-bold">Digital Habit Design & Focus Routines</p>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-800 text-sm sm:text-base leading-relaxed">
+                            How do we take back control of our focus thresholds without severe tech bans? We'll spend 15 minutes investigating device configurations: <strong class="text-slate-950">iOS Focus Modes</strong> or <strong class="text-slate-950">Android Modes and Routines</strong>. Let's design custom setups built around focus context.
+                        </p>
+
+                        <!-- Classroom Focus Simulator App -->
+                        <div class="bg-slate-950 rounded-xl text-white overflow-hidden border border-slate-800 shadow-md">
+                            <div class="bg-slate-900 px-4 py-3 border-b border-slate-800 flex justify-between items-center">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Focus Switchboard Demo</span>
+                                <span class="bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded text-xs font-bold">Interactive Simulator</span>
+                            </div>
+                            <div class="p-4 space-y-4">
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-900 p-3.5 rounded-lg border border-slate-800 gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <i id="focus-icon" class="fa-solid fa-bell text-yellow-400 text-base animate-bounce" aria-hidden="true"></i>
+                                        <div>
+                                            <p class="text-xs font-bold" id="focus-status-title">Current Mode: General Focus</p>
+                                            <p class="text-xs text-slate-300" id="focus-status-desc">All app notifications are allowed.</p>
+                                        </div>
+                                    </div>
+                                    <button onclick="toggleClassFocus()" id="btn-toggle-focus" class="px-3.5 py-2.5 bg-indigo-700 hover:bg-indigo-600 text-xs font-bold rounded-lg transition min-h-[44px] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500">
+                                        Activate Class Focus
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                                    <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 text-center space-y-2">
+                                        <div class="w-7 h-7 rounded-full bg-orange-500/20 text-orange-400 mx-auto flex items-center justify-center" aria-hidden="true">
+                                            <i class="fa-brands fa-tiktok text-sm"></i>
+                                        </div>
+                                        <p class="text-xs font-bold">TikTok</p>
+                                        <span id="badge-tiktok" class="inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">Allowed</span>
+                                    </div>
+
+                                    <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 text-center space-y-2">
+                                        <div class="w-7 h-7 rounded-full bg-violet-500/20 text-violet-400 mx-auto flex items-center justify-center" aria-hidden="true">
+                                            <i class="fa-solid fa-sparkles text-sm"></i>
+                                        </div>
+                                        <p class="text-xs font-bold">Gemini AI</p>
+                                        <span id="badge-gemini" class="inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">Allowed</span>
+                                    </div>
+
+                                    <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 text-center space-y-2">
+                                        <div class="w-7 h-7 rounded-full bg-green-500/20 text-green-400 mx-auto flex items-center justify-center" aria-hidden="true">
+                                            <i class="fa-brands fa-spotify text-sm"></i>
+                                        </div>
+                                        <p class="text-xs font-bold">Spotify</p>
+                                        <span id="badge-spotify" class="inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">Allowed</span>
+                                    </div>
+
+                                    <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 text-center space-y-2">
+                                        <div class="w-7 h-7 rounded-full bg-amber-500/20 text-amber-400 mx-auto flex items-center justify-center" aria-hidden="true">
+                                            <i class="fa-regular fa-envelope text-sm"></i>
+                                        </div>
+                                        <p class="text-xs font-bold">Gmail</p>
+                                        <span id="badge-gmail" class="inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">Allowed</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 flex gap-3">
+                            <i class="fa-solid fa-lightbulb text-indigo-800 text-lg mt-0.5" aria-hidden="true"></i>
+                            <div>
+                                <h3 class="text-xs font-bold text-indigo-950 uppercase tracking-wide">Next Step: Post and Defend</h3>
+                                <p class="text-xs text-indigo-950 mt-1 leading-relaxed">
+                                    Analyze which system configurations yield class productivity versus those that pull your attention away. Compare with classmates and post your custom workspace mode configurations.
+                                </p>
+                                <a href="https://padlet.com/jcary1/hcai-focus-mode-builds-za55ep6v33ilkg8k" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-lg text-xs font-bold shadow-sm transition min-h-[44px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                                    <i class="fa-solid fa-pencil" aria-hidden="true"></i> Upload Setup Build to Padlet <i class="fa-solid fa-external-link text-[8px]" aria-hidden="true"></i>
+                                    <span class="sr-only">(opens in a new window)</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONTENT PANEL: ACTIVITY 3 -->
+                    <div role="tabpanel" id="content-activity-3" aria-labelledby="tab-activity-3" tabindex="0" class="hidden space-y-5 focus:outline-none">
+                        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                            <span class="w-10 h-10 bg-rose-50 text-rose-800 rounded-lg flex items-center justify-center shadow-sm" aria-hidden="true">
+                                <i class="fa-solid fa-people-arrows text-lg"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900">Activity 3: Human vs. Data</h2>
+                                <p class="text-xs text-rose-800 font-bold">Physical Networking & AI Limits</p>
+                            </div>
+                        </div>
+
+                        <!-- Step-by-Step Accessible Accordion -->
+                        <div class="space-y-3" role="presentation">
+                            
+                            <!-- Step 1 Accordion Section -->
+                            <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                                <button onclick="toggleStep(1)" id="accordion-btn-1" aria-expanded="true" aria-controls="step-desc-1" class="w-full flex items-center justify-between p-4 bg-slate-50 text-left hover:bg-slate-100/80 transition min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs" aria-hidden="true">1</span>
+                                        <div>
+                                            <span class="block font-bold text-slate-900 text-xs sm:text-sm">Rapid Peer Interview</span>
+                                            <span class="block text-[11px] text-slate-700 font-semibold">Duration: ~5 Minutes</span>
+                                        </div>
+                                    </div>
+                                    <i id="step-icon-1" class="fa-solid fa-chevron-up text-[11px] text-slate-600" aria-hidden="true"></i>
+                                </button>
+                                <div id="step-desc-1" role="region" aria-labelledby="accordion-btn-1" class="p-4 border-t border-slate-100 space-y-3.5 text-xs sm:text-sm">
+                                    <p class="text-slate-800 leading-relaxed font-medium">
+                                        Find a peer sitting nearby. Swap stories, but bypass generic introductions. Ask context-rich questions focused on unique subjective perspectives.
+                                    </p>
+                                    <div class="bg-rose-50/70 rounded-lg p-3.5 border border-rose-200 text-xs leading-relaxed">
+                                        <span class="font-bold text-rose-950 block mb-1.5 text-[13px]">Try asking these questions:</span>
+                                        <ul class="list-disc pl-5 space-y-1.5 text-rose-900 font-medium">
+                                            <li>"What specialized knowledge or skill do you hold that AI couldn't replicate?"</li>
+                                            <li>"What is something you genuinely love that recommender systems consistently misjudge?"</li>
+                                        </ul>
+                                    </div>
+                                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-xs italic font-medium flex items-start gap-2">
+                                        <i class="fa-solid fa-lightbulb text-indigo-700 mt-0.5" aria-hidden="true"></i>
+                                        <span><strong>Tip:</strong> Need help designing prompts? Query Gemini: <span class="bg-white px-1.5 py-0.5 border border-slate-300 rounded font-mono text-[10px] font-bold text-slate-800">"Give me three qualitative, human-centric icebreaker questions..."</span></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2 Accordion Section -->
+                            <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                                <button onclick="toggleStep(2)" id="accordion-btn-2" aria-expanded="false" aria-controls="step-desc-2" class="w-full flex items-center justify-between p-4 bg-slate-50 text-left hover:bg-slate-100/80 transition min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs" aria-hidden="true">2</span>
+                                        <div>
+                                            <span class="block font-bold text-slate-900 text-xs sm:text-sm">Data Labeling</span>
+                                            <span class="block text-[11px] text-slate-700 font-semibold">Duration: ~15 Minutes</span>
+                                        </div>
+                                    </div>
+                                    <i id="step-icon-2" class="fa-solid fa-chevron-down text-[11px] text-slate-600" aria-hidden="true"></i>
+                                </button>
+                                <div id="step-desc-2" role="region" aria-labelledby="accordion-btn-2" class="hidden p-4 border-t border-slate-100 space-y-4 text-xs sm:text-sm">
+                                    <p class="text-slate-800 leading-relaxed font-medium">
+                                        Collect two physical sticky notes. Write your partner's name on Note 1, and write a 3-word summation of their distinct human trait on Note 2. Post them to our designated classroom whiteboard, arranging them in clusters based on themes.
+                                    </p>
+                                    
+                                    <!-- Interactive Sticky Board Simulator -->
+                                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-3">
+                                        <span class="text-xs font-bold text-indigo-900 uppercase tracking-wider block">Local Demo Board Preview</span>
+                                        
+                                        <fieldset class="space-y-3 border-none p-0 m-0">
+                                            <legend class="sr-only">Add test sticky note to preview board</legend>
+                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                <div class="flex-1 min-w-[120px]">
+                                                    <label for="sticky-name" class="sr-only">Name</label>
+                                                    <input type="text" id="sticky-name" placeholder="Partner Name" class="w-full px-3 py-2 text-xs border-2 border-slate-300 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-0 min-h-[40px]">
+                                                </div>
+                                                <div class="flex-[2] min-w-[180px]">
+                                                    <label for="sticky-trait" class="sr-only">3-Word Human Trait</label>
+                                                    <input type="text" id="sticky-trait" placeholder="3-Word Human Trait" class="w-full px-3 py-2 text-xs border-2 border-slate-300 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-0 min-h-[40px]">
+                                                </div>
+                                                <button onclick="addSimulatedSticky()" class="px-4 py-2 bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold rounded-lg transition min-h-[40px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                                                    Post Note
+                                                </button>
+                                            </div>
+                                        </fieldset>
+
+                                        <div id="sticky-board" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1.5">
+                                            <div class="p-3 bg-amber-100 rounded-lg border border-amber-300 shadow-sm">
+                                                <p class="font-bold text-slate-900 border-b border-amber-300 pb-1 mb-1.5">Jamie</p>
+                                                <p class="text-slate-800 italic font-medium">"Analog Vinyl Collector"</p>
+                                            </div>
+                                            <div class="p-3 bg-teal-100 rounded-lg border border-teal-300 shadow-sm">
+                                                <p class="font-bold text-slate-900 border-b border-teal-300 pb-1 mb-1.5">Alex</p>
+                                                <p class="text-slate-800 italic font-medium">"Hates Fresh Cilantro"</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3 Accordion Section -->
+                            <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                                <button onclick="toggleStep(3)" id="accordion-btn-3" aria-expanded="false" aria-controls="step-desc-3" class="w-full flex items-center justify-between p-4 bg-slate-50 text-left hover:bg-slate-100/80 transition min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs" aria-hidden="true">3</span>
+                                        <div>
+                                            <span class="block font-bold text-slate-900 text-xs sm:text-sm">Visual Observations</span>
+                                            <span class="block text-[11px] text-slate-700 font-semibold">Duration: ~15 Minutes</span>
+                                        </div>
+                                    </div>
+                                    <i id="step-icon-3" class="fa-solid fa-chevron-down text-[11px] text-slate-600" aria-hidden="true"></i>
+                                </button>
+                                <div id="step-desc-3" role="region" aria-labelledby="accordion-btn-3" class="hidden p-4 border-t border-slate-100 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                                    Step back and examine our physical dataset. Where do patterns cross? What unique individual features stand out? Look closely for emergent clusters: highly specific hobbies, complex empathy markers, or surprising artistic tastes.
+                                </div>
+                            </div>
+
+                            <!-- Step 4 Accordion Section -->
+                            <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                                <button onclick="toggleStep(4)" id="accordion-btn-4" aria-expanded="false" aria-controls="step-desc-4" class="w-full flex items-center justify-between p-4 bg-slate-50 text-left hover:bg-slate-100/80 transition min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs" aria-hidden="true">4</span>
+                                        <div>
+                                            <span class="block font-bold text-slate-900 text-xs sm:text-sm">Critical Analysis</span>
+                                            <span class="block text-[11px] text-slate-700 font-semibold">Duration: ~10 Minutes</span>
+                                        </div>
+                                    </div>
+                                    <i id="step-icon-4" class="fa-solid fa-chevron-down text-[11px] text-slate-600" aria-hidden="true"></i>
+                                </button>
+                                <div id="step-desc-4" role="region" aria-labelledby="accordion-btn-4" class="hidden p-4 border-t border-slate-100 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                                    If an algorithmic script evaluated our class data roster, what would it register? It would log dry categories: age range, majors, postal codes. What qualitative context is fully lost in plain parameters? What essential parts of who we are remain absent from simple databases?
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONTENT PANEL: ATTENDANCE -->
+                    <div role="tabpanel" id="content-attendance" aria-labelledby="tab-attendance" tabindex="0" class="hidden space-y-5 focus:outline-none">
+                        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                            <span class="w-10 h-10 bg-amber-50 text-amber-800 rounded-lg flex items-center justify-center shadow-sm" aria-hidden="true">
+                                <i class="fa-solid fa-clipboard-user text-lg"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900">Attendance Verification</h2>
+                                <p class="text-xs text-slate-700 font-bold">Log Daily Participation</p>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-800 text-sm sm:text-base leading-relaxed">
+                            Log your presence and interactive session performance today via the Poll Everywhere link below to record your attendance points for today's lesson.
+                        </p>
+
+                        <!-- CTA Attendance Verification Card -->
+                        <div class="bg-gradient-to-br from-amber-50/50 to-orange-50/50 border border-amber-200 rounded-xl p-6 text-center max-w-md mx-auto space-y-4 shadow-sm">
+                            <div class="w-11 h-11 bg-amber-700 text-white rounded-full flex items-center justify-center mx-auto shadow-md" aria-hidden="true">
+                                <i class="fa-solid fa-check text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-950 text-sm">Poll Everywhere Form</h3>
+                                <p class="text-xs text-slate-800 font-medium mt-0.5">Quick attendance validation check</p>
+                            </div>
+                            <div class="pt-1">
+                                <a href="https://PollEv.com/free_text_polls/W7IyKocRJtUoze9RDH7Xu/respond" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-5 py-3 bg-amber-700 hover:bg-amber-800 text-white font-bold rounded-lg text-xs transition shadow-md focus-visible:ring-2 focus-visible:ring-amber-700 min-h-[44px]">
+                                    Verify Attendance Now <i class="fa-solid fa-arrow-up-right-from-square text-[9px]" aria-hidden="true"></i>
+                                    <span class="sr-only">(opens in external Poll Everywhere tool)</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subtle Navigation Footer inside Workspace -->
+                <div class="border-t border-slate-200 pt-4 mt-6 flex justify-between items-center text-xs text-slate-600 font-medium">
+                    <span>HCAI 2101 — Day One Activity</span>
+                    <span>Interactive Workspace</span>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- App Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto text-center px-4">
+        <p class="text-xs text-slate-700 font-bold">
+            Designed for Universal Access & WCAG 2.1 AA Compliance.
+        </p>
+    </footer>
+
+    <!-- Front-End Interactive Script Logic -->
+    <script>
+        // Track the actively viewed section/tab
+        let activeTab = 'overview';
+        // Track current state of Focus Simulator
+        let focusActive = false;
+        // Step accordion states
+        const openSteps = { 1: true, 2: false, 3: false, 4: false };
+
+        /**
+         * Navigation Tab Switch Controller
+         * Handles ARIA states and focus transition.
+         * @param {string} tabId - Target navigation ID
+         */
+        function selectTab(tabId) {
+            // Hide active panel and clear active styling from former tab button
+            const formerPanel = document.getElementById(`content-${activeTab}`);
+            const formerTabBtn = document.getElementById(`tab-${activeTab}`);
+            
+            if (formerPanel) formerPanel.classList.add('hidden');
+            if (formerTabBtn) {
+                formerTabBtn.setAttribute('aria-selected', 'false');
+                formerTabBtn.setAttribute('tabindex', '-1');
+                formerTabBtn.className = "w-full text-left flex items-center justify-between p-3.5 rounded-lg transition-all duration-200 group hover:bg-slate-50 border-l-4 border-transparent min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600";
+            }
+
+            // Update state variable
+            activeTab = tabId;
+
+            // Show selected panel and update tab properties
+            const nextPanel = document.getElementById(`content-${tabId}`);
+            const nextTabBtn = document.getElementById(`tab-${tabId}`);
+            
+            if (nextPanel) {
+                nextPanel.classList.remove('hidden');
+                // Move screen reader focus directly to panel workspace
+                nextPanel.focus();
+            }
+            
+            if (nextTabBtn) {
+                nextTabBtn.setAttribute('aria-selected', 'true');
+                nextTabBtn.setAttribute('tabindex', '0');
+            }
+
+            // Visual borders to trace the current selected roadmap item
+            const activeBorders = {
+                'overview': 'border-indigo-700 bg-slate-50',
+                'activity-1': 'border-emerald-600 bg-emerald-50/30',
+                'activity-2': 'border-indigo-600 bg-indigo-50/30',
+                'activity-3': 'border-rose-600 bg-rose-50/30',
+                'attendance': 'border-amber-600 bg-amber-50/30'
+            };
+            
+            if (nextTabBtn) {
+                nextTabBtn.className = `w-full text-left flex items-center justify-between p-3.5 rounded-lg transition-all duration-200 group border-l-4 ${activeBorders[tabId]} min-h-[48px] focus-visible:ring-2 focus-visible:ring-indigo-600`;
+            }
+
+            announceToScreenReader(`Switched tab to ${tabId.replace('-', ' ')} overview panel.`);
+        }
+
+        /**
+         * Keyboard navigation handler for WAI-ARIA tablist
+         */
+        const tabList = document.getElementById('roadmap-tablist');
+        const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+
+        tabList.addEventListener('keydown', (e) => {
+            const index = tabs.indexOf(document.activeElement);
+            if (index === -1) return;
+
+            let nextIndex = index;
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                nextIndex = (index + 1) % tabs.length;
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                nextIndex = (index - 1 + tabs.length) % tabs.length;
+                e.preventDefault();
+            } else if (e.key === 'Home') {
+                nextIndex = 0;
+                e.preventDefault();
+            } else if (e.key === 'End') {
+                nextIndex = tabs.length - 1;
+                e.preventDefault();
+            }
+
+            if (nextIndex !== index) {
+                tabs[nextIndex].focus();
+                // Select tab immediately upon arrow movement to align with WAI-ARIA pattern
+                tabs[nextIndex].click();
+            }
+        });
+
+        /**
+         * Focus Switchboard Simulator Toggle Handler
+         */
+        function toggleClassFocus() {
+            focusActive = !focusActive;
+            const title = document.getElementById('focus-status-title');
+            const desc = document.getElementById('focus-status-desc');
+            const icon = document.getElementById('focus-icon');
+            const btn = document.getElementById('btn-toggle-focus');
+
+            const bTiktok = document.getElementById('badge-tiktok');
+            const bGemini = document.getElementById('badge-gemini');
+            const bSpotify = document.getElementById('badge-spotify');
+            const bGmail = document.getElementById('badge-gmail');
+
+            if (focusActive) {
+                title.textContent = 'Current Mode: Class Focus Active';
+                desc.textContent = 'Social feeds & entertainment apps are muted.';
+                icon.className = 'fa-solid fa-moon text-indigo-400 text-base animate-pulse';
+                btn.textContent = 'Restore Normal Focus';
+
+                bTiktok.className = 'inline-block px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-xs font-bold border border-rose-500/30';
+                bTiktok.textContent = 'Muted';
+                bSpotify.className = 'inline-block px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-xs font-bold border border-rose-500/30';
+                bSpotify.textContent = 'Muted';
+
+                bGemini.className = 'inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30';
+                bGemini.textContent = 'Active';
+                bGmail.className = 'inline-block px-2 py-0.5 rounded bg-slate-500/20 text-slate-300 text-xs font-bold border border-slate-500/30';
+                bGmail.textContent = 'Priority Only';
+
+                announceToScreenReader("Class Focus Mode active. TikTok and Spotify are muted. Gemini AI remains active.");
+            } else {
+                title.textContent = 'Current Mode: General Focus';
+                desc.textContent = 'All app notifications are allowed.';
+                icon.className = 'fa-solid fa-bell text-yellow-400 text-base animate-bounce';
+                btn.textContent = 'Activate Class Focus';
+
+                bTiktok.className = 'inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30';
+                bTiktok.textContent = 'Allowed';
+                bSpotify.className = 'inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30';
+                bSpotify.textContent = 'Allowed';
+                bGemini.className = 'inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30';
+                bGemini.textContent = 'Allowed';
+                bGmail.className = 'inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30';
+                bGmail.textContent = 'Allowed';
+
+                announceToScreenReader("Restored normal focus mode. All notifications allowed.");
+            }
+        }
+
+        /**
+         * Activity 3: Accordion Section Switch Controller
+         * @param {number} stepNum - Accordion Step Index
+         */
+        function toggleStep(stepNum) {
+            openSteps[stepNum] = !openSteps[stepNum];
+            const content = document.getElementById(`step-desc-${stepNum}`);
+            const icon = document.getElementById(`step-icon-${stepNum}`);
+            const btn = document.getElementById(`accordion-btn-${stepNum}`);
+            
+            if (openSteps[stepNum]) {
+                content.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+                icon.className = 'fa-solid fa-chevron-up text-[11px] text-slate-600';
+                announceToScreenReader(`Expanded step ${stepNum}`);
+            } else {
+                content.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+                icon.className = 'fa-solid fa-chevron-down text-[11px] text-slate-600';
+                announceToScreenReader(`Collapsed step ${stepNum}`);
+            }
+        }
+
+        /**
+         * Simulated Travel Grid Add Action
+         */
+        function addSimulatedTravel() {
+            const input = document.getElementById('travel-location');
+            const loc = input.value.trim();
+            if (loc) {
+                const grid = document.getElementById('travel-grid');
+                const span = document.createElement('span');
+                span.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-950 border border-emerald-300 animate-bounce";
+                span.innerHTML = `<i class="fa-solid fa-map-pin text-[10px]" aria-hidden="true"></i> ${loc}`;
+                grid.appendChild(span);
+                input.value = '';
+                announceToScreenReader(`Successfully registered travel path entry: ${loc}`);
+                setTimeout(() => { span.classList.remove('animate-bounce'); }, 1000);
+            }
+        }
+
+        /**
+         * Simulated Sticky Board Card Add Action
+         */
+        function addSimulatedSticky() {
+            const nameInp = document.getElementById('sticky-name');
+            const traitInp = document.getElementById('sticky-trait');
+            const name = nameInp.value.trim();
+            const trait = traitInp.value.trim();
+
+            if (name && trait) {
+                const board = document.getElementById('sticky-board');
+                const card = document.createElement('div');
+                const colors = [
+                    'bg-amber-100 border-amber-300 text-slate-950', 
+                    'bg-sky-100 border-sky-300 text-slate-950', 
+                    'bg-rose-100 border-rose-300 text-slate-950', 
+                    'bg-purple-100 border-purple-300 text-slate-950'
+                ];
+                const randomVisual = colors[Math.floor(Math.random() * colors.length)];
+                
+                card.className = `p-3 ${randomVisual} rounded-lg border shadow-sm text-xs sm:text-sm animate-pulse`;
+                card.innerHTML = `
+                    <p class="font-bold border-b border-black/10 pb-1 mb-1.5">${name}</p>
+                    <p class="text-slate-900 italic font-medium">"${trait}"</p>
+                `;
+                board.appendChild(card);
+                nameInp.value = '';
+                traitInp.value = '';
+                announceToScreenReader(`Successfully posted sticky note for partner ${name} with trait ${trait}`);
+                setTimeout(() => { card.classList.remove('animate-pulse'); }, 1000);
+            }
+        }
+
+        /**
+         * Utility function to push accessibility messages to the screen reader's live zone
+         * @param {string} msg - Announcement content
+         */
+        function announceToScreenReader(msg) {
+            const announcer = document.getElementById('sr-announcer');
+            if (announcer) {
+                announcer.textContent = msg;
+            }
+        }
+    </script>
+</body>
+</html>
