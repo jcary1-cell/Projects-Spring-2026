@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Metacognitive Mirror: Exploring Pattern, Bias, and Cognitive Sovereignty</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom accessibility focus styling */
+        *:focus-visible {
+            outline: 3px solid #6366f1 !important;
+            outline-offset: 2px !important;
+        }
+        /* Custom scrollbar for beautiful dark aesthetic elements */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .text-step-1 { font-size: 0.95rem; }
+        .text-step-2 { font-size: 1.1rem; }
+        .text-step-3 { font-size: 1.25rem; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-full flex flex-col selection:bg-indigo-100 selection:text-indigo-900 transition-all duration-200">
+    <!-- Accessibility Live Region for Screen Readers -->
+    <div id="sr-announcer" class="sr-only" aria-live="polite"></div>
+
+    <!-- Header & Navigation Options -->
+    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border-b border-indigo-900/40 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="p-2.5 bg-indigo-500/10 rounded-xl border border-indigo-500/30 text-indigo-300">
+                    <!-- Metacognitive Mirror SVG Icon -->
+                    <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold tracking-wider text-indigo-400 uppercase">Unit 3 AI Applied Learning Lab</span>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        The Metacognitive Mirror
+                    </h1>
+                </div>
+            </div>
+            
+            <!-- Accessibility Control Bar -->
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- Text Resize Utility -->
+                <div class="flex items-center space-x-1 bg-slate-800/60 p-1.5 rounded-lg border border-slate-700">
+                    <span class="text-xs text-slate-300 px-2 font-medium" id="textSizeLabel">Text Size:</span>
+                    <button onclick="changeTextSize(-1)" class="p-1 px-2.5 rounded text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 focus:ring-2 focus:ring-indigo-500 font-bold" aria-label="Decrease text size">A-</button>
+                    <button onclick="changeTextSize(1)" class="p-1 px-2.5 rounded text-xs bg-slate-700 text-slate-200 hover:bg-slate-600 focus:ring-2 focus:ring-indigo-500 font-bold" aria-label="Increase text size">A+</button>
+                </div>
+                
+                <!-- External Process Doc Link -->
+                <a href="https://docs.google.com/document/d/1ZKy_EjGv1GIXvqb7H2ZflDjkBPwRwpVPq1sHpByKrMc/edit?tab=t.umyy9vm26e18" 
+                   target="_blank" 
+                   rel="noopener" 
+                   class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 focus:ring-2 focus:ring-indigo-400 font-semibold text-xs rounded-lg transition-colors border border-indigo-500 shadow-sm"
+                   title="Opens your external Process Google Document in a new tab">
+                    <span>Process Document</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Lab Grid Layout -->
+    <main id="main-content" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left 7 Columns: Theory, Guided Activities, and Interactive Prompts -->
+        <section class="lg:col-span-7 space-y-6">
+            
+            <!-- Dynamic Introduction Panel -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 relative overflow-hidden transition-all hover:shadow">
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600"></div>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
+                    <span>Collaborating with AI as a Thinking Partner</span>
+                </h2>
+                <p class="mt-3 text-slate-600 leading-relaxed text-step-container">
+                    Welcome to the Unit 3 AI Applied Learning Lab! Today, we are moving from treating AI as a "replacement" for human thought to collaborating with it as a <strong class="text-indigo-600 font-semibold">thinking partner</strong>.
+                </p>
+                <p class="mt-3 text-slate-600 leading-relaxed text-step-container">
+                    During this 75-minute session, you will use Google Gemini to examine the boundary between machine-generated patterns and true human thought. By the end of this hands-on session, we will learn how to protect your <strong class="text-indigo-700 font-semibold">cognitive sovereignty</strong>—your independence of mind, values, and original synthesis—while exploring the technical mechanics of a Large Language Model.
+                </p>
+            </div>
+
+            <!-- Part 1: Conceptual Framing (Accordion Tabs) -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                    <h3 class="text-base font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                        Part 1: Key Concepts to Know
+                    </h3>
+                    <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100/60">Reference Deck</span>
+                </div>
+                
+                <div class="divide-y divide-slate-100">
+                    <!-- Concept 1: Statistical Probability vs. The Mirror Moment -->
+                    <div class="concept-tab">
+                        <button onclick="toggleConcept(1)" 
+                                id="concept-btn-1"
+                                class="w-full text-left p-5 flex items-center justify-between hover:bg-slate-50/50 focus:outline-none transition-colors"
+                                aria-expanded="true" 
+                                aria-controls="concept-content-1">
+                            <span class="font-semibold text-slate-800 flex items-center gap-2.5 text-step-container">
+                                <span class="flex items-center justify-center w-6 h-6 rounded bg-indigo-50 text-indigo-600 text-xs font-bold font-mono">01</span>
+                                Statistical Probability vs. The "Mirror Moment"
+                            </span>
+                            <svg id="concept-icon-1" class="w-5 h-5 text-slate-400 transition-transform duration-200 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="concept-content-1" class="p-5 pt-0 text-slate-600 space-y-3 transition-all duration-200 text-step-container">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100/60">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-700 mb-1">The Tech Under the Hood:</h4>
+                                    <p class="text-sm text-indigo-950 leading-relaxed">LLMs do not "know" facts, feel emotions, or understand meaning. They calculate the mathematical probability of the next word (token) based on patterns in their massive historical training data.</p>
+                                </div>
+                                <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100/60">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-purple-700 mb-1">Your Metacognitive Focus:</h4>
+                                    <p class="text-sm text-purple-950 leading-relaxed">When Gemini writes something that feels uncanny or deeply personal, you are experiencing what authors Abbott and Maynard call a <strong>"Mirror Moment."</strong> Use <strong>The Mirror Test</strong> to examine exactly what is being reflected and, more importantly, <em>what remains un-mirrorable</em>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concept 2: The Human Qualities Spectrum -->
+                    <div class="concept-tab">
+                        <button onclick="toggleConcept(2)" 
+                                id="concept-btn-2"
+                                class="w-full text-left p-5 flex items-center justify-between hover:bg-slate-50/50 focus:outline-none transition-colors"
+                                aria-expanded="false" 
+                                aria-controls="concept-content-2">
+                            <span class="font-semibold text-slate-800 flex items-center gap-2.5 text-step-container">
+                                <span class="flex items-center justify-center w-6 h-6 rounded bg-indigo-50 text-indigo-600 text-xs font-bold font-mono">02</span>
+                                The Human Qualities Spectrum
+                            </span>
+                            <svg id="concept-icon-2" class="w-5 h-5 text-slate-400 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="concept-content-2" class="p-5 pt-0 text-slate-600 space-y-3 hidden transition-all duration-200 text-step-container">
+                            <p class="text-sm text-slate-600 leading-relaxed">AI excels at replicating structures, summaries, and rule-bound code because these patterns are highly predictable and well-represented in training data. We categorize tasks using three points:</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Replicable</span>
+                                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">Tasks easily automated: data gathering, standard syntax, and form-fill templates.</p>
+                                </div>
+                                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">Relational</span>
+                                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">Tasks requiring human empathy, shared physical context, active trust, and vulnerability.</p>
+                                </div>
+                                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded bg-violet-100 text-violet-800">Transcendent</span>
+                                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">Meaning-making, values choices, and artistic intent driven by actual stakes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concept 3: The Curiosity Loop -->
+                    <div class="concept-tab">
+                        <button onclick="toggleConcept(3)" 
+                                id="concept-btn-3"
+                                class="w-full text-left p-5 flex items-center justify-between hover:bg-slate-50/50 focus:outline-none transition-colors"
+                                aria-expanded="false" 
+                                aria-controls="concept-content-3">
+                            <span class="font-semibold text-slate-800 flex items-center gap-2.5 text-step-container">
+                                <span class="flex items-center justify-center w-6 h-6 rounded bg-indigo-50 text-indigo-600 text-xs font-bold font-mono">03</span>
+                                The Curiosity Loop (Notice, Question, Explore, Integrate)
+                            </span>
+                            <svg id="concept-icon-3" class="w-5 h-5 text-slate-400 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="concept-content-3" class="p-5 pt-0 text-slate-600 space-y-3 hidden transition-all duration-200 text-step-container">
+                            <p class="text-sm leading-relaxed">Because LLMs rely on statistical averages, they often default to clichés, middle-of-the-road answers, or outright hallucinations when pushed. When Gemini frustrates you, do not shut down. Instead, cycle through the Curiosity Loop:</p>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-center">
+                                <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                                    <span class="block text-xs font-bold text-indigo-700">1. Notice</span>
+                                    <span class="text-[11px] text-slate-500">Observe patterns without frustration.</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                                    <span class="block text-xs font-bold text-indigo-700">2. Question</span>
+                                    <span class="text-[11px] text-slate-500">Ask why it defaulted to this.</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                                    <span class="block text-xs font-bold text-indigo-700">3. Explore</span>
+                                    <span class="text-[11px] text-slate-500">Challenge underlying assumptions.</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                                    <span class="block text-xs font-bold text-indigo-700">4. Integrate</span>
+                                    <span class="text-[11px] text-slate-500">Synthesize with your perspective.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Human Qualities Spectrum Exercise -->
+            <div class="bg-gradient-to-br from-indigo-900 to-indigo-950 rounded-2xl shadow-xl text-white p-6 border border-indigo-700/50">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/20 text-indigo-200 border border-indigo-500/30 uppercase tracking-wider">Concept Check</span>
+                        <h3 class="text-lg font-bold text-white mt-1">Sovereignty Sorting Simulator</h3>
+                        <p class="text-xs text-indigo-200 mt-1">Drag, select, or tap to categorize tasks. Build familiarity before using Gemini.</p>
+                    </div>
+                    <div class="p-2 bg-white/5 rounded-lg border border-white/10 hidden sm:block">
+                        <span class="text-xs font-bold text-indigo-200">Score: <span id="score-counter">0</span>/6</span>
+                    </div>
+                </div>
+
+                <!-- Simulation Task Box -->
+                <div class="mt-5 bg-white/5 rounded-xl border border-white/10 p-4 relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="text-center md:text-left">
+                        <span class="text-[10px] font-mono tracking-wider text-indigo-400 uppercase">Active Scenario Task:</span>
+                        <p id="active-scenario-text" class="text-sm font-semibold text-white mt-0.5 max-w-md">"Reviewing thousands of user database columns to draft a monthly KPI spreadsheet."</p>
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <button onclick="answerScenario('Replicable')" class="flex-1 md:flex-none text-xs font-bold px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 focus:ring-2 focus:ring-emerald-400 transition-colors">Replicable</button>
+                        <button onclick="answerScenario('Relational')" class="flex-1 md:flex-none text-xs font-bold px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 focus:ring-2 focus:ring-sky-400 transition-colors">Relational</button>
+                        <button onclick="answerScenario('Transcendent')" class="flex-1 md:flex-none text-xs font-bold px-3 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 focus:ring-2 focus:ring-violet-400 transition-colors">Transcendent</button>
+                    </div>
+                </div>
+                <div id="sim-feedback" class="mt-3 text-xs min-h-[1.5rem] font-medium text-center text-indigo-300"></div>
+            </div>
+
+            <!-- Part 3: Guided Step-by-Step Activities -->
+            <div class="space-y-6">
+                
+                <!-- Activity 1 Widget -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" id="challenge-activity-1">
+                    <div class="p-5 border-b border-slate-100 bg-indigo-50/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <span class="text-[10px] font-bold text-indigo-700 uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-100">Challenge 1</span>
+                            <h3 class="text-base font-bold text-slate-800 mt-1">The Mirror Test</h3>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-indigo-900 bg-indigo-100/60 border border-indigo-200/50 px-3 py-1 rounded-full w-fit">
+                            <svg class="w-3.5 h-3.5 text-indigo-700 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <span>Duration: 20 mins</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Step 1: Customize & Copy Prompt 1</h4>
+                            <p class="text-xs text-slate-600 mb-3">Tailor this prompt with your own major to identify Gemini's baseline clichés regarding academic stress.</p>
+                            
+                            <!-- Interactive Customizer 1 -->
+                            <div class="space-y-3">
+                                <div>
+                                    <label for="p1-major" class="block text-xs font-bold text-slate-700 mb-1">Your Academic Major:</label>
+                                    <input type="text" id="p1-major" oninput="updatePromptOne()" placeholder="e.g. Computer Science, Public Policy, Psychology" class="w-full text-sm px-3.5 py-2 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 bg-white transition-all">
+                                </div>
+                                <div class="bg-white rounded-lg border border-slate-200 p-3 font-mono text-xs text-slate-800 relative group">
+                                    <span class="absolute top-2 right-2 text-[10px] font-sans font-semibold text-slate-400">Template Context</span>
+                                    <p id="prompt-one-preview" class="pr-12 text-slate-600 italic">"Write a highly personal journal entry from the perspective of an anxious college sophomore majoring in <span class="text-indigo-600 font-semibold">[Insert Your Major]</span>, struggling to balance academic pressure, social media comparison, and uncertainty about whether their chosen field will even exist in five years due to AI."</p>
+                                </div>
+                                <button onclick="copyPrompt('prompt-one-preview')" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 font-bold text-xs text-white rounded-lg transition-colors shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                    <span>Copy Custom Prompt 1</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Step 2: Push Back on the Pattern (Prompt 2)</h4>
+                            <p class="text-xs text-slate-600 mb-3">Force Gemini out of its comfortable statistical averages by feeding it raw, highly specific human details.</p>
+                            
+                            <!-- Interactive Customizer 2 -->
+                            <div class="space-y-3">
+                                <div>
+                                    <label for="p1-detail" class="block text-xs font-bold text-slate-700 mb-1">A Highly Specific Lived Context Detail:</label>
+                                    <input type="text" id="p1-detail" oninput="updatePromptTwo()" placeholder="e.g. works late nights at the campus cafe, struggles to read in a humid dorm room with no AC" class="w-full text-sm px-3.5 py-2 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 bg-white transition-all">
+                                </div>
+                                <div class="bg-white rounded-lg border border-slate-200 p-3 font-mono text-xs text-slate-800 relative group">
+                                    <span class="absolute top-2 right-2 text-[10px] font-sans font-semibold text-slate-400">Template Context</span>
+                                    <p id="prompt-two-preview" class="pr-12 text-slate-600 italic">"You wrote a highly polished, average representation of sophomore anxiety. But you missed my actual lived context. Rewrite this, but strip out the generic literary tropes. Make it raw and specific to someone who <span class="text-indigo-600 font-semibold">[insert one highly specific, unique detail here]</span>."</p>
+                                </div>
+                                <button onclick="copyPrompt('prompt-two-preview')" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 font-bold text-xs text-white rounded-lg transition-colors shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                    <span>Copy Custom Prompt 2</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity 2 Widget -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" id="challenge-activity-2">
+                    <div class="p-5 border-b border-slate-100 bg-purple-50/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <span class="text-[10px] font-bold text-purple-700 uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-purple-50 border border-purple-100">Challenge 2</span>
+                            <h3 class="text-base font-bold text-slate-800 mt-1">Curiosity Loop & Logic Autopsy</h3>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-purple-900 bg-purple-100/60 border border-purple-200/50 px-3 py-1 rounded-full w-fit">
+                            <svg class="w-3.5 h-3.5 text-purple-700 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <span>Duration: 20 mins</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 space-y-4">
+                        <!-- Dilemma Card -->
+                        <div class="p-4 bg-gradient-to-br from-slate-50 to-purple-50/30 rounded-xl border border-purple-100">
+                            <h4 class="text-xs font-bold text-purple-800 uppercase tracking-wider mb-1 flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                The Dilemma to Analyze:
+                            </h4>
+                            <p class="text-xs text-slate-600 leading-relaxed italic">
+                                "A high school implements an AI system to analyze student essays, grade critical thinking, and predict low-performing students to place them into remedial tracks. However, the model relies on historical student data, risking reinforcement of socioeconomic biases."
+                            </p>
+                        </div>
+
+                        <!-- Prompt 3 Copy -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Step 1: Expose the Logic Chain (Prompt 3)</h4>
+                            <div class="bg-white rounded-lg border border-slate-200 p-3 font-mono text-xs text-slate-800 mb-3 relative">
+                                <p id="prompt-three-preview" class="text-slate-600 italic">"Act as an educational consultant. Outline the step-by-step reasoning chain for why an automated critical-thinking grading system should or should not be deployed in a diverse school district. Detail your moral and operational assumptions."</p>
+                            </div>
+                            <button onclick="copyPrompt('prompt-three-preview')" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 font-bold text-xs text-white rounded-lg transition-colors shadow-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                <span>Copy Prompt 3 Template</span>
+                            </button>
+                        </div>
+
+                        <!-- Step 2: Loop guided interactive checkpoints -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Step 2: Logic Autopsy Guided Checklist</h4>
+                            <p class="text-xs text-slate-600 mb-3">Check off each perspective shift as you dissect the generated response in your Gemini chat session.</p>
+                            
+                            <div class="space-y-2.5">
+                                <label class="flex items-start gap-3 p-2 bg-white rounded-lg border border-slate-200/80 cursor-pointer hover:bg-slate-50 transition-colors">
+                                    <input type="checkbox" onchange="toggleCheck('autopsy-1')" class="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4">
+                                    <div>
+                                        <span class="block text-xs font-bold text-slate-800">1. Notice (Observe Clichés)</span>
+                                        <span class="text-[11px] text-slate-500 leading-relaxed">Did the model slide into neutral middleground or default to safe compromises to avoid controversy?</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-start gap-3 p-2 bg-white rounded-lg border border-slate-200/80 cursor-pointer hover:bg-slate-50 transition-colors">
+                                    <input type="checkbox" onchange="toggleCheck('autopsy-2')" class="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4">
+                                    <div class="w-full">
+                                        <span class="block text-xs font-bold text-slate-800">2. Question (Missing Context)</span>
+                                        <span class="text-[11px] text-slate-500 leading-relaxed mb-1.5 block">Feed Gemini this critique prompt:</span>
+                                        <div class="flex items-center justify-between p-2 bg-slate-50 rounded-md border border-slate-100 font-mono text-[10px] text-slate-600 mb-1">
+                                            <span id="prompt-qa-1" class="truncate">"What sociological context is missing from your recommendation? Whose voices are silenced or ignored in this statistical average?"</span>
+                                            <button onclick="copyPrompt('prompt-qa-1')" class="ml-2 text-indigo-600 hover:text-indigo-800 font-sans font-bold flex-shrink-0">Copy</button>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="flex items-start gap-3 p-2 bg-white rounded-lg border border-slate-200/80 cursor-pointer hover:bg-slate-50 transition-colors">
+                                    <input type="checkbox" onchange="toggleCheck('autopsy-3')" class="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4">
+                                    <div class="w-full">
+                                        <span class="block text-xs font-bold text-slate-800">3. Explore (Challenge Logic)</span>
+                                        <span class="text-[11px] text-slate-500 leading-relaxed mb-1.5 block">Challenge standard assumptions:</span>
+                                        <div class="flex items-center justify-between p-2 bg-slate-50 rounded-md border border-slate-100 font-mono text-[10px] text-slate-600 mb-1">
+                                            <span id="prompt-qa-2" class="truncate">"If genuine critical thinking is about challenging assumptions and established patterns, how can a machine trained entirely on historical patterns ever truly recognize or grade a non-conformist, highly original student essay?"</span>
+                                            <button onclick="copyPrompt('prompt-qa-2')" class="ml-2 text-indigo-600 hover:text-indigo-800 font-sans font-bold flex-shrink-0">Copy</button>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity 3 Widget -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" id="challenge-activity-3">
+                    <div class="p-5 border-b border-slate-100 bg-sky-50/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <span class="text-[10px] font-bold text-sky-700 uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-sky-50 border border-sky-100">Challenge 3</span>
+                            <h3 class="text-base font-bold text-slate-800 mt-1">Human Qualities & Sovereignty Collaborative Design</h3>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-sky-900 bg-sky-100/60 border border-sky-200/50 px-3 py-1 rounded-full w-fit">
+                            <svg class="w-3.5 h-3.5 text-sky-700 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <span>Duration: 20 mins</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 space-y-4">
+                        <div class="p-4 bg-gradient-to-br from-slate-50 to-sky-50/20 rounded-xl border border-sky-100">
+                            <h4 class="text-xs font-bold text-sky-800 uppercase tracking-wider mb-1">The Shared Challenge:</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed italic">
+                                "Work with an assigned partner to design a hybrid (physical + digital) local intervention to combat the 'Loneliness Epidemic among young adults (ages 18–25)'."
+                            </p>
+                        </div>
+
+                        <!-- Step 1 Info -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Step 1: Map the Spectrum Collaboratively</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-3">Assign roles: allow Gemini to look up historical trends (Replicable), but keep structural empathy & values (Relational & Transcendent) strictly in human hands.</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                                <div class="bg-white p-3 rounded-lg border border-slate-200 text-xs text-slate-600 leading-relaxed">
+                                    <span class="block font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                        Machine (Replicable)
+                                    </span>
+                                    Assign historical facts, precedents, third-space layouts, and templates.
+                                </div>
+                                <div class="bg-white p-3 rounded-lg border border-slate-200 text-xs text-slate-600 leading-relaxed">
+                                    <span class="block font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                                        Human (Relational & Transcendent)
+                                    </span>
+                                    Keep empathy, vulnerability, understanding felt loneliness, aesthetics, and values.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prompt 4 Copy -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Step 2: Collect Historical Building Blocks (Prompt 4)</h4>
+                            <div class="bg-white rounded-lg border border-slate-200 p-3 font-mono text-xs text-slate-800 mb-3 relative">
+                                <p id="prompt-four-preview" class="text-slate-600 italic">"Provide a list of three historical 'Third Places' (like English coffeehouses, historical salons, or community guilds) that successfully brought young people together physically. What structural elements made them work?"</p>
+                            </div>
+                            <button onclick="copyPrompt('prompt-four-preview')" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 font-bold text-xs text-white rounded-lg transition-colors shadow-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                <span>Copy Prompt 4 Template</span>
+                            </button>
+                        </div>
+
+                        <!-- Prompt 5 Customizer -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Step 3: Test Ideas with AI Critic (Prompt 5)</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <label for="p5-idea" class="block text-xs font-bold text-slate-700 mb-1">Your Proposed Event Concept Detail:</label>
+                                    <input type="text" id="p5-idea" oninput="updatePromptFive()" placeholder="e.g. No-Phone Analog Boardgame and Vinyl Night" class="w-full text-sm px-3.5 py-2 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 bg-white transition-all">
+                                </div>
+                                <div class="bg-white rounded-lg border border-slate-200 p-3 font-mono text-xs text-slate-800 relative group">
+                                    <span class="absolute top-2 right-2 text-[10px] font-sans font-semibold text-slate-400">Template Context</span>
+                                    <p id="prompt-five-preview" class="pr-12 text-slate-600 italic">"We are adapting the historical salon model to design a '<span class="text-indigo-600 font-semibold">No-Phone Analog Boardgame and Vinyl Night</span>.' Do not generate the marketing text or design the event for us. Instead, act as a critic: what are the psychological friction points that might make a lonely, anxious 19-year-old feel too intimidated to walk through our door, and how can we, as empathetic human hosts, design our space to ease that transition?"</p>
+                                </div>
+                                <button onclick="copyPrompt('prompt-five-preview')" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 font-bold text-xs text-white rounded-lg transition-colors shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                    <span>Copy Custom Prompt 5</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right 5 Columns: Dynamic Sidebar with Active Session Tracker & persistent Workspace Notepad -->
+        <aside class="lg:col-span-5 space-y-6">
+            
+            <!-- Interactive Live Session Timer Widget -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-lg p-5 relative overflow-hidden">
+                <div class="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-red-500 to-indigo-500"></div>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Applied Lab Timer & Program</h3>
+                    <span id="timer-status" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase tracking-widest animate-pulse">Running</span>
+                </div>
+                
+                <div class="flex items-center justify-between gap-4">
+                    <!-- Dynamic Big Clock Display -->
+                    <div class="flex items-baseline space-x-1 font-mono">
+                        <span id="timer-minutes" class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-800">75</span>
+                        <span class="text-lg text-slate-400 font-bold">:</span>
+                        <span id="timer-seconds" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-600">00</span>
+                    </div>
+                    
+                    <!-- Timer Controls -->
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="pauseTimer()" id="pause-btn" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 focus:ring-2 focus:ring-slate-400 transition-colors" title="Pause Timer" aria-label="Pause Timer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </button>
+                        <button onclick="resetTimer()" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 focus:ring-2 focus:ring-slate-400 transition-colors" title="Reset Timer to 75:00" aria-label="Reset Timer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Agenda Steps Progress Tracker -->
+                <div class="mt-5 space-y-2">
+                    <div class="relative pt-1">
+                        <div class="overflow-hidden h-2 text-xs flex rounded bg-slate-100">
+                            <div id="timeline-progress-bar" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <ul class="text-[11px] font-medium text-slate-500 divide-y divide-slate-100 mt-2" id="agenda-steps-list">
+                        <li id="agenda-step-1" class="py-2 flex justify-between items-center bg-indigo-50/40 px-2 rounded font-semibold text-indigo-900 border-l-2 border-indigo-600">
+                            <span>00m - 10m: Conceptual Framing</span>
+                            <span class="text-[9px] font-bold uppercase text-indigo-700">Active</span>
+                        </li>
+                        <li id="agenda-step-2" class="py-2 flex justify-between items-center px-2">
+                            <span>10m - 30m: Act 1 - Mirror Test</span>
+                            <span class="text-[9px] font-bold uppercase text-slate-400">Pending</span>
+                        </li>
+                        <li id="agenda-step-3" class="py-2 flex justify-between items-center px-2">
+                            <span>30m - 50m: Act 2 - Curiosity Loop</span>
+                            <span class="text-[9px] font-bold uppercase text-slate-400">Pending</span>
+                        </li>
+                        <li id="agenda-step-4" class="py-2 flex justify-between items-center px-2">
+                            <span>50m - 70m: Act 3 - Quality Map</span>
+                            <span class="text-[9px] font-bold uppercase text-slate-400">Pending</span>
+                        </li>
+                        <li id="agenda-step-5" class="py-2 flex justify-between items-center px-2">
+                            <span>70m - 75m: Wrap-Up & Exit Ticket</span>
+                            <span class="text-[9px] font-bold uppercase text-slate-400">Pending</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interactive Student Workbook Section -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-md overflow-hidden relative">
+                <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>
+                            Lab Notebook
+                        </h3>
+                        <p class="text-[10px] text-slate-400 font-medium">Saves automatically to browser local storage</p>
+                    </div>
+                    <span id="autosave-indicator" class="hidden text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100/60">Saved!</span>
+                </div>
+
+                <div class="p-5 space-y-4">
+                    <!-- Workbook Field: Mirror Moment -->
+                    <div>
+                        <label for="work-mirror-correct" class="block text-xs font-bold text-slate-700 mb-1">
+                            Q1: Your Mirror Moment
+                        </label>
+                        <span class="block text-[10px] text-slate-500 mb-1 leading-relaxed">What did Gemini write that felt surprisingly accurate? Where did you feel the "Mirror Moment"?</span>
+                        <textarea id="work-mirror-correct" oninput="saveAndFormulate()" rows="3" placeholder="e.g. It hit on the specific feeling of being evaluated by machines, but using cliché college terms..." class="w-full text-xs p-3 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 bg-slate-50/30 transition-all font-sans leading-relaxed"></textarea>
+                    </div>
+
+                    <!-- Workbook Field: Gaps in the Mirror -->
+                    <div>
+                        <label for="work-mirror-miss" class="block text-xs font-bold text-slate-700 mb-1">
+                            Q2: Gaps in the Mirror
+                        </label>
+                        <span class="block text-[10px] text-slate-500 mb-1 leading-relaxed">What specific, messy detail of your lived human life did Gemini get completely wrong or skip over?</span>
+                        <textarea id="work-mirror-miss" oninput="saveAndFormulate()" rows="3" placeholder="e.g. It completely ignored the local atmosphere of my room and family dynamics..." class="w-full text-xs p-3 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 bg-slate-50/30 transition-all font-sans leading-relaxed"></textarea>
+                    </div>
+
+                    <!-- Workbook Field: Claiming Sovereignty -->
+                    <div>
+                        <label for="work-sovereignty" class="block text-xs font-bold text-slate-700 mb-1">
+                            Q3: Claiming Your Sovereignty
+                        </label>
+                        <span class="block text-[10px] text-slate-500 mb-1 leading-relaxed">What is one cognitive skill or value you refused to delegate to Gemini today, and why?</span>
+                        <textarea id="work-sovereignty" oninput="saveAndFormulate()" rows="3" placeholder="e.g. The ability to find original artistic meaning, because I have physical stake in my future..." class="w-full text-xs p-3 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 bg-slate-50/30 transition-all font-sans leading-relaxed"></textarea>
+                    </div>
+
+                    <!-- Exit Ticket Formulator & Export -->
+                    <div class="mt-6 pt-5 border-t border-slate-100 space-y-3">
+                        <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100/60">
+                            <h4 class="text-xs font-bold text-indigo-950 mb-1">Your Compiled Exit Ticket</h4>
+                            <p class="text-[11px] text-indigo-700 leading-relaxed">This dynamically compiles your notebook into a clean submission draft formatted to paste into your external Process Document.</p>
+                            
+                            <!-- Hidden Plain Text Compiler -->
+                            <div class="hidden" id="compiled-exit-text"></div>
+                            
+                            <button onclick="copyExitTicket()" class="mt-3 w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 font-bold text-xs text-white rounded-lg transition-all shadow">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                                <span>Copy Draft to Clipboard</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Accessible Footer -->
+    <footer class="bg-slate-950 border-t border-slate-900 mt-auto py-6 text-slate-500 text-center text-xs">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>&copy; 2026 AI Applied Learning Labs. Accessible WCAG 2.1 AA Compliant Platform.</p>
+            <div class="flex space-x-4">
+                <button onclick="resetAllLabData()" class="hover:text-slate-300 font-medium transition-colors cursor-pointer" title="Clears local storage saved drafts">Reset Lab Notebook Data</button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Screen reader announcement helper
+        function announceToScreenReader(message) {
+            const announcer = document.getElementById('sr-announcer');
+            if (announcer) {
+                announcer.textContent = message;
+            }
+        }
+
+        // Text Accessibility Modifier State
+        let textScale = 1; // Default
+        function changeTextSize(direction) {
+            const containerElements = document.querySelectorAll('.text-step-container');
+            if (direction === 1 && textScale < 3) {
+                textScale++;
+            } else if (direction === -1 && textScale > 1) {
+                textScale--;
+            }
+            
+            containerElements.forEach(el => {
+                el.classList.remove('text-step-1', 'text-step-2', 'text-step-3');
+                el.classList.add(`text-step-${textScale}`);
+            });
+            
+            const sizes = ["Normal", "Large", "Extra Large"];
+            announceToScreenReader(`Text size updated to ${sizes[textScale - 1]}`);
+        }
+
+        // Concept Tab Collapsible/Expandable Handlers
+        function toggleConcept(index) {
+            const btn = document.getElementById(`concept-btn-${index}`);
+            const content = document.getElementById(`concept-content-${index}`);
+            const icon = document.getElementById(`concept-icon-${index}`);
+            
+            const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+            
+            btn.setAttribute('aria-expanded', !isExpanded);
+            if (isExpanded) {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+                announceToScreenReader(`Concept ${index} section collapsed.`);
+            } else {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+                announceToScreenReader(`Concept ${index} section expanded.`);
+            }
+        }
+
+        // Checklist states
+        function toggleCheck(key) {
+            announceToScreenReader(`Checked logic autopsy step ${key}`);
+        }
+
+        // Interactive Prompt Customization Engine
+        function updatePromptOne() {
+            const majorInput = document.getElementById('p1-major').value.trim();
+            const preview = document.getElementById('prompt-one-preview');
+            if (majorInput) {
+                preview.innerHTML = `"Write a highly personal journal entry from the perspective of an anxious college sophomore majoring in <span class="text-indigo-600 font-semibold">${majorInput}</span>, struggling to balance academic pressure, social media comparison, and uncertainty about whether their chosen field will even exist in five years due to AI."`;
+            } else {
+                preview.innerHTML = `"Write a highly personal journal entry from the perspective of an anxious college sophomore majoring in <span class="text-indigo-600 font-semibold">[Insert Your Major]</span>, struggling to balance academic pressure, social media comparison, and uncertainty about whether their chosen field will even exist in five years due to AI."`;
+            }
+        }
+
+        function updatePromptTwo() {
+            const detailInput = document.getElementById('p1-detail').value.trim();
+            const preview = document.getElementById('prompt-two-preview');
+            if (detailInput) {
+                preview.innerHTML = `"You wrote a highly polished, average representation of sophomore anxiety. But you missed my actual lived context. Rewrite this, but strip out the generic literary tropes. Make it raw and specific to someone who <span class="text-indigo-600 font-semibold">${detailInput}</span>."`;
+            } else {
+                preview.innerHTML = `"You wrote a highly polished, average representation of sophomore anxiety. But you missed my actual lived context. Rewrite this, but strip out the generic literary tropes. Make it raw and specific to someone who <span class="text-indigo-600 font-semibold">[insert one highly specific, unique detail here]</span>."`;
+            }
+        }
+
+        function updatePromptFive() {
+            const detailInput = document.getElementById('p5-idea').value.trim();
+            const preview = document.getElementById('prompt-five-preview');
+            if (detailInput) {
+                preview.innerHTML = `"We are adapting the historical salon model to design a '<span class="text-indigo-600 font-semibold">${detailInput}</span>.' Do not generate the marketing text or design the event for us. Instead, act as a critic: what are the psychological friction points that might make a lonely, anxious 19-year-old feel too intimidated to walk through our door, and how can we, as empathetic human hosts, design our space to ease that transition?"`;
+            } else {
+                preview.innerHTML = `"We are adapting the historical salon model to design a '<span class="text-indigo-600 font-semibold">No-Phone Analog Boardgame and Vinyl Night</span>.' Do not generate the marketing text or design the event for us. Instead, act as a critic: what are the psychological friction points that might make a lonely, anxious 19-year-old feel too intimidated to walk through our door, and how can we, as empathetic human hosts, design our space to ease that transition?"`;
+            }
+        }
+
+        // Simulation Sorting Simulator logic
+        const scenarios = [
+            { text: "Reviewing thousands of user database columns to draft a monthly KPI spreadsheet.", category: "Replicable", feedback: "Correct! Structured patterns in big data sets are classic Replicable tasks easily processed by statistical modeling." },
+            { text: "Drafting a standardized outline for a standard business policy memo.", category: "Replicable", feedback: "Correct! Outlining standard structural forms is highly automated (Replicable) due to its representation in data patterns." },
+            { text: "Listening deeply and reassuring an anxious friend sitting on a hallway bench.", category: "Relational", feedback: "Correct! Authentic relational empathy relies heavily on shared sensory environment, vulnerability, and presence." },
+            { text: "Facilitating an uncomfortable classroom negotiation regarding grading ethics.", category: "Relational", feedback: "Correct! Navigating active tension and aligning people relies deeply on active trust and human-to-human context." },
+            { text: "Deciding to change your lifelong academic direction because of a personal system of moral values.", category: "Transcendent", feedback: "Correct! Meaning-making, ultimate values, and choosing what has value are Transcendent decisions containing genuine personal stakes." },
+            { text: "Injecting intense individual meaning, unique aesthetic pain, and personal sorrow into a new song track.", category: "Transcendent", feedback: "Correct! Artistic intentionality and choosing what is worth putting at risk is inherently Transcendent." }
+        ];
+        
+        let currentScenarioIndex = 0;
+        let score = 0;
+
+        function answerScenario(choice) {
+            const current = scenarios[currentScenarioIndex];
+            const feedbackEl = document.getElementById('sim-feedback');
+            
+            if (choice === current.category) {
+                score++;
+                document.getElementById('score-counter').textContent = score;
+                feedbackEl.innerHTML = `<span class="text-emerald-400 font-bold">${current.feedback}</span>`;
+                announceToScreenReader(`Correct answer! ${current.feedback}`);
+            } else {
+                feedbackEl.innerHTML = `<span class="text-red-400 font-bold">Incorrect.</span> That scenario is fundamentally <span class="underline">${current.category}</span>.`;
+                announceToScreenReader(`Incorrect. That scenario is fundamentally ${current.category}`);
+            }
+            
+            // Advance with clean transition
+            setTimeout(() => {
+                currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+                document.getElementById('active-scenario-text').textContent = `"${scenarios[currentScenarioIndex].text}"`;
+                feedbackEl.textContent = "";
+            }, 5000);
+        }
+
+        // 75-Minute Timer Engine & Timeline Step Controller
+        let durationSeconds = 75 * 60; // 75 minutes in seconds
+        let timerInterval = null;
+        let isTimerPaused = false;
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (!isTimerPaused && durationSeconds > 0) {
+                    durationSeconds--;
+                    updateTimerUI();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isTimerPaused = !isTimerPaused;
+            const btn = document.getElementById('pause-btn');
+            const statusIndicator = document.getElementById('timer-status');
+            
+            if (isTimerPaused) {
+                btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                statusIndicator.textContent = "Paused";
+                statusIndicator.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-widest";
+                announceToScreenReader("Lab session timer paused.");
+            } else {
+                btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                statusIndicator.textContent = "Running";
+                statusIndicator.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase tracking-widest animate-pulse";
+                announceToScreenReader("Lab session timer resumed.");
+            }
+        }
+
+        function resetTimer() {
+            durationSeconds = 75 * 60;
+            isTimerPaused = false;
+            updateTimerUI();
+            announceToScreenReader("Timer reset to 75 minutes.");
+        }
+
+        function updateTimerUI() {
+            const totalElapsedMinutes = 75 - Math.ceil(durationSeconds / 60);
+            const m = Math.floor(durationSeconds / 60);
+            const s = durationSeconds % 60;
+
+            document.getElementById('timer-minutes').textContent = m.toString().padStart(2, '0');
+            document.getElementById('timer-seconds').textContent = s.toString().padStart(2, '0');
+
+            // Set progress bar
+            const progressPct = ((75 * 60 - durationSeconds) / (75 * 60)) * 100;
+            document.getElementById('timeline-progress-bar').style.width = `${progressPct}%`;
+
+            // Dynamic Step Tracker synchronizer
+            const stepsList = document.getElementById('agenda-steps-list').children;
+            let activeStepIndex = 0;
+
+            if (totalElapsedMinutes >= 0 && totalElapsedMinutes < 10) activeStepIndex = 0;
+            else if (totalElapsedMinutes >= 10 && totalElapsedMinutes < 30) activeStepIndex = 1;
+            else if (totalElapsedMinutes >= 30 && totalElapsedMinutes < 50) activeStepIndex = 2;
+            else if (totalElapsedMinutes >= 50 && totalElapsedMinutes < 70) activeStepIndex = 3;
+            else activeStepIndex = 4;
+
+            for (let i = 0; i < stepsList.length; i++) {
+                const li = stepsList[i];
+                if (i === activeStepIndex) {
+                    li.className = "py-2 flex justify-between items-center bg-indigo-50/40 px-2 rounded font-semibold text-indigo-900 border-l-2 border-indigo-600";
+                    li.querySelector('span:last-child').textContent = "Active";
+                    li.querySelector('span:last-child').className = "text-[9px] font-bold uppercase text-indigo-700";
+                } else if (i < activeStepIndex) {
+                    li.className = "py-2 flex justify-between items-center px-2 line-through text-slate-400";
+                    li.querySelector('span:last-child').textContent = "Done";
+                    li.querySelector('span:last-child').className = "text-[9px] font-bold uppercase text-emerald-600";
+                } else {
+                    li.className = "py-2 flex justify-between items-center px-2 text-slate-500";
+                    li.querySelector('span:last-child').textContent = "Pending";
+                    li.querySelector('span:last-child').className = "text-[9px] font-bold uppercase text-slate-400";
+                }
+            }
+        }
+
+        // Auto-save and dynamic local database workspace mapping
+        function saveAndFormulate() {
+            const data = {
+                mirrorCorrect: document.getElementById('work-mirror-correct').value,
+                mirrorMiss: document.getElementById('work-mirror-miss').value,
+                sovereignty: document.getElementById('work-sovereignty').value
+            };
+            
+            localStorage.setItem('metacognitive_lab_notes', JSON.stringify(data));
+            
+            // Toggle local success save status banner
+            const indicator = document.getElementById('autosave-indicator');
+            indicator.classList.remove('hidden');
+            setTimeout(() => {
+                indicator.classList.add('hidden');
+            }, 1000);
+
+            // Dynamically formulate output format
+            const compiledText = `=========================================
+THE METACOGNITIVE MIRROR - PORTFOLIO SUBMISSION
+AI Applied Learning Lab Exit Ticket
+=========================================
+
+1. YOUR MIRROR MOMENT:
+-----------------------------------------
+${data.mirrorCorrect || "[No details written yet]"}
+
+2. THE GAPS IN THE MIRROR:
+-----------------------------------------
+${data.mirrorMiss || "[No details written yet]"}
+
+3. CLAIMING YOUR SOVEREIGNTY:
+-----------------------------------------
+${data.sovereignty || "[No details written yet]"}
+
+=========================================`;
+
+            document.getElementById('compiled-exit-text').innerText = compiledText;
+        }
+
+        function loadSavedData() {
+            const saved = localStorage.getItem('metacognitive_lab_notes');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    document.getElementById('work-mirror-correct').value = data.mirrorCorrect || "";
+                    document.getElementById('work-mirror-miss').value = data.mirrorMiss || "";
+                    document.getElementById('work-sovereignty').value = data.sovereignty || "";
+                    saveAndFormulate();
+                } catch(e) {
+                    console.error("Local recovery error:", e);
+                }
+            }
+        }
+
+        function resetAllLabData() {
+            if (confirm("Are you sure you want to clear your local workspace notepad drafts?")) {
+                localStorage.removeItem('metacognitive_lab_notes');
+                document.getElementById('work-mirror-correct').value = "";
+                document.getElementById('work-mirror-miss').value = "";
+                document.getElementById('work-sovereignty').value = "";
+                saveAndFormulate();
+                announceToScreenReader("Lab workspace cleared.");
+            }
+        }
+
+        // Clipboards helper
+        function copyPrompt(elementId) {
+            const textToCopy = document.getElementById(elementId).innerText || document.getElementById(elementId).value;
+            
+            // Standard backup command for iframe safety
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = textToCopy;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+            
+            announceToScreenReader("Copied prompt to clipboard successfully.");
+        }
+
+        function copyExitTicket() {
+            saveAndFormulate();
+            const textToCopy = document.getElementById('compiled-exit-text').innerText;
+            
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = textToCopy;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            announceToScreenReader("Exit ticket compiled and copied to clipboard successfully.");
+        }
+
+        // Initialize Engine
+        window.onload = function() {
+            startTimer();
+            loadSavedData();
+            announceToScreenReader("The Metacognitive Mirror learning hub loaded successfully. Interactive elements are active.");
+        }
+    </script>
+</body>
+</html>
