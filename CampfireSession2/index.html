@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Storytelling Lab: Campfire Sessions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-button.active { border-bottom: 2px solid #ea580c; color: #ea580c; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <header class="mb-12 border-l-4 border-orange-600 pl-6">
+            <span class="text-orange-600 font-semibold tracking-wide uppercase text-sm">[Thursday] AI Storytelling Lab: Campfire Session 2</span>
+            <h1 class="text-4xl md:text-5xl font-bold mt-2 text-slate-900">Campfire Sessions: Pitching Solutions</h1>
+            <p class="text-lg text-slate-600 mt-4">Welcome to Unit 6! It's time to share your community-driven solutions with the world, not through slides, but through conversation.</p>
+        </header>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-12">
+            <a href="https://docs.google.com/document/d/1PWLNVJp6obnx1UwZ9ujIVCirIXao5he2LQKGs3SmRo0/copy" target="_blank" class="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition">
+                <h3 class="font-bold text-slate-900">Team Assessment Doc</h3>
+                <p class="text-sm text-slate-500 mt-1">Make a copy to track notes and assessments.</p>
+            </a>
+            <a href="https://notebooklm.google.com/notebook/a5c7a58b-2302-430d-be8f-5bc4b3546305" target="_blank" class="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition">
+                <h3 class="font-bold text-slate-900">HCAI 2101 NotebookLM</h3>
+                <p class="text-sm text-slate-500 mt-1">Access course resources for your session.</p>
+            </a>
+        </div>
+
+        <section class="bg-orange-50 p-8 rounded-3xl mb-12">
+            <h2 class="text-2xl font-bold mb-4 text-orange-900">What is a Campfire Session?</h2>
+            <p class="italic text-orange-800 text-lg">"Picture a real campfire: People pull up a log, gather in a circle, and share compelling stories. The atmosphere is collaborative, and the conversation flows naturally."</p>
+            <p class="mt-4 text-orange-900/80">In our lab, we ditch the podium. Instead of talking <strong class="font-semibold">at</strong> your peers, you are leading a dynamic, community-driven conversation <strong class="font-semibold">with</strong> them.</p>
+        </section>
+
+        <div class="mb-12">
+            <div class="flex border-b border-slate-200 mb-6">
+                <button onclick="showTab('tab1')" id="btn-tab1" class="tab-button active pb-4 px-4 font-semibold text-slate-600">1. The 3-Part Fire</button>
+                <button onclick="showTab('tab2')" id="btn-tab2" class="tab-button pb-4 px-4 font-semibold text-slate-600">2. Visual Rules</button>
+                <button onclick="showTab('tab3')" id="btn-tab3" class="tab-button pb-4 px-4 font-semibold text-slate-600">3. Audience Role</button>
+            </div>
+            
+            <div id="tab1" class="tab-content active space-y-4">
+                <h3 class="text-xl font-bold text-slate-900">The Vibe: Conversational & Collaborative</h3>
+                <ul class="list-disc pl-5 space-y-2 text-slate-600">
+                    <li><strong>Informal:</strong> Think of it as a guided conversation.</li>
+                    <li><strong>The Circle:</strong> Everyone is on the same level.</li>
+                    <li><strong>The Tech:</strong> Keep devices tucked away unless actively used for your pitch.</li>
+                </ul>
+            </div>
+            <div id="tab2" class="tab-content space-y-4">
+                <h3 class="text-xl font-bold text-slate-900">Your Narrative: Ignite the Conversation</h3>
+                <ul class="list-disc pl-5 space-y-2 text-slate-600">
+                    <li><strong>Own Your Narrative:</strong> Keep it 5-7 minutes. Focus on human context and ethics.</li>
+                    <li><strong>Be Conversational:</strong> Use natural body language and eye contact.</li>
+                    <li><strong>Welcome the Messiness:</strong> Don't strive for a perfect solution—highlight the dilemmas.</li>
+                </ul>
+            </div>
+            <div id="tab3" class="tab-content space-y-4">
+                <h3 class="text-xl font-bold text-slate-900">Active Engagement: Keep the Fire Burning</h3>
+                <ul class="list-disc pl-5 space-y-2 text-slate-600">
+                    <li><strong>Listen with Intent:</strong> Put away distractions; focus on the human stakes.</li>
+                    <li><strong>Constructive Questions:</strong> Ask about ethical guardrails and community impact.</li>
+                    <li><strong>"Glows and Grows":</strong> Share one deep resonance (glow) and one area for deeper critical thinking (grow).</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer class="bg-slate-900 text-white p-8 rounded-3xl">
+            <h2 class="text-2xl font-bold mb-4">What To Submit Today</h2>
+            <p class="text-slate-300">Ensure your team has completed the <a href="#" class="underline text-orange-400">Team Assessment Doc</a>. Remember to populate the "Campfire Session Notes" tab during the session to remain engaged and provide meaningful feedback to your peers.</p>
+        </footer>
+    </main>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
