@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HCAI 2101 - Unplugging the Mind Workshop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar and animations */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .highlight-banned {
+      background-color: rgba(239, 68, 68, 0.25);
+      border-bottom: 2px solid #ef4444;
+      color: #fca5a5;
+      padding: 0 4px;
+      border-radius: 2px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="h-full font-sans antialiased bg-slate-950 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-slate-950">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-bold text-xl shadow-lg shadow-emerald-500/20">
+          🌱
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HCAI 2101</span>
+            <span class="text-xs text-slate-400">Day 1 Workshop</span>
+          </div>
+          <h1 class="text-lg font-bold text-slate-100 tracking-tight">Unplugging the Mind: Non-Computational Cognition</h1>
+        </div>
+      </div>
+
+      <!-- Live Workshop Timer -->
+      <div class="flex items-center gap-4 bg-slate-950/80 px-4 py-2 rounded-xl border border-slate-800">
+        <div class="text-right">
+          <div class="text-xs text-slate-400 font-medium" id="timer-phase-label">Phase 1: The Audit</div>
+          <div class="text-xl font-mono font-bold text-emerald-400" id="timer-display">60:00</div>
+        </div>
+        <div class="flex gap-1.5">
+          <button id="btn-timer-toggle" onclick="toggleTimer()" class="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 transition-colors" title="Start/Pause Timer">
+            <svg id="icon-play" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <svg id="icon-pause" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </button>
+          <button onclick="resetTimer()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors" title="Reset Timer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workshop Navigation Tabs -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/80">
+      <nav class="flex space-x-2 sm:space-x-6 overflow-x-auto py-2 scrollbar-none" id="nav-tabs">
+        <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active text-emerald-400 border-b-2 border-emerald-400 px-3 py-2 text-sm font-medium whitespace-nowrap">
+          1. Overview & Challenge
+        </button>
+        <button onclick="switchTab('detector')" id="tab-detector" class="tab-btn text-slate-400 hover:text-slate-200 px-3 py-2 text-sm font-medium whitespace-nowrap">
+          2. Banned Metaphor Detector
+        </button>
+        <button onclick="switchTab('lexicon')" id="tab-lexicon" class="tab-btn text-slate-400 hover:text-slate-200 px-3 py-2 text-sm font-medium whitespace-nowrap">
+          3. Banned Lexicon Vault
+        </button>
+        <button onclick="switchTab('remapper')" id="tab-remapper" class="tab-btn text-slate-400 hover:text-slate-200 px-3 py-2 text-sm font-medium whitespace-nowrap">
+          4. Re-Mapping Studio
+        </button>
+        <button onclick="switchTab('simulator')" id="tab-simulator" class="tab-btn text-slate-400 hover:text-slate-200 px-3 py-2 text-sm font-medium whitespace-nowrap">
+          5. AI Design Simulator
+        </button>
+        <button onclick="switchTab('worksheet')" id="tab-worksheet" class="tab-btn text-slate-400 hover:text-slate-200 px-3 py-2 text-sm font-medium whitespace-nowrap">
+          6. Team Deliverable & Export
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- TAB 1: OVERVIEW & CHALLENGE -->
+    <section id="panel-overview" class="tab-panel space-y-8">
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 p-8 border border-slate-800 shadow-2xl">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-3xl space-y-4 relative z-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20">
+            Dr. Robert Epstein's Challenge
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            Can you explain human behavior without using a single computer metaphor?
+          </h2>
+          <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+            For half a century, we've viewed human minds through the lens of dominant technology: from Ancient Greek wax tablets to steam engines, to modern CPUs, RAM, and algorithms.
+          </p>
+          <div class="p-4 rounded-xl bg-slate-950/70 border-l-4 border-emerald-500 text-slate-300 italic text-sm sm:text-base">
+            "If we view humans as organic software or biological hardware, we will design AI that treats humans like faulty computers."
+          </div>
+        </div>
+      </div>
+
+      <!-- Workshop Phases Timeline Grid -->
+      <div>
+        <h3 class="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
+          <span>⏳</span> Workshop Roadmap (60 Minutes)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-2 hover:border-emerald-500/40 transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Phase 1 • 10 Mins</span>
+              <span class="text-lg">🔍</span>
+            </div>
+            <h4 class="font-bold text-slate-100">The Lexicon Audit</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">Discuss morning routines or study habits. Identify at least 5 times someone uses a computational metaphor.</p>
+          </div>
+
+          <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-2 hover:border-emerald-500/40 transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Phase 2 • 15 Mins</span>
+              <span class="text-lg">🌿</span>
+            </div>
+            <h4 class="font-bold text-slate-100">Choose Paradigm</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">Select a non-computational metaphor: Ecosystems, Fluid Dynamics, Acoustics, Textiles, or Craft/Masonry.</p>
+          </div>
+
+          <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-2 hover:border-emerald-500/40 transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Phase 3 • 20 Mins</span>
+              <span class="text-lg">🛠️</span>
+            </div>
+            <h4 class="font-bold text-slate-100">The Re-Mapping</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">Re-map Habits, Mental Fatigue, Problem Solving, and Overwhelm purely through your new organic paradigm.</p>
+          </div>
+
+          <div class="glass-panel p-5 rounded-xl border border-slate-800 space-y-2 hover:border-emerald-500/40 transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Phase 4 • 15 Mins</span>
+              <span class="text-lg">🚀</span>
+            </div>
+            <h4 class="font-bold text-slate-100">AI Design Pitch</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">Design an AI Study Assistant through your team's organic lens vs the old CPU model. Export deliverable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: BANNED METAPHOR DETECTOR -->
+    <section id="panel-detector" class="tab-panel hidden space-y-6">
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+              <span>🚨</span> Real-Time "Computational Trap" Detector
+            </h2>
+            <p class="text-sm text-slate-400">Paste your team's thoughts or discussions below. The detector will automatically flag banned tech terms!</p>
+          </div>
+          <button onclick="loadSampleText()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors">
+            Load Sample Student Speech
+          </button>
+        </div>
+
+        <div class="space-y-2">
+          <label for="detector-input" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Input Text / Team Statements</label>
+          <textarea id="detector-input" oninput="analyzeText()" rows="5" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-sans text-sm leading-relaxed" placeholder="e.g., I need coffee to boot up this morning because my CPU is overheating and I don't have enough bandwidth for this class..."></textarea>
+        </div>
+
+        <!-- Realtime Detection Results Box -->
+        <div class="space-y-3 pt-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Analysis & Highlighted Output</span>
+            <span id="detector-count" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300">0 Banned Terms Found</span>
+          </div>
+          
+          <div id="detector-output" class="p-5 rounded-xl bg-slate-950 border border-slate-800 min-h-[120px] text-slate-200 text-sm leading-relaxed whitespace-pre-wrap">
+            <span class="text-slate-500 italic">Type or paste text above to scan for computational metaphors...</span>
+          </div>
+        </div>
+
+        <!-- Suggested Re-Framing Guidance -->
+        <div id="detector-suggestions" class="hidden p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-200 space-y-2 text-xs sm:text-sm">
+          <div class="font-bold flex items-center gap-1.5 text-amber-400">
+            <span>💡</span> Re-Framing Guidance:
+          </div>
+          <p id="detector-suggestion-text">Try swapping your technical terms for physical or natural phenomena (e.g., instead of "low battery," use "depleted soil" or "dampened vibrations").</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: BANNED LEXICON VAULT -->
+    <section id="panel-lexicon" class="tab-panel hidden space-y-6">
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+              <span>📚</span> The Banned Lexicon Vault
+            </h2>
+            <p class="text-sm text-slate-400">Browse all 50+ strictly forbidden computational metaphors categorized by domain.</p>
+          </div>
+          
+          <!-- Search & Filter Controls -->
+          <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+            <input id="lexicon-search" oninput="filterLexicon()" type="text" placeholder="Search banned term..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <select id="lexicon-category" onchange="filterLexicon()" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="ALL font-medium">All Categories</option>
+              <option value="Hardware">Hardware & Capacity</option>
+              <option value="Software">Software & Coding</option>
+              <option value="Cognitive">Cognitive Processing</option>
+              <option value="Networks">Networks & Systems</option>
+              <option value="Operations">System Operations</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Lexicon Cards Grid -->
+        <div id="lexicon-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: RE-MAPPING STUDIO -->
+    <section id="panel-remapper" class="tab-panel hidden space-y-8">
+      <!-- Paradigm Selection -->
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+        <div class="flex justify-between items-center">
+          <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+            <span>🌿</span> Step 1: Select Your Alternative Paradigm
+          </h2>
+          <span class="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20 font-semibold">Phase 2 Task</span>
+        </div>
+        <p class="text-sm text-slate-400">Select one alternative non-computational metaphor system for your group to build upon:</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="paradigm-selector">
+          <div onclick="selectParadigm('ecosystems')" id="paradigm-ecosystems" class="paradigm-card cursor-pointer p-4 rounded-xl border-2 border-slate-800 bg-slate-950/60 hover:border-emerald-500 transition-all space-y-2">
+            <div class="text-2xl">🌲</div>
+            <h4 class="font-bold text-slate-100">1. Ecosystems & Biology</h4>
+            <p class="text-xs text-slate-400">Forests, fungal networks (mycelium), seasonal shifts, weather patterns, soil health, decay and regrowth.</p>
+          </div>
+
+          <div onclick="selectParadigm('fluid')" id="paradigm-fluid" class="paradigm-card cursor-pointer p-4 rounded-xl border-2 border-slate-800 bg-slate-950/60 hover:border-emerald-500 transition-all space-y-2">
+            <div class="text-2xl">🌊</div>
+            <h4 class="font-bold text-slate-100">2. Fluid Dynamics & Rivers</h4>
+            <p class="text-xs text-slate-400">Streams, currents, erosion, dams, reservoirs, tides, eddies, water pressure, sediment buildup.</p>
+          </div>
+
+          <div onclick="selectParadigm('acoustics')" id="paradigm-acoustics" class="paradigm-card cursor-pointer p-4 rounded-xl border-2 border-slate-800 bg-slate-950/60 hover:border-emerald-500 transition-all space-y-2">
+            <div class="text-2xl">🎵</div>
+            <h4 class="font-bold text-slate-100">3. Acoustics & Music</h4>
+            <p class="text-xs text-slate-400">Harmony, resonance, dissonance, echo chambers, tempo, timbre, acoustic dampening, sympathetic vibration.</p>
+          </div>
+
+          <div onclick="selectParadigm('textiles')" id="paradigm-textiles" class="paradigm-card cursor-pointer p-4 rounded-xl border-2 border-slate-800 bg-slate-950/60 hover:border-emerald-500 transition-all space-y-2">
+            <div class="text-2xl">🧵</div>
+            <h4 class="font-bold text-slate-100">4. Textiles & Weaving</h4>
+            <p class="text-xs text-slate-400">Warp and wefts, frayed threads, tapestry, knots, tension, dye absorption, unraveling, weaving patterns.</p>
+          </div>
+
+          <div onclick="selectParadigm('craft')" id="paradigm-craft" class="paradigm-card cursor-pointer p-4 rounded-xl border-2 border-slate-800 bg-slate-950/60 hover:border-emerald-500 transition-all space-y-2">
+            <div class="text-2xl">🏺</div>
+            <h4 class="font-bold text-slate-100">5. Craft & Clay/Masonry</h4>
+            <p class="text-xs text-slate-400">Clay molding, stone carving, weathering, grain in wood, joinery, structural strain, firing in kilns.</p>
+          </div>
+
+          <div onclick="selectParadigm('custom')" id="paradigm-custom" class="paradigm-card cursor-pointer p-4 rounded-xl border-2 border-slate-800 bg-slate-950/60 hover:border-emerald-500 transition-all space-y-2">
+            <div class="text-2xl">✨</div>
+            <h4 class="font-bold text-slate-100">6. Custom Paradigm</h4>
+            <p class="text-xs text-slate-400">Inspirations: Culinary arts, atmospheric navigation, botanical grafting, deep ocean currents.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Concept Re-mapping Form -->
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+        <div class="flex justify-between items-center">
+          <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+            <span>✍️</span> Step 2: The 4 Core Concept Re-Mappings
+          </h2>
+          <span class="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20 font-semibold">Phase 3 Task</span>
+        </div>
+
+        <div class="space-y-6">
+          <!-- 1. Habit Formation -->
+          <div class="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-emerald-400 text-base">1. Habit Formation & Change</h3>
+              <span class="text-xs text-slate-500">Instead of "reprogramming" / "hardcoded"</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs text-slate-400 font-semibold">Old Computational Phrase:</label>
+                <input id="remap-habit-old" type="text" class="w-full mt-1 bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. My morning workout is hardcoded into my script.">
+              </div>
+              <div>
+                <label class="text-xs text-emerald-400 font-semibold">New Non-Computational Metaphor:</label>
+                <input id="remap-habit-new" type="text" class="w-full mt-1 bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. Creating a worn riverbed path where water flows naturally.">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Mental Fatigue -->
+          <div class="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-emerald-400 text-base">2. Mental Fatigue & Recovery</h3>
+              <span class="text-xs text-slate-500">Instead of "low battery" / "rebooting"</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs text-slate-400 font-semibold">Old Computational Phrase:</label>
+                <input id="remap-fatigue-old" type="text" class="w-full mt-1 bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. My battery is low, I need to reboot my system.">
+              </div>
+              <div>
+                <label class="text-xs text-emerald-400 font-semibold">New Non-Computational Metaphor:</label>
+                <input id="remap-fatigue-new" type="text" class="w-full mt-1 bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. Depleted soil needing fallow winter rest to restore nutrients.">
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Complex Problem Solving -->
+          <div class="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-emerald-400 text-base">3. Complex Problem Solving / Epiphany</h3>
+              <span class="text-xs text-slate-500">Instead of "background processing" / "algorithm"</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs text-slate-400 font-semibold">Old Computational Phrase:</label>
+                <input id="remap-problem-old" type="text" class="w-full mt-1 bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. My brain ran background processing on the code problem.">
+              </div>
+              <div>
+                <label class="text-xs text-emerald-400 font-semibold">New Non-Computational Metaphor:</label>
+                <input id="remap-problem-new" type="text" class="w-full mt-1 bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. Allowing tea leaves to steep gently until flavors clarify.">
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Overwhelm / Anxiety -->
+          <div class="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-emerald-400 text-base">4. Emotional / Sensory Overwhelm</h3>
+              <span class="text-xs text-slate-500">Instead of "bandwidth maxed out" / "system crash"</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs text-slate-400 font-semibold">Old Computational Phrase:</label>
+                <input id="remap-overwhelm-old" type="text" class="w-full mt-1 bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. I have no bandwidth left and my system is crashing.">
+              </div>
+              <div>
+                <label class="text-xs text-emerald-400 font-semibold">New Non-Computational Metaphor:</label>
+                <input id="remap-overwhelm-new" type="text" class="w-full mt-1 bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. Violent storm dissonance causing acoustic resonance overload.">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: AI DESIGN SIMULATOR -->
+    <section id="panel-simulator" class="tab-panel hidden space-y-8">
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+              <span>🤖</span> Interactive AI Study Companion Simulator
+            </h2>
+            <p class="text-sm text-slate-400">Compare how an AI assistant behaves when designed under a CPU lens vs an Organic lens.</p>
+          </div>
+          <span class="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20 font-semibold">Phase 4 Synthesis</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Approach A: Computational View -->
+          <div class="rounded-xl border border-red-500/30 bg-red-950/10 p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-red-500/20 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🖥️</span>
+                <div>
+                  <h3 class="font-bold text-red-400">Approach A: CPU Paradigm</h3>
+                  <span class="text-xs text-slate-400">Treats student like biological hardware</span>
+                </div>
+              </div>
+              <span class="text-xs font-mono bg-red-500/20 text-red-300 px-2 py-0.5 rounded">STATUS: OVERCLOCKED</span>
+            </div>
+
+            <!-- Mock AI UI elements -->
+            <div class="space-y-3 font-mono text-xs">
+              <div class="p-3 bg-slate-950 rounded-lg border border-red-900/50 space-y-1">
+                <div class="text-slate-400">Metric Dashboard:</div>
+                <div class="text-red-400 font-bold">Throughput: 84% • Latency: 420ms</div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-red-500 h-full w-[88%]"></div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-red-900/20 rounded-lg border border-red-500/30 text-red-200">
+                ⚠️ <strong>System Alert:</strong> Bandwidth capacity reached. Clear cache or overclock to maintain hourly problem output.
+              </div>
+
+              <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-slate-300">
+                🤖 "User study efficiency decreased by 14%. Recommend immediate 10-minute fast-reboot to optimize memory allocation."
+              </div>
+            </div>
+          </div>
+
+          <!-- Approach B: Organic View -->
+          <div class="rounded-xl border border-emerald-500/30 bg-emerald-950/10 p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-emerald-500/20 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🌱</span>
+                <div>
+                  <h3 class="font-bold text-emerald-400">Approach B: Organic Paradigm</h3>
+                  <span class="text-xs text-slate-400">Treats student like an ecosystem/instrument</span>
+                </div>
+              </div>
+              <span class="text-xs font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">STATUS: SEASONAL REST</span>
+            </div>
+
+            <!-- Mock AI UI elements -->
+            <div class="space-y-3 font-sans text-xs">
+              <div class="p-3 bg-slate-950 rounded-lg border border-emerald-900/50 space-y-1">
+                <div class="text-slate-400">Ecosystem Health:</div>
+                <div class="text-emerald-400 font-bold">Resonance: Deep • Season: Winter Rest</div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full w-[65%]"></div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-emerald-900/20 rounded-lg border border-emerald-500/30 text-emerald-200">
+                🍃 <strong>Natural Rhythm Note:</strong> Your cognitive soil is rich but currently saturated. Let ideas steep without adding fresh seeds.
+              </div>
+
+              <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-slate-300">
+                🌿 "I notice dissonance in your focus rhythm. How about stepping away to let the mental silt settle before we weave the next concept?"
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: TEAM DELIVERABLE & EXPORT -->
+    <section id="panel-worksheet" class="tab-panel hidden space-y-8">
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+              <span>📋</span> Group Deliverable & Export
+            </h2>
+            <p class="text-sm text-slate-400">Complete your team metadata, preview your final worksheet, and copy/export for class submission.</p>
+          </div>
+
+          <div class="flex gap-2">
+            <button onclick="copyWorksheetMarkdown()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs transition-all flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+              Copy Markdown
+            </button>
+            <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs transition-all flex items-center gap-1.5">
+              🖨️ Print / Save PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Team Details Inputs -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-semibold text-slate-400">Team Name / Number</label>
+            <input id="team-name" type="text" oninput="updateWorksheetPreview()" class="w-full mt-1 bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. Team Ecosystem Alpha">
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-slate-400">Group Members</label>
+            <input id="team-members" type="text" oninput="updateWorksheetPreview()" class="w-full mt-1 bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. Alex M., Jordan T., Sam K.">
+          </div>
+        </div>
+
+        <!-- Reflections Input -->
+        <div class="space-y-4">
+          <h3 class="font-bold text-slate-200 text-base">Part B: Human-Centered AI Reflection</h3>
+          <div>
+            <label class="text-xs text-slate-400 font-semibold">1. What does the computational metaphor distort or miss about humans?</label>
+            <textarea id="reflect-q1" oninput="updateWorksheetPreview()" rows="3" class="w-full mt-1 bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="Discuss fatigue, physical bodies, organic emotional flow, intuition, ambiguous creativity..."></textarea>
+          </div>
+
+          <div>
+            <label class="text-xs text-slate-400 font-semibold">2. AI Study Companion Pitch: How does the interface and interaction change under your team's lens?</label>
+            <textarea id="reflect-q2" oninput="updateWorksheetPreview()" rows="3" class="w-full mt-1 bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="Describe specific UX features, notification cadence, and interaction style..."></textarea>
+          </div>
+        </div>
+
+        <!-- Live Preview Document Box -->
+        <div class="space-y-2 pt-4">
+          <label class="text-xs font-bold uppercase tracking-wider text-emerald-400">Formatted Deliverable Preview</label>
+          <div id="worksheet-preview" class="p-6 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+            <!-- Dynamically updated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /* BANNED LEXICON DATABASE */
+    const bannedLexicon = [
+      { word: "hardwired", cat: "Hardware", desc: "Fixed PCB traces", meaning: "Inborn traits or instinctual tendencies" },
+      { word: "bandwidth", cat: "Hardware", desc: "Data transmission rate (Gbps)", meaning: "Cognitive capacity or emotional tolerance" },
+      { word: "ram", cat: "Hardware", desc: "Volatile RAM memory", meaning: "Working memory holding active thoughts" },
+      { word: "storage", cat: "Hardware", desc: "Hard drives/SSDs", meaning: "Long-term archival memory" },
+      { word: "overheating", cat: "Hardware", desc: "Thermal CPU throttling", meaning: "Extreme stress leading to cognitive slowdown" },
+      { word: "low battery", cat: "Hardware", desc: "Depleted battery state", meaning: "Lacking energy or physical fatigue" },
+      { word: "fried", cat: "Hardware", desc: "Overheated circuits", meaning: "Exhaustion from prolonged focus" },
+      { word: "bricked", cat: "Hardware", desc: "Unresponsive hardware device", meaning: "Frozen due to shock or intense overwhelm" },
+      { word: "plugged in", cat: "Hardware", desc: "Connected to electrical grid", meaning: "Deeply engaged or attentive" },
+      { word: "hardcoded", cat: "Software", desc: "Immutable variable in source code", meaning: "Deeply ingrained habit or prejudice" },
+      { word: "default settings", cat: "Software", desc: "Initial system config", meaning: "Baseline mood or unstudied behavior" },
+      { word: "running a script", cat: "Software", desc: "Executing automated script", meaning: "Predictable social ritual or small talk" },
+      { word: "glitch", cat: "Software", desc: "Unexpected software fault", meaning: "Temporary slip-up in speech or memory" },
+      { word: "bug", cat: "Software", desc: "Code defect", meaning: "Personality flaw or mistake" },
+      { word: "feature not a bug", cat: "Software", desc: "Unintended positive behavior", meaning: "Quirk serving an evolutionary purpose" },
+      { word: "spaghetti code", cat: "Software", desc: "Messy unstructured source", meaning: "Confusing logic or chaotic reasoning" },
+      { word: "infinite loop", cat: "Software", desc: "Unterminating code loop", meaning: "Obsessive mental rumination" },
+      { word: "refactoring", cat: "Software", desc: "Optimizing code structure", meaning: "Streamlining personal routine" },
+      { word: "background processing", cat: "Cognitive", desc: "Asynchronous threading", meaning: "Subconscious incubation on a problem" },
+      { word: "context switching", cat: "Cognitive", desc: "CPU state saving/loading", meaning: "Mental cost of jumping between tasks" },
+      { word: "input / output", cat: "Cognitive", desc: "I/O stream", meaning: "Sensory reception and behavioral output" },
+      { word: "heuristics as algorithms", cat: "Cognitive", desc: "Algorithmic rules", meaning: "Mental shortcuts or intuition" },
+      { word: "neural network weights", cat: "Networks", desc: "Machine learning parameter", meaning: "Biological memory strength" },
+      { word: "lag", cat: "Networks", desc: "Network response delay", meaning: "Sluggish response or physical fatigue" },
+      { word: "latency", cat: "Networks", desc: "Time delay in data packet", meaning: "Emotional reaction delay" },
+      { word: "ping", cat: "Networks", desc: "ICMP echo request", meaning: "Short text message or touchpoint" },
+      { word: "firewall", cat: "Networks", desc: "Network security filter", meaning: "Emotional guard or personal boundary" },
+      { word: "rebooting", cat: "Operations", desc: "System restart", meaning: "Resting, napping, or taking a vacation" },
+      { word: "buffering", cat: "Operations", desc: "Data pre-fetching queue", meaning: "Pausing while trying to recall a word" },
+      { word: "cache clearing", cat: "Operations", desc: "Flushing working memory", meaning: "Meditating or going for a walk" },
+      { word: "system crash", cat: "Operations", desc: "Fatal OS fault", meaning: "Complete emotional burnout" },
+      { word: "booting up", cat: "Operations", desc: "Power-on self test (POST)", meaning: "Waking up and drinking morning coffee" },
+      { word: "downtime", cat: "Operations", desc: "System maintenance window", meaning: "Rest and recovery time" },
+      { word: "overclocking", cat: "Operations", desc: "Exceeding CPU frequency", meaning: "Pushing productivity with excessive caffeine" }
+    ];
+
+    // Active State Variables
+    let selectedParadigm = 'ecosystems';
+    let timerInterval = null;
+    let timerSeconds = 3600; // 60 minutes
+    let isTimerRunning = false;
+
+    // Window Load Initialization
+    window.onload = function() {
+      renderLexiconGrid();
+      updateWorksheetPreview();
+      selectParadigm('ecosystems');
+    };
+
+    // Tab Navigation Logic
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active', 'text-emerald-400', 'border-b-2', 'border-emerald-400');
+        b.classList.add('text-slate-400');
+      });
+
+      const targetPanel = document.getElementById(`panel-${tabId}`);
+      const targetBtn = document.getElementById(`tab-${tabId}`);
+      
+      if (targetPanel && targetBtn) {
+        targetPanel.classList.remove('hidden');
+        targetBtn.classList.add('active', 'text-emerald-400', 'border-b-2', 'border-emerald-400');
+        targetBtn.classList.remove('text-slate-400');
+      }
+    }
+
+    // Timer Logic
+    function toggleTimer() {
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        document.getElementById('icon-play').classList.remove('hidden');
+        document.getElementById('icon-pause').classList.add('hidden');
+      } else {
+        isTimerRunning = true;
+        document.getElementById('icon-play').classList.add('hidden');
+        document.getElementById('icon-pause').classList.remove('hidden');
+        timerInterval = setInterval(() => {
+          if (timerSeconds > 0) {
+            timerSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      timerSeconds = 3600;
+      document.getElementById('icon-play').classList.remove('hidden');
+      document.getElementById('icon-pause').classList.add('hidden');
+      updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timerSeconds / 60);
+      const secs = timerSeconds % 60;
+      document.getElementById('timer-display').innerText = 
+        `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+      // Update Phase Label based on time elapsed
+      const elapsed = 3600 - timerSeconds;
+      const phaseLabel = document.getElementById('timer-phase-label');
+      if (elapsed < 600) {
+        phaseLabel.innerText = "Phase 1: Lexicon Audit (10m)";
+      } else if (elapsed < 1500) {
+        phaseLabel.innerText = "Phase 2: Choose Paradigm (15m)";
+      } else if (elapsed < 2700) {
+        phaseLabel.innerText = "Phase 3: The Re-Mapping (20m)";
+      } else {
+        phaseLabel.innerText = "Phase 4: AI Synthesis (15m)";
+      }
+    }
+
+    // Real-Time Metaphor Detector
+    function analyzeText() {
+      const input = document.getElementById('detector-input').value;
+      const outputBox = document.getElementById('detector-output');
+      const countLabel = document.getElementById('detector-count');
+      const suggestionBox = document.getElementById('detector-suggestions');
+
+      if (!input.trim()) {
+        outputBox.innerHTML = `<span class="text-slate-500 italic">Type or paste text above to scan for computational metaphors...</span>`;
+        countLabel.innerText = "0 Banned Terms Found";
+        suggestionBox.classList.add('hidden');
+        return;
+      }
+
+      let detectedCount = 0;
+      let highlightedHTML = input;
+
+      // Scan against banned lexicon
+      bannedLexicon.forEach(item => {
+        const regex = new RegExp(`\\b(${item.word})\\b`, 'gi');
+        if (regex.test(input)) {
+          detectedCount++;
+          highlightedHTML = highlightedHTML.replace(regex, `<span class="highlight-banned" title="Banned (${item.cat}): ${item.meaning}">$1</span>`);
+        }
+      });
+
+      outputBox.innerHTML = highlightedHTML;
+      countLabel.innerText = `${detectedCount} Banned Term${detectedCount === 1 ? '' : 's'} Found`;
+
+      if (detectedCount > 0) {
+        suggestionBox.classList.remove('hidden');
+      } else {
+        suggestionBox.classList.add('hidden');
+      }
+    }
+
+    function loadSampleText() {
+      document.getElementById('detector-input').value = 
+        "I need coffee to boot up this morning because my CPU is overheating and I don't have enough bandwidth for this class. My short-term RAM is completely full and I keep lagging during context switching.";
+      analyzeText();
+    }
+
+    // Lexicon Vault Rendering & Filter
+    function renderLexiconGrid() {
+      const grid = document.getElementById('lexicon-grid');
+      grid.innerHTML = '';
+
+      bannedLexicon.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 hover:border-slate-700 transition-colors lexicon-card";
+        card.setAttribute('data-word', item.word);
+        card.setAttribute('data-cat', item.cat);
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-red-400 font-mono text-sm">"${item.word}"</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-400">${item.cat}</span>
+          </div>
+          <div class="text-xs text-slate-500">Origin: <span class="text-slate-400">${item.desc}</span></div>
+          <div class="text-xs text-slate-300 font-medium">Mapped Human Meaning: <br><span class="text-slate-400 font-normal">${item.meaning}</span></div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterLexicon() {
+      const search = document.getElementById('lexicon-search').value.toLowerCase();
+      const category = document.getElementById('lexicon-category').value;
+      const cards = document.querySelectorAll('.lexicon-card');
+
+      cards.forEach(card => {
+        const word = card.getAttribute('data-word').toLowerCase();
+        const cat = card.getAttribute('data-cat');
+        
+        const matchesSearch = word.includes(search);
+        const matchesCat = (category === 'ALL' || category.includes(cat));
+
+        if (matchesSearch && matchesCat) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // Paradigm Selection Logic
+    function selectParadigm(key) {
+      selectedParadigm = key;
+      document.querySelectorAll('.paradigm-card').forEach(card => {
+        card.classList.remove('border-emerald-500', 'bg-emerald-950/20');
+        card.classList.add('border-slate-800');
+      });
+
+      const activeCard = document.getElementById(`paradigm-${key}`);
+      if (activeCard) {
+        activeCard.classList.add('border-emerald-500', 'bg-emerald-950/20');
+        activeCard.classList.remove('border-slate-800');
+      }
+      updateWorksheetPreview();
+    }
+
+    // Worksheet Preview & Export Generator
+    function updateWorksheetPreview() {
+      const teamName = document.getElementById('team-name').value || "[Team Name]";
+      const members = document.getElementById('team-members').value || "[Member Names]";
+      
+      const habitOld = document.getElementById('remap-habit-old').value || "[Old computational phrase]";
+      const habitNew = document.getElementById('remap-habit-new').value || "[New metaphor & explanation]";
+      
+      const fatigueOld = document.getElementById('remap-fatigue-old').value || "[Old computational phrase]";
+      const fatigueNew = document.getElementById('remap-fatigue-new').value || "[New metaphor & explanation]";
+
+      const problemOld = document.getElementById('remap-problem-old').value || "[Old computational phrase]";
+      const problemNew = document.getElementById('remap-problem-new').value || "[New metaphor & explanation]";
+
+      const overwhelmOld = document.getElementById('remap-overwhelm-old').value || "[Old computational phrase]";
+      const overwhelmNew = document.getElementById('remap-overwhelm-new').value || "[New metaphor & explanation]";
+
+      const q1 = document.getElementById('reflect-q1').value || "[Reflection on what computational metaphor hides]";
+      const q2 = document.getElementById('reflect-q2').value || "[AI Companion UI/UX design changes]";
+
+      const markdownText = `# HCAI 2101 Day 1 Deliverable: Unplugging the Mind
+
+**Team Name:** ${teamName}
+**Group Members:** ${members}
+**Chosen Paradigm:** ${selectedParadigm.toUpperCase()}
+
+---
+
+### Part A: The 4 Core Re-Mapped Concepts
+
+1. **Habit Formation & Change**
+   - *Old Computational View:* ${habitOld}
+   - *New Organic Metaphor:* ${habitNew}
+
+2. **Mental Fatigue & Recovery**
+   - *Old Computational View:* ${fatigueOld}
+   - *New Organic Metaphor:* ${fatigueNew}
+
+3. **Complex Problem Solving / Epiphany**
+   - *Old Computational View:* ${problemOld}
+   - *New Organic Metaphor:* ${problemNew}
+
+4. **Emotional / Sensory Overwhelm**
+   - *Old Computational View:* ${overwhelmOld}
+   - *New Organic Metaphor:* ${overwhelmNew}
+
+---
+
+### Part B: Human-Centered AI Reflection
+
+1. **What computational metaphors distort about humans:**
+   ${q1}
+
+2. **AI Study Companion Design Shift (Approach B):**
+   ${q2}
+`;
+
+      document.getElementById('worksheet-preview').innerText = markdownText;
+    }
+
+    function copyWorksheetMarkdown() {
+      const previewText = document.getElementById('worksheet-preview').innerText;
+      
+      // Fallback copy execution
+      const dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = previewText;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+
+      // Visual toast feedback
+      const btn = event.currentTarget;
+      const origText = btn.innerHTML;
+      btn.innerHTML = "✓ Copied to Clipboard!";
+      btn.classList.replace('bg-emerald-500', 'bg-teal-400');
+      setTimeout(() => {
+        btn.innerHTML = origText;
+        btn.classList.replace('bg-teal-400', 'bg-emerald-500');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
