@@ -65,8 +65,8 @@
   <style>
     /* Custom refined scrollbar styling */
     ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
     }
     ::-webkit-scrollbar-track {
       background: transparent;
@@ -96,25 +96,23 @@
     const { useState, useEffect, useMemo } = React;
 
     const Icons = {
-      Grid: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>,
-      Plus: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"/></svg>,
-      Sparkles: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>,
-      Copy: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>,
-      Check: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>,
-      ExternalLink: () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>,
-      Trash: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>,
-      Tag: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>,
-      Palette: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>,
-      Code: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>,
-      Search: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>,
-      Filter: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>,
-      Eye: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>,
-      BookOpen: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
-      ShieldAlert: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>,
-      Wand: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>,
-      Sun: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>,
-      Moon: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>,
-      Feather: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+      Grid: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>,
+      Plus: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"/></svg>,
+      Sparkles: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>,
+      Copy: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>,
+      Check: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>,
+      ExternalLink: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>,
+      Trash: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>,
+      Tag: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>,
+      Palette: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>,
+      Code: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>,
+      Search: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>,
+      Filter: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>,
+      Eye: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>,
+      BookOpen: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
+      ShieldAlert: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>,
+      Wand: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>,
+      Feather: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
     };
 
     const INITIAL_ITEMS = [
@@ -185,17 +183,16 @@
       'USE distinct hairline border contrast (1px crisp neutral border) and intentional editorial serif/sans pairings.'
     ];
 
-    // Theme Visual Presets
     const THEME_PRESETS = {
       editorial: {
         name: 'Warm Editorial Cream',
         bg: 'bg-[#FAF8F5]',
-        panelBg: 'bg-white/80 backdrop-blur-md',
+        panelBg: 'bg-white/90 backdrop-blur-md',
         border: 'border-stone-200/90',
         borderActive: 'border-terracotta-500',
         textPrimary: 'text-stone-900',
-        textSecondary: 'text-stone-600',
-        textMuted: 'text-stone-400',
+        textSecondary: 'text-stone-700',
+        textMuted: 'text-stone-500',
         accentBg: 'bg-terracotta-600 hover:bg-terracotta-700 text-white',
         badgeBg: 'bg-terracotta-50 text-terracotta-700 border-terracotta-200',
         headerBg: 'bg-[#FAF8F5]/90 border-b border-stone-200/80',
@@ -209,10 +206,10 @@
         border: 'border-stone-300/80',
         borderActive: 'border-sage-600',
         textPrimary: 'text-stone-950',
-        textSecondary: 'text-stone-700',
-        textMuted: 'text-stone-500',
+        textSecondary: 'text-stone-800',
+        textMuted: 'text-stone-600',
         accentBg: 'bg-sage-600 hover:bg-sage-700 text-white',
-        badgeBg: 'bg-sage-50 text-sage-700 border-sage-200',
+        badgeBg: 'bg-sage-50 text-sage-800 border-sage-200',
         headerBg: 'bg-[#F3EFEC]/90 border-b border-stone-300/70',
         cardBg: 'bg-[#FCFBFA]',
         codeBg: 'bg-stone-900 text-stone-100',
@@ -225,7 +222,7 @@
         borderActive: 'border-terracotta-500',
         textPrimary: 'text-stone-100',
         textSecondary: 'text-stone-300',
-        textMuted: 'text-stone-500',
+        textMuted: 'text-stone-400',
         accentBg: 'bg-terracotta-500 hover:bg-terracotta-600 text-stone-950 font-bold',
         badgeBg: 'bg-terracotta-950/60 text-terracotta-300 border-terracotta-800',
         headerBg: 'bg-stone-900/90 border-b border-stone-800',
@@ -236,15 +233,15 @@
 
     function App() {
       const [items, setItems] = useState(() => {
-        const saved = localStorage.getItem('taste_gallery_items_v2');
+        const saved = localStorage.getItem('taste_gallery_items_v3');
         return saved ? JSON.parse(saved) : INITIAL_ITEMS;
       });
 
-      const [themeKey, setThemeKey] = useState('editorial'); // 'editorial' | 'nordic' | 'dark'
+      const [themeKey, setThemeKey] = useState('editorial');
       const activeTheme = THEME_PRESETS[themeKey];
 
       const [selectedIds, setSelectedIds] = useState([]);
-      const [activeTab, setActiveTab] = useState('gallery'); // 'gallery' | 'builder' | 'signature' | 'sandbox'
+      const [activeTab, setActiveTab] = useState('gallery');
       const [filterCategory, setFilterCategory] = useState('All');
       const [filterTag, setFilterTag] = useState('');
       const [searchQuery, setSearchQuery] = useState('');
@@ -255,7 +252,7 @@
       const [copiedText, setCopiedText] = useState(false);
 
       useEffect(() => {
-        localStorage.setItem('taste_gallery_items_v2', JSON.stringify(items));
+        localStorage.setItem('taste_gallery_items_v3', JSON.stringify(items));
       }, [items]);
 
       const categories = ['All', 'Full Site', 'Hero Section', 'Typography', 'Color Palette', 'Components', 'Landing Page'];
@@ -369,47 +366,48 @@
       };
 
       return (
-        <div className={`min-h-screen flex flex-col ${activeTheme.bg} ${activeTheme.textPrimary} transition-colors duration-300`}>
+        <div className={`min-h-screen flex flex-col ${activeTheme.bg} ${activeTheme.textPrimary} transition-colors duration-300 text-sm`}>
           
+          {}
           <header className={`sticky top-0 z-30 ${activeTheme.headerBg} backdrop-blur-md transition-colors duration-300`}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
               
               {/* Logo & Brand */}
-              <div className="flex items-center space-x-3">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-terracotta-500 to-amber-600 flex items-center justify-center text-white shadow-md shadow-terracotta-500/20 font-serif font-bold text-lg">
+              <div className="flex items-center space-x-3.5">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-terracotta-500 to-amber-600 flex items-center justify-center text-white shadow-md shadow-terracotta-500/20 font-serif font-bold text-xl">
                   <Icons.Feather />
                 </div>
                 <div>
-                  <h1 className="text-base font-bold tracking-tight font-serif text-stone-900 dark:text-stone-100 flex items-center gap-2">
-                    Taste Gallery <span className="text-xs font-sans font-normal text-terracotta-600 dark:text-terracotta-400 bg-terracotta-50 dark:bg-terracotta-950/60 border border-terracotta-200 dark:border-terracotta-800 px-2 py-0.5 rounded-full">AI Style Translator</span>
+                  <h1 className="text-lg font-bold tracking-tight font-serif text-stone-900 dark:text-stone-100 flex items-center gap-2">
+                    Taste Gallery <span className="text-xs font-sans font-semibold text-terracotta-700 dark:text-terracotta-300 bg-terracotta-50 dark:bg-terracotta-950/80 border border-terracotta-200 dark:border-terracotta-800 px-2.5 py-1 rounded-full">AI Style Translator</span>
                   </h1>
-                  <p className={`text-xs font-mono hidden sm:block ${activeTheme.textMuted}`}>Curate Visual Style & Translate for AI Prompts</p>
+                  <p className={`text-xs font-mono hidden sm:block ${activeTheme.textMuted} mt-0.5`}>Curate Visual Style & Translate for AI Prompts</p>
                 </div>
               </div>
 
               {/* Center Navigation Tabs */}
-              <nav className={`flex items-center space-x-1 p-1 rounded-xl border ${activeTheme.border} ${activeTheme.panelBg}`}>
+              <nav className={`flex items-center space-x-1.5 p-1.5 rounded-xl border ${activeTheme.border} ${activeTheme.panelBg}`}>
                 <button
                   onClick={() => setActiveTab('gallery')}
-                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                     activeTab === 'gallery' ? `${activeTheme.accentBg} shadow-sm` : `${activeTheme.textSecondary} hover:${activeTheme.textPrimary}`
                   }`}
                 >
                   <Icons.Grid />
                   <span>Gallery</span>
-                  <span className="ml-1 bg-black/10 dark:bg-white/10 px-1.5 py-0.5 rounded text-[10px] font-mono">{items.length}</span>
+                  <span className="ml-1 bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded text-xs font-mono font-bold">{items.length}</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('builder')}
-                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                     activeTab === 'builder' ? `${activeTheme.accentBg} shadow-sm` : `${activeTheme.textSecondary} hover:${activeTheme.textPrimary}`
                   }`}
                 >
                   <Icons.Wand />
-                  <span>AI Style Prompt Generator</span>
+                  <span>AI Prompt Generator</span>
                   {selectedIds.length > 0 && (
-                    <span className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                    <span className="bg-white/30 px-2 py-0.5 rounded text-xs font-bold">
                       {selectedIds.length}
                     </span>
                   )}
@@ -417,7 +415,7 @@
 
                 <button
                   onClick={() => setActiveTab('signature')}
-                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                     activeTab === 'signature' ? `${activeTheme.accentBg} shadow-sm` : `${activeTheme.textSecondary} hover:${activeTheme.textPrimary}`
                   }`}
                 >
@@ -427,7 +425,7 @@
 
                 <button
                   onClick={() => setActiveTab('sandbox')}
-                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                     activeTab === 'sandbox' ? `${activeTheme.accentBg} shadow-sm` : `${activeTheme.textSecondary} hover:${activeTheme.textPrimary}`
                   }`}
                 >
@@ -437,14 +435,12 @@
               </nav>
 
               {/* Theme Selector & Actions */}
-              <div className="flex items-center space-x-2">
-                
-                {/* Theme Selector Dropdown */}
+              <div className="flex items-center space-x-3">
                 <select
                   value={themeKey}
                   onChange={(e) => setThemeKey(e.target.value)}
-                  className={`text-xs px-2.5 py-1.5 rounded-lg border ${activeTheme.border} ${activeTheme.panelBg} ${activeTheme.textSecondary} focus:outline-none cursor-pointer font-mono`}
-                  title="Switch Aesthetic Visual Theme"
+                  className={`text-sm px-3 py-2 rounded-xl border ${activeTheme.border} ${activeTheme.panelBg} ${activeTheme.textPrimary} font-medium focus:outline-none cursor-pointer font-mono shadow-sm`}
+                  title="Switch Visual Theme"
                 >
                   <option value="editorial">✨ Warm Cream Editorial</option>
                   <option value="nordic">🌿 Nordic Studio Light</option>
@@ -453,7 +449,7 @@
 
                 <button
                   onClick={() => setIsAddModalOpen(true)}
-                  className={`flex items-center space-x-2 ${activeTheme.accentBg} font-semibold px-3.5 py-1.5 rounded-lg text-xs transition-all shadow-md active:scale-95`}
+                  className={`flex items-center space-x-2 ${activeTheme.accentBg} font-bold px-4 py-2 rounded-xl text-sm transition-all shadow-md active:scale-95`}
                 >
                   <Icons.Plus />
                   <span className="hidden sm:inline">Add Inspiration</span>
@@ -463,31 +459,32 @@
             </div>
           </header>
 
-          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
             
+            {}
             {activeTab === 'gallery' && (
               <div className="space-y-6">
                 
                 {/* Search & Filter Toolbar */}
-                <div className={`p-4 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4`}>
+                <div className={`p-5 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4`}>
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     
                     {/* Search Bar */}
                     <div className="relative flex-1">
-                      <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${activeTheme.textMuted}`}>
+                      <div className={`absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none ${activeTheme.textMuted}`}>
                         <Icons.Search />
                       </div>
                       <input
                         type="text"
-                        placeholder="Search keywords, styles, colors, notes..."
+                        placeholder="Search keywords, design styles, colors, personal notes..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className={`w-full pl-9 pr-4 py-2 rounded-xl text-xs ${activeTheme.panelBg} border ${activeTheme.border} ${activeTheme.textPrimary} placeholder-stone-400 focus:outline-none focus:border-terracotta-500 transition-colors`}
+                        className={`w-full pl-11 pr-4 py-3 rounded-xl text-sm ${activeTheme.panelBg} border ${activeTheme.border} ${activeTheme.textPrimary} placeholder-stone-500 focus:outline-none focus:border-terracotta-500 transition-colors`}
                       />
                       {searchQuery && (
                         <button 
                           onClick={() => setSearchQuery('')}
-                          className={`absolute inset-y-0 right-0 pr-3 flex items-center ${activeTheme.textMuted} hover:${activeTheme.textPrimary} text-xs`}
+                          className={`absolute inset-y-0 right-0 pr-4 flex items-center ${activeTheme.textMuted} hover:${activeTheme.textPrimary} text-sm font-semibold`}
                         >
                           Clear
                         </button>
@@ -495,14 +492,14 @@
                     </div>
 
                     {/* Quick Category Buttons */}
-                    <div className="flex items-center space-x-1 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+                    <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
                       {categories.map(cat => (
                         <button
                           key={cat}
                           onClick={() => setFilterCategory(cat)}
-                          className={`px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all ${
+                          className={`px-4 py-2 rounded-xl text-sm whitespace-nowrap font-medium transition-all ${
                             filterCategory === cat 
-                              ? `${activeTheme.badgeBg} font-medium border` 
+                              ? `${activeTheme.badgeBg} font-bold border shadow-sm` 
                               : `${activeTheme.panelBg} ${activeTheme.textSecondary} hover:${activeTheme.textPrimary} border ${activeTheme.border}`
                           }`}
                         >
@@ -515,7 +512,7 @@
                     <div className={`flex items-center space-x-2 border-l ${activeTheme.border} pl-4`}>
                       <button
                         onClick={selectAll}
-                        className={`text-xs ${activeTheme.textSecondary} hover:text-terracotta-600 flex items-center space-x-1 font-mono`}
+                        className={`text-sm ${activeTheme.textSecondary} hover:text-terracotta-600 flex items-center space-x-1 font-mono font-medium`}
                       >
                         <Icons.Check />
                         <span>{selectedIds.length === filteredItems.length && filteredItems.length > 0 ? 'Deselect All' : 'Select All'}</span>
@@ -526,14 +523,14 @@
 
                   {/* Filter Tags Pill List */}
                   {allTags.length > 0 && (
-                    <div className={`flex items-center space-x-2 flex-wrap gap-y-2 pt-2 border-t ${activeTheme.border}`}>
-                      <span className={`text-[11px] ${activeTheme.textMuted} font-mono flex items-center gap-1`}>
-                        <Icons.Filter /> Aesthetic Filter:
+                    <div className={`flex items-center space-x-2 flex-wrap gap-2 pt-3 border-t ${activeTheme.border}`}>
+                      <span className={`text-xs ${activeTheme.textMuted} font-mono font-semibold uppercase tracking-wider flex items-center gap-1.5`}>
+                        <Icons.Filter /> Aesthetic Tags:
                       </span>
                       {filterTag && (
                         <button
                           onClick={() => setFilterTag('')}
-                          className="px-2 py-0.5 rounded bg-red-500/10 text-red-600 border border-red-500/20 text-[11px]"
+                          className="px-3 py-1 rounded-lg bg-red-500/10 text-red-600 border border-red-500/20 text-xs font-semibold"
                         >
                           Reset Filter ×
                         </button>
@@ -542,7 +539,7 @@
                         <button
                           key={tag}
                           onClick={() => setFilterTag(filterTag === tag ? '' : tag)}
-                          className={`px-2.5 py-1 rounded-full text-[11px] transition-all ${
+                          className={`px-3 py-1.5 rounded-full text-xs transition-all ${
                             filterTag === tag
                               ? `${activeTheme.accentBg} font-bold shadow-sm`
                               : `${activeTheme.panelBg} ${activeTheme.textSecondary} hover:${activeTheme.textPrimary} border ${activeTheme.border}`
@@ -555,15 +552,15 @@
                   )}
                 </div>
 
-                {/* Gallery Cards Grid */}
+                {}
                 {filteredItems.length === 0 ? (
                   <div className={`text-center py-20 rounded-2xl border border-dashed ${activeTheme.border} ${activeTheme.panelBg}`}>
-                    <div className={`w-12 h-12 rounded-full border ${activeTheme.border} flex items-center justify-center mx-auto ${activeTheme.textMuted} mb-3`}>
+                    <div className={`w-14 h-14 rounded-full border ${activeTheme.border} flex items-center justify-center mx-auto ${activeTheme.textMuted} mb-3`}>
                       <Icons.Search />
                     </div>
-                    <h3 className={`text-sm font-semibold ${activeTheme.textPrimary}`}>No aesthetic examples found</h3>
-                    <p className={`text-xs ${activeTheme.textMuted} mt-1 max-w-sm mx-auto`}>
-                      Try resetting your search query or add a new website screenshot/link to your taste collection.
+                    <h3 className={`text-base font-bold ${activeTheme.textPrimary}`}>No aesthetic examples found</h3>
+                    <p className={`text-sm ${activeTheme.textMuted} mt-1 max-w-md mx-auto`}>
+                      Try resetting your search query or add a new website screenshot or link to your taste collection.
                     </p>
                   </div>
                 ) : (
@@ -592,7 +589,7 @@
                             />
                             
                             {/* Category Badge */}
-                            <span className="absolute top-3 left-3 bg-white/90 dark:bg-stone-950/80 backdrop-blur-md text-stone-800 dark:text-stone-200 text-[10px] font-mono font-medium px-2.5 py-1 rounded-full border border-stone-200 dark:border-stone-800 shadow-sm">
+                            <span className="absolute top-3 left-3 bg-white/95 dark:bg-stone-950/90 backdrop-blur-md text-stone-900 dark:text-stone-100 text-xs font-mono font-bold px-3 py-1 rounded-full border border-stone-200 dark:border-stone-800 shadow-sm">
                               {item.category}
                             </span>
 
@@ -602,10 +599,10 @@
                                 e.stopPropagation();
                                 toggleSelect(item.id);
                               }}
-                              className={`absolute top-3 right-3 w-7 h-7 rounded-lg border flex items-center justify-center transition-all ${
+                              className={`absolute top-3 right-3 w-8 h-8 rounded-lg border flex items-center justify-center transition-all ${
                                 isSelected
                                   ? 'bg-terracotta-600 border-terracotta-700 text-white shadow-md'
-                                  : 'bg-white/80 dark:bg-stone-950/80 border-stone-300 dark:border-stone-700 text-transparent hover:text-stone-400'
+                                  : 'bg-white/90 dark:bg-stone-950/90 border-stone-300 dark:border-stone-700 text-transparent hover:text-stone-400'
                               }`}
                               title="Select to include in AI Prompt Builder"
                             >
@@ -614,11 +611,11 @@
 
                             {/* Color Palette Overlay Strip */}
                             {item.colors && item.colors.length > 0 && (
-                              <div className="absolute bottom-2 left-3 right-3 flex items-center space-x-1.5 p-1.5 rounded-lg bg-white/90 dark:bg-stone-950/90 backdrop-blur-md border border-stone-200/80 dark:border-stone-800/80 shadow-sm">
+                              <div className="absolute bottom-2.5 left-3 right-3 flex items-center space-x-1.5 p-2 rounded-xl bg-white/95 dark:bg-stone-950/90 backdrop-blur-md border border-stone-200/80 dark:border-stone-800/80 shadow-sm">
                                 {item.colors.map((hex, i) => (
                                   <div
                                     key={i}
-                                    className="h-3 flex-1 rounded-sm border border-black/10 dark:border-white/10 relative group/color"
+                                    className="h-3.5 flex-1 rounded-sm border border-black/10 dark:border-white/10 relative group/color"
                                     style={{ backgroundColor: hex }}
                                     title={hex}
                                   />
@@ -628,42 +625,42 @@
                           </div>
 
                           {/* Card Content Details */}
-                          <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                          <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                             <div>
                               <div className="flex items-start justify-between">
                                 <h3 
                                   onClick={() => setViewItem(item)}
-                                  className={`font-semibold text-sm ${activeTheme.textPrimary} hover:text-terracotta-600 transition-colors cursor-pointer line-clamp-1`}
+                                  className={`font-bold text-base ${activeTheme.textPrimary} hover:text-terracotta-600 transition-colors cursor-pointer leading-snug line-clamp-1`}
                                 >
                                   {item.title}
                                 </h3>
                               </div>
 
                               {/* Aesthetic Tags */}
-                              <div className="flex flex-wrap gap-1 mt-2">
+                              <div className="flex flex-wrap gap-1.5 mt-2.5">
                                 {item.aestheticTags?.map((tag) => (
                                   <span
                                     key={tag}
-                                    className={`text-[10px] font-mono ${activeTheme.badgeBg} px-2 py-0.5 rounded border`}
+                                    className={`text-xs font-mono font-medium ${activeTheme.badgeBg} px-2.5 py-0.5 rounded border`}
                                   >
                                     #{tag}
                                   </span>
                                 ))}
                               </div>
 
-                              {/* Notes Preview */}
+                              {/* Personal Notes Preview */}
                               {item.notes && (
-                                <p className={`text-xs ${activeTheme.textSecondary} mt-2.5 line-clamp-2 leading-relaxed`}>
+                                <p className={`text-sm ${activeTheme.textSecondary} mt-3 line-clamp-2 leading-relaxed`}>
                                   {item.notes}
                                 </p>
                               )}
                             </div>
 
                             {/* Footer Actions */}
-                            <div className={`pt-3 border-t ${activeTheme.border} flex items-center justify-between text-xs ${activeTheme.textMuted}`}>
+                            <div className={`pt-3 border-t ${activeTheme.border} flex items-center justify-between text-sm ${activeTheme.textMuted} font-medium`}>
                               <button
                                 onClick={() => setViewItem(item)}
-                                className={`flex items-center space-x-1 hover:${activeTheme.textPrimary} transition-colors`}
+                                className={`flex items-center space-x-1.5 hover:${activeTheme.textPrimary} transition-colors`}
                               >
                                 <Icons.Eye />
                                 <span>Inspect</span>
@@ -674,7 +671,7 @@
                                   href={item.sourceUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="flex items-center space-x-1 text-terracotta-600 hover:underline transition-colors"
+                                  className="flex items-center space-x-1 text-terracotta-600 font-semibold hover:underline transition-colors"
                                 >
                                   <span>Source</span>
                                   <Icons.ExternalLink />
@@ -683,7 +680,7 @@
 
                               <button
                                 onClick={() => handleDeleteItem(item.id)}
-                                className="hover:text-red-600 transition-colors opacity-60 hover:opacity-100 p-1"
+                                className="hover:text-red-600 transition-colors opacity-70 hover:opacity-100 p-1"
                                 title="Delete item"
                               >
                                 <Icons.Trash />
@@ -699,105 +696,104 @@
               </div>
             )}
 
+            {}
             {activeTab === 'builder' && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
                 {/* Left Options Panel */}
                 <div className="lg:col-span-5 space-y-6">
-                  <div className={`p-5 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-5`}>
+                  <div className={`p-6 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-6`}>
                     
                     <div className={`border-b ${activeTheme.border} pb-4`}>
-                      <h2 className={`text-base font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
+                      <h2 className={`text-lg font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
                         <Icons.Wand /> Target AI Tool Configuration
                       </h2>
-                      <p className={`text-xs ${activeTheme.textSecondary} mt-1`}>
-                        Select your AI workflow to tailor the generated design system prompt.
+                      <p className={`text-sm ${activeTheme.textSecondary} mt-1 leading-relaxed`}>
+                        Select your preferred AI tool format to tailor the generated system prompt.
                       </p>
                     </div>
 
                     {/* Tool Target Selector */}
-                    <div className="space-y-2">
-                      <label className={`text-xs font-mono ${activeTheme.textMuted} uppercase tracking-wider`}>
+                    <div className="space-y-3">
+                      <label className={`text-xs font-mono font-bold ${activeTheme.textMuted} uppercase tracking-wider`}>
                         Target AI Output Format
                       </label>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-3">
                         <button
                           onClick={() => setTargetTool('v0_lovable')}
-                          className={`p-3 rounded-xl border text-left text-xs transition-all ${
+                          className={`p-3.5 rounded-xl border text-left transition-all ${
                             targetTool === 'v0_lovable'
-                              ? `${activeTheme.badgeBg} font-semibold border ${activeTheme.borderActive}`
+                              ? `${activeTheme.badgeBg} border ${activeTheme.borderActive} shadow-sm`
                               : `${activeTheme.panelBg} border ${activeTheme.border} ${activeTheme.textSecondary}`
                           }`}
                         >
-                          <div className="font-bold">v0 / Lovable / Bolt</div>
-                          <div className={`text-[10px] ${activeTheme.textMuted} font-normal mt-0.5`}>Frontend App Generators</div>
+                          <div className="font-bold text-sm">v0 / Lovable / Bolt</div>
+                          <div className={`text-xs ${activeTheme.textMuted} mt-1`}>Frontend App Generators</div>
                         </button>
 
                         <button
                           onClick={() => setTargetTool('system_prompt')}
-                          className={`p-3 rounded-xl border text-left text-xs transition-all ${
+                          className={`p-3.5 rounded-xl border text-left transition-all ${
                             targetTool === 'system_prompt'
-                              ? `${activeTheme.badgeBg} font-semibold border ${activeTheme.borderActive}`
+                              ? `${activeTheme.badgeBg} border ${activeTheme.borderActive} shadow-sm`
                               : `${activeTheme.panelBg} border ${activeTheme.border} ${activeTheme.textSecondary}`
                           }`}
                         >
-                          <div className="font-bold">LLM System Prompt</div>
-                          <div className={`text-[10px] ${activeTheme.textMuted} font-normal mt-0.5`}>Claude / ChatGPT Rules</div>
+                          <div className="font-bold text-sm">LLM System Prompt</div>
+                          <div className={`text-xs ${activeTheme.textMuted} mt-1`}>Claude / ChatGPT Rules</div>
                         </button>
 
                         <button
                           onClick={() => setTargetTool('midjourney')}
-                          className={`p-3 rounded-xl border text-left text-xs transition-all ${
+                          className={`p-3.5 rounded-xl border text-left transition-all ${
                             targetTool === 'midjourney'
-                              ? `${activeTheme.badgeBg} font-semibold border ${activeTheme.borderActive}`
+                              ? `${activeTheme.badgeBg} border ${activeTheme.borderActive} shadow-sm`
                               : `${activeTheme.panelBg} border ${activeTheme.border} ${activeTheme.textSecondary}`
                           }`}
                         >
-                          <div className="font-bold">Midjourney / Image AI</div>
-                          <div className={`text-[10px] ${activeTheme.textMuted} font-normal mt-0.5`}>UI Mockups & Moodboards</div>
+                          <div className="font-bold text-sm">Midjourney / Image AI</div>
+                          <div className={`text-xs ${activeTheme.textMuted} mt-1`}>UI Mockups & Visuals</div>
                         </button>
 
                         <button
                           onClick={() => setTargetTool('tailwind')}
-                          className={`p-3 rounded-xl border text-left text-xs transition-all ${
+                          className={`p-3.5 rounded-xl border text-left transition-all ${
                             targetTool === 'tailwind'
-                              ? `${activeTheme.badgeBg} font-semibold border ${activeTheme.borderActive}`
+                              ? `${activeTheme.badgeBg} border ${activeTheme.borderActive} shadow-sm`
                               : `${activeTheme.panelBg} border ${activeTheme.border} ${activeTheme.textSecondary}`
                           }`}
                         >
-                          <div className="font-bold">Tailwind Config</div>
-                          <div className={`text-[10px] ${activeTheme.textMuted} font-normal mt-0.5`}>Design System Tokens</div>
+                          <div className="font-bold text-sm">Tailwind Config</div>
+                          <div className={`text-xs ${activeTheme.textMuted} mt-1`}>Design System Tokens</div>
                         </button>
                       </div>
                     </div>
 
                     {/* Context Selection Summary */}
-                    <div className={`p-4 rounded-xl border ${activeTheme.border} bg-stone-100/60 dark:bg-stone-900/60 space-y-2`}>
-                      <div className="flex items-center justify-between text-xs">
+                    <div className={`p-4 rounded-xl border ${activeTheme.border} bg-stone-100/70 dark:bg-stone-900/70 space-y-2`}>
+                      <div className="flex items-center justify-between text-sm">
                         <span className={activeTheme.textSecondary}>Source Examples Selected:</span>
                         <span className="font-mono text-terracotta-600 dark:text-terracotta-400 font-bold">
                           {selectedItems.length > 0 ? `${selectedItems.length} selected` : `All (${items.length} examples)`}
                         </span>
                       </div>
-                      <p className={`text-[11px] ${activeTheme.textMuted}`}>
+                      <p className={`text-xs ${activeTheme.textMuted} leading-relaxed`}>
                         {selectedItems.length > 0 
-                          ? 'Generating prompt using only your explicitly checked items.' 
-                          : 'No items checked, generating overall prompt using your entire taste gallery.'}
+                          ? 'Generating prompt using only your explicitly checked gallery items.' 
+                          : 'No items checked, generating prompt using your entire taste gallery collection.'}
                       </p>
                     </div>
 
                     {/* Anti-Generic Rules Highlights */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className={`text-xs font-mono ${activeTheme.textMuted} uppercase tracking-wider flex items-center gap-1.5`}>
-                          <Icons.ShieldAlert /> Anti-Generic AI Rules Enforced
-                        </label>
-                      </div>
-                      <div className={`p-3 rounded-xl border ${activeTheme.border} bg-stone-50 dark:bg-stone-950 text-xs ${activeTheme.textSecondary} space-y-1.5`}>
+                    <div className="space-y-3">
+                      <label className={`text-xs font-mono font-bold ${activeTheme.textMuted} uppercase tracking-wider flex items-center gap-2`}>
+                        <Icons.ShieldAlert /> Anti-Generic AI Directives
+                      </label>
+                      <div className={`p-4 rounded-xl border ${activeTheme.border} bg-stone-50 dark:bg-stone-950 text-sm ${activeTheme.textSecondary} space-y-2`}>
                         {DEFAULT_ANTI_PATTERNS.slice(0, 4).map((pattern, idx) => (
-                          <div key={idx} className="flex items-start gap-2">
-                            <span className="text-terracotta-600 font-bold text-xs">•</span>
-                            <span className="text-[11px]">{pattern}</span>
+                          <div key={idx} className="flex items-start gap-2.5 leading-relaxed">
+                            <span className="text-terracotta-600 font-bold text-sm">•</span>
+                            <span className="text-xs font-medium">{pattern}</span>
                           </div>
                         ))}
                       </div>
@@ -808,19 +804,19 @@
 
                 {/* Right Code/Prompt Output Panel */}
                 <div className="lg:col-span-7 space-y-4">
-                  <div className={`p-5 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4 flex flex-col h-full`}>
+                  <div className={`p-6 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4 flex flex-col h-full`}>
                     
-                    <div className={`flex items-center justify-between border-b ${activeTheme.border} pb-3`}>
+                    <div className={`flex items-center justify-between border-b ${activeTheme.border} pb-4`}>
                       <div>
-                        <h2 className={`text-sm font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
-                          <Icons.Code /> Generated AI Prompt
+                        <h2 className={`text-base font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
+                          <Icons.Code /> Generated Design System Prompt
                         </h2>
-                        <p className={`text-xs ${activeTheme.textMuted}`}>Copy & paste directly into your AI tool</p>
+                        <p className={`text-xs ${activeTheme.textMuted} mt-0.5`}>Copy & paste directly into your AI tool</p>
                       </div>
 
                       <button
                         onClick={handleCopyPrompt}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
+                        className={`flex items-center space-x-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md ${
                           copiedText
                             ? 'bg-emerald-600 text-white'
                             : `${activeTheme.accentBg}`
@@ -832,11 +828,11 @@
                     </div>
 
                     {/* Prompt Output Box */}
-                    <div className={`relative flex-1 rounded-xl border ${activeTheme.border} ${activeTheme.codeBg} p-4 font-mono text-xs leading-relaxed overflow-y-auto max-h-[500px]`}>
+                    <div className={`relative flex-1 rounded-xl border ${activeTheme.border} ${activeTheme.codeBg} p-5 font-mono text-sm leading-relaxed overflow-y-auto min-h-[380px] max-h-[550px]`}>
                       <pre className="whitespace-pre-wrap">{generatedPrompt}</pre>
                     </div>
 
-                    <div className={`flex items-center justify-between text-[11px] ${activeTheme.textMuted} font-mono pt-2`}>
+                    <div className={`flex items-center justify-between text-xs ${activeTheme.textMuted} font-mono pt-2 font-medium`}>
                       <span>Length: {generatedPrompt.length} characters</span>
                       <span>Format: {targetTool.toUpperCase()}</span>
                     </div>
@@ -847,64 +843,65 @@
               </div>
             )}
 
+            {}
             {activeTab === 'signature' && (
               <div className="space-y-6">
                 
                 {/* Header Banner */}
                 <div className={`p-8 rounded-2xl border ${activeTheme.border} bg-gradient-to-r from-stone-100 via-stone-50 to-stone-100 dark:from-stone-900 dark:to-stone-950 space-y-3 shadow-sm`}>
-                  <span className={`px-3 py-1 rounded-full ${activeTheme.badgeBg} border text-xs font-mono uppercase font-bold`}>
+                  <span className={`px-3.5 py-1 rounded-full ${activeTheme.badgeBg} border text-xs font-mono uppercase font-bold`}>
                     Aesthetic DNA Analysis
                   </span>
-                  <h2 className={`text-3xl font-serif font-bold ${activeTheme.textPrimary}`}>
-                    Your Curated Design Signature
+                  <h2 className={`text-4xl font-serif font-bold ${activeTheme.textPrimary}`}>
+                    Your Curated Visual Signature
                   </h2>
-                  <p className={`text-xs ${activeTheme.textSecondary} max-w-2xl leading-relaxed`}>
-                    Based on your curated gallery items, here is an automated breakdown of your visual style preferences, dominant color palettes, and typographic personality.
+                  <p className={`text-sm ${activeTheme.textSecondary} max-w-2xl leading-relaxed`}>
+                    Based on your saved items, here is an automated breakdown of your visual style preferences, dominant color palettes, and typographic personality.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   
                   {/* Dominant Palette */}
-                  <div className={`p-5 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4`}>
-                    <h3 className={`text-sm font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
-                      <Icons.Palette /> Primary Color Palette
+                  <div className={`p-6 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4`}>
+                    <h3 className={`text-base font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
+                      <Icons.Palette /> Primary Color Tokens
                     </h3>
                     <div className="space-y-3">
                       {Array.from(new Set(items.flatMap(i => i.colors || []))).map((hex, idx) => (
-                        <div key={idx} className={`flex items-center justify-between p-2 rounded-xl border ${activeTheme.border} ${activeTheme.cardBg}`}>
+                        <div key={idx} className={`flex items-center justify-between p-2.5 rounded-xl border ${activeTheme.border} ${activeTheme.cardBg}`}>
                           <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 rounded-lg border border-black/10 dark:border-white/10 shadow-sm" style={{ backgroundColor: hex }} />
-                            <span className={`font-mono text-xs ${activeTheme.textPrimary} uppercase`}>{hex}</span>
+                            <div className="w-9 h-9 rounded-lg border border-black/10 dark:border-white/10 shadow-sm" style={{ backgroundColor: hex }} />
+                            <span className={`font-mono text-sm ${activeTheme.textPrimary} font-semibold uppercase`}>{hex}</span>
                           </div>
-                          <span className={`text-[10px] ${activeTheme.textMuted} font-mono`}>Token {idx + 1}</span>
+                          <span className={`text-xs ${activeTheme.textMuted} font-mono font-medium`}>Token {idx + 1}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Aesthetic Keyword Cloud */}
-                  <div className={`p-5 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4`}>
-                    <h3 className={`text-sm font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
+                  <div className={`p-6 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4`}>
+                    <h3 className={`text-base font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
                       <Icons.Tag /> Frequent Aesthetic Tags
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {allTags.map((tag) => (
-                        <div key={tag} className={`p-2.5 rounded-xl border ${activeTheme.border} ${activeTheme.cardBg} flex items-center space-x-2 text-xs`}>
-                          <span className="text-terracotta-600 font-mono font-medium">#{tag}</span>
+                        <div key={tag} className={`p-3 rounded-xl border ${activeTheme.border} ${activeTheme.cardBg} flex items-center space-x-2 text-sm`}>
+                          <span className="text-terracotta-600 font-mono font-bold">#{tag}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Typography Styles */}
-                  <div className={`p-5 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4`}>
-                    <h3 className={`text-sm font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
+                  <div className={`p-6 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} shadow-sm space-y-4`}>
+                    <h3 className={`text-base font-bold ${activeTheme.textPrimary} flex items-center gap-2 font-serif`}>
                       <Icons.BookOpen /> Preferred Typography
                     </h3>
-                    <div className="space-y-2">
+                    <div className="space-y-2.5">
                       {Array.from(new Set(items.map(i => i.typography).filter(Boolean))).map((font, idx) => (
-                        <div key={idx} className={`p-3 rounded-xl border ${activeTheme.border} ${activeTheme.cardBg} text-xs ${activeTheme.textPrimary} font-mono`}>
+                        <div key={idx} className={`p-3.5 rounded-xl border ${activeTheme.border} ${activeTheme.cardBg} text-sm ${activeTheme.textPrimary} font-mono font-medium`}>
                           {font}
                         </div>
                       ))}
@@ -916,13 +913,14 @@
               </div>
             )}
 
+            {}
             {activeTab === 'sandbox' && (
               <div className="space-y-6">
                 
-                <div className={`p-4 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} flex items-center justify-between shadow-sm`}>
+                <div className={`p-5 rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} flex items-center justify-between shadow-sm`}>
                   <div>
-                    <h2 className={`text-sm font-bold ${activeTheme.textPrimary} font-serif`}>Interactive UI Taste Tester</h2>
-                    <p className={`text-xs ${activeTheme.textMuted}`}>Live component preview formatted using your curated design identity</p>
+                    <h2 className={`text-base font-bold ${activeTheme.textPrimary} font-serif`}>Interactive UI Taste Tester</h2>
+                    <p className={`text-sm ${activeTheme.textMuted} mt-0.5`}>Live component preview formatted using your curated design identity</p>
                   </div>
                 </div>
 
@@ -931,33 +929,33 @@
                   
                   {/* Preview Card 1: Warm Editorial Card */}
                   <div className="bg-[#FAF8F5] text-[#1C1612] p-8 rounded-2xl border border-stone-300 shadow-lg space-y-6 font-serif">
-                    <div className="text-xs font-mono uppercase tracking-widest text-terracotta-700 font-medium">
+                    <div className="text-xs font-mono uppercase tracking-widest text-terracotta-700 font-bold">
                       // Style Archetype: Warm Editorial Minimal
                     </div>
-                    <h3 className="text-3xl font-normal leading-tight italic">
+                    <h3 className="text-4xl font-normal leading-tight italic">
                       Crafting memorable web UI through intentional restraint.
                     </h3>
-                    <p className="text-xs text-stone-600 font-sans leading-relaxed">
+                    <p className="text-sm text-stone-700 font-sans leading-relaxed">
                       This component demonstrates high contrast serif headers with warm paper canvas, crisp hairline borders, terracotta highlights, and zero harsh floating shadows.
                     </p>
-                    <div className="pt-4 border-t border-stone-200 flex items-center justify-between text-xs font-sans">
-                      <span className="font-semibold uppercase tracking-wider text-[10px] text-terracotta-600">Read Editorial Guide →</span>
-                      <span className="text-stone-400">Jul 2026</span>
+                    <div className="pt-4 border-t border-stone-200 flex items-center justify-between text-sm font-sans">
+                      <span className="font-bold uppercase tracking-wider text-xs text-terracotta-600">Read Editorial Guide →</span>
+                      <span className="text-stone-500 font-mono">Jul 2026</span>
                     </div>
                   </div>
 
                   {/* Preview Card 2: Nordic Sage Component */}
                   <div className="bg-[#F3EFEC] text-stone-900 p-8 rounded-2xl border border-stone-300 shadow-lg space-y-6 font-sans">
-                    <div className="text-xs font-mono font-semibold uppercase tracking-wider text-sage-700 bg-sage-100 px-2.5 py-1 inline-block rounded-lg border border-sage-200">
+                    <div className="text-xs font-mono font-bold uppercase tracking-wider text-sage-800 bg-sage-100 px-3 py-1.5 inline-block rounded-lg border border-sage-200">
                       Style Archetype: Nordic Studio
                     </div>
-                    <h3 className="text-2xl font-bold tracking-tight text-stone-900">
+                    <h3 className="text-3xl font-bold tracking-tight text-stone-950">
                       Tactile & Humanistic Modern UI
                     </h3>
-                    <p className="text-xs font-normal leading-relaxed text-stone-600">
+                    <p className="text-sm font-normal leading-relaxed text-stone-700">
                       Soft organic linen tints, natural sage green focal cards, high legibility body text, and spacious padding.
                     </p>
-                    <button className="bg-sage-600 hover:bg-sage-700 text-white font-medium px-5 py-2.5 rounded-xl text-xs transition-all shadow-sm">
+                    <button className="bg-sage-600 hover:bg-sage-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all shadow-sm">
                       Interactive Element
                     </button>
                   </div>
@@ -965,18 +963,18 @@
                   {/* Preview Card 3: Swiss Grid Minimalist */}
                   <div className="bg-white text-stone-900 p-8 rounded-2xl border border-stone-300 shadow-md space-y-6 font-mono col-span-1 lg:col-span-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-stone-500">// Style Archetype: Swiss Precision Grid</span>
-                      <span className="text-[10px] bg-stone-100 text-stone-700 border border-stone-300 px-2 py-0.5 rounded font-bold">GRID ACTIVE</span>
+                      <span className="text-xs text-stone-600 font-bold">// Style Archetype: Swiss Precision Grid</span>
+                      <span className="text-xs bg-stone-100 text-stone-800 border border-stone-300 px-2.5 py-1 rounded font-bold">GRID ACTIVE</span>
                     </div>
-                    <h3 className="text-xl font-bold font-sans text-stone-900">
+                    <h3 className="text-2xl font-bold font-sans text-stone-900">
                       Swiss Precision & Monospace Visual Identity
                     </h3>
-                    <p className="text-xs text-stone-600 font-sans leading-relaxed max-w-xl">
+                    <p className="text-sm text-stone-700 font-sans leading-relaxed max-w-2xl">
                       Pure white canvas, micro 1px stone grid lines, neutral color accents, high density informational layout with clear typography hierarchy.
                     </p>
-                    <div className="flex items-center gap-3 font-mono text-xs">
-                      <span className="bg-stone-100 text-stone-800 border border-stone-300 px-3 py-1.5 rounded-lg">npm install @taste/style</span>
-                      <span className="bg-stone-200 text-stone-600 px-3 py-1.5 rounded-lg">v2.4.0</span>
+                    <div className="flex items-center gap-3 font-mono text-sm">
+                      <span className="bg-stone-100 text-stone-800 border border-stone-300 px-4 py-2 rounded-lg font-semibold">npm install @taste/style</span>
+                      <span className="bg-stone-200 text-stone-700 px-3 py-2 rounded-lg font-bold">v2.4.0</span>
                     </div>
                   </div>
 
@@ -987,6 +985,7 @@
 
           </main>
 
+          {}
           {viewItem && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/60 backdrop-blur-sm">
               <div className={`w-full max-w-2xl rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} overflow-hidden shadow-2xl max-h-[90vh] flex flex-col`}>
@@ -995,26 +994,26 @@
                   <img src={viewItem.imageUrl} alt={viewItem.title} className="w-full h-full object-cover" />
                   <button
                     onClick={() => setViewItem(null)}
-                    className="absolute top-3 right-3 bg-white/80 dark:bg-stone-950/80 text-stone-800 dark:text-stone-200 p-2 rounded-full backdrop-blur-md border border-stone-200 dark:border-stone-800"
+                    className="absolute top-4 right-4 bg-white/90 dark:bg-stone-950/90 text-stone-900 dark:text-stone-100 w-8 h-8 rounded-full backdrop-blur-md border border-stone-200 dark:border-stone-800 font-bold text-sm"
                   >
                     ✕
                   </button>
                 </div>
 
-                <div className="p-6 space-y-4 overflow-y-auto flex-1">
-                  <div className="flex items-start justify-between">
+                <div className="p-6 space-y-5 overflow-y-auto flex-1">
+                  <div className="flex items-start justify-between gap-4">
                     <div>
-                      <span className={`text-[10px] font-mono ${activeTheme.badgeBg} px-2.5 py-1 rounded border`}>
+                      <span className={`text-xs font-mono font-bold ${activeTheme.badgeBg} px-3 py-1 rounded border`}>
                         {viewItem.category}
                       </span>
-                      <h2 className={`text-lg font-bold font-serif ${activeTheme.textPrimary} mt-2`}>{viewItem.title}</h2>
+                      <h2 className={`text-xl font-bold font-serif ${activeTheme.textPrimary} mt-2.5`}>{viewItem.title}</h2>
                     </div>
                     {viewItem.sourceUrl && (
                       <a
                         href={viewItem.sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center space-x-1 text-xs text-terracotta-600 hover:underline"
+                        className="flex items-center space-x-1.5 text-sm font-bold text-terracotta-600 hover:underline"
                       >
                         <span>Visit Link</span>
                         <Icons.ExternalLink />
@@ -1024,13 +1023,13 @@
 
                   {/* Colors */}
                   {viewItem.colors && (
-                    <div className="space-y-1.5">
-                      <label className={`text-[11px] font-mono ${activeTheme.textMuted}`}>Color Palette</label>
-                      <div className="flex items-center space-x-2">
+                    <div className="space-y-2">
+                      <label className={`text-xs font-mono font-bold uppercase tracking-wider ${activeTheme.textMuted}`}>Color Palette</label>
+                      <div className="flex flex-wrap items-center gap-2">
                         {viewItem.colors.map((hex, i) => (
-                          <div key={i} className={`flex items-center space-x-1.5 ${activeTheme.cardBg} px-2 py-1 rounded-lg border ${activeTheme.border}`}>
-                            <div className="w-4 h-4 rounded border border-black/10 dark:border-white/10" style={{ backgroundColor: hex }} />
-                            <span className={`text-[10px] font-mono ${activeTheme.textPrimary}`}>{hex}</span>
+                          <div key={i} className={`flex items-center space-x-2 ${activeTheme.cardBg} px-3 py-1.5 rounded-lg border ${activeTheme.border}`}>
+                            <div className="w-5 h-5 rounded border border-black/10 dark:border-white/10" style={{ backgroundColor: hex }} />
+                            <span className={`text-xs font-mono font-bold ${activeTheme.textPrimary}`}>{hex}</span>
                           </div>
                         ))}
                       </div>
@@ -1038,18 +1037,18 @@
                   )}
 
                   {/* Prompt Keywords */}
-                  <div className="space-y-1">
-                    <label className={`text-[11px] font-mono ${activeTheme.textMuted}`}>AI Prompt Tokens</label>
-                    <p className={`p-3 rounded-xl border ${activeTheme.border} ${activeTheme.codeBg} text-xs font-mono`}>
+                  <div className="space-y-1.5">
+                    <label className={`text-xs font-mono font-bold uppercase tracking-wider ${activeTheme.textMuted}`}>AI Prompt Tokens</label>
+                    <p className={`p-4 rounded-xl border ${activeTheme.border} ${activeTheme.codeBg} text-sm font-mono leading-relaxed`}>
                       {viewItem.promptKeywords}
                     </p>
                   </div>
 
                   {/* Personal Notes */}
                   {viewItem.notes && (
-                    <div className="space-y-1">
-                      <label className={`text-[11px] font-mono ${activeTheme.textMuted}`}>Personal Taste Notes</label>
-                      <p className={`text-xs ${activeTheme.textSecondary} leading-relaxed p-3 rounded-xl border ${activeTheme.border} ${activeTheme.cardBg}`}>
+                    <div className="space-y-1.5">
+                      <label className={`text-xs font-mono font-bold uppercase tracking-wider ${activeTheme.textMuted}`}>Personal Taste Notes</label>
+                      <p className={`text-sm ${activeTheme.textSecondary} leading-relaxed p-4 rounded-xl border ${activeTheme.border} ${activeTheme.cardBg}`}>
                         {viewItem.notes}
                       </p>
                     </div>
@@ -1059,9 +1058,9 @@
                 <div className={`p-4 border-t ${activeTheme.border} flex justify-end`}>
                   <button
                     onClick={() => setViewItem(null)}
-                    className={`px-4 py-2 ${activeTheme.accentBg} text-xs font-semibold rounded-xl`}
+                    className={`px-5 py-2.5 ${activeTheme.accentBg} text-sm font-bold rounded-xl shadow-md`}
                   >
-                    Close
+                    Close Preview
                   </button>
                 </div>
 
@@ -1069,6 +1068,7 @@
             </div>
           )}
 
+          {}
           {isAddModalOpen && (
             <AddInspirationModal
               onClose={() => setIsAddModalOpen(false)}
@@ -1118,46 +1118,46 @@
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/60 backdrop-blur-sm">
           <div className={`w-full max-w-xl rounded-2xl border ${activeTheme.border} ${activeTheme.panelBg} overflow-hidden shadow-2xl max-h-[90vh] flex flex-col`}>
             
-            <div className={`p-5 border-b ${activeTheme.border} flex items-center justify-between`}>
+            <div className={`p-6 border-b ${activeTheme.border} flex items-center justify-between`}>
               <div>
-                <h3 className={`text-base font-bold font-serif ${activeTheme.textPrimary}`}>Add Design Inspiration</h3>
-                <p className={`text-xs ${activeTheme.textMuted}`}>Save web designs, Pinterest screenshots, or color schemes to your taste gallery</p>
+                <h3 className={`text-xl font-bold font-serif ${activeTheme.textPrimary}`}>Add Design Inspiration</h3>
+                <p className={`text-xs ${activeTheme.textMuted} mt-1`}>Save web designs, Pinterest screenshots, or color schemes to your taste gallery</p>
               </div>
-              <button onClick={onClose} className={`${activeTheme.textMuted} hover:${activeTheme.textPrimary} text-lg`}>✕</button>
+              <button onClick={onClose} className={`${activeTheme.textMuted} hover:${activeTheme.textPrimary} text-xl font-bold`}>✕</button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-5 space-y-4 overflow-y-auto flex-1 text-xs">
+            <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 text-sm">
               
               <div>
-                <label className={`block ${activeTheme.textMuted} mb-1 font-mono`}>Title *</label>
+                <label className={`block ${activeTheme.textMuted} mb-1.5 font-mono text-xs font-bold uppercase tracking-wider`}>Title *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Minimalist Swiss Architectural Landing Page"
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-2.5 ${activeTheme.textPrimary} focus:outline-none focus:border-terracotta-500`}
+                  className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-3 ${activeTheme.textPrimary} text-sm focus:outline-none focus:border-terracotta-500`}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className={`block ${activeTheme.textMuted} mb-1 font-mono`}>Image URL</label>
+                  <label className={`block ${activeTheme.textMuted} mb-1.5 font-mono text-xs font-bold uppercase tracking-wider`}>Image URL</label>
                   <input
                     type="url"
                     placeholder="https://..."
                     value={imageUrl}
                     onChange={e => setImageUrl(e.target.value)}
-                    className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-2.5 ${activeTheme.textPrimary} focus:outline-none focus:border-terracotta-500`}
+                    className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-3 ${activeTheme.textPrimary} text-sm focus:outline-none focus:border-terracotta-500`}
                   />
                 </div>
 
                 <div>
-                  <label className={`block ${activeTheme.textMuted} mb-1 font-mono`}>Category</label>
+                  <label className={`block ${activeTheme.textMuted} mb-1.5 font-mono text-xs font-bold uppercase tracking-wider`}>Category</label>
                   <select
                     value={category}
                     onChange={e => setCategory(e.target.value)}
-                    className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-2.5 ${activeTheme.textPrimary} focus:outline-none focus:border-terracotta-500`}
+                    className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-3 ${activeTheme.textPrimary} text-sm focus:outline-none focus:border-terracotta-500`}
                   >
                     {categories.map(c => (
                       <option key={c} value={c}>{c}</option>
@@ -1167,73 +1167,73 @@
               </div>
 
               <div>
-                <label className={`block ${activeTheme.textMuted} mb-1 font-mono`}>Source Link (Optional)</label>
+                <label className={`block ${activeTheme.textMuted} mb-1.5 font-mono text-xs font-bold uppercase tracking-wider`}>Source Link (Optional)</label>
                 <input
                   type="url"
                   placeholder="https://pinterest.com/pin/... or website URL"
                   value={sourceUrl}
                   onChange={e => setSourceUrl(e.target.value)}
-                  className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-2.5 ${activeTheme.textPrimary} focus:outline-none focus:border-terracotta-500`}
+                  className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-3 ${activeTheme.textPrimary} text-sm focus:outline-none focus:border-terracotta-500`}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className={`block ${activeTheme.textMuted} mb-1 font-mono`}>Aesthetic Tags (comma separated)</label>
+                  <label className={`block ${activeTheme.textMuted} mb-1.5 font-mono text-xs font-bold uppercase tracking-wider`}>Aesthetic Tags</label>
                   <input
                     type="text"
-                    placeholder="Warm Editorial, Glassmorphism, Brutalism"
+                    placeholder="Warm Editorial, Minimal, Serif"
                     value={tags}
                     onChange={e => setTags(e.target.value)}
-                    className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-2.5 ${activeTheme.textPrimary} focus:outline-none focus:border-terracotta-500`}
+                    className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-3 ${activeTheme.textPrimary} text-sm focus:outline-none focus:border-terracotta-500`}
                   />
                 </div>
 
                 <div>
-                  <label className={`block ${activeTheme.textMuted} mb-1 font-mono`}>Hex Colors (comma separated)</label>
+                  <label className={`block ${activeTheme.textMuted} mb-1.5 font-mono text-xs font-bold uppercase tracking-wider`}>Hex Colors</label>
                   <input
                     type="text"
                     placeholder="#FAF8F5, #1C1612, #C2593F"
                     value={colors}
                     onChange={e => setColors(e.target.value)}
-                    className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-2.5 ${activeTheme.textPrimary} focus:outline-none focus:border-terracotta-500`}
+                    className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-3 ${activeTheme.textPrimary} text-sm focus:outline-none focus:border-terracotta-500`}
                   />
                 </div>
               </div>
 
               <div>
-                <label className={`block ${activeTheme.textMuted} mb-1 font-mono`}>AI Prompt Keywords & Descriptors</label>
+                <label className={`block ${activeTheme.textMuted} mb-1.5 font-mono text-xs font-bold uppercase tracking-wider`}>AI Prompt Keywords & Descriptors</label>
                 <textarea
                   rows="2"
                   placeholder="e.g., Warm cream canvas, 1px thin hairline borders, high kerning headers, no box shadows"
                   value={promptKeywords}
                   onChange={e => setPromptKeywords(e.target.value)}
-                  className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-2.5 ${activeTheme.textPrimary} focus:outline-none focus:border-terracotta-500`}
+                  className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-3 ${activeTheme.textPrimary} text-sm focus:outline-none focus:border-terracotta-500`}
                 />
               </div>
 
               <div>
-                <label className={`block ${activeTheme.textMuted} mb-1 font-mono`}>Why do you like this? (Taste Notes)</label>
+                <label className={`block ${activeTheme.textMuted} mb-1.5 font-mono text-xs font-bold uppercase tracking-wider`}>Personal Notes</label>
                 <textarea
                   rows="2"
                   placeholder="e.g. Love the serif typography contrast and non-digital warm paper feel."
                   value={notes}
                   onChange={e => setNotes(e.target.value)}
-                  className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-2.5 ${activeTheme.textPrimary} focus:outline-none focus:border-terracotta-500`}
+                  className={`w-full border ${activeTheme.border} ${activeTheme.cardBg} rounded-xl p-3 ${activeTheme.textPrimary} text-sm focus:outline-none focus:border-terracotta-500`}
                 />
               </div>
 
-              <div className={`pt-3 border-t ${activeTheme.border} flex justify-end space-x-2`}>
+              <div className={`pt-4 border-t ${activeTheme.border} flex justify-end space-x-3`}>
                 <button
                   type="button"
                   onClick={onClose}
-                  className={`px-4 py-2 border ${activeTheme.border} ${activeTheme.cardBg} ${activeTheme.textSecondary} font-semibold rounded-xl`}
+                  className={`px-5 py-2.5 border ${activeTheme.border} ${activeTheme.cardBg} ${activeTheme.textSecondary} font-semibold rounded-xl text-sm`}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className={`px-4 py-2 ${activeTheme.accentBg} font-bold rounded-xl shadow-md`}
+                  className={`px-5 py-2.5 ${activeTheme.accentBg} font-bold rounded-xl shadow-md text-sm`}
                 >
                   Save Inspiration
                 </button>
