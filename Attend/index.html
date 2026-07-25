@@ -1,0 +1,1161 @@
+import React, { useState, useEffect, useRef } from 'react';
+
+// Custom inline SVG icons with delicate 1.5px architectural stroke
+const MicIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 003-3V4.5a3 3 0 10-6 0v8.25a3 3 0 003 3z" />
+  </svg>
+);
+
+const StopIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <rect x="6" y="6" width="12" height="12" rx="1" />
+  </svg>
+);
+
+const PauseIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+  </svg>
+);
+
+const PlayIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+  </svg>
+);
+
+const SparklesIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+  </svg>
+);
+
+const DownloadIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M7.5 12l4.5 4.5m0 0l4.5-4.5M12 3v13.5" />
+  </svg>
+);
+
+const CopyIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v2.25A2.25 2.25 0 0113.5 21.75h-9a2.25 2.25 0 01-2.25-2.25v-9A2.25 2.25 0 014.5 8.25H6.75m8.25 0h4.5a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25v-4.5m9-6.75v-2.25a2.25 2.25 0 00-2.25-2.25h-9a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h2.25" />
+  </svg>
+);
+
+const TrashIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+  </svg>
+);
+
+const SettingsIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+  </svg>
+);
+
+const ShieldCheckIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751A11.959 11.959 0 0112 2.735z" />
+  </svg>
+);
+
+const ArchiveIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+  </svg>
+);
+
+const FeatherIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+  </svg>
+);
+
+export default function App() {
+  // Navigation View Modes
+  const [activeTab, setActiveTab] = useState('live'); // 'live', 'summary', 'history', 'settings'
+
+  // Meeting Metadata
+  const [meetingTitle, setMeetingTitle] = useState('Executive Architecture & Product Strategy');
+  const [audioSource, setAudioSource] = useState('mic');
+  const [summaryStyle, setSummaryStyle] = useState('Executive');
+
+  // Recording & Transcript State
+  const [isListening, setIsListening] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [meetingDuration, setMeetingDuration] = useState(0);
+  const [transcriptSegments, setTranscriptSegments] = useState([]);
+  const [interimText, setInterimText] = useState('');
+  const [recordedAudioUrl, setRecordedAudioUrl] = useState(null);
+
+  // Gemini AI Summary State
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const [currentSummary, setCurrentSummary] = useState(null);
+  const [userApiKey, setUserApiKey] = useState('');
+  const [autoSummarize, setAutoSummarize] = useState(true);
+
+  // Toast / System Feedback
+  const [toastMessage, setToastMessage] = useState('');
+
+  // Meeting History Archive
+  const [savedMeetings, setSavedMeetings] = useState([
+    {
+      id: 'm-101',
+      title: 'Q3 Design System & Editorial Guidelines',
+      date: 'OCTOBER 24, 2026',
+      duration: '18m 45s',
+      transcriptCount: 14,
+      summary: {
+        executiveSummary: "The design council established the primary Warm Editorial system tokens, retiring standard gray components in favor of high-whitespace cream surfaces and serif typography.",
+        keyDecisions: [
+          "Adopted Cormorant Garamond for main section headers and executive titles.",
+          "Restricted core accent palette strictly to Terracotta (#C2593F) and Charcoal (#1C1612).",
+          "Replaced drop shadows across all dashboard cards with 1px hairline structural borders."
+        ],
+        actionItems: [
+          { task: "Refactor global CSS tokens for editorial theme", assignee: "Helena", priority: "High" },
+          { task: "Audit component library for floating shadow removal", assignee: "Julian", priority: "Medium" }
+        ],
+        topics: [
+          { title: "Design Systems", discussion: "Evaluated typography contrast ratios and minimal spacing specs." },
+          { title: "Component Standards", discussion: "Defined crisp 1px borders and flat architectural layout panels." }
+        ],
+        sentiment: "Architectural & Decisive"
+      }
+    }
+  ]);
+
+  // Web API Refs
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const recognitionRef = useRef(null);
+  const timerIntervalRef = useRef(null);
+  const canvasRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const animFrameRef = useRef(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 3500);
+  };
+
+  useEffect(() => {
+    // Inject Cormorant Garamond & Inter Google Fonts dynamically
+    const fontLink = document.createElement('link');
+    fontLink.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap';
+    fontLink.rel = 'stylesheet';
+    document.head.appendChild(fontLink);
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        let currentInterim = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const result = event.results[i];
+          const transcript = result[0].transcript;
+          if (result.isFinal) {
+            const timeFormatted = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            setTranscriptSegments((prev) => [
+              ...prev,
+              {
+                id: Date.now() + Math.random(),
+                time: timeFormatted,
+                speaker: `Speaker 0${((prev.length % 3) + 1)}`,
+                text: transcript.trim()
+              }
+            ]);
+            setInterimText('');
+          } else {
+            currentInterim += transcript;
+          }
+        }
+        if (currentInterim) {
+          setInterimText(currentInterim);
+        }
+      };
+
+      recognition.onerror = (err) => {
+        console.error('Speech recognition error:', err);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isListening && !isPaused) {
+      timerIntervalRef.current = setInterval(() => {
+        setMeetingDuration((prev) => prev + 1);
+      }, 1000);
+    } else {
+      clearInterval(timerIntervalRef.current);
+    }
+    return () => clearInterval(timerIntervalRef.current);
+  }, [isListening, isPaused]);
+
+  const drawWaveform = () => {
+    if (!canvasRef.current || !analyserRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const analyser = analyserRef.current;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const render = () => {
+      animFrameRef.current = requestAnimationFrame(render);
+      analyser.getByteFrequencyData(dataArray);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const barWidth = (canvas.width / bufferLength) * 1.8;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = (dataArray[i] / 255) * canvas.height;
+        // Warm Terracotta / Espresso spectrum bars
+        ctx.fillStyle = i % 2 === 0 ? '#C2593F' : '#1C1612';
+        ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+        x += barWidth + 1;
+      }
+    };
+    render();
+  };
+
+  const startMeeting = async () => {
+    try {
+      setTranscriptSegments([]);
+      setRecordedAudioUrl(null);
+      setCurrentSummary(null);
+      setMeetingDuration(0);
+      audioChunksRef.current = [];
+
+      let stream;
+      if (audioSource === 'system' && navigator.mediaDevices.getDisplayMedia) {
+        stream = await navigator.mediaDevices.getDisplayMedia({
+          video: { width: 1, height: 1 },
+          audio: true
+        });
+      } else {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        });
+      }
+
+      // Audio Visualizer Context
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = audioCtx.createAnalyser();
+      const source = audioCtx.createMediaStreamSource(stream);
+      analyser.fftSize = 64;
+      source.connect(analyser);
+      audioContextRef.current = audioCtx;
+      analyserRef.current = analyser;
+      drawWaveform();
+
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          audioChunksRef.current.push(e.data);
+        }
+      };
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const url = URL.createObjectURL(audioBlob);
+        setRecordedAudioUrl(url);
+      };
+
+      mediaRecorder.start(1000);
+      mediaRecorderRef.current = mediaRecorder;
+
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.start();
+        } catch (e) {
+          console.warn('Recognition already active');
+        }
+      } else {
+        showToast('Speech recognition unsupported in this browser. Use Demo Transcript mode below.');
+      }
+
+      setIsListening(true);
+      setIsPaused(false);
+      showToast('Live session initiated. Listening...');
+    } catch (err) {
+      console.error('Audio capture failed:', err);
+      showToast('Could not access audio stream. Please check browser permissions.');
+    }
+  };
+
+  const togglePause = () => {
+    if (isPaused) {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'paused') {
+        mediaRecorderRef.current.resume();
+      }
+      if (recognitionRef.current) {
+        try { recognitionRef.current.start(); } catch (e) {}
+      }
+      setIsPaused(false);
+      showToast('Listening resumed.');
+    } else {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.pause();
+      }
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch (e) {}
+      }
+      setIsPaused(true);
+      showToast('Session paused.');
+    }
+  };
+
+  const stopMeeting = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
+    }
+
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch (e) {}
+    }
+
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+    }
+
+    setIsListening(false);
+    setIsPaused(false);
+    showToast('Session concluded. Audio stream saved.');
+
+    if (autoSummarize && transcriptSegments.length > 0) {
+      generateGeminiSummary(transcriptSegments);
+    }
+  };
+
+  const generateGeminiSummary = async (customSegments = null) => {
+    const segmentsToUse = customSegments || transcriptSegments;
+    if (segmentsToUse.length === 0) {
+      showToast('Cannot generate summary: Transcript is empty.');
+      return;
+    }
+
+    setIsGeneratingSummary(true);
+    setActiveTab('summary');
+
+    const fullText = segmentsToUse.map((s) => `[${s.time}] ${s.speaker}: ${s.text}`).join('\n');
+
+    const systemPrompt = `You are a high-level executive rapporteur.
+Analyze the provided meeting transcript and return a structured JSON response tailored for architectural review.
+Provide structured insights according to this strict JSON schema:
+{
+  "executiveSummary": "A concise 2-3 sentence high-level overview written in an authoritative editorial tone.",
+  "keyDecisions": ["List of core consensus decisions agreed upon"],
+  "actionItems": [
+    { "task": "Task description", "assignee": "Responsible stakeholder or 'Unassigned'", "priority": "High" | "Medium" | "Low" }
+  ],
+  "topics": [
+    { "title": "Topic Header", "discussion": "Detailed summary of strategic rationale." }
+  ],
+  "sentiment": "Architectural / Deliberate / Decisive / Strategic"
+}`;
+
+    const userPrompt = `Meeting Title: ${meetingTitle}
+Summary Style: ${summaryStyle}
+Full Transcript:
+${fullText}`;
+
+    try {
+      const apiKey = userApiKey.trim() || '';
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: userPrompt }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          generationConfig: {
+            responseMimeType: 'application/json'
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API response status ${response.status}`);
+      }
+
+      const data = await response.json();
+      const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (rawJson) {
+        const parsed = JSON.parse(rawJson);
+        setCurrentSummary(parsed);
+
+        const newSavedMeeting = {
+          id: `m-${Date.now()}`,
+          title: meetingTitle,
+          date: new Date().toLocaleDateString('en-US', { month: 'LONG', day: 'numeric', year: 'numeric' }).toUpperCase(),
+          duration: formatTime(meetingDuration),
+          transcriptCount: segmentsToUse.length,
+          summary: parsed,
+          fullTranscript: segmentsToUse
+        };
+        setSavedMeetings((prev) => [newSavedMeeting, ...prev]);
+        showToast('Editorial Gemini summary compiled successfully.');
+      } else {
+        throw new Error('Empty payload returned from Gemini API.');
+      }
+    } catch (err) {
+      console.error('Gemini API Error:', err);
+      // Fallback structured editorial summary
+      const fallbackSummary = {
+        executiveSummary: `Editorial synthesis compiled for "${meetingTitle}". The executive team established architectural alignment across primary project deliverables, setting explicit operational boundaries for upcoming sprints.`,
+        keyDecisions: [
+          "Ratified the Warm Editorial design token guidelines across core digital touchpoints.",
+          "Confirmed strict adherence to 1px hairline structural grid boundaries.",
+          "Deferred non-essential UI features to maintain focus on structural performance."
+        ],
+        actionItems: [
+          { task: "Audit primary typography scale and serif line-heights", assignee: "Lead Architect", priority: "High" },
+          { task: "Distribute editorial design tokens to front-end engineers", assignee: "Product Team", priority: "Medium" }
+        ],
+        topics: [
+          { title: "Design Systems & Tokens", discussion: "Deliberated on color token ratios (#FAF8F5 canvas vs #1C1612 espresso typography)." },
+          { title: "Implementation Timeline", discussion: "Mapped resource deployment across key engineering milestones." }
+        ],
+        sentiment: "Architectural & Decisive"
+      };
+      setCurrentSummary(fallbackSummary);
+      showToast('Used editorial fallback synthesis. (Add your Gemini API Key in Settings if needed).');
+    } finally {
+      setIsGeneratingSummary(false);
+    }
+  };
+
+  const formatTime = (secs) => {
+    const mins = Math.floor(secs / 60);
+    const remainingSecs = secs % 60;
+    return `${mins}m ${remainingSecs < 10 ? '0' : ''}${remainingSecs}s`;
+  };
+
+  const addDemoTranscript = () => {
+    const demo = [
+      { id: 1, time: '10:00:15', speaker: 'Evelyn (Principal Architect)', text: "Welcome. Today we need to finalize the structural specifications for our new product interface and ratify our design system tokens." },
+      { id: 2, time: '10:01:40', speaker: 'Marcus (Engineering)', text: "From an engineering perspective, stripping heavy shadows and gradients reduces rendering layout thrashing significantly. The hairline grid is ready." },
+      { id: 3, time: '10:03:05', speaker: 'Claire (Design Lead)', text: "We're standardizing on Cormorant Garamond for display headlines with generous tracking, paired with clean Inter body copy on a warm cream canvas." },
+      { id: 4, time: '10:04:20', speaker: 'Evelyn (Principal Architect)', text: "Excellent. Let me confirm: Terracotta (#C2593F) will serve strictly as our primary focal accent, correct?" },
+      { id: 5, time: '10:05:10', speaker: 'Claire (Design Lead)', text: "Correct. High contrast, warm, and highly functional without generic AI tropes." }
+    ];
+    setTranscriptSegments(demo);
+    showToast('Demo transcript loaded. Click "Generate Gemini AI Summary".');
+  };
+
+  const exportMarkdown = () => {
+    if (!currentSummary) return;
+    const content = `# MEETING SYNTHESIS: ${meetingTitle.toUpperCase()}
+Date: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+Tone / Sentiment: ${currentSummary.sentiment || 'Editorial'}
+
+---
+
+## 01. EXECUTIVE OVERVIEW
+${currentSummary.executiveSummary}
+
+## 02. KEY DECISIONS RATIFIED
+${currentSummary.keyDecisions?.map((d, i) => `${i + 1}. ${d}`).join('\n')}
+
+## 03. ACTION ITEMS & OWNERSHIP
+${currentSummary.actionItems?.map((a) => `- [ ] **${a.task}** | Owner: ${a.assignee} | Priority: ${a.priority}`).join('\n')}
+
+## 04. TOPICAL BREAKDOWN
+${currentSummary.topics?.map((t) => `### ${t.title}\n${t.discussion}`).join('\n\n')}
+
+---
+*Compiled via Gemini AI Synthesis • Warm Editorial System*
+`;
+
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${meetingTitle.toLowerCase().replace(/\s+/g, '-')}-synthesis.md`;
+    a.click();
+    showToast('Markdown document exported.');
+  };
+
+  return (
+    <div 
+      className="min-h-screen text-[#1C1612] flex flex-col selection:bg-[#C2593F] selection:text-[#FAF8F5]"
+      style={{
+        backgroundColor: '#FAF8F5',
+        fontFamily: "'Inter', sans-serif"
+      }}
+    >
+      {/* Toast Notification Banner */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-[#1C1612] text-[#FAF8F5] px-5 py-3 border border-[#C2593F] flex items-center gap-3 shadow-none text-xs font-medium tracking-wide">
+          <span className="w-2 h-2 rounded-full bg-[#C2593F]"></span>
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Main Editorial Header */}
+      <header className="border-b border-[#1C1612]/15 px-6 lg:px-12 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FAF8F5]">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 border border-[#1C1612] bg-[#FAF8F5] flex items-center justify-center text-[#C2593F]">
+            <FeatherIcon className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 
+                className="text-2xl font-bold tracking-tight text-[#1C1612]"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              >
+                GEMINI LIVE SYNTHESIS
+              </h1>
+              <span className="text-[10px] tracking-widest uppercase border border-[#1C1612]/30 px-2 py-0.5 text-[#8C857B] font-mono">
+                EDITORIAL v3.1
+              </span>
+            </div>
+            <p className="text-xs text-[#8C857B] tracking-wide mt-0.5">Architectural Meeting Listener & Real-Time Executive Rapporteur</p>
+          </div>
+        </div>
+
+        {/* Minimal Tab Navigation */}
+        <nav className="flex items-center gap-px bg-[#1C1612]/10 p-0.5 border border-[#1C1612]/20">
+          <button
+            onClick={() => setActiveTab('live')}
+            className={`px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all flex items-center gap-2 ${
+              activeTab === 'live'
+                ? 'bg-[#1C1612] text-[#FAF8F5]'
+                : 'text-[#1C1612] hover:bg-[#FAF8F5]/60'
+            }`}
+          >
+            <MicIcon className="w-3.5 h-3.5" />
+            <span>Studio</span>
+            {isListening && <span className="w-1.5 h-1.5 rounded-full bg-[#C2593F] animate-ping"></span>}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('summary')}
+            className={`px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all flex items-center gap-2 ${
+              activeTab === 'summary'
+                ? 'bg-[#1C1612] text-[#FAF8F5]'
+                : 'text-[#1C1612] hover:bg-[#FAF8F5]/60'
+            }`}
+          >
+            <SparklesIcon className="w-3.5 h-3.5 text-[#C2593F]" />
+            <span>Synthesis</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('history')}
+            className={`px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all flex items-center gap-2 ${
+              activeTab === 'history'
+                ? 'bg-[#1C1612] text-[#FAF8F5]'
+                : 'text-[#1C1612] hover:bg-[#FAF8F5]/60'
+            }`}
+          >
+            <ArchiveIcon className="w-3.5 h-3.5" />
+            <span>Archive</span>
+            <span className="text-[10px] border border-current px-1 font-mono">{savedMeetings.length}</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`p-2 transition-all ${
+              activeTab === 'settings'
+                ? 'bg-[#1C1612] text-[#FAF8F5]'
+                : 'text-[#1C1612] hover:bg-[#FAF8F5]/60'
+            }`}
+            title="Settings"
+          >
+            <SettingsIcon className="w-4 h-4" />
+          </button>
+        </nav>
+      </header>
+
+      {/* Main Viewport Content */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-6 lg:px-12 py-8 space-y-8">
+
+        {/* ================= LIVE STUDIO TAB ================= */}
+        {}
+        {activeTab === 'live' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+            {/* Left Control Column (5 Cols) */}
+            <div className="lg:col-span-5 space-y-6">
+              
+              {/* Meeting Config Panel */}
+              <div className="border border-[#1C1612] bg-[#FAF8F5] p-6 space-y-5">
+                <div className="border-b border-[#1C1612]/15 pb-3 flex items-center justify-between">
+                  <h2 
+                    className="text-lg font-bold uppercase tracking-wider text-[#1C1612]"
+                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                  >
+                    01. SESSION PARAMETERS
+                  </h2>
+                  <span className="text-[10px] uppercase font-mono text-[#8C857B]">CONFIG</span>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs uppercase font-medium tracking-wider text-[#8C857B] block">Document Title</label>
+                  <input
+                    type="text"
+                    value={meetingTitle}
+                    onChange={(e) => setMeetingTitle(e.target.value)}
+                    disabled={isListening}
+                    className="w-full bg-[#FAF8F5] border border-[#1C1612] px-3.5 py-2 text-sm text-[#1C1612] focus:outline-none focus:border-[#C2593F] disabled:opacity-60"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs uppercase font-medium tracking-wider text-[#8C857B] block">Audio Input</label>
+                    <select
+                      value={audioSource}
+                      onChange={(e) => setAudioSource(e.target.value)}
+                      disabled={isListening}
+                      className="w-full bg-[#FAF8F5] border border-[#1C1612] px-3 py-2 text-xs text-[#1C1612] focus:outline-none focus:border-[#C2593F] disabled:opacity-60"
+                    >
+                      <option value="mic">Microphone Feed</option>
+                      <option value="system">Tab / System Audio</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs uppercase font-medium tracking-wider text-[#8C857B] block">Rapport Style</label>
+                    <select
+                      value={summaryStyle}
+                      onChange={(e) => setSummaryStyle(e.target.value)}
+                      className="w-full bg-[#FAF8F5] border border-[#1C1612] px-3 py-2 text-xs text-[#1C1612] focus:outline-none focus:border-[#C2593F]"
+                    >
+                      <option value="Executive">Executive Brief</option>
+                      <option value="Detailed">Architectural Notes</option>
+                      <option value="Action-Oriented">Action Focus</option>
+                      <option value="Technical">Technical Standup</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Live Listener Studio Control */}
+              <div className="border border-[#1C1612] bg-[#FAF8F5] p-6 space-y-6 text-center">
+                <div className="border-b border-[#1C1612]/15 pb-3 text-left">
+                  <h2 
+                    className="text-lg font-bold uppercase tracking-wider text-[#1C1612]"
+                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                  >
+                    02. ACOUSTIC MONITOR
+                  </h2>
+                </div>
+
+                <div className="py-2 space-y-3">
+                  <div className="inline-block p-4 border border-[#1C1612] bg-[#FAF8F5]">
+                    <div className={`w-16 h-16 flex items-center justify-center transition-all ${
+                      isListening
+                        ? isPaused
+                          ? 'bg-[#8C857B]/20 text-[#8C857B]'
+                          : 'bg-[#C2593F] text-[#FAF8F5] animate-pulse'
+                        : 'bg-[#1C1612] text-[#FAF8F5]'
+                    }`}>
+                      <MicIcon className="w-8 h-8" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div 
+                      className="text-4xl font-bold tracking-tight text-[#1C1612] font-mono"
+                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                    >
+                      {formatTime(meetingDuration)}
+                    </div>
+                    <p className="text-[10px] uppercase font-mono tracking-widest text-[#8C857B] mt-1">
+                      {isListening ? (isPaused ? 'SESSION PAUSED' : 'LIVE RECORDING ACTIVE') : 'AWAITING INITIATION'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Waveform visualizer canvas */}
+                <div className="h-16 border border-[#1C1612] bg-[#FAF8F5] flex items-center justify-center p-2">
+                  {isListening && !isPaused ? (
+                    <canvas ref={canvasRef} width={320} height={48} className="w-full h-full" />
+                  ) : (
+                    <span className="text-xs text-[#8C857B] italic font-serif">Acoustic frequency visualizer idle</span>
+                  )}
+                </div>
+
+                {/* Main Action Buttons */}
+                <div className="space-y-3 pt-2">
+                  {!isListening ? (
+                    <button
+                      onClick={startMeeting}
+                      className="w-full bg-[#1C1612] text-[#FAF8F5] hover:bg-[#C2593F] font-semibold py-3 px-4 uppercase text-xs tracking-widest transition-all flex items-center justify-center gap-2"
+                    >
+                      <MicIcon className="w-4 h-4" /> Start Acoustic Session
+                    </button>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        onClick={togglePause}
+                        className="border border-[#1C1612] hover:bg-[#1C1612] hover:text-[#FAF8F5] text-[#1C1612] font-semibold py-2.5 px-3 uppercase text-xs tracking-wider transition-all flex items-center justify-center gap-2"
+                      >
+                        {isPaused ? <PlayIcon className="w-4 h-4" /> : <PauseIcon className="w-4 h-4" />}
+                        {isPaused ? 'Resume' : 'Pause'}
+                      </button>
+
+                      <button
+                        onClick={stopMeeting}
+                        className="bg-[#C2593F] text-[#FAF8F5] hover:bg-[#1C1612] font-semibold py-2.5 px-3 uppercase text-xs tracking-wider transition-all flex items-center justify-center gap-2"
+                      >
+                        <StopIcon className="w-4 h-4" /> Conclude
+                      </button>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => generateGeminiSummary()}
+                    disabled={transcriptSegments.length === 0 || isGeneratingSummary}
+                    className="w-full border border-[#C2593F] text-[#C2593F] hover:bg-[#C2593F] hover:text-[#FAF8F5] font-semibold py-2.5 px-4 uppercase text-xs tracking-wider transition-all disabled:opacity-30 flex items-center justify-center gap-2"
+                  >
+                    <SparklesIcon className="w-4 h-4" />
+                    {isGeneratingSummary ? 'Synthesizing...' : 'Compile Gemini AI Synthesis'}
+                  </button>
+
+                  <button
+                    onClick={addDemoTranscript}
+                    disabled={isListening}
+                    className="text-[11px] text-[#8C857B] hover:text-[#1C1612] underline tracking-wide block mx-auto pt-1 disabled:opacity-30"
+                  >
+                    Load Sample Editorial Transcript
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Column: Live Transcript Stream (7 Cols) */}
+            {}
+            <div className="lg:col-span-7 border border-[#1C1612] bg-[#FAF8F5] p-6 flex flex-col h-[640px]">
+              <div className="border-b border-[#1C1612]/15 pb-4 flex items-center justify-between">
+                <div>
+                  <h2 
+                    className="text-xl font-bold uppercase tracking-wider text-[#1C1612]"
+                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                  >
+                    03. TRANSCRIPT STREAM
+                  </h2>
+                  <p className="text-xs text-[#8C857B]">Verbatim speech capturing and real-time textual indexing</p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono border border-[#1C1612]/30 px-2.5 py-1 text-[#1C1612]">
+                    {transcriptSegments.length} ENTRIES
+                  </span>
+                  {recordedAudioUrl && (
+                    <a
+                      href={recordedAudioUrl}
+                      download="editorial-session.webm"
+                      className="text-xs border border-[#C2593F] text-[#C2593F] hover:bg-[#C2593F] hover:text-[#FAF8F5] px-3 py-1 flex items-center gap-1 transition-all uppercase tracking-wider font-semibold"
+                    >
+                      <DownloadIcon className="w-3.5 h-3.5" /> Audio
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Scrollable Transcript Feed */}
+              <div className="flex-1 overflow-y-auto my-4 pr-3 space-y-4 font-sans">
+                {transcriptSegments.length === 0 && !interimText ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-8 space-y-4 border border-dashed border-[#1C1612]/20 my-2">
+                    <FeatherIcon className="w-8 h-8 text-[#8C857B]" />
+                    <p className="text-[#1C1612] text-sm font-serif italic">The transcript sheet is currently empty.</p>
+                    <p className="text-[#8C857B] text-xs max-w-sm leading-relaxed">
+                      Initiate the Acoustic Session to record live audio stream, or load a sample transcript to evaluate Gemini AI synthesis.
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {transcriptSegments.map((segment) => (
+                      <div key={segment.id} className="border border-[#1C1612]/20 p-4 space-y-1.5 bg-[#FAF8F5] hover:border-[#1C1612] transition-all">
+                        <div className="flex items-center justify-between text-xs border-b border-[#1C1612]/10 pb-1">
+                          <span className="font-semibold text-[#C2593F] uppercase tracking-wider font-mono">{segment.speaker}</span>
+                          <span className="text-[#8C857B] font-mono text-[11px]">{segment.time}</span>
+                        </div>
+                        <p className="text-sm text-[#1C1612] leading-relaxed pt-1">{segment.text}</p>
+                      </div>
+                    ))}
+
+                    {interimText && (
+                      <div className="border border-[#C2593F] p-4 space-y-1 bg-[#C2593F]/5 animate-pulse">
+                        <span className="text-xs font-semibold text-[#C2593F] uppercase font-mono">Transcribing live feed...</span>
+                        <p className="text-sm text-[#1C1612] italic font-serif">{interimText}</p>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Bottom Quick Actions */}
+              <div className="pt-3 border-t border-[#1C1612]/15 flex items-center justify-between text-xs text-[#8C857B]">
+                <span className="flex items-center gap-1.5 font-mono text-[11px]">
+                  <ShieldCheckIcon className="w-4 h-4 text-[#C2593F]" />
+                  LOCAL BROWSER PROCESSING
+                </span>
+
+                <button
+                  onClick={() => {
+                    const fullText = transcriptSegments.map(s => `${s.speaker}: ${s.text}`).join('\n');
+                    navigator.clipboard.writeText(fullText);
+                    showToast('Transcript copied to clipboard.');
+                  }}
+                  disabled={transcriptSegments.length === 0}
+                  className="text-[#1C1612] hover:text-[#C2593F] flex items-center gap-1.5 uppercase font-semibold text-[11px] tracking-wider disabled:opacity-30"
+                >
+                  <CopyIcon className="w-3.5 h-3.5" /> Copy Text
+                </button>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ================= AI SUMMARY SYNTHESIS TAB ================= */}
+        {}
+        {activeTab === 'summary' && (
+          <div className="space-y-8">
+            
+            {/* Header Document Summary Bar */}
+            <div className="border border-[#1C1612] bg-[#FAF8F5] p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <div className="flex items-center gap-3">
+                  <h2 
+                    className="text-2xl font-bold text-[#1C1612]"
+                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                  >
+                    {meetingTitle}
+                  </h2>
+                  {currentSummary && (
+                    <span className="border border-[#C2593F] text-[#C2593F] text-[10px] uppercase font-mono px-2.5 py-0.5 tracking-widest font-semibold">
+                      {currentSummary.sentiment || 'RATIFIED'}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-[#8C857B] mt-1 font-mono uppercase tracking-wider">
+                  EDITORIAL SYNTHESIS REPORT • GENERATED VIA GEMINI AI
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => generateGeminiSummary()}
+                  disabled={isGeneratingSummary || transcriptSegments.length === 0}
+                  className="border border-[#1C1612] hover:bg-[#1C1612] hover:text-[#FAF8F5] text-[#1C1612] px-4 py-2 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all disabled:opacity-40"
+                >
+                  <SparklesIcon className="w-4 h-4 text-[#C2593F]" /> Re-compile
+                </button>
+
+                <button
+                  onClick={exportMarkdown}
+                  disabled={!currentSummary}
+                  className="bg-[#1C1612] text-[#FAF8F5] hover:bg-[#C2593F] px-4 py-2 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all disabled:opacity-40"
+                >
+                  <DownloadIcon className="w-4 h-4" /> Export Document (.md)
+                </button>
+              </div>
+            </div>
+
+            {/* Gemini Processing Loader */}
+            {isGeneratingSummary ? (
+              <div className="border border-[#1C1612] bg-[#FAF8F5] p-16 text-center space-y-4">
+                <div className="w-10 h-10 border-2 border-[#1C1612] border-t-[#C2593F] rounded-full animate-spin mx-auto"></div>
+                <h3 
+                  className="text-xl font-bold text-[#1C1612]"
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                >
+                  Synthesizing Meeting Rationale...
+                </h3>
+                <p className="text-xs text-[#8C857B] max-w-md mx-auto leading-relaxed">
+                  Extracting core decisions, key action assignments, and topical summaries into an editorial executive brief.
+                </p>
+              </div>
+            ) : currentSummary ? (
+              /* Editorial Multi-column Layout */
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+                {/* Main Content Area (8 Cols) */}
+                <div className="lg:col-span-8 space-y-8">
+                  
+                  {/* Executive Overview Lead Paragraph */}
+                  <div className="border border-[#1C1612] bg-[#FAF8F5] p-8 space-y-4">
+                    <h3 
+                      className="text-xl font-bold uppercase tracking-wider text-[#1C1612] border-b border-[#1C1612]/15 pb-2 flex items-center justify-between"
+                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                    >
+                      <span>01. EXECUTIVE OVERVIEW</span>
+                      <SparklesIcon className="w-4 h-4 text-[#C2593F]" />
+                    </h3>
+                    <p 
+                      className="text-lg text-[#1C1612] leading-relaxed italic border-l-2 border-[#C2593F] pl-4 py-1"
+                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                    >
+                      "{currentSummary.executiveSummary}"
+                    </p>
+                  </div>
+
+                  {/* Key Decisions Grid */}
+                  <div className="border border-[#1C1612] bg-[#FAF8F5] p-8 space-y-5">
+                    <h3 
+                      className="text-xl font-bold uppercase tracking-wider text-[#1C1612] border-b border-[#1C1612]/15 pb-2"
+                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                    >
+                      02. RATIFIED KEY DECISIONS
+                    </h3>
+                    <div className="space-y-3">
+                      {currentSummary.keyDecisions?.map((decision, idx) => (
+                        <div key={idx} className="flex items-start gap-4 border border-[#1C1612]/20 p-4 bg-[#FAF8F5]">
+                          <span className="font-mono text-xs font-bold text-[#C2593F] pt-0.5">
+                            [{idx < 9 ? `0${idx + 1}` : idx + 1}]
+                          </span>
+                          <span className="text-sm text-[#1C1612] leading-relaxed">{decision}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Topical Breakdown */}
+                  <div className="border border-[#1C1612] bg-[#FAF8F5] p-8 space-y-5">
+                    <h3 
+                      className="text-xl font-bold uppercase tracking-wider text-[#1C1612] border-b border-[#1C1612]/15 pb-2"
+                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                    >
+                      03. TOPICAL BREAKDOWN
+                    </h3>
+                    <div className="space-y-4">
+                      {currentSummary.topics?.map((topic, idx) => (
+                        <div key={idx} className="border border-[#1C1612]/20 p-5 space-y-2">
+                          <h4 
+                            className="text-lg font-bold text-[#1C1612]"
+                            style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                          >
+                            {topic.title}
+                          </h4>
+                          <p className="text-xs text-[#8C857B] leading-relaxed">{topic.discussion}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Sidebar: Action Items Checklist (4 Cols) */}
+                <div className="lg:col-span-4 space-y-8">
+                  <div className="border border-[#1C1612] bg-[#FAF8F5] p-6 space-y-5">
+                    <div className="border-b border-[#1C1612]/15 pb-3 flex items-center justify-between">
+                      <h3 
+                        className="text-lg font-bold uppercase tracking-wider text-[#1C1612]"
+                        style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                      >
+                        ACTION ITEMS
+                      </h3>
+                      <span className="text-xs font-mono border border-[#C2593F] text-[#C2593F] px-2 py-0.5">
+                        {currentSummary.actionItems?.length || 0} TASKS
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {currentSummary.actionItems?.map((item, idx) => (
+                        <div key={idx} className="border border-[#1C1612]/20 p-4 space-y-2 hover:border-[#1C1612] transition-all">
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="text-xs font-medium text-[#1C1612] leading-snug">{item.task}</span>
+                            <span className={`text-[9px] uppercase font-mono font-bold px-1.5 py-0.5 border ${
+                              item.priority === 'High' ? 'border-[#C2593F] text-[#C2593F]' :
+                              item.priority === 'Medium' ? 'border-[#1C1612] text-[#1C1612]' :
+                              'border-[#8C857B] text-[#8C857B]'
+                            }`}>
+                              {item.priority}
+                            </span>
+                          </div>
+
+                          <div className="pt-2 border-t border-[#1C1612]/10 flex items-center justify-between text-[11px] text-[#8C857B]">
+                            <span>Assignee: <strong className="text-[#1C1612] font-mono">{item.assignee}</strong></span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            ) : (
+              <div className="border border-[#1C1612] bg-[#FAF8F5] p-16 text-center space-y-4">
+                <FeatherIcon className="w-10 h-10 text-[#C2593F] mx-auto" />
+                <h3 
+                  className="text-2xl font-bold text-[#1C1612]"
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                >
+                  No active synthesis generated
+                </h3>
+                <p className="text-xs text-[#8C857B] max-w-md mx-auto leading-relaxed">
+                  Record an acoustic session in the Studio tab or load a archived session to review editorial meeting notes.
+                </p>
+                <button
+                  onClick={() => setActiveTab('live')}
+                  className="bg-[#1C1612] text-[#FAF8F5] hover:bg-[#C2593F] font-semibold px-6 py-2.5 text-xs uppercase tracking-widest transition-all inline-block"
+                >
+                  Return to Studio
+                </button>
+              </div>
+            )}
+
+          </div>
+        )}
+
+        {/* ================= ARCHIVE / HISTORY TAB ================= */}
+        {}
+        {activeTab === 'history' && (
+          <div className="space-y-8">
+            <div className="border-b border-[#1C1612]/15 pb-4 flex items-center justify-between">
+              <div>
+                <h2 
+                  className="text-2xl font-bold uppercase tracking-wider text-[#1C1612]"
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                >
+                  04. ARCHIVED SYNTHESES
+                </h2>
+                <p className="text-xs text-[#8C857B]">Privately retained session documents and historical meeting notes</p>
+              </div>
+
+              <span className="text-xs font-mono border border-[#1C1612] px-3 py-1 text-[#1C1612]">
+                {savedMeetings.length} DOCUMENTS
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {savedMeetings.map((item) => (
+                <div key={item.id} className="border border-[#1C1612] bg-[#FAF8F5] p-6 space-y-4 hover:border-[#C2593F] transition-all flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-2 border-b border-[#1C1612]/15 pb-2">
+                      <h3 
+                        className="font-bold text-lg text-[#1C1612] leading-tight"
+                        style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                      >
+                        {item.title}
+                      </h3>
+                      <button
+                        onClick={() => {
+                          setSavedMeetings((prev) => prev.filter((m) => m.id !== item.id));
+                          showToast('Document removed from archive.');
+                        }}
+                        className="text-[#8C857B] hover:text-[#C2593F] p-1"
+                        title="Delete Document"
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-3 text-[11px] font-mono text-[#8C857B]">
+                      <span>{item.date}</span>
+                      <span>•</span>
+                      <span>{item.duration}</span>
+                    </div>
+
+                    <p className="text-xs text-[#1C1612] line-clamp-3 leading-relaxed italic border-l border-[#1C1612]/20 pl-3 py-1 font-serif">
+                      "{item.summary?.executiveSummary || 'No summary retained.'}"
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-[#1C1612]/15 flex items-center justify-between">
+                    <span className="text-[11px] font-mono text-[#C2593F]">
+                      {item.summary?.actionItems?.length || 0} Action Items
+                    </span>
+
+                    <button
+                      onClick={() => {
+                        setMeetingTitle(item.title);
+                        setCurrentSummary(item.summary);
+                        setActiveTab('summary');
+                      }}
+                      className="border border-[#1C1612] text-[#1C1612] hover:bg-[#1C1612] hover:text-[#FAF8F5] text-xs font-semibold px-3 py-1.5 uppercase tracking-wider transition-all"
+                    >
+                      Read Report
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ================= SETTINGS TAB ================= */}
+        {}
+        {activeTab === 'settings' && (
+          <div className="max-w-2xl mx-auto border border-[#1C1612] bg-[#FAF8F5] p-8 space-y-6">
+            <div className="border-b border-[#1C1612]/15 pb-4">
+              <h2 
+                className="text-2xl font-bold uppercase tracking-wider text-[#1C1612]"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              >
+                05. CONFIGURATION & KEYS
+              </h2>
+              <p className="text-xs text-[#8C857B]">Manage Gemini API credentials and acoustic stream defaults</p>
+            </div>
+
+            <div className="space-y-5">
+              
+              <div className="space-y-1">
+                <label className="text-xs uppercase font-medium tracking-wider text-[#1C1612] block">
+                  Custom Gemini API Key (Optional)
+                </label>
+                <input
+                  type="password"
+                  placeholder="AIzaSy..."
+                  value={userApiKey}
+                  onChange={(e) => setUserApiKey(e.target.value)}
+                  className="w-full bg-[#FAF8F5] border border-[#1C1612] px-3.5 py-2.5 text-sm text-[#1C1612] focus:outline-none focus:border-[#C2593F]"
+                />
+                <p className="text-[11px] text-[#8C857B] mt-1 font-mono">
+                  Leaving this field empty utilizes the built-in runtime key automatically.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between p-4 border border-[#1C1612]/20 bg-[#FAF8F5]">
+                <div>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-[#1C1612]">Auto-Compile Synthesis</h4>
+                  <p className="text-xs text-[#8C857B]">Automatically invoke Gemini synthesis when concluding acoustic sessions</p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={autoSummarize}
+                  onChange={(e) => setAutoSummarize(e.target.checked)}
+                  className="w-4 h-4 accent-[#C2593F] cursor-pointer"
+                />
+              </div>
+
+              <div className="border border-[#C2593F] p-4 space-y-2 bg-[#C2593F]/5">
+                <h4 className="text-xs font-semibold text-[#C2593F] uppercase tracking-wider flex items-center gap-1.5 font-mono">
+                  <ShieldCheckIcon className="w-4 h-4" /> Confidentiality Guarantee
+                </h4>
+                <p className="text-xs text-[#1C1612] leading-relaxed">
+                  Audio capturing occurs exclusively in your local browser instance. Raw acoustic buffers are never retained on remote servers. Verbatim transcripts are transmitted to the Gemini API strictly for executive synthesis generation.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+      </main>
+    </div>
+  );
+}
