@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#FAF8F5] text-[#1C1612]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Spirit Camera of the 21st Century | AI Music & Esotericism</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FAF8F5',
+                            100: '#F3EFEC',
+                            200: '#E7E1DC',
+                        },
+                        espresso: {
+                            900: '#0F0B08',
+                            800: '#1C1612',
+                            700: '#2F2620',
+                            600: '#3A322B',
+                        },
+                        terracotta: {
+                            DEFAULT: '#C2593F',
+                            bright: '#D96846',
+                        },
+                        sage: {
+                            DEFAULT: '#3A5446',
+                            light: '#5C836E',
+                            muted: '#486B59',
+                        },
+                        stone: {
+                            350: '#8C857B',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .hairline-border {
+            border: 1px solid #E7E1DC;
+        }
+        .hairline-b {
+            border-bottom: 1px solid #E7E1DC;
+        }
+        .hairline-t {
+            border-top: 1px solid #E7E1DC;
+        }
+        .hairline-r {
+            border-right: 1px solid #E7E1DC;
+        }
+        .hairline-l {
+            border-left: 1px solid #E7E1DC;
+        }
+        /* Custom scrollbars for clean editorial aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E7E1DC;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8C857B;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans antialiased bg-[#FAF8F5] text-[#1C1612] selection:bg-terracotta selection:text-white">
+
+    <!-- Editorial Header & Navigation -->
+    <header class="w-full bg-[#FAF8F5]/90 backdrop-blur-md sticky top-0 z-50 hairline-b transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- Brand & Conference Identity -->
+            <div class="flex items-center space-x-3">
+                <div class="w-7 h-7 rounded-full bg-terracotta flex items-center justify-center text-white font-serif italic text-sm font-bold shadow-sm">
+                    Ψ
+                </div>
+                <div>
+                    <h1 class="font-serif text-lg font-bold tracking-tight text-espresso-800 leading-none">
+                        The Spirit Camera <span class="font-sans text-xs uppercase tracking-widest font-normal text-terracotta ml-1.5 hidden sm:inline-block">21st Century</span>
+                    </h1>
+                    <p class="text-[10px] font-mono text-stone-350 tracking-wider uppercase mt-0.5">Conference Panel Symposium · AI Music & Esotericism</p>
+                </div>
+            </div>
+
+            <!-- Navigation Mode Switcher -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <div class="bg-cream-100 p-1 rounded-xl hairline-border flex items-center text-xs font-mono">
+                    <button id="btn-DeckMode" onclick="window.switchView('deck')" class="view-btn px-3 py-1.5 rounded-lg transition-all duration-200 bg-white shadow-sm text-espresso-800 font-medium flex items-center space-x-1.5">
+                        <i data-lucide="presentation" class="w-3.5 h-3.5 text-terracotta"></i>
+                        <span>Slide Deck</span>
+                    </button>
+                    <button id="btn-EssayMode" onclick="window.switchView('essay')" class="view-btn px-3 py-1.5 rounded-lg transition-all duration-200 text-espresso-600 hover:text-espresso-800 flex items-center space-x-1.5">
+                        <i data-lucide="book-open" class="w-3.5 h-3.5 text-sage"></i>
+                        <span>Monograph</span>
+                    </button>
+                    <button id="btn-SynthMode" onclick="window.switchView('synth')" class="view-btn px-3 py-1.5 rounded-lg transition-all duration-200 text-espresso-600 hover:text-espresso-800 flex items-center space-x-1.5">
+                        <i data-lucide="disc" class="w-3.5 h-3.5 text-terracotta"></i>
+                        <span class="hidden sm:inline">Séance Synth</span>
+                    </button>
+                </div>
+
+                <!-- Ambient Audio Drone Controller -->
+                <button onclick="window.toggleAudio()" id="globalAudioToggle" class="hairline-border px-3 py-1.5 rounded-xl text-xs font-mono text-espresso-800 hover:bg-cream-100 transition flex items-center space-x-1.5 bg-cream-50" title="Toggle Spectral Drone Audio">
+                    <i data-lucide="volume-x" id="audioIcon" class="w-3.5 h-3.5 text-stone-350"></i>
+                    <span id="audioStatusText" class="hidden md:inline">Drone: Off</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main View Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- VIEW 1: SLIDE DECK PRESENTATION -->
+        <section id="view-deck" class="space-y-6">
+            
+            <!-- Deck Control Bar -->
+            <div class="flex items-center justify-between bg-cream-100 p-3 rounded-2xl hairline-border">
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-mono bg-espresso-800 text-cream-50 px-2.5 py-1 rounded-md font-medium">
+                        Slide <span id="currentSlideNum">1</span> / <span id="totalSlideNum">7</span>
+                    </span>
+                    <span id="slideTitleTag" class="text-xs font-serif italic text-espresso-700 hidden sm:inline">
+                        Framing the Ghost in the Machine
+                    </span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="window.prevSlide()" class="p-2 bg-white hover:bg-cream-50 rounded-lg hairline-border transition shadow-sm" title="Previous Slide (Key: ←)">
+                        <i data-lucide="chevron-left" class="w-4 h-4 text-espresso-800"></i>
+                    </button>
+                    <button onclick="window.nextSlide()" class="p-2 bg-white hover:bg-cream-50 rounded-lg hairline-border transition shadow-sm" title="Next Slide (Key: →)">
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-espresso-800"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide Canvas Container -->
+            <div id="slideCanvas" class="bg-white rounded-2xl p-6 sm:p-10 lg:p-12 hairline-border shadow-sm min-h-[540px] flex flex-col justify-between transition-all duration-300">
+                
+                <!-- SLIDE 1: TITLE & CORE PARALLEL -->
+                <div class="slide-content space-y-6" data-slide="1">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-md bg-terracotta/10 text-terracotta text-xs font-mono font-medium">Panel Introduction</span>
+                        <span class="text-xs font-mono text-stone-350">· 1870 vs. 2026</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-espresso-900 leading-tight">
+                        The Spirit Camera of the <span class="italic text-terracotta">21st Century</span>
+                    </h2>
+                    <p class="font-serif text-xl sm:text-2xl text-espresso-700 leading-relaxed max-w-3xl">
+                        AI Music, Esotericism, and Digital Spiritualism: Examining Latent Diffusion as Contemporary Spiritual Practice
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 hairline-t">
+                        <div class="bg-cream-50 p-5 rounded-xl hairline-border space-y-2">
+                            <div class="text-xs font-mono text-terracotta uppercase tracking-wider">1861–1870 · William H. Mumler</div>
+                            <h3 class="font-serif text-lg font-bold text-espresso-800">The Silver Gelatin Séance</h3>
+                            <p class="text-sm text-espresso-700 leading-relaxed">
+                                Capturing ghostly visages of deceased loved ones on glass plates. Was it divine transcendence evoking spirit voices, or double-exposure parlor tricks?
+                            </p>
+                        </div>
+                        <div class="bg-cream-50 p-5 rounded-xl hairline-border space-y-2">
+                            <div class="text-xs font-mono text-sage uppercase tracking-wider">2024–2026 · Generative Audio</div>
+                            <h3 class="font-serif text-lg font-bold text-espresso-800">The Latent Space Séance</h3>
+                            <p class="text-sm text-espresso-700 leading-relaxed">
+                                Synthesizing musical compositions from human lyricism through non-human latent data sets. Is AI music a spiritual conduit or high-tech charlatanism?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 2: HISTORICAL ARCHIVAL PARALLEL -->
+                <div class="slide-content space-y-6 hidden" data-slide="2">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-md bg-sage/10 text-sage text-xs font-mono font-medium">Historical Context</span>
+                        <span class="text-xs font-mono text-stone-350">· Archival Evidence</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso-900">
+                        Mumler’s Daguerreotypes & Latent Acoustic Diffusion
+                    </h2>
+                    <p class="text-base sm:text-lg text-espresso-700 leading-relaxed">
+                        In 1869, William Mumler stood trial for fraud in New York. P.T. Barnum testified against him. Yet thousands of grief-stricken patrons felt authentic spiritual solace in his portraits.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border">
+                            <div class="font-mono text-xs text-terracotta mb-1">Unseen Mediums</div>
+                            <h4 class="font-serif font-bold text-base mb-1">The Invisible Plate</h4>
+                            <p class="text-xs text-espresso-600">The camera lens captured what human eyes could not see—an unseen ethereal frequency.</p>
+                        </div>
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border">
+                            <div class="font-mono text-xs text-sage mb-1">Modern Equivalent</div>
+                            <h4 class="font-serif font-bold text-base mb-1">The Latent Noise Field</h4>
+                            <p class="text-xs text-espresso-600">Diffusion algorithms pull structured harmony directly from gaussian acoustic noise.</p>
+                        </div>
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border">
+                            <div class="font-mono text-xs text-stone-350 mb-1">Cultural Marginality</div>
+                            <h4 class="font-serif font-bold text-base mb-1">Esoteric Fringes</h4>
+                            <p class="text-xs text-espresso-600">Both practices operate on the cultural periphery before mainstream institutional adoption.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 3: METAMODERN PROMETHEUS -->
+                <div class="slide-content space-y-6 hidden" data-slide="3">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-md bg-terracotta/10 text-terracotta text-xs font-mono font-medium">Theoretical Framework</span>
+                        <span class="text-xs font-mono text-stone-350">· Justin Cary (2025)</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso-900">
+                        The Metamodern Prometheus & Demythologizing Magic
+                    </h2>
+                    <blockquote class="p-4 bg-cream-100 rounded-xl border-l-4 border-terracotta italic font-serif text-lg text-espresso-800">
+                        "Silicon Valley tech founders explicitly deploy the language of magic ('it feels like magic') to construct a mythos around neural networks, obscuring human training labor while invoking awe."
+                        <span class="block mt-2 font-mono text-xs not-italic text-stone-350">— Justin Cary (2025), GSOLE Research in Online Literacy Education</span>
+                    </blockquote>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border">
+                            <h4 class="font-bold text-sm text-espresso-800 mb-1">Mythologizing the AI Tool</h4>
+                            <p class="text-xs text-espresso-600">Frame neural outputs as autonomous divine spirits beyond human control to create commercial mystique.</p>
+                        </div>
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border">
+                            <h4 class="font-bold text-sm text-espresso-800 mb-1">Esoteric Literacy Approach</h4>
+                            <p class="text-xs text-espresso-600">Demythologize the illusion to recognize human-authored prompt intent and structured lyricism as the true alchemy.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 4: UNSEEN SOURCES & MOLICCK'S CONSTRAINT MODEL -->
+                <div class="slide-content space-y-6 hidden" data-slide="4">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-md bg-sage/10 text-sage text-xs font-mono font-medium">Technological Architecture</span>
+                        <span class="text-xs font-mono text-stone-350">· Ethan Mollick (2025)</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso-900">
+                        Negative Space & Intentional Constraints
+                    </h2>
+                    <p class="text-base sm:text-lg text-espresso-700 leading-relaxed">
+                        Modern multimodal generative AI models have shifted from simple keyword matching to intentional constraint handling ("No Elephants").
+                    </p>
+                    <div class="bg-cream-50 p-5 rounded-xl hairline-border space-y-3">
+                        <div class="flex items-center justify-between font-mono text-xs text-terracotta">
+                            <span>TRANSITION IN MODEL INTELLIGENCE</span>
+                            <span>2023 → 2026</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-white rounded-lg hairline-border">
+                                <span class="font-mono text-xs text-stone-350">EARLY GENERATIVE MODELS</span>
+                                <p class="text-sm font-serif mt-1 text-espresso-800">"Keyword Collision"</p>
+                                <p class="text-xs text-espresso-600 mt-1">Prompting "Don't include elephants" resulted in generating elephants due to keyword association.</p>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg hairline-border">
+                                <span class="font-mono text-xs text-sage font-bold">RECENT ADVANCEMENTS (MOLLICK, 2025)</span>
+                                <p class="text-sm font-serif mt-1 text-espresso-800">"Negative Constraint Processing"</p>
+                                <p class="text-xs text-espresso-600 mt-1">Models grasp negative space, spatial relationships, and subtextual creative constraints.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 5: CASE STUDY - YOU DON'T LIVE HERE ANYMORE -->
+                <div class="slide-content space-y-6 hidden" data-slide="5">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-md bg-terracotta/10 text-terracotta text-xs font-mono font-medium">Musical Case Study</span>
+                        <span class="text-xs font-mono text-stone-350">· Suno AI + Human Lyricism</span>
+                    </div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso-900">
+                                "You Don't Live Here (Anymore)"
+                            </h2>
+                            <p class="font-mono text-xs text-stone-350 mt-1">Human Lyricist / Chair & Suno Generative Audio Architecture</p>
+                        </div>
+                        <button onclick="window.switchView('synth')" class="self-start px-4 py-2 bg-terracotta text-white rounded-xl font-mono text-xs font-medium hover:bg-terracotta-bright transition flex items-center space-x-2 shadow-sm">
+                            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                            <span>Open Audio Case Study</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                        <div class="space-y-3">
+                            <div class="text-xs font-mono text-espresso-800 font-bold uppercase tracking-wider">Human Authorial Input</div>
+                            <div class="p-4 bg-cream-50 rounded-xl hairline-border font-serif text-sm italic text-espresso-800 space-y-2">
+                                <p>"The hallway echoes with your phantom key..."</p>
+                                <p>"Dust settled on the piano keys you played..."</p>
+                                <p>"I called your name, but silence answered back."</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="text-xs font-mono text-sage font-bold uppercase tracking-wider">Latent Acoustic Output</div>
+                            <p class="text-xs text-espresso-700 leading-relaxed">
+                                When human-authored grief lyrics encounter Suno's acoustic diffusion model, the resulting track exhibits unpredictable vocal trembling and ghostly harmonies that were never explicitly coded—mirroring Mumler’s unexpected photographic halos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 6: LEGAL FRONTIERS & ETHICAL ALTERITY -->
+                <div class="slide-content space-y-6 hidden" data-slide="6">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-md bg-sage/10 text-sage text-xs font-mono font-medium">Legal & Ethical Alterity</span>
+                        <span class="text-xs font-mono text-stone-350">· California Legislation & SAG-AFTRA</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso-900">
+                        Digital Likeness, Voice Replicas & Archival Ethics
+                    </h2>
+                    <p class="text-sm text-espresso-700 leading-relaxed">
+                        Spiritualism raised questions of mediumship authorization. Today, legal frameworks struggle to protect the sanctity of human voice and likeness from unauthorized synthetic resurrecting.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border space-y-1.5">
+                            <span class="font-mono text-[11px] text-terracotta">CALIFORNIA LEGISLATION (AB 1836 / AB 2602)</span>
+                            <h4 class="font-serif font-bold text-base text-espresso-800">Protections Against Digital Replicas</h4>
+                            <p class="text-xs text-espresso-600">Prohibits unauthorized AI digital voice and likeness replicas of deceased and living performers (Carrigan, 2024; Skadden, 2024).</p>
+                        </div>
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border space-y-1.5">
+                            <span class="font-mono text-[11px] text-sage">ARCHIVAL PRODUCERS ALLIANCE (APA)</span>
+                            <h4 class="font-serif font-bold text-base text-espresso-800">Ethical Generative Documentary Guidelines</h4>
+                            <p class="text-xs text-espresso-600">Mandates strict disclosure when AI is used to re-create historical figures or archival audio material (APA, 2024).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 7: AUDIENCE POLL & DIALECTIC VERDICT -->
+                <div class="slide-content space-y-6 hidden" data-slide="7">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-md bg-terracotta/10 text-terracotta text-xs font-mono font-medium">Interactive Dialectic</span>
+                        <span class="text-xs font-mono text-stone-350">· Live Symposium Poll</span>
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso-900">
+                        Is AI Music Modern Transcendence or Synthetic Parlor Trick?
+                    </h2>
+                    <p class="text-sm text-espresso-700">
+                        Cast your vote for the conference panel symposium record:
+                    </p>
+
+                    <!-- Interactive Vote Widget -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
+                        <button onclick="window.castVote('transcendence')" class="p-5 rounded-xl border-2 border-sage bg-cream-50 hover:bg-sage/10 transition text-left space-y-2 group">
+                            <div class="flex items-center justify-between">
+                                <span class="font-serif font-bold text-lg text-sage">Spiritual Transcendence</span>
+                                <span id="count-transcendence" class="font-mono text-sm font-bold bg-sage text-white px-2 py-0.5 rounded">42%</span>
+                            </div>
+                            <p class="text-xs text-espresso-700">A genuine conduit evoking a modern 'spirit voice' through non-human latent data aggregation.</p>
+                        </button>
+
+                        <button onclick="window.castVote('charlatanism')" class="p-5 rounded-xl border-2 border-terracotta bg-cream-50 hover:bg-terracotta/10 transition text-left space-y-2 group">
+                            <div class="flex items-center justify-between">
+                                <span class="font-serif font-bold text-lg text-terracotta">Elaborate Charlatanism</span>
+                                <span id="count-charlatanism" class="font-mono text-sm font-bold bg-terracotta text-white px-2 py-0.5 rounded">58%</span>
+                            </div>
+                            <p class="text-xs text-espresso-700">A digital parlor trick mythologized by tech executives to monetize human training corpora.</p>
+                        </button>
+                    </div>
+
+                    <p class="text-xs font-mono text-stone-350 text-center italic">
+                        "Ultimately, do these distinctions matter in esoteric creative practice?"
+                    </p>
+                </div>
+
+                <!-- Slide Navigation Dots Indicator -->
+                <div class="flex items-center justify-center space-x-2 pt-6 hairline-t">
+                    <button onclick="window.goToSlide(1)" class="slide-dot w-2.5 h-2.5 rounded-full bg-terracotta transition-all"></button>
+                    <button onclick="window.goToSlide(2)" class="slide-dot w-2.5 h-2.5 rounded-full bg-cream-200 hover:bg-stone-350 transition-all"></button>
+                    <button onclick="window.goToSlide(3)" class="slide-dot w-2.5 h-2.5 rounded-full bg-cream-200 hover:bg-stone-350 transition-all"></button>
+                    <button onclick="window.goToSlide(4)" class="slide-dot w-2.5 h-2.5 rounded-full bg-cream-200 hover:bg-stone-350 transition-all"></button>
+                    <button onclick="window.goToSlide(5)" class="slide-dot w-2.5 h-2.5 rounded-full bg-cream-200 hover:bg-stone-350 transition-all"></button>
+                    <button onclick="window.goToSlide(6)" class="slide-dot w-2.5 h-2.5 rounded-full bg-cream-200 hover:bg-stone-350 transition-all"></button>
+                    <button onclick="window.goToSlide(7)" class="slide-dot w-2.5 h-2.5 rounded-full bg-cream-200 hover:bg-stone-350 transition-all"></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: MONOGRAPH ESSAY READER -->
+        <section id="view-essay" class="hidden max-w-4xl mx-auto space-y-12 py-4">
+            
+            <!-- Article Header -->
+            <header class="space-y-4 text-center border-b border-cream-200 pb-8">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-terracotta/10 text-terracotta text-xs font-mono">
+                    <span>SYMPOSIUM MONOGRAPH</span>
+                    <span>·</span>
+                    <span>OCTOBER 2026</span>
+                </div>
+                <h1 class="font-serif text-4xl sm:text-6xl font-bold tracking-tight text-espresso-900 leading-tight">
+                    The Spirit Camera of the 21st Century
+                </h1>
+                <p class="font-serif text-2xl text-espresso-700 italic max-w-2xl mx-auto">
+                    AI Music, Esotericism, and Digital Spiritualism
+                </p>
+                <div class="pt-4 flex items-center justify-center space-x-4 text-xs font-mono text-stone-350">
+                    <span>Panel Chair & Author</span>
+                    <span>·</span>
+                    <span>Peer-Reviewed Conference Monograph</span>
+                </div>
+            </header>
+
+            <!-- Abstract Box -->
+            <div class="bg-cream-100 p-6 sm:p-8 rounded-2xl hairline-border space-y-3">
+                <h3 class="font-mono text-xs text-terracotta font-bold uppercase tracking-wider">Abstract</h3>
+                <p class="font-serif text-base text-espresso-800 leading-relaxed italic">
+                    Near the turn of the 20th century, William Mumler amazed New York with a startling new technology: The Spirit Camera. This paper looks forward by looking back, examining generative artificial intelligence in musical audio production as a contemporary spiritual practice. Drawing direct connections to 19th-century spirit photography, we pose the fundamental question: is AI music a form of modern spiritual transcendence, evoking a ‘spirit voice’, or elaborate charlatanism—and do these distinctions matter in esoteric creative practice?
+                </p>
+            </div>
+
+            <!-- Monograph Content Sections -->
+            <article class="prose prose-stone max-w-none space-y-8 font-sans text-espresso-800 leading-relaxed text-base sm:text-lg">
+                
+                <section class="space-y-4">
+                    <h2 class="font-serif text-3xl font-bold text-espresso-900 border-b border-cream-200 pb-2">
+                        I. The Silver Gelatin Séance & The Latent Noise Field
+                    </h2>
+                    <p>
+                        In 1861, Boston engraver William H. Mumler developed an accidental double exposure while taking a self-portrait. In the resulting photograph, alongside his own image stood the faint, translucent figure of his deceased cousin. Recognizing the immense cultural appetite for contact with the unseeable, Mumler established a lucrative practice as the world’s first spirit photographer (Wikipedia, 2026b; A Thousand Words, 2024). Patrons like Mary Todd Lincoln paid premium prices to sit before his glass plate camera, seeking proof that their departed loved ones resided in a persistent, accessible realm just beyond human perception.
+                    </p>
+                    <p>
+                        Fast forward 165 years to the emergence of generative AI musical platforms like Suno and Udio. When modern users prompt neural diffusion models with deeply personal lyricism, the algorithmic system pulls acoustic vectors from a multi-terabyte latent training space—a vast archive of human musical history. Out of random Gaussian noise emerges a haunting vocal timbre, complete with subtle vibrato, room acoustics, and emotional resonance that feel inexplicably haunted.
+                    </p>
+                </section>
+
+                <section class="space-y-4">
+                    <h2 class="font-serif text-3xl font-bold text-espresso-900 border-b border-cream-200 pb-2">
+                        II. Unseen Sources & Latent Space Magic
+                    </h2>
+                    <p>
+                        As Ethan Mollick (2025) demonstrates in his analysis of multimodal generative breakthroughs (*"No elephants: Breakthroughs in image generation"*), AI models have evolved far beyond literal keyword matching. Modern generative models handle intricate structural constraints, spatial relationships, and negative space without hallucinating unintended artifacts. In musical audio generation, this manifests as an ability to process nuanced emotional subtext within human-authored lyrics, matching subtle lyrical grief with precise harmonic minor modulations.
+                    </p>
+
+                    <!-- Figure Embed Box -->
+                    <figure class="my-6 p-6 bg-cream-50 rounded-2xl hairline-border space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs text-terracotta">FIGURE 1.0 · CASE STUDY ANALYSIS</span>
+                            <a href="https://www.youtube.com/watch?v=jWf6EdexSFw" target="_blank" rel="noopener noreferrer" class="text-xs font-mono text-sage underline hover:text-espresso-900 flex items-center space-x-1">
+                                <span>Listen on YouTube</span>
+                                <i data-lucide="external-link" class="w-3 h-3"></i>
+                            </a>
+                        </div>
+                        <h4 class="font-serif font-bold text-xl text-espresso-900">"You Don't Live Here (Anymore)"</h4>
+                        <p class="text-sm text-espresso-700 italic">
+                            Synthesis of original human lyrics with Suno AI latent audio diffusion. The vocal artifacts create an eerie acoustic resonance akin to a spirit voice recorded on magnetic wire.
+                        </p>
+                    </figure>
+
+                    <p>
+                        In Justin Cary’s (2025) framework, *"The Metamodern Prometheus"*, Silicon Valley executives intentionally frame neural networks as "magical" to obscure the vast corpora of human creative labor beneath. Yet from an esoteric perspective, the magic resides precisely in the interaction between human authorial intentionality and the unpredictable alterity of the machine.
+                    </p>
+                </section>
+
+                <section class="space-y-4">
+                    <h2 class="font-serif text-3xl font-bold text-espresso-900 border-b border-cream-200 pb-2">
+                        III. Synthetic Charlatanism & Legal Alterity
+                    </h2>
+                    <p>
+                        When Mumler was brought to trial in 1869, prominent figures like P.T. Barnum claimed he was exploiting bereaved families through parlor trickery. Today, the legal and ethical debate centers on consent, voice likeness, and the unauthorized reanimation of living and deceased artists.
+                    </p>
+                    <p>
+                        California's landmark 2024 legislation (AB 1836 and AB 2602) specifically protects individuals and deceased performers from unauthorized digital replicas and synthetic voice cloning (Carrigan, 2024; Davis+Gilbert LLP, 2024; Epstein et al., 2024; Hollis et al., 2024; Klungness et al., 2024). Simultaneously, the SAG-AFTRA agreements (2023) and the Archival Producers Alliance (APA, 2024) guidelines establish essential ethical guardrails for generative media in documentary filmmaking.
+                    </p>
+                </section>
+
+                <!-- SECTION IV: COMPREHENSIVE BIBLIOGRAPHY -->
+                <section id="bibliography-section" class="space-y-6 pt-6 border-t border-cream-200">
+                    <h2 class="font-serif text-3xl font-bold text-espresso-900">
+                        IV. Primary Source Corpus & References
+                    </h2>
+                    <div class="grid grid-cols-1 gap-4 font-mono text-xs">
+                        
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border space-y-1">
+                            <span class="text-terracotta font-bold">ARCHIVAL PRODUCERS ALLIANCE (APA)</span>
+                            <p class="text-espresso-800 font-sans text-sm">Archival Producers Alliance. (2024). <em>APA guidelines for the use of generative AI in documentary filmmaking</em>.</p>
+                            <a href="https://www.archivalproducersalliance.org/" target="_blank" rel="noopener" class="text-sage underline block">www.archivalproducersalliance.org</a>
+                        </div>
+
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border space-y-1">
+                            <span class="text-terracotta font-bold">A THOUSAND WORDS (HISTORICAL DOCUMENTARY)</span>
+                            <p class="text-espresso-800 font-sans text-sm">A Thousand Words. (2024, March 31). <em>The spirit of deception | Episode 49: Spirit photography, William H. Mumler</em> [Video]. YouTube.</p>
+                            <a href="https://www.youtube.com/watch?v=R9e5O5qOzgU" target="_blank" rel="noopener" class="text-sage underline block">youtube.com/watch?v=R9e5O5qOzgU</a>
+                        </div>
+
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border space-y-1">
+                            <span class="text-terracotta font-bold">CARY, JUSTIN (GSOLE ACADEMIC RESEARCH)</span>
+                            <p class="text-espresso-800 font-sans text-sm">Cary, J. (2025). <em>Fire Walk with Me or The Metamodern Prometheus: Demythologizing AI Tools through AI Literacy</em>. Research in Online Literacy Education (GSOLE), Vol. 4, Iss. 2.</p>
+                            <a href="https://gsole.org/olor/role/vol4.iss2.f" target="_blank" rel="noopener" class="text-sage underline block">gsole.org/olor/role/vol4.iss2.f</a>
+                        </div>
+
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border space-y-1">
+                            <span class="text-terracotta font-bold">MOLLICK, ETHAN (GENERATIVE AI BREAKTHROUGHS)</span>
+                            <p class="text-espresso-800 font-sans text-sm">Mollick, E. (2025). <em>No elephants: Breakthroughs in image generation</em>. One Useful Thing.</p>
+                            <a href="https://www.oneusefulthing.org/p/no-elephants-breakthroughs-in-image" target="_blank" rel="noopener" class="text-sage underline block">oneusefulthing.org/p/no-elephants-breakthroughs-in-image</a>
+                        </div>
+
+                        <div class="p-4 bg-cream-50 rounded-xl hairline-border space-y-1">
+                            <span class="text-terracotta font-bold">CALIFORNIA AI LEGISLATION CORPUS</span>
+                            <p class="text-espresso-800 font-sans text-sm">
+                                Carrigan, J. R., Jr. (2024); Davis+Gilbert LLP (2023, 2024); Epstein et al., Skadden Arps (2024); Hollis et al., Norton Rose Fulbright (2024); Klungness et al., Fenwick & West (2024). <em>California AB 1836 / AB 2602 Digital Replica & Likeness Protection Statutes</em>.
+                            </p>
+                        </div>
+
+                    </div>
+                </section>
+            </article>
+        </section>
+
+        <!-- VIEW 3: SÉANCE SYNTH & MEDIA STUDIO -->
+        <section id="view-synth" class="hidden space-y-8 py-4">
+            
+            <div class="bg-cream-100 p-6 sm:p-8 rounded-2xl hairline-border space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="px-2.5 py-1 rounded-md bg-terracotta text-white font-mono text-xs font-medium">AUDIO CASE STUDY PLAYER</span>
+                    <span class="font-mono text-xs text-stone-350">Suno AI + Human Lyrics</span>
+                </div>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso-900">
+                    "You Don't Live Here (Anymore)"
+                </h2>
+                <p class="text-sm text-espresso-700 max-w-2xl">
+                    Composed using original human-authored grief lyrics combined with Suno AI generative acoustic diffusion. Experience how human emotional intent resonates through non-human latent space.
+                </p>
+
+                <!-- YouTube Embedded Player -->
+                <div class="aspect-video w-full rounded-xl overflow-hidden shadow-sm border border-cream-200 bg-black">
+                    <iframe 
+                        class="w-full h-full"
+                        src="https://www.youtube-nocookie.com/embed/jWf6EdexSFw?rel=0" 
+                        title="You Don't Live Here (Anymore)" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Web Audio Interactive Spectral Generator -->
+            <div class="bg-white p-6 sm:p-8 rounded-2xl hairline-border space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="font-serif text-2xl font-bold text-espresso-900">Interactive Séance Synthesizer</h3>
+                        <p class="text-xs font-mono text-stone-350 mt-1">Real-Time Web Audio Spectral Drone & Latent Oscillator</p>
+                    </div>
+                    <button onclick="window.toggleAudio()" class="self-start sm:self-auto px-4 py-2 bg-espresso-800 text-cream-50 rounded-xl font-mono text-xs hover:bg-espresso-700 transition flex items-center space-x-2">
+                        <i data-lucide="radio" class="w-4 h-4 text-terracotta"></i>
+                        <span id="synthBtnText">Start Spectral Frequency</span>
+                    </button>
+                </div>
+
+                <div class="p-6 bg-cream-50 rounded-xl hairline-border space-y-4">
+                    <div class="flex justify-between text-xs font-mono text-espresso-700">
+                        <span>FREQUENCY: <strong id="freqDisplay">110 Hz (A2)</strong></span>
+                        <span>SPECTRAL DENSITY: <strong id="densityDisplay">Low</strong></span>
+                    </div>
+                    <input type="range" id="freqSlider" min="55" max="440" value="110" oninput="window.updateFreq(this.value)" class="w-full accent-terracotta cursor-pointer">
+                    <p class="text-xs text-espresso-600 font-serif italic">
+                        Adjust frequency slider to simulate tuning through latent noise fields, echoing 19th-century spirit radio mediumship.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="w-full hairline-t bg-[#FAF8F5] py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="font-serif text-sm text-espresso-700">
+                The Spirit Camera of the 21st Century · AI Music, Esotericism & Digital Spiritualism
+            </p>
+            <p class="font-mono text-[11px] text-stone-350">
+                Built for Conference Panel Presentation · Warm Editorial Design System
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        
+        // Active view management state
+        let currentSlide = 1;
+        const totalSlides = 7;
+        
+        const slideTitles = [
+            "Framing the Ghost in the Machine",
+            "Mumler's Daguerreotypes & Latent Acoustic Diffusion",
+            "The Metamodern Prometheus & Demythologizing Magic",
+            "Negative Space & Intentional Constraints",
+            "Case Study: You Don't Live Here (Anymore)",
+            "Digital Likeness, Voice Replicas & Archival Ethics",
+            "Is AI Music Modern Transcendence or Synthetic Parlor Trick?"
+        ];
+
+        // Global view navigation
+        function switchView(viewName) {
+            const deckView = document.getElementById('view-deck');
+            const essayView = document.getElementById('view-essay');
+            const synthView = document.getElementById('view-synth');
+
+            if (deckView) deckView.classList.add('hidden');
+            if (essayView) essayView.classList.add('hidden');
+            if (synthView) synthView.classList.add('hidden');
+
+            const target = document.getElementById('view-' + viewName);
+            if (target) target.classList.remove('hidden');
+
+            // Reset tab styling
+            const btnDeck = document.getElementById('btn-DeckMode');
+            const btnEssay = document.getElementById('btn-EssayMode');
+            const btnSynth = document.getElementById('btn-SynthMode');
+
+            const activeClass = "bg-white shadow-sm text-espresso-800 font-medium";
+            const inactiveClass = "text-espresso-600 hover:text-espresso-800";
+
+            if (btnDeck) btnDeck.className = "view-btn px-3 py-1.5 rounded-lg transition-all duration-200 " + (viewName === 'deck' ? activeClass : inactiveClass);
+            if (btnEssay) btnEssay.className = "view-btn px-3 py-1.5 rounded-lg transition-all duration-200 " + (viewName === 'essay' ? activeClass : inactiveClass);
+            if (btnSynth) btnSynth.className = "view-btn px-3 py-1.5 rounded-lg transition-all duration-200 " + (viewName === 'synth' ? activeClass : inactiveClass);
+
+            if (window.lucide) window.lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Slide Navigation Logic
+        function updateSlideUI() {
+            const slides = document.querySelectorAll('.slide-content');
+            slides.forEach((s, idx) => {
+                if (idx + 1 === currentSlide) {
+                    s.classList.remove('hidden');
+                } else {
+                    s.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('currentSlideNum').innerText = currentSlide;
+            document.getElementById('slideTitleTag').innerText = slideTitles[currentSlide - 1] || "";
+
+            // Update dots
+            const dots = document.querySelectorAll('.slide-dot');
+            dots.forEach((dot, idx) => {
+                if (idx + 1 === currentSlide) {
+                    dot.className = "slide-dot w-2.5 h-2.5 rounded-full bg-terracotta transition-all";
+                } else {
+                    dot.className = "slide-dot w-2.5 h-2.5 rounded-full bg-cream-200 hover:bg-stone-350 transition-all";
+                }
+            });
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlideUI();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlideUI();
+            }
+        }
+
+        function goToSlide(num) {
+            if (num >= 1 && num <= totalSlides) {
+                currentSlide = num;
+                updateSlideUI();
+            }
+        }
+
+        // Interactive Poll Voting Logic
+        let pollVotes = { transcendence: 42, charlatanism: 58 };
+
+        function castVote(option) {
+            pollVotes[option]++;
+            const total = pollVotes.transcendence + pollVotes.charlatanism;
+            const pctTrans = Math.round((pollVotes.transcendence / total) * 100);
+            const pctCharl = 100 - pctTrans;
+
+            document.getElementById('count-transcendence').innerText = pctTrans + '%';
+            document.getElementById('count-charlatanism').innerText = pctCharl + '%';
+        }
+
+        // Web Audio Spectral Synth Drone Engine
+        let audioCtx = null;
+        let droneOsc = null;
+        let droneGain = null;
+        let isAudioPlaying = false;
+
+        function toggleAudio() {
+            const statusText = document.getElementById('audioStatusText');
+            const synthBtnText = document.getElementById('synthBtnText');
+            const icon = document.getElementById('audioIcon');
+
+            if (!isAudioPlaying) {
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!audioCtx) audioCtx = new AudioContext();
+                    
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+
+                    droneOsc = audioCtx.createOscillator();
+                    droneGain = audioCtx.createGain();
+
+                    droneOsc.type = 'sine';
+                    const freqVal = document.getElementById('freqSlider') ? document.getElementById('freqSlider').value : 110;
+                    droneOsc.frequency.setValueAtTime(freqVal, audioCtx.currentTime);
+
+                    droneGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                    droneGain.gain.exponentialRampToValueAtTime(0.06, audioCtx.currentTime + 2);
+
+                    droneOsc.connect(droneGain);
+                    droneGain.connect(audioCtx.destination);
+
+                    droneOsc.start();
+                    isAudioPlaying = true;
+
+                    if (statusText) statusText.innerText = 'Drone: On';
+                    if (synthBtnText) synthBtnText.innerText = 'Stop Spectral Drone';
+                    if (icon) {
+                        icon.setAttribute('data-lucide', 'volume-2');
+                        icon.classList.remove('text-stone-350');
+                        icon.classList.add('text-terracotta');
+                    }
+                } catch (e) {
+                    console.error('Audio synth error:', e);
+                }
+            } else {
+                if (droneGain && audioCtx) {
+                    droneGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+                    setTimeout(() => {
+                        if (droneOsc) droneOsc.stop();
+                        isAudioPlaying = false;
+                        if (statusText) statusText.innerText = 'Drone: Off';
+                        if (synthBtnText) synthBtnText.innerText = 'Start Spectral Frequency';
+                        if (icon) {
+                            icon.setAttribute('data-lucide', 'volume-x');
+                            icon.classList.remove('text-terracotta');
+                            icon.classList.add('text-stone-350');
+                        }
+                    }, 500);
+                }
+            }
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function updateFreq(val) {
+            document.getElementById('freqDisplay').innerText = val + ' Hz';
+            if (droneOsc && audioCtx && isAudioPlaying) {
+                droneOsc.frequency.setValueAtTime(val, audioCtx.currentTime);
+            }
+        }
+
+        // Attach all methods to window scope
+        window.switchView = switchView;
+        window.nextSlide = nextSlide;
+        window.prevSlide = prevSlide;
+        window.goToSlide = goToSlide;
+        window.castVote = castVote;
+        window.toggleAudio = toggleAudio;
+        window.updateFreq = updateFreq;
+
+        // Key bindings for slide deck presentation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Initialize icons on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+            updateSlideUI();
+        });
+    </script>
+</body>
+</html>
