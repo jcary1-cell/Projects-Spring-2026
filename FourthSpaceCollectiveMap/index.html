@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fourth Space Collective - UNCC Campus Map</title>
+    <title>Fourth Space Collective - UNCC Fretwell Campus Map</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -97,7 +97,7 @@
                 <h1 class="font-bold text-lg tracking-tight flex items-center gap-2">
                     Fourth Space <span class="text-emerald-400 font-mono text-sm px-2 py-0.5 bg-emerald-500/10 rounded border border-emerald-500/20">Collective</span>
                 </h1>
-                <p class="text-xs text-slate-400">UNC Charlotte CRI & Campus Contemplative Navigator</p>
+                <p class="text-xs text-slate-400">UNC Charlotte Fretwell Academic Core & Contemplative Navigator</p>
             </div>
         </div>
         
@@ -114,7 +114,7 @@
 
             <!-- Header Quick Stats -->
             <div class="hidden lg:flex items-center gap-4 text-xs text-slate-400 border-l border-slate-800 pl-4">
-                <div>Base: <span class="text-slate-200 font-medium">EPIC HCAI 2101</span></div>
+                <div>Base: <span class="text-slate-200 font-medium">Fretwell HCAI 2101</span></div>
                 <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
                 <div>Mapped Spots: <span class="text-slate-200 font-medium" id="spot-count">9</span></div>
             </div>
@@ -134,7 +134,7 @@
             <!-- Tab Selector -->
             <div class="flex border-b border-slate-800 sticky top-0 bg-slate-900 z-20">
                 <button onclick="switchTab('spots')" id="tab-spots" class="flex-1 py-3 text-center text-xs font-semibold border-b-2 border-emerald-500 text-emerald-400 transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-map-location-dot"></i> Spots Directory
+                    <i class="fa-solid fa-map-location-dot"></i> Fretwell Spots
                 </button>
                 <button onclick="switchTab('sensemaking')" id="tab-sensemaking" class="flex-1 py-3 text-center text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-brain"></i> Sensemaking Tools
@@ -170,26 +170,26 @@
                     </div>
                 </div>
 
-                <!-- Walking Loops -->
+                <!-- Walking Loops centered on Fretwell -->
                 <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
                     <h3 class="text-xs font-bold text-slate-300 flex items-center gap-1.5 mb-2">
-                        <i class="fa-solid fa-route text-indigo-400"></i> Suggest Walking Loops
+                        <i class="fa-solid fa-route text-indigo-400"></i> Walking Reflection Loops
                     </h3>
                     <p class="text-[11px] text-slate-400 mb-2.5">
-                        "Sometimes we find our Fourth Space on a walk around campus to simply talk..." Try these routes starting from EPIC:
+                        "Sometimes we find our Fourth Space on a walk around campus to simply talk..." Try these routes starting directly from Fretwell:
                     </p>
                     <div class="flex flex-col gap-2">
-                        <button onclick="toggleRoute('cri')" id="route-cri-btn" class="w-full text-left bg-slate-900 border border-slate-850 hover:border-indigo-500/40 p-2 rounded transition flex items-center justify-between">
+                        <button onclick="toggleRoute('academic-quad')" id="route-quad-btn" class="w-full text-left bg-slate-900 border border-slate-850 hover:border-indigo-500/40 p-2 rounded transition flex items-center justify-between">
                             <div>
-                                <span class="text-xs font-semibold text-slate-200 block">The CRI Contemplative Loop</span>
-                                <span class="text-[10px] text-slate-500"><i class="fa-solid fa-clock"></i> 12 mins • EPIC ⇆ Portal ⇆ Grigg</span>
+                                <span class="text-xs font-semibold text-slate-200 block">Academic Quad Circuit</span>
+                                <span class="text-[10px] text-slate-500"><i class="fa-solid fa-clock"></i> 8 mins • Fretwell ⇆ Friday ⇆ Belk Plaza</span>
                             </div>
                             <i class="fa-solid fa-circle-chevron-right text-slate-500 hover:text-indigo-400"></i>
                         </button>
-                        <button onclick="toggleRoute('gardens')" id="route-gardens-btn" class="w-full text-left bg-slate-900 border border-slate-850 hover:border-emerald-500/40 p-2 rounded transition flex items-center justify-between">
+                        <button onclick="toggleRoute('botanical-trek')" id="route-gardens-btn" class="w-full text-left bg-slate-900 border border-slate-850 hover:border-emerald-500/40 p-2 rounded transition flex items-center justify-between">
                             <div>
-                                <span class="text-xs font-semibold text-slate-200 block">The Greenhouse escape</span>
-                                <span class="text-[10px] text-slate-500"><i class="fa-solid fa-clock"></i> 25 mins • EPIC ⇆ Botanical Gardens</span>
+                                <span class="text-xs font-semibold text-slate-200 block">Botanical Oasis Walk</span>
+                                <span class="text-[10px] text-slate-500"><i class="fa-solid fa-clock"></i> 15 mins • Fretwell ⇆ Botanical Gardens</span>
                             </div>
                             <i class="fa-solid fa-circle-chevron-right text-slate-500 hover:text-emerald-400"></i>
                         </button>
@@ -199,10 +199,10 @@
                 <!-- Dynamic Spot List Container -->
                 <div class="flex flex-col gap-2.5">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nearby Workspace List</h3>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nearby Workspaces</h3>
                         <span id="filter-tag" class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">Showing All</span>
                     </div>
-                    <div id="spots-list" class="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1">
+                    <div id="spots-list" class="flex flex-col gap-2 max-h-[280px] overflow-y-auto pr-1">
                         <!-- Spot items will be generated here -->
                     </div>
                 </div>
@@ -212,7 +212,7 @@
                     <h3 class="text-xs font-bold text-indigo-300 flex items-center gap-1.5 mb-1">
                         <i class="fa-solid fa-plus"></i> Co-create the Map!
                     </h3>
-                    <p class="text-[10px] text-slate-400 mb-2">Found an amazing study corner or walking reflection path near EPIC? Pin it!</p>
+                    <p class="text-[10px] text-slate-400 mb-2">Found a hidden nook, patio, or window seat near Fretwell? Pin it!</p>
                     <button onclick="toggleSpotForm()" class="w-full bg-indigo-600/25 hover:bg-indigo-600/40 text-indigo-300 text-xs py-1.5 px-3 rounded border border-indigo-500/30 transition flex items-center justify-center gap-1">
                         <span id="toggle-form-text">Add Current Spot Coordinates</span>
                     </button>
@@ -221,7 +221,7 @@
                     <div id="spot-form" class="hidden mt-3 flex flex-col gap-2.5 border-t border-indigo-900/40 pt-2.5">
                         <div>
                             <label class="block text-[10px] text-slate-400 font-semibold mb-1">Spot Name</label>
-                            <input id="new-spot-name" type="text" placeholder="e.g., Portal 2nd Floor Window" class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs px-2.5 py-1.5 rounded focus:outline-none focus:border-indigo-500">
+                            <input id="new-spot-name" type="text" placeholder="e.g., Fretwell 2nd Floor Glass Alcove" class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs px-2.5 py-1.5 rounded focus:outline-none focus:border-indigo-500">
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
@@ -244,12 +244,12 @@
                         </div>
                         <div>
                             <label class="block text-[10px] text-slate-400 font-semibold mb-1">Unique Characteristic</label>
-                            <input id="new-spot-desc" type="text" placeholder="Power outlets nearby, beautiful view, etc." class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs px-2.5 py-1.5 rounded">
+                            <input id="new-spot-desc" type="text" placeholder="Near Peet's Coffee, power outlets, quiet garden view..." class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs px-2.5 py-1.5 rounded">
                         </div>
                         <p class="text-[10px] text-indigo-400 italic"><i class="fa-solid fa-info-circle"></i> Click anywhere on the map to set coordinates, then submit.</p>
                         <div class="grid grid-cols-2 gap-2 text-center text-[10px] font-mono text-slate-400">
-                            <span class="bg-slate-950 py-1 rounded border border-slate-850">Lat: <span id="temp-lat">35.308</span></span>
-                            <span class="bg-slate-950 py-1 rounded border border-slate-850">Lng: <span id="temp-lng">-80.741</span></span>
+                            <span class="bg-slate-950 py-1 rounded border border-slate-850">Lat: <span id="temp-lat">35.3063</span></span>
+                            <span class="bg-slate-950 py-1 rounded border border-slate-850">Lng: <span id="temp-lng">-80.7332</span></span>
                         </div>
                         <button onclick="submitCustomSpot()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold text-xs py-2 rounded transition">
                             Pin Spot onto Map
@@ -293,7 +293,7 @@
                 </div>
 
                 <!-- SAI Project Mini Checklist -->
-                <div class="bg-slate-950 border border-slate-850 p-4 rounded-xl">
+                <div class="bg-slate-950 border border-slate-855 p-4 rounded-xl">
                     <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                         <i class="fa-solid fa-list-check text-emerald-400"></i> SAI Project Session Guide
                     </h3>
@@ -309,7 +309,7 @@
                         </label>
                         <label class="flex items-start gap-2.5 text-xs text-slate-300 cursor-pointer">
                             <input type="checkbox" class="mt-0.5 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-0">
-                            <span>Walk & seek bewilderment with an engineering peer.</span>
+                            <span>Walk & seek bewilderment with an engineering/humanities peer.</span>
                         </label>
                         <label class="flex items-start gap-2.5 text-xs text-slate-300 cursor-pointer">
                             <input type="checkbox" class="mt-0.5 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-0">
@@ -331,18 +331,20 @@
                         <div>
                             <label class="block text-[10px] text-slate-400 font-semibold mb-1">Active Spot</label>
                             <select id="log-spot" class="w-full bg-slate-900 border border-slate-800 text-slate-200 text-xs px-2 py-1.5 rounded">
-                                <option value="EPIC HCAI 2101">EPIC HCAI 2101 (Basecamp)</option>
-                                <option value="Grigg Hall Shaded Patio">Grigg Hall Shaded Patio</option>
-                                <option value="Portal 3rd Floor Balcony">Portal 3rd Floor Balcony</option>
-                                <option value="Duke Hall Atrium">Duke Hall Atrium</option>
-                                <option value="Botanical Gardens">Botanical Gardens</option>
-                                <option value="Belk Plaza Fountain">Belk Plaza Fountain</option>
-                                <option value="Atkins Library 10th Floor">Atkins Library 10th Floor</option>
+                                <option value="Fretwell HCAI 2101">Fretwell HCAI 2101 (Basecamp)</option>
+                                <option value="Friday Building Atrium">Friday Building Atrium</option>
+                                <option value="Belk Plaza & Fountain">Belk Plaza & Fountain</option>
+                                <option value="McEniry Earth Science Courtyard">McEniry Earth Science Courtyard</option>
+                                <option value="Atkins Library 10th Floor Vista">Atkins Library 10th Floor Vista</option>
+                                <option value="Storrs Architecture Atrium">Storrs Architecture Atrium</option>
+                                <option value="UNCC Botanical Gardens">UNCC Botanical Gardens</option>
+                                <option value="Prospector Plaza Outdoor Seating">Prospector Plaza Outdoor Seating</option>
+                                <option value="Cone University Center Lounge">Cone University Center Lounge</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-[10px] text-slate-400 font-semibold mb-1">Ethical AI / Technical Reflection</label>
-                            <textarea id="log-text" rows="3" placeholder="What questions are we grappling with in our SAI work? What bewildered us on our walk?" class="w-full bg-slate-900 border border-slate-800 text-slate-200 text-xs px-2.5 py-1.5 rounded focus:outline-none focus:border-indigo-500"></textarea>
+                            <textarea id="log-text" rows="3" placeholder="What questions are we grappling with in our SAI work? What bewildered us on our walk near Fretwell?" class="w-full bg-slate-900 border border-slate-800 text-slate-200 text-xs px-2.5 py-1.5 rounded focus:outline-none focus:border-indigo-500"></textarea>
                         </div>
                         <button onclick="saveLogEntry()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-slate-100 text-xs font-bold py-2 rounded transition">
                             Commit Log Entry
@@ -382,9 +384,9 @@
                     <i class="fa-solid fa-moon text-indigo-400"></i> Dark Theme
                 </button>
                 
-                <!-- Recenter on EPIC Button -->
-                <button onclick="centerOnEpic()" class="bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700 p-2.5 rounded-lg shadow-lg backdrop-blur transition flex items-center justify-center gap-1.5 text-xs font-medium" title="Fly to EPIC basecamp">
-                    <i class="fa-solid fa-house-laptop text-emerald-400"></i> Go to HCAI 2101
+                <!-- Recenter on Fretwell Button -->
+                <button onclick="centerOnFretwell()" class="bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700 p-2.5 rounded-lg shadow-lg backdrop-blur transition flex items-center justify-center gap-1.5 text-xs font-medium" title="Fly to Fretwell basecamp">
+                    <i class="fa-solid fa-house-laptop text-emerald-400"></i> Go to Fretwell
                 </button>
             </div>
 
@@ -394,7 +396,7 @@
                     <i class="fa-solid fa-tags text-emerald-400"></i> Space Classification
                 </h4>
                 <div class="flex flex-col gap-1 text-slate-400">
-                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 border border-emerald-300"></span> Basecamp (EPIC HCAI)</div>
+                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 border border-emerald-300"></span> Basecamp (Fretwell HCAI)</div>
                     <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 border border-blue-300"></span> Deep Focus / Technical Space</div>
                     <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 border border-amber-300"></span> Quiet Outdoor Walks</div>
                     <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500 border border-indigo-300"></span> High Collaboration Space</div>
@@ -423,13 +425,13 @@
             </div>
             <div class="text-xs text-slate-300 flex flex-col gap-3 leading-relaxed">
                 <p>
-                    Every other Tuesday in <strong>HCAI 2101</strong> (inside the EPIC building), we come together as a learning community and enter into a "Fourth Space" environment.
+                    Every other Tuesday in <strong>HCAI 2101 inside the Fretwell Building</strong>, we come together as a learning community and enter into a "Fourth Space" environment.
                 </p>
                 <p class="border-l-2 border-emerald-500 pl-3 italic text-slate-400">
                     "A Fourth Space is a space specifically designed for collective sensemaking around technological change. We are not escaping from AI here; we are encouraging encounters with it; mediated by presence and shared bewilderment, critical thinking and questioning."
                 </p>
                 <p>
-                    Each session gives you time to build community, work on your <strong>SAI project</strong>, and most importantly, think. Use this navigator to explore suitable corners on UNC Charlotte's campus to think, code, or stroll during our class sessions.
+                    Each session gives you time to build community, work on your <strong>SAI project</strong>, and most importantly, think. Use this navigator to explore suitable corners in the Fretwell academic core on UNC Charlotte's campus to think, code, or stroll during our class sessions.
                 </p>
             </div>
             <div class="flex justify-end pt-3 border-t border-slate-800">
@@ -444,9 +446,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <script>
-        // UNC Charlotte coordinate center coordinates
-        const EPIC_COORD = [35.3088, -80.7408];
-        const UNCC_CENTER = [35.3082, -80.7350];
+        // UNC Charlotte coordinate center coordinates (Fretwell Building as central base)
+        const FRETWELL_COORD = [35.3063, -80.7332];
 
         // Map state
         let map;
@@ -456,8 +457,8 @@
         let currentVibeFilter = 'all';
 
         // Temporary placement coordinate storage for custom spots
-        let selectedLat = 35.3088;
-        let selectedLng = -80.7408;
+        let selectedLat = 35.3063;
+        let selectedLng = -80.7332;
 
         // Web Audio Synthesizer State (The Drone Synth)
         let audioCtx = null;
@@ -467,111 +468,33 @@
         let filterNode = null;
         let isAudioPlaying = false;
 
-        // Custom Spot Dataset
+        // Fretwell-Centric Workspace Spots Dataset
         let spots = [
             {
-                id: "epic-lobby",
-                name: "EPIC Lobby & HCAI 2101",
+                id: "fretwell-base",
+                name: "Fretwell Building & HCAI 2101",
                 vibe: "group",
-                lat: 35.3088,
-                lng: -80.7408,
+                lat: 35.3063,
+                lng: -80.7332,
                 noise: "Moderate",
                 wifi: "Excellent",
                 power: "Everywhere",
                 bewildermentLevel: "Moderate",
-                description: "Our classroom basecamp. Modern, open glass architectural space perfect for collaborating on SAI projects.",
-                tip: "Use the large screens and collaborative tables right outside HCAI 2101."
+                description: "Our classroom basecamp! Located in the main academic core with Peet's Coffee, spacious central stairwells, and modern study lounges.",
+                tip: "Grab a coffee at Peet's and use the glass corridor tables on the 2nd floor for group work."
             },
             {
-                id: "grigg-patio",
-                name: "Grigg Hall Shaded Patio",
-                vibe: "reflection",
-                lat: 35.3101,
-                lng: -80.7428,
-                noise: "Quiet",
-                wifi: "Good",
-                power: "Limited (Outdoor)",
-                bewildermentLevel: "Low",
-                description: "Just northwest of EPIC. Excellent shaded seating surrounded by architectural greenery.",
-                tip: "Perfect for step-out moments where you need a quick screen detox."
-            },
-            {
-                id: "portal-balcony",
-                name: "Portal 3rd Floor Lobby & Balcony",
+                id: "friday-atrium",
+                name: "Friday Building (Belk College of Business)",
                 vibe: "focus",
-                lat: 35.3115,
-                lng: -80.7410,
-                noise: "Silent",
-                wifi: "Excellent",
-                power: "Available",
-                bewildermentLevel: "High",
-                description: "Overlooking the UNC Charlotte research institute park. Highly modern atmosphere suitable for coding or high-level contemplation.",
-                tip: "Stand near the incubator offices and reflect on how technological startup culture alters community structures."
-            },
-            {
-                id: "duke-atrium",
-                name: "Duke Centennial Hall Atrium",
-                vibe: "focus",
-                lat: 35.3075,
-                lng: -80.7412,
+                lat: 35.3054,
+                lng: -80.7338,
                 noise: "Quiet",
                 wifi: "Excellent",
                 power: "Plenty",
                 bewildermentLevel: "Low",
-                description: "Engineering-centric study spaces very close to EPIC. Good computer lab accessibility.",
-                tip: "Perfect for deep analytical sessions when logic-building for the SAI project."
-            },
-            {
-                id: "greenway-trail",
-                name: "CRI Greenway Loop & Bridge",
-                vibe: "walk",
-                lat: 35.3110,
-                lng: -80.7435,
-                noise: "Quiet",
-                wifi: "Weak / LTE",
-                power: "None",
-                bewildermentLevel: "Very High",
-                description: "Wooded walk starting near Grigg Hall leading down to the stream crossing. Excellent 'Walk & Talk' location.",
-                tip: "Take a walking path with an engineering colleague to discuss ethical AI challenges."
-            },
-            {
-                id: "botanical-gardens",
-                name: "UNCC McMillan Greenhouse & Gardens",
-                vibe: "reflection",
-                lat: 35.3075,
-                lng: -80.7295,
-                noise: "Silent",
-                wifi: "Fair",
-                power: "None",
-                bewildermentLevel: "Critical",
-                description: "An unbelievable oasis of deep green on campus. Completely contrasts with technological acceleration.",
-                tip: "Observe how biological life constructs intricate systems of sensemaking compared to digital neural networks."
-            },
-            {
-                id: "student-union",
-                name: "Popp Martin Student Union (Outdoor Terraces)",
-                vibe: "group",
-                lat: 35.3085,
-                lng: -80.7327,
-                noise: "Moderate",
-                wifi: "Excellent",
-                power: "Available",
-                bewildermentLevel: "Low",
-                description: "The energetic central hub of UNC Charlotte. Best for collaborative lunch brainstorming or light social sensemaking.",
-                tip: "Grab lunch or coffee to fuel your group brainstorming sessions."
-            },
-            {
-                id: "atkins-tower",
-                name: "Atkins Library (10th Floor Vista)",
-                vibe: "focus",
-                lat: 35.3060,
-                lng: -80.7290,
-                noise: "Silent",
-                wifi: "Excellent",
-                power: "Everywhere",
-                bewildermentLevel: "High",
-                description: "Highest quiet view of campus. Perfect for isolation and high architectural perspective.",
-                tip: "A quiet space to write up critical reflections after walking around."
+                description: "Just steps southwest of Fretwell. Modern multi-story glass atrium with comfortable leather seating and collaborative study alcoves.",
+                tip: "Ideal for deep technical focus sessions and structured SAI project logic."
             },
             {
                 id: "belk-plaza",
@@ -583,8 +506,86 @@
                 wifi: "Good",
                 power: "Limited",
                 bewildermentLevel: "Medium",
-                description: "Vibrant outdoor plaza. The rhythmic fountain creates a great background auditory mask.",
-                tip: "Walk clockwise around the fountain to pace out collaborative dialogue."
+                description: "Vibrant central campus plaza directly east of Fretwell. Wide paved walkways, shade trees, and the rhythmic fountain sound mask.",
+                tip: "Walk clockwise around the fountain with your group to pace out sensemaking discussions."
+            },
+            {
+                id: "mceniry-courtyard",
+                name: "McEniry Earth Science Courtyard",
+                vibe: "reflection",
+                lat: 35.3072,
+                lng: -80.7340,
+                noise: "Quiet",
+                wifi: "Good",
+                power: "Limited (Outdoor)",
+                bewildermentLevel: "High",
+                description: "Immediately northwest of Fretwell. Features shaded rock installations, native vegetation, and tranquil wooden benches.",
+                tip: "A quick 1-minute step-out spot when you need a screen break and quiet reflection."
+            },
+            {
+                id: "atkins-tower",
+                name: "Atkins Library (Dalton Tower Vista)",
+                vibe: "focus",
+                lat: 35.3060,
+                lng: -80.7290,
+                noise: "Silent",
+                wifi: "Excellent",
+                power: "Everywhere",
+                bewildermentLevel: "High",
+                description: "Short stroll east across Belk Plaza. Area 49 maker spaces on lower floors, with high-altitude quiet views of campus on upper floors.",
+                tip: "Head to the top floors for expansive views and deep uninterrupted writing sessions."
+            },
+            {
+                id: "botanical-gardens",
+                name: "UNCC McMillan Greenhouse & Gardens",
+                vibe: "reflection",
+                lat: 35.3075,
+                lng: -80.7295,
+                noise: "Silent",
+                wifi: "Fair",
+                power: "None",
+                bewildermentLevel: "Critical",
+                description: "Just 5 minutes walk northeast across Craver Road. An incredible lush botanical oasis right on campus.",
+                tip: "Observe how biological life constructs intricate systems of sensemaking compared to digital neural networks."
+            },
+            {
+                id: "storrs-atrium",
+                name: "Storrs Architecture Atrium & Lawn",
+                vibe: "group",
+                lat: 35.3045,
+                lng: -80.7305,
+                noise: "Quiet",
+                wifi: "Excellent",
+                power: "Available",
+                bewildermentLevel: "High",
+                description: "Home to the College of Arts + Architecture. Soaring ceilings, spatial models, and high natural light.",
+                tip: "Great location for brainstorming non-traditional UI and creative physical-digital interfaces."
+            },
+            {
+                id: "prospector-plaza",
+                name: "Prospector Outdoor Courtyard",
+                vibe: "walk",
+                lat: 35.3068,
+                lng: -80.7316,
+                noise: "Moderate",
+                wifi: "Good",
+                power: "Limited",
+                bewildermentLevel: "Low",
+                description: "Outdoor dining plaza north of Belk Plaza and east of Fretwell. Quick snack access with high pedestrian vitality.",
+                tip: "Stop by for quick informal team check-ins between walks."
+            },
+            {
+                id: "cone-lounge",
+                name: "Cone University Center Lounges",
+                vibe: "focus",
+                lat: 35.3050,
+                lng: -80.7318,
+                noise: "Quiet",
+                wifi: "Excellent",
+                power: "Available",
+                bewildermentLevel: "Low",
+                description: "Historic student union building with quiet carpeted study nooks and classic wood-paneled lounges.",
+                tip: "Great retreat on rainy or hot days when you want indoor quiet without going all the way to Atkins."
             }
         ];
 
@@ -593,17 +594,17 @@
             {
                 id: 1,
                 theme: "Presence vs. Device",
-                text: "Look around this physical spot. How is automated and networked technology altering the physical layout and labor of the people maintaining it?"
+                text: "Look around this physical spot near Fretwell. How is automated and networked technology altering the physical layout and labor of the people maintaining it?"
             },
             {
                 id: 2,
                 theme: "Shared Bewilderment",
-                text: "Open ChatGPT on your device. Ask it to describe your current physical coordinate context, then critique what crucial sensory elements it leaves out."
+                text: "Open ChatGPT on your device. Ask it to describe your current physical coordinate context near Fretwell, then critique what crucial sensory elements it leaves out."
             },
             {
                 id: 3,
                 theme: "Ethical AI Challenge",
-                text: "Whose data was used to train the models running on your laptop right now? In what way does this spot's peacefulness mask global inequalities?"
+                text: "Whose data was used to train the models running on your laptop right now? In what way does this spot's peacefulness mask global technical inequalities?"
             },
             {
                 id: 4,
@@ -613,12 +614,12 @@
             {
                 id: 5,
                 theme: "Nature vs. Technical System",
-                text: "If nature (trees, plants around you) had a voice in your technological system design, what feedback would they give about energy and resources?"
+                text: "If nature (trees, gardens around Fretwell) had a voice in your technological system design, what feedback would they give about energy and resources?"
             },
             {
                 id: 6,
                 theme: "Community Building",
-                text: "Find a stranger or colleague. Ask them what technological change scares them the most, then reflect on how your build directly impacts that fear."
+                text: "Find a colleague during your stroll. Ask them what technological change scares them the most, then reflect on how your build directly impacts that fear."
             },
             {
                 id: 7,
@@ -628,7 +629,7 @@
             {
                 id: 8,
                 theme: "Sensory Mapping",
-                text: "Close your eyes for 30 seconds. Identify 3 distinct machine hums and 3 distinct organic sounds. How do they interlock at this campus space?"
+                text: "Close your eyes for 30 seconds. Identify 3 distinct machine hums and 3 distinct organic sounds. How do they interlock here in the academic core?"
             },
             {
                 id: 9,
@@ -649,17 +650,15 @@
             initMap();
             loadLogsFromLocalStorage();
             generateNextPrompt();
-            
-            // Render Initial Spots in the list
             renderSpotsList();
         };
 
         function initMap() {
-            // Setup Leaflet map instance
+            // Setup Leaflet map instance centered on Fretwell
             map = L.map('map', {
-                center: EPIC_COORD,
-                zoom: 16,
-                minZoom: 14,
+                center: FRETWELL_COORD,
+                zoom: 17,
+                minZoom: 15,
                 maxZoom: 19
             });
 
@@ -693,7 +692,6 @@
 
         // Map Tile Styles Configurations
         function setTileLayer() {
-            // Remove previous tile layers if they exist
             map.eachLayer(layer => {
                 if (layer instanceof L.TileLayer) {
                     map.removeLayer(layer);
@@ -704,9 +702,7 @@
                 ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' 
                 : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
-            const attribution = mapStyle === 'dark'
-                ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+            const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
             L.tileLayer(tileURL, {
                 attribution: attribution,
@@ -719,7 +715,6 @@
             mapStyle = mapStyle === 'dark' ? 'light' : 'dark';
             setTileLayer();
             
-            // Adjust toggle button design
             const btn = document.getElementById('theme-btn');
             if (mapStyle === 'dark') {
                 btn.innerHTML = `<i class="fa-solid fa-moon text-indigo-400"></i> Dark Theme`;
@@ -728,7 +723,6 @@
             }
         }
 
-        // Custom icon mapping based on workspace category
         function getVibeColor(vibe) {
             switch(vibe) {
                 case 'focus': return '#3b82f6'; // Blue
@@ -740,24 +734,21 @@
         }
 
         function renderMarkers() {
-            // Clear existing markers
             activeMarkers.forEach(m => map.removeLayer(m));
             activeMarkers = [];
 
             spots.forEach(spot => {
-                // Apply filters
                 if (currentVibeFilter !== 'all' && spot.vibe !== currentVibeFilter) return;
 
-                const markerColor = spot.id === 'epic-lobby' ? '#10b981' : getVibeColor(spot.vibe);
-                const isEpic = spot.id === 'epic-lobby';
+                const markerColor = spot.id === 'fretwell-base' ? '#10b981' : getVibeColor(spot.vibe);
+                const isBase = spot.id === 'fretwell-base';
 
-                // Create customized HTML div icon with ripple/pulse effects
                 const customIcon = L.divIcon({
                     html: `
                         <div class="relative flex items-center justify-center">
                             <span class="animate-ping absolute inline-flex h-6 w-6 rounded-full opacity-60" style="background-color: ${markerColor}"></span>
                             <div class="relative rounded-full flex items-center justify-center text-white border-2 border-slate-900 shadow-md font-bold" style="background-color: ${markerColor}; width: 28px; height: 28px; font-size: 11px;">
-                                ${isEpic ? '<i class="fa-solid fa-house-laptop"></i>' : getIconForVibe(spot.vibe)}
+                                ${isBase ? '<i class="fa-solid fa-house-laptop"></i>' : getIconForVibe(spot.vibe)}
                             </div>
                         </div>
                     `,
@@ -804,18 +795,15 @@
         function filterSpots(vibe) {
             currentVibeFilter = vibe;
             
-            // Update Vibe button styling states
             document.querySelectorAll('.vibe-btn').forEach(btn => {
                 btn.classList.remove('active', 'bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/30');
                 btn.classList.add('bg-slate-800', 'text-slate-300', 'border-transparent');
             });
 
-            // Target correct clicked button
             const clickedBtn = event.currentTarget;
             clickedBtn.classList.remove('bg-slate-800', 'text-slate-300', 'border-transparent');
             clickedBtn.classList.add('active', 'bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/30');
 
-            // Render tags
             const filterTag = document.getElementById('filter-tag');
             filterTag.innerText = `Showing: ${vibe.toUpperCase()}`;
 
@@ -874,7 +862,6 @@
                 duration: 1.5
             });
 
-            // Find corresponding marker to trigger popup
             activeMarkers.forEach(marker => {
                 const latLng = marker.getLatLng();
                 if (Math.abs(latLng.lat - spot.lat) < 0.0001 && Math.abs(latLng.lng - spot.lng) < 0.0001) {
@@ -885,11 +872,9 @@
 
         function flyToAndSelect(id) {
             flyToSpot(id);
-            // Switch dropdown in journaling logger to make reflection tracking easy
             const logSelector = document.getElementById('log-spot');
             const targetSpot = spots.find(s => s.id === id);
             if (logSelector && targetSpot) {
-                // Ensure spot is in dropdown (if custom, we will append it dynamically)
                 let exists = false;
                 for (let i = 0; i < logSelector.options.length; i++) {
                     if (logSelector.options[i].value === targetSpot.name) {
@@ -909,69 +894,69 @@
             switchTab('journal');
         }
 
-        function centerOnEpic() {
-            map.flyTo(EPIC_COORD, 17, {
+        function centerOnFretwell() {
+            map.flyTo(FRETWELL_COORD, 17, {
                 animate: true,
                 duration: 1.2
             });
         }
 
-        // Walking Route Polylines
+        // Walking Routes Coordinates Centered on Fretwell
         const routes = {
-            cri: [
-                EPIC_COORD,
-                [35.3101, -80.7428], // Grigg
-                [35.3115, -80.7410], // Portal
-                [35.3110, -80.7435], // Greenway Bridge
-                EPIC_COORD
+            quad: [
+                FRETWELL_COORD,              // Fretwell
+                [35.3072, -80.7340],         // McEniry Courtyard
+                [35.3054, -80.7338],         // Friday Building
+                [35.3056, -80.7314],         // Belk Plaza Fountain
+                [35.3068, -80.7316],         // Prospector Plaza
+                FRETWELL_COORD               // Return to Fretwell
             ],
             gardens: [
-                EPIC_COORD,
-                [35.3085, -80.7327], // Student Union
-                [35.3075, -80.7295]  // Botanical Gardens
+                FRETWELL_COORD,              // Fretwell
+                [35.3068, -80.7316],         // Prospector Plaza
+                [35.3060, -80.7290],         // Atkins Library
+                [35.3075, -80.7295],         // UNCC Botanical Gardens
+                FRETWELL_COORD               // Return to Fretwell
             ]
         };
 
         function toggleRoute(type) {
-            const criBtn = document.getElementById('route-cri-btn');
+            const quadBtn = document.getElementById('route-quad-btn');
             const gardensBtn = document.getElementById('route-gardens-btn');
 
-            // If active route clicked, clear it
             if (currentRouteLayer) {
                 map.removeLayer(currentRouteLayer);
                 currentRouteLayer = null;
-                criBtn.classList.remove('border-indigo-500', 'bg-indigo-950/20');
+                quadBtn.classList.remove('border-indigo-500', 'bg-indigo-950/20');
                 gardensBtn.classList.remove('border-emerald-500', 'bg-emerald-950/20');
-                if (type === 'cri' && currentRouteLayer) return; // Toggle logic
             }
 
-            // Draw new polyline
-            if (type === 'cri') {
-                currentRouteLayer = L.polyline(routes.cri, {
+            if (type === 'academic-quad') {
+                currentRouteLayer = L.polyline(routes.quad, {
                     color: '#6366f1',
                     weight: 4,
                     dashArray: '8, 8',
-                    opacity: 0.8
+                    opacity: 0.85
                 }).addTo(map);
                 
-                criBtn.classList.add('border-indigo-500', 'bg-indigo-950/20');
+                quadBtn.classList.add('border-indigo-500', 'bg-indigo-950/20');
                 gardensBtn.classList.remove('border-emerald-500', 'bg-emerald-950/20');
 
                 map.fitBounds(currentRouteLayer.getBounds(), { padding: [30, 30] });
-                showCustomAlert("Route Overlay Active", "Follow the dashed indigo route around the Charlotte Research Institute complex.", "fa-solid fa-route text-indigo-400");
-            } else if (type === 'gardens') {
+                showCustomAlert("Academic Quad Loop Active", "Follow the dashed indigo route circling Fretwell, McEniry, Friday, and Belk Plaza.", "fa-solid fa-route text-indigo-400");
+            } else if (type === 'botanical-trek') {
                 currentRouteLayer = L.polyline(routes.gardens, {
                     color: '#10b981',
                     weight: 4,
                     dashArray: '8, 8',
-                    opacity: 0.8
+                    opacity: 0.85
                 }).addTo(map);
 
                 gardensBtn.classList.add('border-emerald-500', 'bg-emerald-950/20');
-                criBtn.classList.remove('border-indigo-500', 'bg-indigo-950/20');
+                quadBtn.classList.remove('border-indigo-500', 'bg-indigo-950/20');
 
                 map.fitBounds(currentRouteLayer.getBounds(), { padding: [30, 30] });
-                showCustomAlert("Route Overlay Active", "Take the Green Route from the EPIC Building across main campus to the UNCC Botanical Gardens.", "fa-solid fa-route text-emerald-400");
+                showCustomAlert("Botanical Oasis Loop Active", "Take the emerald path east from Fretwell past Atkins Library into the UNCC Botanical Gardens.", "fa-solid fa-route text-emerald-400");
             }
         }
 
@@ -1009,34 +994,26 @@
                 wifi: "Untested",
                 power: "Unknown",
                 bewildermentLevel: "High",
-                description: desc || "A collaborative spot mapped by the Fourth Space learning community during class.",
+                description: desc || "A collaborative spot mapped by the Fourth Space learning community near Fretwell.",
                 tip: "Explore, document, and add notes to your SAI session log."
             };
 
             spots.push(newSpot);
-            
-            // Update stats
             document.getElementById('spot-count').innerText = spots.length;
 
-            // Re-render map and list
             renderMarkers();
             renderSpotsList();
             toggleSpotForm();
-
-            // Fly to new marker
             flyToSpot(newSpot.id);
 
-            // Reset inputs
             document.getElementById('new-spot-name').value = '';
             document.getElementById('new-spot-desc').value = '';
 
-            showCustomAlert("Pin Dropped Successfully!", `${name} has been co-created and pinned directly to the UNCC active map.`, "fa-solid fa-map-pin text-emerald-400");
+            showCustomAlert("Pin Dropped Successfully!", `${name} has been co-created and pinned directly to the active map.`, "fa-solid fa-map-pin text-emerald-400");
         }
 
-        // Atmospheric Focus Soundscape (Synthesizing drone to accompany student studying/reflection sessions)
         function toggleAmbientSound() {
             if (isAudioPlaying) {
-                // Stop synth
                 if (oscillator1) oscillator1.stop();
                 if (oscillator2) oscillator2.stop();
                 if (lfo) lfo.stop();
@@ -1046,47 +1023,39 @@
                 document.getElementById('sound-btn').className = "bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-400 px-2 py-1 rounded transition border border-emerald-500/30 font-mono flex items-center gap-1";
                 document.getElementById('sound-icon').className = "fa-solid fa-volume-xmark text-slate-500";
             } else {
-                // Initialize audio context lazily
                 if (!audioCtx) {
                     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 }
 
-                // Create master filter to create damp 'nature' feel
                 filterNode = audioCtx.createBiquadFilter();
                 filterNode.type = 'lowpass';
                 filterNode.frequency.setValueAtTime(450, audioCtx.currentTime);
 
-                // Create Warm Low Drone (Analog hum representing presence)
                 oscillator1 = audioCtx.createOscillator();
                 oscillator1.type = 'sine';
-                oscillator1.frequency.setValueAtTime(110, audioCtx.currentTime); // A2 Note
+                oscillator1.frequency.setValueAtTime(110, audioCtx.currentTime);
 
-                // Create slight metallic drift (representing AI/tech layer)
                 oscillator2 = audioCtx.createOscillator();
                 oscillator2.type = 'triangle';
-                oscillator2.frequency.setValueAtTime(110.5, audioCtx.currentTime); // Slight detune
+                oscillator2.frequency.setValueAtTime(110.5, audioCtx.currentTime);
 
-                // Low Frequency Modulator to create slow sea-like wave movements
                 lfo = audioCtx.createOscillator();
-                lfo.frequency.setValueAtTime(0.12, audioCtx.currentTime); // 0.12 Hz LFO
+                lfo.frequency.setValueAtTime(0.12, audioCtx.currentTime);
                 
                 let lfoGain = audioCtx.createGain();
                 lfoGain.gain.setValueAtTime(80, audioCtx.currentTime);
 
-                // Setup Gains
                 let masterGain = audioCtx.createGain();
-                masterGain.gain.setValueAtTime(0.08, audioCtx.currentTime); // Safe quiet volume
+                masterGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
 
-                // Connect paths
                 lfo.connect(lfoGain);
-                lfoGain.connect(filterNode.frequency); // Modulate cutoff frequency over time
+                lfoGain.connect(filterNode.frequency);
 
                 oscillator1.connect(filterNode);
                 oscillator2.connect(filterNode);
                 filterNode.connect(masterGain);
                 masterGain.connect(audioCtx.destination);
 
-                // Start oscillators
                 oscillator1.start();
                 oscillator2.start();
                 lfo.start();
@@ -1117,7 +1086,7 @@
             } else if (tab === 'journal') {
                 document.getElementById('panel-journal').classList.remove('hidden');
                 document.getElementById('tab-journal').className = "flex-1 py-3 text-center text-xs font-semibold border-b-2 border-emerald-500 text-emerald-400 transition flex items-center justify-center gap-2 relative";
-                document.getElementById('log-badge').classList.add('hidden'); // Clear dot badge
+                document.getElementById('log-badge').classList.add('hidden');
             }
         }
 
@@ -1129,13 +1098,11 @@
             document.getElementById('prompt-content').innerText = `"${prompt.text}"`;
             document.getElementById('prompt-num').innerText = `Card #${prompt.id} / ${prompts.length}`;
             
-            // Auto update placeholder inside session logger with the active prompt theme
             document.getElementById('log-text').placeholder = `Theme: ${prompt.theme}. Write down your ideas on this or the challenges of your SAI project...`;
         }
 
         function copyPromptToClipboard() {
             const promptText = document.getElementById('prompt-content').innerText;
-            // Clipboard copy workaround for restricted iframe environment
             const tempInput = document.createElement("input");
             tempInput.value = promptText;
             document.body.appendChild(tempInput);
@@ -1146,7 +1113,6 @@
             showCustomAlert("Copied to Clipboard", "Use this sensemaking question to spark dialogue in your walk group!", "fa-solid fa-copy text-indigo-400");
         }
 
-        // Local Storage Sensemaking Journal Logs
         function saveLogEntry() {
             const spotName = document.getElementById('log-spot').value;
             const logContent = document.getElementById('log-text').value.trim();
@@ -1167,7 +1133,6 @@
             logs.unshift(newEntry);
             localStorage.setItem('fourth_space_logs', JSON.stringify(logs));
 
-            // Reset field
             document.getElementById('log-text').value = '';
 
             loadLogsFromLocalStorage();
@@ -1189,7 +1154,6 @@
                 return;
             }
 
-            // Show badge if there are logs and we are not currently viewing the tab
             if (document.getElementById('panel-journal').classList.contains('hidden')) {
                 badge.classList.remove('hidden');
             }
@@ -1227,7 +1191,7 @@
             }
         }
 
-        // Custom Modal Alert Box (Replacing default Alert window)
+        // Custom Modal Alert Box
         function showCustomAlert(title, message, iconClass) {
             document.getElementById('alert-title').innerText = title;
             document.getElementById('alert-message').innerText = message;
@@ -1242,7 +1206,6 @@
             document.getElementById('custom-alert').classList.add('hidden');
         }
 
-        // About Modal toggles
         function openInfoModal() {
             document.getElementById('info-modal').classList.remove('hidden');
         }
