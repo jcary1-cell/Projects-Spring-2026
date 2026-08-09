@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSOLE August 2026 Newsletter - Issue No. 32</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            /* GSOLE Core Palette */
+            --gsole-purple: #934293;
+            --gsole-purple-dark: #6e2e6e;
+            --gsole-purple-light: #faf2fa;
+            --gsole-green: #8cc63f;
+            --gsole-green-dark: #6e9f2d;
+            --gsole-green-light: #f3fbe9;
+            --gsole-amber: #eab308;
+            --gsole-amber-light: #fefce8;
+            --gsole-warm-sand: #faf8f5;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            transition: font-size 0.2s ease;
+        }
+
+        .serif { font-family: 'Playfair Display', Georgia, serif; }
+
+        .newsletter-container {
+            max-width: 1040px;
+            margin: 1.5rem auto;
+            background: #ffffff;
+            box-shadow: 0 20px 50px rgba(147, 66, 147, 0.08), 0 1px 3px rgba(0,0,0,0.05);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .section-padding { padding: 4rem 3.5rem; }
+        @media (max-width: 640px) { .section-padding { padding: 2rem 1.25rem; } }
+
+        h1, h2, h3, h4 { 
+            font-family: 'Playfair Display', Georgia, serif; 
+            color: var(--gsole-purple);
+        }
+
+        .green-accent { color: var(--gsole-green-dark); }
+
+        .btn-primary {
+            background-color: var(--gsole-purple);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.75rem;
+            transition: all 0.25s ease;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(147, 66, 147, 0.25);
+        }
+        .btn-primary:hover { 
+            background-color: var(--gsole-purple-dark); 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(147, 66, 147, 0.35);
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--gsole-purple);
+            border: 2px solid var(--gsole-purple);
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.75rem;
+            transition: all 0.25s ease;
+            border-radius: 8px;
+        }
+        .btn-secondary:hover {
+            background-color: var(--gsole-purple-light);
+            transform: translateY(-1px);
+        }
+
+        .sidebar-card {
+            background: var(--gsole-green-light);
+            border-left: 6px solid var(--gsole-green);
+            padding: 2rem;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .logo-mark {
+            color: var(--gsole-purple);
+            font-weight: 900;
+            font-size: 32px; 
+            line-height: 1; 
+            border: 3px solid var(--gsole-green); 
+            padding: 8px 14px; 
+            border-radius: 50% 50% 50% 0; 
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: white;
+            display: inline-block;
+        }
+        .logo-mark:hover {
+            transform: rotate(-6deg) scale(1.08);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* Print styles */
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; }
+            .newsletter-container { box-shadow: none; margin: 0; max-width: 100%; }
+        }
+    </style>
+</head>
+<body x-data="{ 
+    textSize: 'normal', 
+    searchQuery: '', 
+    activeTab: 'all',
+    savedBookmarks: [],
+    toggleBookmark(id) {
+        if (this.savedBookmarks.includes(id)) {
+            this.savedBookmarks = this.savedBookmarks.filter(item => item !== id);
+        } else {
+            this.savedBookmarks.push(id);
+        }
+    }
+}" :class="{
+    'text-sm': textSize === 'small',
+    'text-base': textSize === 'normal',
+    'text-lg': textSize === 'large'
+}">
+
+    <div class="sticky top-0 z-50 bg-slate-900 text-white shadow-lg no-print">
+        <div class="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center text-xs">
+            <div class="flex items-center gap-4">
+                <span class="bg-[#8cc63f] text-slate-900 font-extrabold px-2.5 py-0.5 rounded text-[10px] tracking-wider uppercase">AUGUST 2026</span>
+                <span class="text-slate-300 hidden sm:inline">Issue No. 32 • The Global Society of Online Literacy Educators</span>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <!-- Text Scaler -->
+                <div class="flex items-center bg-slate-800 rounded p-1 gap-1 border border-slate-700">
+                    <span class="text-[10px] text-slate-400 px-1 font-semibold uppercase">Text:</span>
+                    <button @click="textSize = 'small'" :class="textSize === 'small' ? 'bg-[#934293] text-white' : 'text-slate-300 hover:text-white'" class="px-1.5 py-0.5 rounded text-[11px] font-bold">A-</button>
+                    <button @click="textSize = 'normal'" :class="textSize === 'normal' ? 'bg-[#934293] text-white' : 'text-slate-300 hover:text-white'" class="px-1.5 py-0.5 rounded text-[11px] font-bold">A</button>
+                    <button @click="textSize = 'large'" :class="textSize === 'large' ? 'bg-[#934293] text-white' : 'text-slate-300 hover:text-white'" class="px-1.5 py-0.5 rounded text-[11px] font-bold">A+</button>
+                </div>
+
+                <!-- Print Button -->
+                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded flex items-center gap-1.5 transition-colors border border-slate-700">
+                    <svg class="w-3.5 h-3.5 text-[#8cc63f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    <span>Print / PDF</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bg-white border-b border-slate-200 sticky top-[41px] z-40 no-print shadow-sm overflow-x-auto custom-scrollbar">
+        <div class="max-w-6xl mx-auto px-4 py-2 flex items-center gap-6 text-xs font-semibold whitespace-nowrap text-slate-600">
+            <span class="text-slate-400 font-bold uppercase text-[10px] tracking-wider">Quick Jump:</span>
+            <a href="#presidents-message" class="hover:text-[#934293] transition-colors py-1">✉️ President's Message</a>
+            <a href="#election-results" class="hover:text-[#934293] transition-colors py-1">🗳️ 2026 Leadership</a>
+            <a href="#grants-awards" class="hover:text-[#934293] transition-colors py-1">🏆 Grants & Awards</a>
+            <a href="#publications" class="hover:text-[#934293] transition-colors py-1">📚 New Publications</a>
+            <a href="#conference-call" class="hover:text-[#934293] transition-colors py-1">📅 2027 Conference Committee</a>
+            <a href="#acde-call" class="hover:text-[#934293] transition-colors py-1">🌍 ACDE 2027 Call</a>
+            <a href="#cybersalon" class="hover:text-[#934293] transition-colors py-1">☕ Cyber Salon</a>
+        </div>
+    </nav>
+
+    <div class="newsletter-container">
+        
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-center px-6 md:px-14 py-10 border-b border-slate-100 bg-gradient-to-r from-white via-[#fcfbff] to-white">
+            <a href="https://gsole.org/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-5 mb-6 md:mb-0 group">
+                <div class="logo-mark shadow-sm">G</div>
+                <div>
+                    <div class="text-xl md:text-2xl font-black tracking-tight text-[#934293] leading-tight group-hover:text-[#6e2e6e] transition-colors">
+                        Global Society of <br><span class="text-slate-800 font-extrabold">Online Literacy Educators</span>
+                    </div>
+                    <p class="text-[11px] font-semibold text-slate-500 tracking-wide mt-1">Transforming Literacy Pedagogy in Digital Spaces</p>
+                </div>
+            </a>
+            <div class="text-center md:text-right bg-purple-50/60 p-4 rounded-xl border border-purple-100/50 w-full md:w-auto">
+                <div class="flex items-center justify-center md:justify-end gap-2 mb-1">
+                    <span class="w-2 h-2 rounded-full bg-[#8cc63f] animate-pulse"></span>
+                    <p class="text-[11px] font-extrabold tracking-[0.25em] text-slate-500 uppercase">Issue No. 32</p>
+                </div>
+                <p class="text-3xl font-black serif italic text-[#934293]">August 2026</p>
+            </div>
+        </header>
+
+        <section id="presidents-message" class="section-padding bg-gradient-to-br from-white via-white to-[var(--gsole-warm-sand)] relative overflow-hidden">
+            <!-- Late-Summer Sun SVG Background Accent -->
+            <div class="absolute -top-12 -right-12 opacity-15 pointer-events-none text-[#8cc63f]">
+                <svg width="380" height="380" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="currentColor" d="M44.5,-73.8C57.4,-67.7,67.4,-54.6,74.6,-40C81.8,-25.4,86.2,-9.4,85.1,6.2C84.1,21.8,77.5,37,68.2,49.8C58.8,62.6,46.7,73,32.4,78C18.1,83,1.7,82.7,-14.8,78.8C-31.3,74.9,-47.9,67.4,-59.8,55.5C-71.7,43.6,-78.9,27.3,-81.4,10.1C-83.9,-7.1,-81.7,-25.2,-73.4,-39.8C-65.1,-54.4,-50.7,-65.5,-35.7,-70.8C-20.7,-76.1,-5.1,-75.6,10.6,-73.4C26.3,-71.2,44.5,-73.8,44.5,-73.8Z" transform="translate(100 100)" />
+                </svg>
+            </div>
+
+            <div class="grid md:grid-cols-12 gap-10 md:gap-14 relative z-10">
+                <div class="md:col-span-12 mb-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-100/70 text-[#934293] rounded-full text-xs font-bold uppercase tracking-widest mb-3">
+                        <span>✉️ August Editorial</span>
+                    </div>
+                    <h1 class="text-4xl md:text-6xl leading-tight mb-4 font-black">
+                        Preparing for the <span class="green-accent italic">Fall Horizon.</span>
+                    </h1>
+                    <div class="h-1.5 w-28 bg-gradient-to-r from-[#8cc63f] to-[#934293] rounded-full mb-6"></div>
+                    <p class="text-xs font-extrabold uppercase tracking-[0.25em] text-slate-400">President’s Message</p>
+                </div>
+
+                <div class="md:col-span-7">
+                    <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed space-y-6">
+                        <p class="text-lg font-medium text-slate-800">Dear GSOLE Members,</p>
+                        
+                        <p>
+                            As August arrives, we enter that energetic time of transition when educators around the globe prepare for the upcoming academic year. August is a moment to synthesize new ideas, refresh online course design, and reconnect with our vibrant professional community before the rush of the fall term.
+                        </p>
+                        
+                        <p>
+                            Following our leadership transitions last month, our incoming team is officially in full swing! We spent early August hosting our monthly Cyber Salon where President Kevin DePew engaged with members to hear your direct feedback, visions, and priorities for the future of online literacy instruction (OLI). Your insights are actively helping shape GSOLE’s strategic agenda for the next two years.
+                        </p>
+                        
+                        <p>
+                            Planning for the <strong>2027 GSOLE Annual Conference (February 3–5, 2027)</strong> is moving forward at full speed. As we prepare to launch our second decade as an organization, we invite all members to help shape this hallmark event. Whether you have capacity to assist during the proposal review phase, help organize plenary sessions, or serve as a virtual session moderator, your voice is essential.
+                        </p>
+
+                        <p>
+                            In this August issue, we are also thrilled to highlight our **2026 Research Grant updates**, share fresh publications in *Research in Online Literacy Education (ROLE)* and *OLOR Effective Practices*, and invite submission proposals for our fall calls.
+                        </p>
+
+                        <p>
+                            We wish you all a reflective, productive, and smooth transition into the Fall 2026 semester!
+                        </p>
+                        
+                        <!-- Signature Block -->
+                        <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-8 border-t border-slate-200 pt-8">
+                            <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100">
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">President</p>
+                                <p class="font-black text-2xl serif italic text-[#934293]">Kevin DePew</p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-[#6e9f2d]">Old Dominion University</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Past President</p>
+                                <p class="font-black text-2xl serif italic text-[#934293]">Amy Cicchino</p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-[#6e9f2d]">Auburn University</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="md:col-span-5">
+                    <div class="sidebar-card shadow-sm hover:shadow-md transition-shadow duration-300">
+                        <div class="flex items-center justify-between mb-6 border-b border-green-200/60 pb-3">
+                            <h3 class="text-xs font-black uppercase tracking-widest text-slate-600 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#934293]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                Important Dates & Links
+                            </h3>
+                            <span class="text-[10px] bg-white px-2 py-0.5 rounded font-bold text-[#6e9f2d]">August 2026</span>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- Date Item 1 -->
+                            <div class="bg-white p-3.5 rounded-lg border border-green-100 shadow-2xs">
+                                <span class="text-[10px] font-black tracking-widest uppercase bg-[#8cc63f]/20 text-[#6e9f2d] px-2 py-0.5 rounded inline-block mb-1">
+                                    September 01, 2026
+                                </span>
+                                <p class="font-bold text-slate-900 text-sm">GSOLE Fall Kickoff Cyber Salon</p>
+                                <p class="text-xs text-slate-500 italic mt-0.5">3:00 PM EST | Open to All</p>
+                                <a href="https://gsole.org/cyber-salon" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-[#934293] hover:underline mt-2">
+                                    Register Now →
+                                </a>
+                            </div>
+
+                            <!-- Date Item 2 -->
+                            <div class="bg-white p-3.5 rounded-lg border border-green-100 shadow-2xs">
+                                <span class="text-[10px] font-black tracking-widest uppercase bg-purple-100 text-[#934293] px-2 py-0.5 rounded inline-block mb-1">
+                                    November 01, 2026
+                                </span>
+                                <p class="font-bold text-slate-900 text-sm">ROLE CFP Submission Deadline</p>
+                                <p class="text-xs text-slate-500 italic mt-0.5">Focus: AI & Online Writing Instruction</p>
+                                <a href="#role-cfp" class="inline-flex items-center gap-1 text-xs font-bold text-[#934293] hover:underline mt-2">
+                                    View CFP Details →
+                                </a>
+                            </div>
+
+                            <!-- Date Item 3 -->
+                            <div class="bg-white p-3.5 rounded-lg border border-green-100 shadow-2xs">
+                                <span class="text-[10px] font-black tracking-widest uppercase bg-amber-100 text-amber-800 px-2 py-0.5 rounded inline-block mb-1">
+                                    Feb 03–05, 2027
+                                </span>
+                                <p class="font-bold text-slate-900 text-sm">2027 GSOLE Annual Virtual Conference</p>
+                                <p class="text-xs text-slate-500 italic mt-0.5">Theme Launch Coming Soon</p>
+                                <a href="#conference-call" class="inline-flex items-center gap-1 text-xs font-bold text-[#934293] hover:underline mt-2">
+                                    Join Planning Committee →
+                                </a>
+                            </div>
+
+                            <!-- Essential Links -->
+                            <div class="pt-4 border-t border-green-200/60">
+                                <p class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider mb-2">Core Resources</p>
+                                <ul class="space-y-2 text-xs font-medium">
+                                    <li>
+                                        <a href="https://gsole.org/oliresources/oliprinciples" target="_blank" rel="noopener noreferrer" class="text-slate-700 hover:text-[#934293] flex items-center justify-between bg-white p-2 rounded border border-green-100">
+                                            <span>📖 OLI Principles & Tenets</span>
+                                            <span class="text-slate-400">→</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://gsole.org/conference/2026program" target="_blank" rel="noopener noreferrer" class="text-slate-700 hover:text-[#934293] flex items-center justify-between bg-white p-2 rounded border border-green-100">
+                                            <span>🗂️ 2026 Conference Archive</span>
+                                            <span class="text-slate-400">→</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="election-results" class="section-padding bg-slate-50 border-y border-slate-200/80">
+            <div class="max-w-4xl mx-auto">
+                <div class="p-8 bg-white border-l-8 border-[#934293] rounded-r-xl shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <span class="text-[11px] font-black uppercase tracking-widest text-[#8cc63f]">2026–2028 Leadership Roster</span>
+                            <h2 class="serif text-3xl font-black text-[#934293] mt-1">GSOLE Executive Leadership & Board</h2>
+                        </div>
+                        <span class="bg-purple-100 text-[#934293] text-xs font-extrabold px-3 py-1.5 rounded-full border border-purple-200/60 self-start sm:self-center">
+                            Term Began July 1, 2026
+                        </span>
+                    </div>
+
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        We extend our gratitude to all who participated in this year's leadership elections. Please join us in welcoming our current serving executive officers and board members for the 2026 cycle:
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-4 text-xs font-medium text-slate-700 mb-6">
+                        <div class="p-3.5 bg-purple-50/60 rounded-lg border border-purple-100">
+                            <span class="font-extrabold text-[#934293] uppercase block text-[10px] tracking-wider mb-1">President</span>
+                            <p class="font-bold text-sm text-slate-900">Kevin DePew</p>
+                            <p class="text-slate-500">Old Dominion University</p>
+                        </div>
+
+                        <div class="p-3.5 bg-purple-50/60 rounded-lg border border-purple-100">
+                            <span class="font-extrabold text-[#934293] uppercase block text-[10px] tracking-wider mb-1">Vice President</span>
+                            <p class="font-bold text-sm text-slate-900">Mary Lourdes Silva</p>
+                            <p class="text-slate-500">Ithaca College</p>
+                        </div>
+
+                        <div class="p-3.5 bg-purple-50/60 rounded-lg border border-purple-100">
+                            <span class="font-extrabold text-[#934293] uppercase block text-[10px] tracking-wider mb-1">Secretary</span>
+                            <p class="font-bold text-sm text-slate-900">Jennifer Smith Daniel</p>
+                            <p class="text-slate-500">Queens College</p>
+                        </div>
+
+                        <div class="p-3.5 bg-purple-50/60 rounded-lg border border-purple-100">
+                            <span class="font-extrabold text-[#934293] uppercase block text-[10px] tracking-wider mb-1">Treasurer</span>
+                            <p class="font-bold text-sm text-slate-900">Kathleen Turner Ledgerwood</p>
+                            <p class="text-slate-500">Embry-Riddle Aeronautical University</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                        <span class="font-extrabold text-[#934293] uppercase text-[10px] tracking-wider block mb-2">Executive At-Large Board Members</span>
+                        <ul class="grid sm:grid-cols-2 gap-2 text-xs text-slate-700">
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#8cc63f] font-bold">•</span>
+                                <span><strong>Ann Marie Ade</strong> (Embry-Riddle Aeronautical Univ.)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#8cc63f] font-bold">•</span>
+                                <span><strong>Tess Evans</strong> (Miami University of Ohio)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#8cc63f] font-bold">•</span>
+                                <span><strong>Trent Kays</strong> (Augusta Univ. - Interim through 2027)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#8cc63f] font-bold">•</span>
+                                <span><strong>Maryam Vaezi</strong> (University of Arizona)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap justify-between items-center text-xs text-slate-500 italic">
+                        <span>A special thank you to outgoing leaders: Cat Mahaffey, Nikki Chasteen, Elle Tyson, Tina Calandrino, Alex Evans, & Patrice Johnson.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="grants-awards" class="section-padding bg-gradient-to-b from-white to-[#fbf7fb]">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <span class="text-xs font-black uppercase tracking-widest text-[#8cc63f] bg-green-100 px-3 py-1 rounded-full">
+                        August Award Updates
+                    </span>
+                    <h2 class="text-4xl serif font-black text-[#934293] mt-3 mb-2">GSOLE Grants & Awards Program</h2>
+                    <div class="h-1.5 w-20 bg-[#8cc63f] rounded-full mx-auto mb-4"></div>
+                    <p class="text-slate-600 max-w-2xl mx-auto text-sm">
+                        Recognizing innovation, empirical research, and scholarly excellence in online literacy education.
+                    </p>
+                </div>
+
+                <!-- Status Banner for August -->
+                <div class="bg-gradient-to-r from-purple-900 to-[#934293] text-white p-6 rounded-xl shadow-md mb-10">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <div>
+                            <div class="inline-flex items-center gap-2 bg-[#8cc63f] text-slate-900 text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider mb-2">
+                                Notice: August 01, 2026 Milestone Reached
+                            </div>
+                            <h3 class="text-2xl font-bold text-white serif italic">2026 Research Grant Notifications Distributed</h3>
+                            <p class="text-purple-100 text-xs mt-1 max-w-xl">
+                                Formal notification letters have been emailed to all proposal applicants as of August 1, 2026. Awardees will be formally recognized in our upcoming autumn spotlight.
+                            </p>
+                        </div>
+                        <a href="https://gsole.org/programs/research-grant" target="_blank" rel="noopener noreferrer" class="bg-white text-[#934293] hover:bg-purple-50 px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-colors whitespace-nowrap shadow-sm">
+                            Grant Hub →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Award Cards -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Research Grant Card -->
+                    <div class="bg-white p-7 border-l-4 border-[#8cc63f] rounded-r-xl shadow-sm border-y border-r border-slate-100">
+                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#6e9f2d]">Funding $500 – $2,000</span>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3 mt-1">GSOLE Research Grants</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Designed to support both pilot studies and major empirical research initiatives addressing online literacy pedagogy, digital accessibility, and course design.
+                        </p>
+                        <div class="bg-slate-50 p-3 rounded text-[11px] space-y-1.5 text-slate-600 border border-slate-200/70 mb-4">
+                            <p class="flex justify-between"><span>CFP Closed:</span> <strong class="text-slate-800">May 22, 2026</strong></p>
+                            <p class="flex justify-between"><span>Reviews Conducted:</span> <strong class="text-slate-800">June–July 2026</strong></p>
+                            <p class="flex justify-between text-[#934293]"><span>Award Status:</span> <strong>Announced Aug 1, 2026</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Dissertation Award Card (Completing the prompt snippet) -->
+                    <div class="bg-white p-7 border-l-4 border-[#934293] rounded-r-xl shadow-sm border-y border-r border-slate-100">
+                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#934293]">Dissertation Excellence</span>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3 mt-1">Beth Hewett Dissertation Award</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Recognizing outstanding dissertation research that contributes directly to the theory, practice, or assessment of online literacy education.
+                        </p>
+                        <div class="bg-purple-50/50 p-3 rounded text-[11px] space-y-1.5 text-slate-600 border border-purple-100 mb-4">
+                            <p class="flex justify-between"><span>Honoring:</span> <strong class="text-[#934293]">Dr. Beth Hewett</strong></p>
+                            <p class="flex justify-between"><span>Focus:</span> <strong class="text-slate-800">Emerging OWI Scholars</strong></p>
+                            <p class="flex justify-between"><span>Next Nominations:</span> <strong class="text-slate-800">Late Fall 2026</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="publications" class="section-padding bg-white border-y border-slate-200/80">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-10">
+                    <p class="text-xs font-black text-[#8cc63f] uppercase tracking-widest mb-2">GSOLE Publications & Scholarship</p>
+                    <h2 class="text-4xl serif font-black text-[#934293]">Fresh Scholarly Insights</h2>
+                    <div class="h-1.5 w-20 bg-[#934293] rounded-full mx-auto mt-3"></div>
+                </div>
+
+                <!-- Interactive Publications Filter Tabs -->
+                <div class="flex justify-center gap-2 mb-8 no-print flex-wrap">
+                    <button @click="activeTab = 'all'" :class="activeTab === 'all' ? 'bg-[#934293] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                        All Works
+                    </button>
+                    <button @click="activeTab = 'role'" :class="activeTab === 'role' ? 'bg-[#934293] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                        ROLE Journal (4.2)
+                    </button>
+                    <button @click="activeTab = 'ep'" :class="activeTab === 'ep' ? 'bg-[#934293] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                        Effective Practices
+                    </button>
+                    <button @click="activeTab = 'reviews'" :class="activeTab === 'reviews' ? 'bg-[#934293] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                        Book Reviews
+                    </button>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- ROLE Card -->
+                    <div x-show="activeTab === 'all' || activeTab === 'role'" class="bg-white p-6 md:p-8 border-l-4 border-[#934293] rounded-r-xl shadow-md hover:shadow-lg transition-shadow border-y border-r border-slate-100">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] font-bold bg-purple-100 text-[#934293] px-2.5 py-0.5 rounded uppercase">ROLE Issue 4.2 (2025/2026)</span>
+                            <button @click="toggleBookmark('role42')" class="text-xs text-slate-400 hover:text-amber-500">
+                                <span x-text="savedBookmarks.includes('role42') ? '★ Bookmarked' : '☆ Bookmark'"></span>
+                            </button>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3 serif italic text-[#934293]">Tribute to Michael Greer</h3>
+                        <p class="text-xs text-slate-500 font-semibold mb-3">Founding Editor Tribute • Peer-Reviewed Research</p>
+                        <p class="text-sm text-slate-700 leading-relaxed mb-4">
+                            The latest issue of <em>Research in Online Literacy Education (ROLE)</em> honors founding editor Michael Greer and core values he championed: student agency, universal design, and responsive OWI technologies. Contributing authors include <strong>Jessie Borgman, Casey McArdle, Ann Marie Francis, Heidi McCauley, Cat Mahaffey, Justin Cary, and Jason Snart</strong>.
+                        </p>
+                        <a href="https://gsole.org/olor/role/2025/" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                            <span>Read ROLE Issue 4.2</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Effective Practice Card 1 -->
+                    <div x-show="activeTab === 'all' || activeTab === 'ep'" class="bg-white p-6 md:p-8 border-l-4 border-[#8cc63f] rounded-r-xl shadow-md hover:shadow-lg transition-shadow border-y border-r border-slate-100">
+                        <span class="text-[10px] font-bold bg-green-100 text-[#6e9f2d] px-2.5 py-0.5 rounded uppercase mb-2 inline-block">OLOR Effective Practice</span>
+                        <h3 class="text-xl font-bold text-slate-900 mb-1">The Participation Contract</h3>
+                        <p class="text-xs text-[#6e9f2d] font-bold uppercase tracking-wider mb-3">Nicole Golden (2026)</p>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            This piece explores how collaborative contract grading and participation agreements can increase accountability, student buy-in, and transparency in online composition courses.
+                        </p>
+                        <a href="https://gsole.org/olor/ep/2026.05.20/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-xs font-black uppercase tracking-wider text-[#934293] border-b-2 border-[#8cc63f] pb-0.5 hover:text-[#6e2e6e] transition-colors">
+                            Read Effective Practice Piece →
+                        </a>
+                    </div>
+
+                    <!-- Effective Practice Card 2 (Scott Ortolano with Author Links) -->
+                    <div x-show="activeTab === 'all' || activeTab === 'ep'" class="bg-white p-6 md:p-8 border-l-4 border-[#8cc63f] rounded-r-xl shadow-md hover:shadow-lg transition-shadow border-y border-r border-slate-100">
+                        <span class="text-[10px] font-bold bg-green-100 text-[#6e9f2d] px-2.5 py-0.5 rounded uppercase mb-2 inline-block">OLOR Effective Practice</span>
+                        <h3 class="text-xl font-bold text-slate-900 mb-1">A Little Goes a Long Way: Using Short, Informal Videos to Personalize and Build Classroom Community in Virtual Teaching Environments</h3>
+                        <p class="text-xs text-[#6e9f2d] font-bold uppercase tracking-wider mb-4">Scott Ortolano (2026)</p>
+                        
+                        <!-- Social Media & Web Links Bar -->
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 mb-4">
+                            <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Author Web & Social Channels:</p>
+                            <div class="flex flex-wrap gap-x-4 gap-y-2 text-xs font-medium text-slate-600">
+                                <a href="https://www.facebook.com/scott.ortolano" target="_blank" rel="noopener noreferrer" class="hover:text-[#934293] transition-colors flex items-center gap-1">🌐 Facebook</a>
+                                <span>•</span>
+                                <a href="https://bsky.app/profile/floridasnow.bsky.social" target="_blank" rel="noopener noreferrer" class="hover:text-[#934293] transition-colors flex items-center gap-1">🦋 Bluesky (@floridasnow)</a>
+                                <span>•</span>
+                                <span class="text-slate-500">📸 Insta: @florida_snow_</span>
+                                <span>•</span>
+                                <a href="http://www.SOrtolano.com" target="_blank" rel="noopener noreferrer" class="hover:text-[#934293] transition-colors font-bold text-[#934293]">SOrtolano.com</a>
+                            </div>
+                        </div>
+
+                        <a href="https://gsole.org/olor/ep/current" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-xs font-black uppercase tracking-wider text-[#934293] border-b-2 border-[#8cc63f] pb-0.5 hover:text-[#6e2e6e] transition-colors">
+                            Read Full Article →
+                        </a>
+                    </div>
+
+                    <!-- Book Reviews Card -->
+                    <div x-show="activeTab === 'all' || activeTab === 'reviews'" class="bg-white p-6 md:p-8 border-l-4 border-amber-500 rounded-r-xl shadow-md hover:shadow-lg transition-shadow border-y border-r border-slate-100">
+                        <span class="text-[10px] font-bold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded uppercase mb-2 inline-block">OLOR Reviews</span>
+                        <h3 class="text-xl font-bold text-slate-900 mb-1">Humanizing Online Instruction: Multimedia, Presence, and Learning Design</h3>
+                        <p class="text-xs text-slate-500 font-semibold mb-2">Review of <em>Multimedia in the College Classroom: Improve Learning and Connect with Students in Online and Hybrid Courses</em></p>
+                        <p class="text-xs text-amber-800 font-bold uppercase tracking-wider mb-4">Cat S. Williams-Monardes (2026)</p>
+                        <a href="https://gsole.org/olor/reviews2026.02.11" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-xs font-black uppercase tracking-wider text-[#934293] border-b-2 border-amber-500 pb-0.5 hover:text-[#6e2e6e] transition-colors">
+                            Read Book Review →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="role-cfp" class="section-padding bg-gradient-to-br from-[#faf2fa] via-white to-purple-50/30 border-b border-slate-200/80">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-8 md:p-10 border-l-8 border-[#934293] rounded-r-xl shadow-md border-y border-r border-purple-100">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-[#934293] bg-purple-100 px-2.5 py-1 rounded">Journal CFP</span>
+                            <h2 class="text-3xl serif italic text-[#934293] mt-2 font-black">ROLE Call for Proposals: AI & OWI</h2>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold px-3 py-2 rounded-lg text-right">
+                            <span class="block text-[10px] text-amber-600 uppercase font-black">Deadline</span>
+                            November 01, 2026
+                        </div>
+                    </div>
+
+                    <p class="text-slate-700 leading-relaxed text-sm mb-6">
+                        <em>Research in Online Literacy Education (ROLE)</em> invites article proposal submissions for our upcoming peer-reviewed issue. This special issue engages deeply with the rapidly expanding conversations surrounding Artificial Intelligence (AI), generative writing tools, automated feedback systems, and critical digital literacy in online writing instruction (OWI).
+                    </p>
+
+                    <div class="bg-purple-50/50 p-4 rounded-lg border border-purple-100 mb-6 text-xs text-slate-700 space-y-2">
+                        <p class="font-bold text-[#934293] uppercase tracking-wider text-[11px]">Recommended Proposal Topics:</p>
+                        <ul class="list-disc list-inside space-y-1 text-slate-600">
+                            <li>Ethical AI integration & policy development in virtual composition classrooms</li>
+                            <li>Equitable assessment & student agency in AI-augmented writing environments</li>
+                            <li>Empirical investigations of student and instructor experiences with LLMs</li>
+                        </ul>
+                    </div>
+
+                    <a href="https://docs.google.com/forms/d/1i3hQfLUK1wOEsywbRa95Uf5bWlbopPjax8jE65Vb16M/viewform?edit_requested=true" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                        <span>Submit Proposal via Google Form</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="conference-call" class="section-padding bg-slate-50 border-b border-slate-200/80">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-8 md:p-10 border-l-8 border-[#8cc63f] rounded-r-xl shadow-md border-y border-r border-slate-200">
+                    <div class="mb-6">
+                        <span class="text-xs font-black uppercase tracking-widest text-[#6e9f2d]">Volunteer Opportunity</span>
+                        <h2 class="text-3xl serif italic text-[#934293] mt-1 font-black">2027 Conference Committee Call</h2>
+                        <div class="h-1 w-20 bg-[#8cc63f] rounded-full mt-2"></div>
+                    </div>
+
+                    <div class="prose prose-slate max-w-none text-slate-700 text-sm leading-relaxed space-y-4">
+                        <p>
+                            GSOLE cordially invites all active members to volunteer for the <strong>2027 Conference Planning Committee</strong>. Our annual virtual conference (scheduled for <strong>February 3–5, 2027</strong>) depends on the dedication and creativity of member volunteers.
+                        </p>
+                        <p>
+                            Commitment is flexible and tailored to your available bandwidth. Volunteers can participate in drafting the Call for Papers, reviewing incoming proposal submissions, organizing plenary sessions, or serving as virtual session moderators during the live event.
+                        </p>
+                    </div>
+
+                    <!-- Interactive Survey Modal / Callout -->
+                    <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-green-50/50 p-4 rounded-xl border border-green-100">
+                        <div>
+                            <p class="font-bold text-slate-900 text-sm">Ready to help shape GSOLE 2027?</p>
+                            <p class="text-xs text-slate-500">Takes less than 3 minutes to indicate your availability.</p>
+                        </div>
+                        <a href="https://gsole.org/" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background-color: #6e9f2d;">
+                            <span>Complete Committee Interest Survey</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="acde-call" class="section-padding bg-gradient-to-br from-emerald-50/30 via-white to-slate-50 border-b border-slate-200/80">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-8 md:p-10 border-l-8 border-[#8cc63f] rounded-r-xl shadow-md border-y border-r border-emerald-100">
+                    
+                    <!-- ACDE 2027 Conference Banner Image Placeholder -->
+                    <div class="mb-6 overflow-hidden rounded-xl shadow-sm border border-slate-200">
+                        <img src="acde-2027-banner.jpg" 
+                             alt="ACDE 2027 Conference - Rethinking Anew Sciences for Africa, Cape Town, South Africa, 12-16 April 2027" 
+                             class="w-full h-auto object-cover block" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/1200x500/0f766e/ffffff?text=ACDE+2027+Conference+Banner';" />
+                    </div>
+
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-[#6e9f2d] bg-green-100 px-2.5 py-1 rounded">
+                                Partner Call for Papers
+                            </span>
+                            <h2 class="text-3xl serif italic text-[#934293] mt-2 font-black">
+                                ACDE Conference 2027: Call for Abstracts
+                            </h2>
+                            <p class="text-xs font-semibold text-slate-500 mt-1">Hosted by the University of South Africa (Unisa) • 12–16 April 2027</p>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold px-3 py-2 rounded-lg text-right">
+                            <span class="block text-[10px] text-amber-700 uppercase font-black">Abstract Deadline</span>
+                            31 August 2026 <span class="text-[10px] font-normal block text-amber-600">23:59 SAST</span>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-700 leading-relaxed text-sm mb-6">
+                        The <strong>African Council for Distance Education (ACDE) Conference 2027</strong>, hosted by the <strong>University of South Africa (Unisa)</strong>, invites researchers, academics, practitioners, policymakers, postgraduate students, and industry partners to submit abstracts for presentation at the conference, to be held from <strong>12–16 April 2027</strong>.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200/80 text-xs">
+                            <p class="font-bold text-[#934293] uppercase tracking-wider text-[11px] mb-2.5 flex items-center gap-1.5">
+                                <span>📋</span> Submission Categories
+                            </p>
+                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-700 font-medium">
+                                <li class="flex items-center gap-1.5"><span class="text-[#8cc63f] font-bold">•</span> Research papers</li>
+                                <li class="flex items-center gap-1.5"><span class="text-[#8cc63f] font-bold">•</span> Case studies</li>
+                                <li class="flex items-center gap-1.5"><span class="text-[#8cc63f] font-bold">•</span> Innovative practices</li>
+                                <li class="flex items-center gap-1.5"><span class="text-[#8cc63f] font-bold">•</span> Policy papers</li>
+                                <li class="flex items-center gap-1.5"><span class="text-[#8cc63f] font-bold">•</span> Panel discussions</li>
+                                <li class="flex items-center gap-1.5"><span class="text-[#8cc63f] font-bold">•</span> Student research</li>
+                                <li class="flex items-center gap-1.5 sm:col-span-2"><span class="text-[#8cc63f] font-bold">•</span> Lightning papers (5-min presentations)</li>
+                                <li class="flex items-center gap-1.5 sm:col-span-2"><span class="text-[#8cc63f] font-bold">•</span> Poster presentations</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-purple-50/50 p-4 rounded-lg border border-purple-100 text-xs">
+                            <p class="font-bold text-[#934293] uppercase tracking-wider text-[11px] mb-2.5 flex items-center gap-1.5">
+                                <span>📖</span> Publication Opportunities
+                            </p>
+                            <p class="text-slate-600 leading-relaxed mb-3">
+                                Accepted abstracts will be published in the official <strong>Conference Abstract Book</strong>.
+                            </p>
+                            <p class="text-slate-600 leading-relaxed">
+                                Selected authors may be invited to submit full papers for publication in conference proceedings, edited books, or accredited journals, subject to peer review.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-green-50/60 rounded-xl border border-green-200/70 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <p class="font-bold text-slate-900 text-xs">Submit Your Abstract Before the August 31 Deadline</p>
+                            <p class="text-[11px] text-slate-500">Open to researchers, academics, practitioners, policymakers, & students.</p>
+                        </div>
+                        <a href="https://www.unisa.ac.za/" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background-color: #6e9f2d;">
+                            <span>Submission Info & Details</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cybersalon" class="section-padding bg-gradient-to-b from-white to-[var(--gsole-warm-sand)]">
+            <div class="max-w-4xl mx-auto">
+                <div class="p-8 bg-[#f7fee7] border-l-4 border-[#8cc63f] rounded-r-xl shadow-sm border-y border-r border-green-100">
+                    <div class="flex items-start gap-4">
+                        <div class="text-4xl">☕</div>
+                        <div class="space-y-3">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-[#6e9f2d] bg-white px-2.5 py-0.5 rounded border border-green-200">
+                                Regular Community Space
+                            </span>
+                            <h3 class="serif italic text-2xl font-black text-[#934293]">GSOLE Cyber Salon Sessions</h3>
+                            <p class="text-xs text-slate-700 leading-relaxed">
+                                Cyber Salons are informal, monthly virtual gatherings held on the <strong>first Tuesday of every month</strong> at 3:00 PM EST. They provide open spaces for online literacy educators to discuss emerging pedagogies, troubleshoot digital classroom challenges, and network. Free and open to both members and non-members!
+                            </p>
+                            <div class="pt-2">
+                                <a href="https://gsole.org/cyber-salon" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                                    <span>Visit Cybersalon Hub & Join Next Session →</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-slate-900 text-slate-300 px-8 py-12 border-t border-slate-800">
+            <div class="max-w-4xl mx-auto text-center md:text-left grid md:grid-cols-3 gap-8 text-xs">
+                <div>
+                    <div class="flex items-center gap-3 justify-center md:justify-start mb-3">
+                        <div class="logo-mark text-lg p-1.5 border-2">G</div>
+                        <span class="font-black text-white text-base">GSOLE</span>
+                    </div>
+                    <p class="text-slate-400 leading-relaxed">
+                        The Global Society of Online Literacy Educators is a non-profit professional organization dedicated to improving online literacy instruction.
+                    </p>
+                </div>
+
+                <div>
+                    <p class="font-bold text-white uppercase tracking-wider mb-3 text-[11px]">Quick Links</p>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="https://gsole.org/" target="_blank" class="hover:text-white transition-colors">Official Website</a></li>
+                        <li><a href="https://gsole.org/cyber-salon" target="_blank" class="hover:text-white transition-colors">Cyber Salon Events</a></li>
+                        <li><a href="https://gsole.org/oliresources/oliprinciples" target="_blank" class="hover:text-white transition-colors">OLI Principles & Tenets</a></li>
+                        <li><a href="https://gsole.org/programs/research-grant" target="_blank" class="hover:text-white transition-colors">Grants & Awards</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <p class="font-bold text-white uppercase tracking-wider mb-3 text-[11px]">Newsletter Contact</p>
+                    <p class="text-slate-400 leading-relaxed mb-2">
+                        Have news, calls for proposals, or announcements to share in an upcoming issue?
+                    </p>
+                    <a href="mailto:contact@gsole.org" class="text-[#8cc63f] font-bold hover:underline">
+                        Contact GSOLE Editorial Team &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto mt-10 pt-6 border-t border-slate-800 text-center text-[11px] text-slate-500">
+                <p>&copy; 2026 Global Society of Online Literacy Educators (GSOLE). All rights reserved.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        console.log("GSOLE August 2026 Newsletter Loaded Successfully.");
+    </script>
+</body>
+</html>
