@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#F8F9FA] text-[#111827]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNC Charlotte | AI Pedagogy Pop-ups</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Plus Jakarta Sans (Body/Headers) + JetBrains Mono (Code/Numbers/Badges) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons (Used sparingly) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        niner: {
+                            DEFAULT: '#00703C',
+                            dark: '#004D28',
+                            light: '#00A859',
+                            soft: '#E6F3EC'
+                        },
+                        swiss: {
+                            bg: '#F8F9FA',
+                            card: '#FFFFFF',
+                            text: '#111827',
+                            muted: '#6B7280',
+                            border: '#E5E7EB',
+                            darkborder: '#374151',
+                            accent: '#00703C'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8F9FA;
+            color: #111827;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Hairline borders and grid alignment */
+        .swiss-border {
+            border: 1px solid #E5E7EB;
+        }
+
+        .swiss-border-b {
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .swiss-border-t {
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .swiss-border-r {
+            border-right: 1px solid #E5E7EB;
+        }
+
+        /* Clean subtle card transition without heavy elevation */
+        .swiss-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .swiss-card:hover {
+            border-color: #00703C;
+        }
+
+        /* Custom subtle scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F8F9FA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00703C;
+        }
+
+        /* Drawer overlay animation */
+        .drawer-backdrop {
+            transition: opacity 0.25s ease-in-out;
+        }
+
+        .drawer-panel {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col bg-[#F8F9FA] text-[#111827] selection:bg-[#00703C] selection:text-white">
+
+    <!-- NAVIGATION HEADER -->
+    <header class="bg-white swiss-border-b sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Brand Identifier -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchMainTab('showcases')">
+                    <div class="w-8 h-8 bg-niner text-white font-mono font-bold text-sm flex items-center justify-center rounded-[3px]">
+                        UNC
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[10px] font-mono font-semibold tracking-wider text-niner uppercase">UNC Charlotte</span>
+                            <span class="text-[10px] font-mono text-slate-400">// ACADEMY EXTENSION</span>
+                        </div>
+                        <h1 class="text-base font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+                            AI PEDAGOGY POP-UPS
+                            <span class="hidden sm:inline-block text-[10px] font-mono font-semibold text-niner bg-niner-soft px-2 py-0.5 rounded-[3px]">30-MIN PEER DEMOS</span>
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Main Navigation Tabs -->
+                <nav class="hidden md:flex items-center space-x-1 font-mono text-xs">
+                    <button onclick="switchMainTab('showcases')" id="nav-showcases" class="nav-btn px-3 py-2 text-niner font-bold border-b-2 border-niner transition flex items-center gap-1.5">
+                        <span class="text-slate-400 font-normal">01.</span> SHOWCASE INDEX
+                    </button>
+                    <button onclick="switchMainTab('agenda')" id="nav-agenda" class="nav-btn px-3 py-2 text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                        <span class="text-slate-400 font-normal">02.</span> 30-MIN AGENDA
+                    </button>
+                    <button onclick="switchMainTab('sandbox')" id="nav-sandbox" class="nav-btn px-3 py-2 text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                        <span class="text-slate-400 font-normal">03.</span> ARTIFACT SANDBOX
+                    </button>
+                    <button onclick="switchMainTab('prospectus')" id="nav-prospectus" class="nav-btn px-3 py-2 text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                        <span class="text-slate-400 font-normal">04.</span> PROSPECTUS
+                    </button>
+                </nav>
+
+                <!-- Primary Action Button -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="openProposeDrawer()" class="bg-niner hover:bg-niner-dark text-white font-mono font-semibold text-xs px-3.5 py-2 rounded-[3px] transition flex items-center gap-2">
+                        <i class="fa-solid fa-plus text-[10px]"></i>
+                        <span>HOST A POP-UP</span>
+                    </button>
+                    
+                    <!-- Mobile Nav Toggle -->
+                    <button onclick="toggleMobileNav()" class="md:hidden text-slate-700 p-2 text-lg">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-nav" class="hidden md:hidden bg-white swiss-border-b px-4 py-3 space-y-2 text-xs font-mono">
+            <button onclick="switchMainTab('showcases'); toggleMobileNav()" class="block w-full text-left py-2 text-niner font-bold">01. SHOWCASE INDEX</button>
+            <button onclick="switchMainTab('agenda'); toggleMobileNav()" class="block w-full text-left py-2 text-slate-700">02. 30-MIN AGENDA</button>
+            <button onclick="switchMainTab('sandbox'); toggleMobileNav()" class="block w-full text-left py-2 text-slate-700">03. ARTIFACT SANDBOX</button>
+            <button onclick="switchMainTab('prospectus'); toggleMobileNav()" class="block w-full text-left py-2 text-slate-700">04. PROSPECTUS</button>
+        </div>
+    </header>
+
+    <!-- EDITORIAL HERO HEADER -->
+    <section class="bg-white swiss-border-b py-10 sm:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-8 items-end">
+                
+                <div class="lg:col-span-8 space-y-4">
+                    <div class="inline-flex items-center gap-2 font-mono text-xs tracking-wider uppercase text-niner font-bold bg-niner-soft px-2.5 py-1 rounded-[3px]">
+                        <span class="w-1.5 h-1.5 rounded-full bg-niner"></span>
+                        Summer AI Literacy Academy Fellowship Series
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+                        Field-Tested AI Pedagogy in <br>
+                        <span class="text-niner underline decoration-slate-200 decoration-2 underline-offset-4">30-Minute Peer Showcases</span>
+                    </h2>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-3xl font-normal">
+                        Singular, actionable syllabus policies, forensic fact-checking protocols, and Socratic STEM prompts designed by UNC Charlotte faculty for immediate undergraduate classroom adaptation.
+                    </p>
+                </div>
+
+                <!-- Ticker Quick Stats -->
+                <div class="lg:col-span-4 border-l-0 lg:border-l border-slate-200 pl-0 lg:pl-8 grid grid-cols-2 gap-4 font-mono text-xs">
+                    <div class="space-y-1">
+                        <div class="text-2xl font-bold text-slate-900">30 MIN</div>
+                        <div class="text-[11px] text-slate-500 uppercase tracking-wide">Format Duration</div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-2xl font-bold text-niner">05 FELLOWS</div>
+                        <div class="text-[11px] text-slate-500 uppercase tracking-wide">Inaugural Cohort</div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-2xl font-bold text-slate-900">3 CORE</div>
+                        <div class="text-[11px] text-slate-500 uppercase tracking-wide">Disciplines</div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-2xl font-bold text-niner">100%</div>
+                        <div class="text-[11px] text-slate-500 uppercase tracking-wide">Faculty Artifacts</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+
+        <!-- SECTION 1: FACULTY SHOWCASE INDEX (SWISS GRID) -->
+        <section id="view-showcases" class="space-y-6">
+            
+            <!-- Controls Bar -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 swiss-border-b pb-4">
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900 tracking-tight uppercase flex items-center gap-2">
+                        <span class="font-mono text-niner font-bold">01.</span> Faculty Showcase Index
+                    </h3>
+                    <p class="text-xs text-slate-500 font-mono">Select a showcase card to inspect artifacts or copy ready-to-use prompts.</p>
+                </div>
+
+                <!-- Category Filter Buttons -->
+                <div class="flex flex-wrap items-center gap-1.5 font-mono text-xs">
+                    <button onclick="filterShowcases('all', this)" class="filter-btn active-filter px-3 py-1.5 rounded-[3px] bg-niner text-white font-bold">ALL (05)</button>
+                    <button onclick="filterShowcases('writing', this)" class="filter-btn px-3 py-1.5 rounded-[3px] bg-white swiss-border text-slate-600 hover:text-slate-900 hover:border-slate-400">WRITING</button>
+                    <button onclick="filterShowcases('stem', this)" class="filter-btn px-3 py-1.5 rounded-[3px] bg-white swiss-border text-slate-600 hover:text-slate-900 hover:border-slate-400">MATH & STEM</button>
+                    <button onclick="filterShowcases('humanities', this)" class="filter-btn px-3 py-1.5 rounded-[3px] bg-white swiss-border text-slate-600 hover:text-slate-900 hover:border-slate-400">HUMANITIES</button>
+                </div>
+            </div>
+
+            <!-- BENTO GRID CONTAINER -->
+            <div id="bento-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
+
+                <!-- CARD 1: BERT WRAY (Large Feature - 8 Columns) -->
+                <div class="bento-item lg:col-span-8 swiss-card p-6 rounded-[4px] flex flex-col justify-between group" data-category="writing">
+                    <div class="space-y-5">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 font-mono text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-400">01 /</span>
+                                <span class="bg-niner-soft text-niner font-semibold px-2 py-0.5 rounded-[2px]">Writing & Rhetoric</span>
+                                <span class="text-slate-500">First-Year Writing</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[11px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-[2px]">🛠️ Syllabus Policy</span>
+                                <span class="text-[11px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-[2px]">⚡ 5-Min Prep</span>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-12 gap-6 items-start">
+                            <div class="md:col-span-7 space-y-2">
+                                <h4 class="text-2xl font-extrabold text-slate-900 group-hover:text-niner transition-colors">Bert Wray</h4>
+                                <p class="text-xs font-mono text-slate-500">Instructor in Writing</p>
+                                <h5 class="text-sm font-bold text-slate-800 pt-1">Tiered AI Policies & Course Design Frameworks</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed pt-1">
+                                    Replaces vague "ban or allow" statements with explicit, multi-tiered policy expectations tied directly to writing phases (brainstorming, drafting, revising).
+                                </p>
+                            </div>
+
+                            <!-- Code Box Snippet -->
+                            <div class="md:col-span-5 bg-slate-900 text-slate-100 p-3.5 rounded-[3px] font-mono text-[11px] space-y-1.5 border border-slate-800">
+                                <div class="text-[10px] text-slate-400 font-semibold uppercase border-b border-slate-800 pb-1 flex justify-between">
+                                    <span>Sample Tiered Policy</span>
+                                    <span class="text-niner-light">YAML/MD</span>
+                                </div>
+                                <p class="text-emerald-400 font-medium">[GREEN]: Brainstorming Allowed</p>
+                                <p class="text-amber-300 font-medium">[YELLOW]: Grammar Coach Only</p>
+                                <p class="text-rose-400 font-medium">[RED]: Human Synthesis Only</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Quick Actions -->
+                    <div class="pt-5 mt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+                        <span class="text-slate-500 text-[11px]"><i class="fa-solid fa-folder text-niner mr-1"></i> Artifact: Policy Work Folder</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openArtifactDrawer('bert-wray')" class="bg-white hover:bg-slate-50 text-slate-800 px-3 py-1.5 rounded-[3px] swiss-border font-semibold transition">
+                                [ Inspect Artifact ]
+                            </button>
+                            <button onclick="copyToClipboardDirect(facultyData[0].samplePrompt, 'Bert Wray policy code copied!')" class="bg-niner hover:bg-niner-dark text-white px-3 py-1.5 rounded-[3px] font-semibold transition">
+                                [ Copy Prompt ]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2: JESSI RAE MORTON (4 Columns) -->
+                <div class="bento-item lg:col-span-4 swiss-card p-6 rounded-[4px] flex flex-col justify-between group" data-category="writing">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 font-mono text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-400">02 /</span>
+                                <span class="bg-niner-soft text-niner font-semibold px-2 py-0.5 rounded-[2px]">WRDS 1103</span>
+                            </div>
+                            <span class="text-[11px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-[2px]">📜 Fact-Check Workflow</span>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-extrabold text-slate-900 group-hover:text-niner transition-colors">Jessi Rae Morton</h4>
+                            <p class="text-xs font-mono text-slate-500">Senior Lecturer, Writing & Rhetoric</p>
+                            <h5 class="text-xs font-bold text-slate-800 pt-2">Source Verification & PDF Documentation</h5>
+                            <p class="text-xs text-slate-600 leading-relaxed pt-1">
+                                Forensic fact-checking workflow training students to systematically audit AI-generated citations against Atkins Library full-text PDFs.
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-[3px] swiss-border font-mono text-[11px] text-slate-700">
+                            <span class="text-niner font-bold">// Audit Protocol:</span>
+                            <p class="text-slate-600 italic mt-0.5">"Locate full PDF in Atkins Library. Log hallucinations in Audit Table."</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 mt-4 border-t border-slate-100 flex gap-2 font-mono text-xs">
+                        <button onclick="openArtifactDrawer('jessi-morton')" class="w-1/2 bg-white hover:bg-slate-50 text-slate-800 py-1.5 rounded-[3px] swiss-border font-semibold transition text-center">
+                            [ Inspect ]
+                        </button>
+                        <button onclick="copyToClipboardDirect(facultyData[1].samplePrompt, 'Morton protocol copied!')" class="w-1/2 bg-niner hover:bg-niner-dark text-white py-1.5 rounded-[3px] font-semibold transition text-center">
+                            [ Copy ]
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARD 3: JENNIFER REED (4 Columns) -->
+                <div class="bento-item lg:col-span-4 swiss-card p-6 rounded-[4px] flex flex-col justify-between group" data-category="stem">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 font-mono text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-400">03 /</span>
+                                <span class="bg-niner-soft text-niner font-semibold px-2 py-0.5 rounded-[2px]">Math 1101 / Algebra</span>
+                            </div>
+                            <span class="text-[11px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-[2px]">🔬 STEM Tool</span>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-extrabold text-slate-900 group-hover:text-niner transition-colors">Jennifer Reed</h4>
+                            <p class="text-xs font-mono text-slate-500">Lecturer in Mathematics</p>
+                            <h5 class="text-xs font-bold text-slate-800 pt-2">AI Prompting & "Ready to Submit" Checklists</h5>
+                            <p class="text-xs text-slate-600 leading-relaxed pt-1">
+                                Student-facing Socratic prompting guidelines paired with 5-step pre-submission integrity checklists.
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-[3px] swiss-border font-mono text-[11px] text-slate-700 space-y-0.5">
+                            <div class="font-bold text-slate-800">[ Check 1 ]: Socratic Prompt Used</div>
+                            <div class="text-slate-500">[ Check 2 ]: Manual Arithmetic Audit</div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 mt-4 border-t border-slate-100 flex gap-2 font-mono text-xs">
+                        <button onclick="openArtifactDrawer('jennifer-reed')" class="w-1/2 bg-white hover:bg-slate-50 text-slate-800 py-1.5 rounded-[3px] swiss-border font-semibold transition text-center">
+                            [ Inspect ]
+                        </button>
+                        <button onclick="copyToClipboardDirect(facultyData[2].samplePrompt, 'Reed checklist copied!')" class="w-1/2 bg-niner hover:bg-niner-dark text-white py-1.5 rounded-[3px] font-semibold transition text-center">
+                            [ Copy ]
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARD 4: DR. ANNA ATHANASOPOULOU (4 Columns) -->
+                <div class="bento-item lg:col-span-4 swiss-card p-6 rounded-[4px] flex flex-col justify-between group" data-category="stem">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 font-mono text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-400">04 /</span>
+                                <span class="bg-niner-soft text-niner font-semibold px-2 py-0.5 rounded-[2px]">Trigonometry</span>
+                            </div>
+                            <span class="text-[11px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-[2px]">🔬 STEM Tool</span>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-extrabold text-slate-900 group-hover:text-niner transition-colors">Dr. Anna Athanasopoulou</h4>
+                            <p class="text-xs font-mono text-slate-500">Teaching Associate Professor</p>
+                            <h5 class="text-xs font-bold text-slate-800 pt-2">AI as a Socratic STEM Dialogue Partner</h5>
+                            <p class="text-xs text-slate-600 leading-relaxed pt-1">
+                                Re-engineers AI from a direct solution generator into a step-by-step Socratic math tutor.
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-[3px] swiss-border font-mono text-[11px] text-slate-700 space-y-0.5">
+                            <div class="font-bold text-niner">Rule: Never print full answer</div>
+                            <div class="text-slate-500">"Ask student to combine fractions first..."</div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 mt-4 border-t border-slate-100 flex gap-2 font-mono text-xs">
+                        <button onclick="openArtifactDrawer('anna-athanasopoulou')" class="w-1/2 bg-white hover:bg-slate-50 text-slate-800 py-1.5 rounded-[3px] swiss-border font-semibold transition text-center">
+                            [ Inspect ]
+                        </button>
+                        <button onclick="copyToClipboardDirect(facultyData[3].samplePrompt, 'Athanasopoulou prompt copied!')" class="w-1/2 bg-niner hover:bg-niner-dark text-white py-1.5 rounded-[3px] font-semibold transition text-center">
+                            [ Copy ]
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARD 5: DR. ERIK BYKER (4 Columns) -->
+                <div class="bento-item lg:col-span-4 swiss-card p-6 rounded-[4px] flex flex-col justify-between group" data-category="humanities">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 font-mono text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-400">05 /</span>
+                                <span class="bg-niner-soft text-niner font-semibold px-2 py-0.5 rounded-[2px]">Global Humanities</span>
+                            </div>
+                            <span class="text-[11px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-[2px]">🌐 Humanities Audit</span>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-extrabold text-slate-900 group-hover:text-niner transition-colors">Dr. Erik Byker</h4>
+                            <p class="text-xs font-mono text-slate-500">Professor of Education & Humanities</p>
+                            <h5 class="text-xs font-bold text-slate-800 pt-2">SDG Research Memos & Critical Bias Interrogation</h5>
+                            <p class="text-xs text-slate-600 leading-relaxed pt-1">
+                                Prompts AI for Sustainable Development Goal policy memos, then systematically audits regional omissions and Western bias.
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-[3px] swiss-border font-mono text-[11px] text-slate-700">
+                            <span class="font-bold text-slate-800">Interrogation Step:</span>
+                            <p class="text-slate-500 mt-0.5">"List 3 local community voices omitted from your previous memo..."</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 mt-4 border-t border-slate-100 flex gap-2 font-mono text-xs">
+                        <button onclick="openArtifactDrawer('erik-byker')" class="w-1/2 bg-white hover:bg-slate-50 text-slate-800 py-1.5 rounded-[3px] swiss-border font-semibold transition text-center">
+                            [ Inspect ]
+                        </button>
+                        <button onclick="copyToClipboardDirect(facultyData[4].samplePrompt, 'Byker interrogation prompt copied!')" class="w-1/2 bg-niner hover:bg-niner-dark text-white py-1.5 rounded-[3px] font-semibold transition text-center">
+                            [ Copy ]
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 2: 30-MINUTE POP-UP AGENDA & SIMULATOR -->
+        <section id="view-agenda" class="hidden space-y-6">
+            <div class="swiss-card p-6 sm:p-8 rounded-[4px] space-y-8">
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between swiss-border-b pb-5 gap-4">
+                    <div>
+                        <div class="text-xs font-mono font-bold text-niner uppercase tracking-wider">// 30-MINUTE POP-UP PROTOCOL</div>
+                        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2 mt-1">
+                            <span class="font-mono text-niner">02.</span> Session Agenda & Facilitator Simulator
+                        </h2>
+                        <p class="text-xs text-slate-500 font-mono mt-0.5">Strictly timed, 30-minute peer showcase agenda optimized for faculty schedules.</p>
+                    </div>
+
+                    <!-- Interactive Timer Widget -->
+                    <div class="bg-slate-50 p-3 rounded-[3px] swiss-border flex items-center gap-4 font-mono">
+                        <div>
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">POP-UP TIMER</div>
+                            <div id="sim-timer-display" class="text-2xl font-bold text-slate-900">00:00</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleSimTimer()" id="sim-play-btn" class="bg-niner hover:bg-niner-dark text-white text-xs px-3 py-2 rounded-[3px] font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-play text-[10px]"></i> START
+                            </button>
+                            <button onclick="resetSimTimer()" class="bg-white hover:bg-slate-100 text-slate-700 text-xs px-2.5 py-2 rounded-[3px] swiss-border transition">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Bar -->
+                <div class="space-y-2 font-mono text-xs">
+                    <div class="flex justify-between font-semibold text-slate-400 text-[11px]">
+                        <span>00m</span>
+                        <span>05m</span>
+                        <span>18m</span>
+                        <span>27m</span>
+                        <span>30m</span>
+                    </div>
+                    <div class="h-3 w-full bg-slate-100 rounded-[2px] flex overflow-hidden swiss-border p-0.5">
+                        <div id="bar-phase-1" onclick="jumpToPhase(1)" class="h-full bg-slate-400 cursor-pointer hover:opacity-80 transition" style="width: 16.6%" title="0-5m: Framing"></div>
+                        <div id="bar-phase-2" onclick="jumpToPhase(2)" class="h-full bg-niner cursor-pointer hover:opacity-80 transition" style="width: 43.3%" title="5-18m: Live Showcase"></div>
+                        <div id="bar-phase-3" onclick="jumpToPhase(3)" class="h-full bg-emerald-500 cursor-pointer hover:opacity-80 transition" style="width: 30.0%" title="18-27m: Q&A"></div>
+                        <div id="bar-phase-4" onclick="jumpToPhase(4)" class="h-full bg-slate-800 cursor-pointer hover:opacity-80 transition" style="width: 10.1%" title="27-30m: Wrap-up"></div>
+                    </div>
+                </div>
+
+                <!-- 4 Phase Cards -->
+                <div class="grid md:grid-cols-4 gap-4 font-mono text-xs">
+                    <div id="phase-card-1" onclick="jumpToPhase(1)" class="phase-card cursor-pointer p-4 rounded-[3px] swiss-border bg-white space-y-2 transition border-l-4 border-l-slate-400">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900">00–05 MIN</span>
+                            <span class="text-[10px] text-slate-400">PHASE 1</span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm font-sans">Context & Framing</h4>
+                        <p class="text-slate-500 text-[11px] leading-normal font-sans">Discipline rationale, course level, and core learning goals.</p>
+                    </div>
+
+                    <div id="phase-card-2" onclick="jumpToPhase(2)" class="phase-card cursor-pointer p-4 rounded-[3px] swiss-border bg-white space-y-2 transition border-l-4 border-l-niner">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-niner">05–18 MIN</span>
+                            <span class="text-[10px] text-niner">PHASE 2</span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm font-sans">Live Artifact Showcase</h4>
+                        <p class="text-slate-500 text-[11px] leading-normal font-sans">Live walk-through of prompt, rubric, or student checklist.</p>
+                    </div>
+
+                    <div id="phase-card-3" onclick="jumpToPhase(3)" class="phase-card cursor-pointer p-4 rounded-[3px] swiss-border bg-white space-y-2 transition border-l-4 border-l-emerald-500">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-emerald-700">18–27 MIN</span>
+                            <span class="text-[10px] text-emerald-700">PHASE 3</span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm font-sans">Peer Q&A & Dialogue</h4>
+                        <p class="text-slate-500 text-[11px] leading-normal font-sans">Implementation challenges, workload impact, and adaptation.</p>
+                    </div>
+
+                    <div id="phase-card-4" onclick="jumpToPhase(4)" class="phase-card cursor-pointer p-4 rounded-[3px] swiss-border bg-white space-y-2 transition border-l-4 border-l-slate-800">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-800">27–30 MIN</span>
+                            <span class="text-[10px] text-slate-800">PHASE 4</span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm font-sans">Repository Wrap-Up</h4>
+                        <p class="text-slate-500 text-[11px] leading-normal font-sans">Accessing open templates, checklists, and contact info.</p>
+                    </div>
+                </div>
+
+                <!-- Facilitator Box -->
+                <div id="phase-guidance-box" class="p-4 rounded-[3px] bg-slate-50 swiss-border text-xs font-mono space-y-1.5">
+                    <div class="flex items-center gap-2 font-bold text-niner uppercase">
+                        <i class="fa-solid fa-compass"></i> Facilitator Guidance: Phase 1 (00–05 Minutes)
+                    </div>
+                    <p class="text-slate-600 font-sans text-xs leading-relaxed">
+                        Start precisely on time. Presenter establishes course context and poses 1 key challenge question in under 3 minutes.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: INTERACTIVE ARTIFACT SANDBOX -->
+        <section id="view-sandbox" class="hidden space-y-6">
+            <div class="swiss-card p-6 sm:p-8 rounded-[4px] space-y-6">
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between swiss-border-b pb-4 gap-4">
+                    <div>
+                        <div class="text-xs font-mono font-bold text-niner uppercase tracking-wider">// ARTIFACT GENERATOR STUDIO</div>
+                        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2 mt-1">
+                            <span class="font-mono text-niner">03.</span> Interactive Pedagogical Sandbox
+                        </h2>
+                        <p class="text-xs text-slate-500 font-mono mt-0.5">Customize and export syllabus policies, checklists, and Socratic prompts in real-time.</p>
+                    </div>
+
+                    <!-- Sandbox Tool Tabs -->
+                    <div class="flex flex-wrap gap-1.5 font-mono text-xs">
+                        <button onclick="switchSandboxTool('policy')" id="tool-btn-policy" class="tool-btn active-tool-btn px-3 py-1.5 rounded-[3px] bg-niner text-white font-bold">
+                            Policy Generator
+                        </button>
+                        <button onclick="switchSandboxTool('checklist')" id="tool-btn-checklist" class="tool-btn px-3 py-1.5 rounded-[3px] bg-white swiss-border text-slate-600 hover:text-slate-900">
+                            Math Checklist
+                        </button>
+                        <button onclick="switchSandboxTool('socratic')" id="tool-btn-socratic" class="tool-btn px-3 py-1.5 rounded-[3px] bg-white swiss-border text-slate-600 hover:text-slate-900">
+                            Socratic Transformer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TOOL 1: Bert Wray Policy Generator -->
+                <div id="tool-policy" class="sandbox-pane space-y-6">
+                    <div class="grid md:grid-cols-12 gap-6 items-start">
+                        
+                        <div class="md:col-span-5 bg-slate-50 p-5 rounded-[3px] swiss-border space-y-4 font-mono text-xs">
+                            <div class="font-bold text-slate-900 uppercase swiss-border-b pb-2 flex justify-between">
+                                <span>Policy Parameters</span>
+                                <span class="text-niner">// Bert Wray Model</span>
+                            </div>
+
+                            <div>
+                                <label class="block text-slate-700 font-semibold mb-1">Course Code & Name</label>
+                                <input type="text" id="policy-course-name" value="UWRT 1104: Writing & Inquiry" oninput="updatePolicyPreview()" class="w-full text-xs p-2 rounded-[3px] bg-white swiss-border text-slate-900 focus:border-niner focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label class="block text-slate-700 font-semibold mb-1">Writing Stage</label>
+                                <select id="policy-phase" onchange="updatePolicyPreview()" class="w-full text-xs p-2 rounded-[3px] bg-white swiss-border text-slate-900 focus:border-niner focus:outline-none">
+                                    <option value="brainstorming">Phase 1: Topic Brainstorming & Outlining</option>
+                                    <option value="drafting">Phase 2: Initial Composition & Drafting</option>
+                                    <option value="revising">Phase 3: Grammar & Prose Revision</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-slate-700 font-semibold mb-1">Permission Tier</label>
+                                <select id="policy-tier" onchange="updatePolicyPreview()" class="w-full text-xs p-2 rounded-[3px] bg-white swiss-border text-slate-900 focus:border-niner focus:outline-none">
+                                    <option value="green">Green Tier: Open AI Co-Creation</option>
+                                    <option value="yellow">Yellow Tier: Guided Assistance with Citation</option>
+                                    <option value="red">Red Tier: Human Synthesis Only</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-slate-700 font-semibold mb-1">Required Attachments</label>
+                                <div class="space-y-1.5 text-slate-600">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" id="disc-prompt" checked onchange="updatePolicyPreview()" class="rounded-[2px] text-niner focus:ring-niner">
+                                        Attach AI prompt transcript link
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" id="disc-reflection" checked onchange="updatePolicyPreview()" class="rounded-[2px] text-niner focus:ring-niner">
+                                        Include 3-sentence reflection statement
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-7 space-y-3">
+                            <div class="flex items-center justify-between font-mono text-xs">
+                                <span class="text-slate-500">// GENERATED SYLLABUS STATEMENT</span>
+                                <button onclick="copyToClipboard('policy-output-box')" class="bg-niner hover:bg-niner-dark text-white px-3 py-1.5 rounded-[3px] font-bold transition">
+                                    Copy Policy Text
+                                </button>
+                            </div>
+
+                            <div id="policy-output-box" class="bg-slate-900 text-slate-100 p-5 rounded-[3px] font-mono text-xs leading-relaxed space-y-3 min-h-[260px] border border-slate-800">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- TOOL 2: Jennifer Reed Math Checklist -->
+                <div id="tool-checklist" class="sandbox-pane hidden space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        
+                        <div class="bg-slate-50 p-5 rounded-[3px] swiss-border space-y-4 font-mono text-xs">
+                            <div class="flex items-center justify-between swiss-border-b pb-2">
+                                <h5 class="font-bold text-slate-900">// Student Interactive Verification</h5>
+                                <span id="checklist-score" class="font-bold px-2 py-0.5 rounded-[2px] bg-amber-100 text-amber-800">0/3 Completed</span>
+                            </div>
+
+                            <div class="space-y-3" id="math-checklist-items">
+                                <label class="flex items-start gap-3 p-3 rounded-[3px] bg-white swiss-border cursor-pointer hover:border-slate-400">
+                                    <input type="checkbox" onchange="updateChecklistScore()" class="mt-0.5 math-chk rounded-[2px] text-niner focus:ring-niner">
+                                    <div>
+                                        <span class="font-bold text-slate-900 block font-sans">1. Socratic Prompting Used</span>
+                                        <span class="text-slate-500 text-[11px] font-sans">Asked AI to guide step-by-step with hints rather than print direct answers.</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-start gap-3 p-3 rounded-[3px] bg-white swiss-border cursor-pointer hover:border-slate-400">
+                                    <input type="checkbox" onchange="updateChecklistScore()" class="mt-0.5 math-chk rounded-[2px] text-niner focus:ring-niner">
+                                    <div>
+                                        <span class="font-bold text-slate-900 block font-sans">2. Manual Arithmetic Audit</span>
+                                        <span class="text-slate-500 text-[11px] font-sans">Re-calculated all operations by hand to check for hallucinations.</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-start gap-3 p-3 rounded-[3px] bg-white swiss-border cursor-pointer hover:border-slate-400">
+                                    <input type="checkbox" onchange="updateChecklistScore()" class="mt-0.5 math-chk rounded-[2px] text-niner focus:ring-niner">
+                                    <div>
+                                        <span class="font-bold text-slate-900 block font-sans">3. Verbal Explanation Readiness</span>
+                                        <span class="text-slate-500 text-[11px] font-sans">Prepared to explain each mathematical step verbally during office hours.</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 font-mono text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">// CANVAS ASSIGNMENT MARKDOWN SNIPPET</span>
+                                <button onclick="copyToClipboard('canvas-checklist-code')" class="bg-niner hover:bg-niner-dark text-white px-3 py-1.5 rounded-[3px] font-bold">
+                                    Copy Code
+                                </button>
+                            </div>
+                            <textarea id="canvas-checklist-code" readonly class="w-full h-64 p-3 bg-slate-900 text-slate-100 font-mono text-xs rounded-[3px] border border-slate-800 focus:outline-none">
+### MATH 1101: AI Verification Checklist
+
+[ ] 1. SOCRATIC PROMPTING: Did you ask AI to act as a step-by-step tutor?
+[ ] 2. INDEPENDENT AUDIT: Did you re-calculate each step by hand?
+[ ] 3. VERBAL EXPLANATION: Can you explain the solution logic verbally?
+[ ] 4. DISCLOSURE: Attach your AI chat transcript URL to your submission.
+
+*Statement:* "I certify that AI was utilized strictly as a learning coach in accordance with course policies."
+                            </textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- TOOL 3: Anna Athanasopoulou Socratic Transformer -->
+                <div id="tool-socratic" class="sandbox-pane hidden space-y-6 font-mono text-xs">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        
+                        <div class="bg-slate-50 p-4 rounded-[3px] swiss-border space-y-2">
+                            <div class="font-bold text-rose-700 uppercase">// PASSIVE DIRECT ANSWER PROMPT (AWAITING COPIED ANSWERS)</div>
+                            <div class="bg-white p-3 rounded-[3px] swiss-border space-y-1">
+                                <p class="text-slate-900 font-bold font-sans">Student: "Solve 2 sin²(x) + sin(x) - 1 = 0"</p>
+                                <p class="text-rose-600 font-mono">AI: Let u = sin(x). Solutions: x = π/6, 5π/6, 3π/2.</p>
+                                <p class="text-[11px] text-slate-400 font-sans italic pt-1">Outcome: Passive consumption without mathematical reasoning.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-niner-soft p-4 rounded-[3px] border border-niner/30 space-y-2">
+                            <div class="font-bold text-niner uppercase">// DR. ATHANASOPOULOU SOCRATIC DIALOGUE PROMPT</div>
+                            <div class="bg-white p-3 rounded-[3px] swiss-border space-y-1">
+                                <p class="text-slate-900 font-bold font-sans">Prompt: "Act as a Socratic tutor. Do not give direct answer."</p>
+                                <p class="text-niner font-mono">AI: "Notice quadratic structure. If sin(x) = u, how would you factor 2u² + u - 1?"</p>
+                                <p class="text-[11px] text-emerald-700 font-sans italic pt-1">Outcome: Active human dialogue and concept mastery.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 4: PROGRAM PROSPECTUS & INSTITUTIONAL ROADMAP -->
+        <section id="view-prospectus" class="hidden space-y-6">
+            <div class="swiss-card p-6 sm:p-8 rounded-[4px] space-y-8">
+                
+                <div class="space-y-3 swiss-border-b pb-6">
+                    <span class="text-xs font-mono font-bold text-niner uppercase tracking-wider">// INSTITUTIONAL STRATEGY</span>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        <span class="font-mono text-niner">04.</span> AI Pedagogy Pop-ups Prospectus
+                    </h2>
+                    <p class="text-sm text-slate-600 leading-relaxed max-w-4xl font-sans">
+                        Emerging directly from the Summer AI Literacy Academy, the Pop-ups bridge the gap between AI theory and daily classroom execution through low-friction, 30-minute peer sharing sessions.
+                    </p>
+                </div>
+
+                <!-- Strategic Pipeline Flowchart -->
+                <div class="space-y-4 font-mono text-xs">
+                    <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">
+                        // Strategic Pipeline & Ecosystem
+                    </h3>
+
+                    <div class="grid md:grid-cols-4 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-[3px] swiss-border space-y-2">
+                            <div class="w-6 h-6 rounded-[2px] bg-slate-900 text-white font-bold flex items-center justify-center text-xs">1</div>
+                            <h4 class="font-bold text-slate-900 font-sans text-sm">Summer Academy</h4>
+                            <p class="text-slate-500 font-sans text-xs">Faculty cohort creation, policy drafting, and prompt engineering.</p>
+                        </div>
+
+                        <div class="bg-niner-soft p-4 rounded-[3px] border border-niner space-y-2">
+                            <div class="w-6 h-6 rounded-[2px] bg-niner text-white font-bold flex items-center justify-center text-xs">2</div>
+                            <h4 class="font-bold text-slate-900 font-sans text-sm">Pedagogy Pop-ups</h4>
+                            <p class="text-slate-600 font-sans text-xs">30-minute micro-demos and live peer artifact exchanges.</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-[3px] swiss-border space-y-2">
+                            <div class="w-6 h-6 rounded-[2px] bg-slate-900 text-white font-bold flex items-center justify-center text-xs">3</div>
+                            <h4 class="font-bold text-slate-900 font-sans text-sm">Campus Repository</h4>
+                            <p class="text-slate-500 font-sans text-xs">Open-access cataloging of vetted templates and prompts.</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-[3px] swiss-border space-y-2">
+                            <div class="w-6 h-6 rounded-[2px] bg-slate-900 text-white font-bold flex items-center justify-center text-xs">4</div>
+                            <h4 class="font-bold text-slate-900 font-sans text-sm">Strategic Roadmap</h4>
+                            <p class="text-slate-500 font-sans text-xs">Data-driven feedback informing institutional AI strategy.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SLIDE-OVER DRAWER: ARTIFACT INSPECTOR -->
+    <div id="drawer-artifact" class="fixed inset-0 z-50 overflow-hidden hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div id="drawer-backdrop" onclick="closeDrawer('drawer-artifact')" class="drawer-backdrop fixed inset-0 bg-slate-900/40 backdrop-blur-xs opacity-0"></div>
+
+        <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+            <div id="drawer-panel" class="drawer-panel w-screen max-w-xl bg-white swiss-border-l shadow-2xl transform translate-x-full flex flex-col justify-between">
+                
+                <!-- Drawer Header -->
+                <div class="bg-slate-50 px-6 py-5 swiss-border-b flex items-start justify-between">
+                    <div class="space-y-1">
+                        <span id="drawer-badge" class="text-[10px] font-mono font-bold uppercase tracking-wider text-niner bg-niner-soft px-2 py-0.5 rounded-[2px]">Course Code</span>
+                        <h3 id="drawer-title" class="text-xl font-extrabold text-slate-900">Session Title</h3>
+                        <p id="drawer-presenter" class="text-xs font-mono text-slate-500">Presenter Name</p>
+                    </div>
+                    <button onclick="closeDrawer('drawer-artifact')" class="text-slate-400 hover:text-slate-900 text-xl p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Drawer Content -->
+                <div class="p-6 overflow-y-auto flex-grow space-y-6 text-xs font-sans">
+                    
+                    <div class="space-y-1.5 font-mono">
+                        <span class="text-slate-400 uppercase font-bold text-[11px]">// CORE ARTIFACT</span>
+                        <div id="drawer-artifact-name" class="p-3 bg-slate-50 rounded-[3px] swiss-border font-bold text-slate-800 text-xs flex items-center gap-2">
+                            <i class="fa-solid fa-file-code text-niner"></i> <span>Artifact File</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 font-mono">
+                        <span class="text-slate-400 uppercase font-bold text-[11px]">// PEDAGOGICAL FOCUS</span>
+                        <p id="drawer-focus" class="text-slate-700 font-sans text-sm leading-relaxed">Focus detail...</p>
+                    </div>
+
+                    <div class="space-y-1.5 font-mono">
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-400 uppercase font-bold text-[11px]">// PROMPT CODE SNIPPET</span>
+                            <button onclick="copyDrawerCode()" class="text-niner font-bold text-[11px] hover:underline">
+                                <i class="fa-solid fa-copy"></i> Copy Prompt
+                            </button>
+                        </div>
+                        <pre id="drawer-code-block" class="bg-slate-900 text-slate-100 p-4 rounded-[3px] font-mono text-[11px] leading-relaxed overflow-x-auto whitespace-pre-wrap max-h-56 swiss-border">Prompt text...</pre>
+                    </div>
+
+                </div>
+
+                <!-- Drawer Footer -->
+                <div class="p-4 bg-slate-50 swiss-border-t flex items-center justify-end gap-3 font-mono text-xs">
+                    <button onclick="closeDrawer('drawer-artifact')" class="px-4 py-2 bg-white swiss-border text-slate-700 font-bold rounded-[3px]">
+                        Close
+                    </button>
+                    <button onclick="switchMainTab('sandbox'); closeDrawer('drawer-artifact')" class="px-4 py-2 bg-niner hover:bg-niner-dark text-white font-bold rounded-[3px]">
+                        Open Sandbox
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE-OVER DRAWER: PROPOSE POP-UP FORM -->
+    <div id="drawer-propose" class="fixed inset-0 z-50 overflow-hidden hidden" aria-labelledby="slide-over-propose" role="dialog" aria-modal="true">
+        <div id="propose-backdrop" onclick="closeDrawer('drawer-propose')" class="drawer-backdrop fixed inset-0 bg-slate-900/40 backdrop-blur-xs opacity-0"></div>
+
+        <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+            <div id="propose-panel" class="drawer-panel w-screen max-w-md bg-white swiss-border-l shadow-2xl transform translate-x-full flex flex-col justify-between font-mono text-xs">
+                
+                <div class="bg-slate-50 px-6 py-5 swiss-border-b flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">PROPOSE A 30-MIN POP-UP</h3>
+                        <p class="text-[11px] text-niner">// UNC Charlotte Faculty Submission</p>
+                    </div>
+                    <button onclick="closeDrawer('drawer-propose')" class="text-slate-400 hover:text-slate-900 text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <form onsubmit="submitProposeForm(event)" class="p-6 space-y-4 font-sans text-xs overflow-y-auto flex-grow">
+                    <div>
+                        <label class="block text-slate-700 font-mono font-semibold mb-1">Faculty Name & Title</label>
+                        <input type="text" required placeholder="e.g., Dr. Jane Doe" class="w-full p-2.5 rounded-[3px] bg-white swiss-border text-slate-900 focus:border-niner focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-700 font-mono font-semibold mb-1">Department / Course Code</label>
+                        <input type="text" required placeholder="e.g., COMM 2100" class="w-full p-2.5 rounded-[3px] bg-white swiss-border text-slate-900 focus:border-niner focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-700 font-mono font-semibold mb-1">Proposed Pop-Up Title</label>
+                        <input type="text" required placeholder="e.g., AI Formative Peer Feedback" class="w-full p-2.5 rounded-[3px] bg-white swiss-border text-slate-900 focus:border-niner focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-700 font-mono font-semibold mb-1">Core Artifact Description</label>
+                        <textarea rows="4" required placeholder="Describe the specific prompt, guide, or policy..." class="w-full p-2.5 rounded-[3px] bg-white swiss-border text-slate-900 focus:border-niner focus:outline-none"></textarea>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" class="w-full py-2.5 bg-niner hover:bg-niner-dark text-white font-mono font-bold rounded-[3px] transition">
+                            Submit Proposal
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-[3px] swiss-border shadow-xl font-mono text-xs flex items-center gap-3 transition-all duration-300 transform translate-y-20 opacity-0 z-50">
+        <i class="fa-solid fa-circle-check text-niner-light text-base"></i>
+        <span id="toast-message">Action completed.</span>
+    </div>
+
+    <script>
+        // Data Store for Showcases
+        const facultyData = [
+            {
+                id: 'bert-wray',
+                name: 'Bert Wray',
+                title: 'Instructor in Writing',
+                course: 'First-Year Writing',
+                category: 'writing',
+                sessionTitle: 'Tiered AI Policies & Course Design Frameworks',
+                coreArtifact: 'Academy-Developed Work Folder & Tiered Syllabus Policy Drafts',
+                focus: 'Replaces vague "ban or allow" statements with explicit, multi-tiered policy expectations tied directly to writing phases (brainstorming, drafting, revising).',
+                samplePrompt: `// Bert Wray Tiered Policy Framework
+[GREEN TIER - Brainstorming]
+Generative AI tools (ChatGPT, Claude) are permitted as exploratory brainstorming partners for outlining and topic selection.
+
+[YELLOW TIER - Drafting]
+AI may be used strictly as a grammar and style coach. Direct generation of paper paragraphs is prohibited.
+
+[RED TIER - Final Analysis]
+The thesis synthesis and core evaluation must represent original human analysis. Cite all AI tool interactions in your Reflection Appendix.`
+            },
+            {
+                id: 'jessi-morton',
+                name: 'Jessi Rae Morton',
+                title: 'Senior Lecturer',
+                course: 'Writing & Rhetoric (WRDS 1103)',
+                category: 'writing',
+                sessionTitle: 'Source Verification & PDF Documentation in the AI Era',
+                coreArtifact: 'Scaffolded Assignment Sequence on Source Integrity',
+                focus: 'Engaging students in evaluating AI output through rigorous source tracking, PDF documentation, and forensic fact-checking workflows.',
+                samplePrompt: `// Source Verification Protocol (Jessi Rae Morton Model)
+1. Generate 5 preliminary academic citations using AI for topic: "AI impact on rhetoric".
+2. Locate the full-text PDF for each citation in the UNC Charlotte Atkins Library database.
+3. For any citation that does NOT exist or has incorrect volume data, log it in the "Hallucination Audit Table".
+4. Annotate 2 real PDFs using Adobe Reader and attach highlighted quote proofs to your final portfolio.`
+            },
+            {
+                id: 'jennifer-reed',
+                name: 'Jennifer Reed',
+                title: 'Lecturer in Mathematics',
+                course: 'Math 1101 / College Algebra',
+                category: 'stem',
+                sessionTitle: 'Student-Facing AI Prompting & "Ready to Submit" Integrity Checklists',
+                coreArtifact: 'Math AI Prompting Guide & Submission Verification Checklist',
+                focus: 'Helping foundational math students construct productive prompts for step-by-step problem-solving while establishing clear self-assessment boundaries prior to submission.',
+                samplePrompt: `// Math Socratic Prompting Template (Jennifer Reed Model)
+"I am a College Algebra student working on quadratic inequalities. 
+Do NOT solve this problem for me: 2x² - 5x - 3 > 0.
+Instead:
+1. Ask me what the first step should be.
+2. If I answer incorrectly, give me a small hint without revealing the algebra.
+3. Guide me through testing test points on the number line."`
+            },
+            {
+                id: 'anna-athanasopoulou',
+                name: 'Dr. Anna Athanasopoulou',
+                title: 'Teaching Associate Professor',
+                course: 'Mathematics (Trigonometry)',
+                category: 'stem',
+                sessionTitle: 'AI as a Collaborative Problem-Solving Partner in STEM',
+                coreArtifact: 'Trigonometry-Specific Collaborative AI Assignments',
+                focus: 'Structuring assignments where AI functions as a dialogue partner rather than an answer generator, pushing students to explain and verify mathematical reasoning.',
+                samplePrompt: `// Socratic Partner Prompt (Dr. Athanasopoulou Model)
+"Act as a Trigonometry Socratic Dialogue Partner.
+Problem: Verify identity: (sin θ / (1 + cos θ)) + ((1 + cos θ) / sin θ) = 2 csc θ.
+
+Rule 1: Never print the full algebraic proof at once.
+Rule 2: Ask me to combine fractions or find common denominators first.
+Rule 3: After I type my algebraic step, critique my step for trigonometric accuracy."`
+            },
+            {
+                id: 'erik-byker',
+                name: 'Dr. Erik Byker',
+                title: 'Professor of Education & Humanities',
+                course: 'Global Humanities & Education',
+                category: 'humanities',
+                sessionTitle: 'Interrogating AI Content: The SDG Research Memo Framework',
+                coreArtifact: 'Sustainable Development Goals (SDG) Research Memo Prompting Guide',
+                focus: 'Prompting AI to generate multifaceted research memos while guiding students to critically interrogate bias, regional context, and global perspectives in AI responses.',
+                samplePrompt: `// SDG Critical Interrogation Prompt (Dr. Byker Model)
+Step 1: "Draft a 500-word policy memo on Sustainable Development Goal 4 (Quality Education) challenges in rural South Asia."
+
+Step 2 (Interrogation Prompt): "Analyze your previous memo output. List 3 perspectives or local community voices that were omitted from your analysis, and explain how Western cultural bias influenced your summary."`
+            }
+        ];
+
+        // Filter Showcases Grid
+        function filterShowcases(category, btnEl) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn px-3 py-1.5 rounded-[3px] bg-white swiss-border text-slate-600 hover:text-slate-900 hover:border-slate-400";
+            });
+            btnEl.className = "filter-btn active-filter px-3 py-1.5 rounded-[3px] bg-niner text-white font-bold";
+
+            const cards = document.querySelectorAll('.bento-item');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Tab Navigation Switcher
+        function switchMainTab(tabId) {
+            ['showcases', 'agenda', 'sandbox', 'prospectus'].forEach(id => {
+                const sec = document.getElementById(`view-${id}`);
+                if (sec) sec.classList.add('hidden');
+                
+                const navBtn = document.getElementById(`nav-${id}`);
+                if (navBtn) {
+                    navBtn.className = "nav-btn px-3 py-2 text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
+                }
+            });
+
+            const activeSec = document.getElementById(`view-${tabId}`);
+            if (activeSec) activeSec.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "nav-btn px-3 py-2 text-niner font-bold border-b-2 border-niner transition flex items-center gap-1.5";
+            }
+
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+        }
+
+        function toggleMobileNav() {
+            document.getElementById('mobile-nav').classList.toggle('hidden');
+        }
+
+        // Slide-Over Drawer Utilities
+        function openArtifactDrawer(id) {
+            const item = facultyData.find(f => f.id === id);
+            if (!item) return;
+
+            document.getElementById('drawer-badge').innerText = item.course;
+            document.getElementById('drawer-title').innerText = item.sessionTitle;
+            document.getElementById('drawer-presenter').innerText = `${item.name} (${item.title})`;
+            document.getElementById('drawer-artifact-name').innerHTML = `<i class="fa-solid fa-file-code text-niner"></i> <span>${item.coreArtifact}</span>`;
+            document.getElementById('drawer-focus').innerText = item.focus;
+            document.getElementById('drawer-code-block').innerText = item.samplePrompt;
+
+            const drawer = document.getElementById('drawer-artifact');
+            drawer.classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('drawer-backdrop').classList.remove('opacity-0');
+                document.getElementById('drawer-panel').classList.remove('translate-x-full');
+            }, 10);
+        }
+
+        function openProposeDrawer() {
+            const drawer = document.getElementById('drawer-propose');
+            drawer.classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('propose-backdrop').classList.remove('opacity-0');
+                document.getElementById('propose-panel').classList.remove('translate-x-full');
+            }, 10);
+        }
+
+        function closeDrawer(drawerId) {
+            const backdrop = document.getElementById(drawerId === 'drawer-artifact' ? 'drawer-backdrop' : 'propose-backdrop');
+            const panel = document.getElementById(drawerId === 'drawer-artifact' ? 'drawer-panel' : 'propose-panel');
+
+            backdrop.classList.add('opacity-0');
+            panel.classList.add('translate-x-full');
+
+            setTimeout(() => {
+                document.getElementById(drawerId).classList.add('hidden');
+            }, 300);
+        }
+
+        function copyDrawerCode() {
+            const text = document.getElementById('drawer-code-block').innerText;
+            copyToClipboardDirect(text, "Prompt copied to clipboard!");
+        }
+
+        function submitProposeForm(e) {
+            e.preventDefault();
+            closeDrawer('drawer-propose');
+            showToast("Pop-Up proposal submitted successfully!");
+        }
+
+        // Sandbox Tool Switcher
+        function switchSandboxTool(toolId) {
+            document.querySelectorAll('.sandbox-pane').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.tool-btn').forEach(b => {
+                b.className = "tool-btn px-3 py-1.5 rounded-[3px] bg-white swiss-border text-slate-600 hover:text-slate-900";
+            });
+
+            document.getElementById(`tool-${toolId}`).classList.remove('hidden');
+            document.getElementById(`tool-btn-${toolId}`).className = "tool-btn active-tool-btn px-3 py-1.5 rounded-[3px] bg-niner text-white font-bold";
+
+            if (toolId === 'policy') updatePolicyPreview();
+        }
+
+        function updatePolicyPreview() {
+            const course = document.getElementById('policy-course-name').value || 'Course Name';
+            const phase = document.getElementById('policy-phase').value;
+            const tier = document.getElementById('policy-tier').value;
+
+            const discPrompt = document.getElementById('disc-prompt').checked;
+            const discReflect = document.getElementById('disc-reflection').checked;
+
+            let tierTitle = "";
+            let tierText = "";
+
+            if (tier === 'green') {
+                tierTitle = "[ GREEN TIER: OPEN AI CO-CREATION ]";
+                tierText = "Generative AI tools (ChatGPT, Claude) are permitted as exploratory brainstorming partners.";
+            } else if (tier === 'yellow') {
+                tierTitle = "[ YELLOW TIER: GUIDED ASSISTANCE WITH CITATION ]";
+                tierText = "AI is limited to prose editing and grammar debugging. Full text generation is prohibited.";
+            } else {
+                tierTitle = "[ RED TIER: HUMAN SYNTHESIS ONLY ]";
+                tierText = "Generative AI tools are strictly prohibited during this assignment phase.";
+            }
+
+            let discHtml = "";
+            if (discPrompt || discReflect) {
+                discHtml = `<div class="pt-2 border-t border-slate-800 text-niner-light font-bold">Required Student Attachments:</div><ul class="list-disc pl-4 text-slate-300 space-y-1">`;
+                if (discPrompt) discHtml += `<li>Submit AI transcript URL link as an appendix.</li>`;
+                if (discReflect) discHtml += `<li>Include a 3-sentence reflection statement.</li>`;
+                discHtml += `</ul>`;
+            }
+
+            const html = `
+                <div class="space-y-2">
+                    <div class="text-niner-light font-bold">${course}</div>
+                    <div class="font-bold text-white">${tierTitle}</div>
+                    <p class="text-slate-200">${tierText}</p>
+                    ${discHtml}
+                </div>
+            `;
+
+            document.getElementById('policy-output-box').innerHTML = html;
+        }
+
+        function updateChecklistScore() {
+            const total = document.querySelectorAll('.math-chk').length;
+            const checked = document.querySelectorAll('.math-chk:checked').length;
+            const scoreEl = document.getElementById('checklist-score');
+
+            scoreEl.innerText = `${checked}/${total} Completed`;
+            if (checked === total) {
+                scoreEl.className = "font-bold px-2 py-0.5 rounded-[2px] bg-emerald-100 text-emerald-800";
+            } else {
+                scoreEl.className = "font-bold px-2 py-0.5 rounded-[2px] bg-amber-100 text-amber-800";
+            }
+        }
+
+        // Timer Simulation Logic
+        let simSeconds = 0;
+        let simInterval = null;
+        let isSimRunning = false;
+
+        function toggleSimTimer() {
+            const btn = document.getElementById('sim-play-btn');
+            if (isSimRunning) {
+                clearInterval(simInterval);
+                isSimRunning = false;
+                btn.innerHTML = `<i class="fa-solid fa-play text-[10px]"></i> RESUME`;
+            } else {
+                isSimRunning = true;
+                btn.innerHTML = `<i class="fa-solid fa-pause text-[10px]"></i> PAUSE`;
+                simInterval = setInterval(() => {
+                    simSeconds++;
+                    if (simSeconds >= 1800) {
+                        simSeconds = 1800;
+                        clearInterval(simInterval);
+                        isSimRunning = false;
+                        showToast("30-Minute Session Completed!");
+                    }
+                    updateTimerUI();
+                }, 1000);
+            }
+        }
+
+        function resetSimTimer() {
+            clearInterval(simInterval);
+            isSimRunning = false;
+            simSeconds = 0;
+            document.getElementById('sim-play-btn').innerHTML = `<i class="fa-solid fa-play text-[10px]"></i> START`;
+            updateTimerUI();
+            jumpToPhase(1, false);
+        }
+
+        function updateTimerUI() {
+            const mins = Math.floor(simSeconds / 60);
+            const secs = simSeconds % 60;
+            document.getElementById('sim-timer-display').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+            if (mins < 5) jumpToPhase(1, false);
+            else if (mins < 18) jumpToPhase(2, false);
+            else if (mins < 27) jumpToPhase(3, false);
+            else jumpToPhase(4, false);
+        }
+
+        function jumpToPhase(phaseNum, setTime = true) {
+            if (setTime) {
+                if (phaseNum === 1) simSeconds = 0;
+                if (phaseNum === 2) simSeconds = 5 * 60;
+                if (phaseNum === 3) simSeconds = 18 * 60;
+                if (phaseNum === 4) simSeconds = 27 * 60;
+                updateTimerUI();
+            }
+
+            for (let i = 1; i <= 4; i++) {
+                const card = document.getElementById(`phase-card-${i}`);
+                if (i === phaseNum) {
+                    card.classList.add('bg-slate-50', 'shadow-xs');
+                } else {
+                    card.classList.remove('bg-slate-50', 'shadow-xs');
+                }
+            }
+
+            const guidance = [
+                "Start precisely on time. Presenter establishes course context and poses 1 key challenge question in under 3 minutes.",
+                "Live demonstration of prompt sequence or syllabus framework. Show real student work examples or course Canvas pages.",
+                "Peer interaction phase. Attendees ask about workload impact, grading friction, and adaptation for their own disciplines.",
+                "Share direct links to open-access UNC Charlotte faculty repository and provide template download links."
+            ];
+
+            document.getElementById('phase-guidance-box').innerHTML = `
+                <div class="flex items-center gap-2 font-bold text-niner uppercase">
+                    <i class="fa-solid fa-compass"></i> Facilitator Guidance: Phase ${phaseNum}
+                </div>
+                <p class="text-slate-600 font-sans text-xs leading-relaxed">${guidance[phaseNum - 1]}</p>
+            `;
+        }
+
+        // Copy Clipboard Helpers
+        function copyToClipboard(elementId) {
+            const el = document.getElementById(elementId);
+            let text = el.innerText || el.value;
+            copyToClipboardDirect(text, "Text copied to clipboard!");
+        }
+
+        function copyToClipboardDirect(text, msg) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast(msg);
+            } catch (err) {
+                showToast("Copy failed.");
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        window.onload = function() {
+            updatePolicyPreview();
+        };
+    </script>
+</body>
+</html>
