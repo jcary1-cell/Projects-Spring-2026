@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gem Garden - Gemini Gems Directory & Repository</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gem: {
+                            sapphire: '#3b82f6',
+                            emerald: '#10b981',
+                            amethyst: '#a855f7',
+                            ruby: '#ef4444',
+                            amber: '#f59e0b',
+                            topaz: '#06b6d4',
+                            rose: '#ec4899',
+                            darkBg: '#0f172a',
+                            cardBg: '#1e293b'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'sparkle': 'sparkle 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        },
+                        sparkle: {
+                            '0%, 100%': { opacity: '0.3', transform: 'scale(0.95)' },
+                            '50%': { opacity: '1', transform: 'scale(1.05)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        
+        /* Custom Glowing Card Borders */
+        .gem-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .gem-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 1rem;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.02));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .gem-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+        .gem-card-sapphire:hover::before { background: linear-gradient(135deg, #3b82f6, transparent); }
+        .gem-card-emerald:hover::before { background: linear-gradient(135deg, #10b981, transparent); }
+        .gem-card-amethyst:hover::before { background: linear-gradient(135deg, #a855f7, transparent); }
+        .gem-card-ruby:hover::before { background: linear-gradient(135deg, #ef4444, transparent); }
+        .gem-card-amber:hover::before { background: linear-gradient(135deg, #f59e0b, transparent); }
+        .gem-card-topaz:hover::before { background: linear-gradient(135deg, #06b6d4, transparent); }
+        .gem-card-rose:hover::before { background: linear-gradient(135deg, #ec4899, transparent); }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-purple-500 selection:text-white">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-500 to-cyan-400 p-0.5 shadow-lg shadow-purple-500/20 flex items-center justify-center">
+                        <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                            <i class="fa-solid fa-gem text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 text-lg"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-purple-300 bg-clip-text text-transparent">
+                            Gem Garden
+                        </h1>
+                        <p class="text-[11px] text-slate-400 font-medium leading-none">Gemini Gems Repository</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- View Switcher -->
+                    <div class="bg-slate-900/80 p-1 rounded-xl border border-slate-800 flex items-center gap-1">
+                        <button id="viewGridBtn" onclick="switchView('grid')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-purple-600 text-white shadow">
+                            <i class="fa-solid fa-grid-2"></i> Grid
+                        </button>
+                        <button id="viewGardenBtn" onclick="switchView('garden')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1.5 transition-all">
+                            <i class="fa-solid fa-[#000]"></i>
+                            <i class="fa-solid fa-seedling text-emerald-400"></i> Garden World
+                        </button>
+                    </div>
+
+                    <!-- Add New Gem Button -->
+                    <button onclick="openAddGemModal()" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl transition-all shadow-md shadow-purple-900/30 flex items-center gap-2 border border-purple-500/30">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span class="hidden sm:inline">Plant New Gem</span>
+                    </button>
+
+                    <!-- Settings / Export Dropdown -->
+                    <div class="relative">
+                        <button onclick="toggleMenu()" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-all">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 rounded-xl glass-panel border border-slate-800 shadow-xl py-1 z-50">
+                            <button onclick="exportData()" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800/60 hover:text-white flex items-center gap-2">
+                                <i class="fa-solid fa-download text-purple-400"></i> Export Collection
+                            </button>
+                            <label class="w-full text-left px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800/60 hover:text-white flex items-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-upload text-cyan-400"></i> Import Collection
+                                <input type="file" id="importFileInput" onchange="importData(event)" class="hidden" accept=".json">
+                            </label>
+                            <div class="border-t border-slate-800 my-1"></div>
+                            <button onclick="resetDefaultGems()" class="w-full text-left px-4 py-2 text-xs font-medium text-rose-400 hover:bg-rose-950/30 flex items-center gap-2">
+                                <i class="fa-solid fa-rotate text-rose-400"></i> Reset Defaults
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+
+        <!-- Hero & Highlight Section -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/50 to-slate-900 border border-slate-800/80 p-6 sm:p-8">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-medium mb-3">
+                        <i class="fa-solid fa-sparkles text-amber-400 animate-pulse"></i>
+                        <span>Your Personal Custom AI Persona Hub</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">
+                        Welcome to your <span class="bg-gradient-to-r from-purple-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">Gemini Gem Sanctuary</span>
+                    </h2>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Organize, test, and instantly launch all your Google Gemini Gems in one place. Keep track of prompts, starter triggers, and sharing links effortlessly.
+                    </p>
+                </div>
+
+                <!-- Stats Quick View -->
+                <div class="grid grid-cols-3 gap-3 w-full md:w-auto">
+                    <div class="glass-panel p-3.5 rounded-xl border border-slate-800 text-center min-w-[90px]">
+                        <span id="statTotal" class="block text-xl font-bold text-white">0</span>
+                        <span class="text-[11px] text-slate-400 font-medium">Total Gems</span>
+                    </div>
+                    <div class="glass-panel p-3.5 rounded-xl border border-slate-800 text-center min-w-[90px]">
+                        <span id="statFavs" class="block text-xl font-bold text-amber-400">0</span>
+                        <span class="text-[11px] text-slate-400 font-medium">Favorites</span>
+                    </div>
+                    <div class="glass-panel p-3.5 rounded-xl border border-slate-800 text-center min-w-[90px]">
+                        <span id="statCategories" class="block text-xl font-bold text-cyan-400">0</span>
+                        <span class="text-[11px] text-slate-400 font-medium">Categories</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls & Filters Bar -->
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            <!-- Search Bar -->
+            <div class="relative flex-1 max-w-md">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search gems by name, prompt, or tags..." class="w-full bg-slate-900/90 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all">
+            </div>
+
+            <!-- Category Pills & Sort -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none" id="categoryFilterContainer">
+                <!-- Categories injected dynamically -->
+            </div>
+        </div>
+
+        <!-- VIEW 1: Grid Gallery View -->
+        <div id="gridView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Gem Cards will be rendered here -->
+        </div>
+
+        <!-- VIEW 2: Virtual Garden Canvas View -->
+        <div id="gardenView" class="hidden flex-1 flex flex-col items-center justify-center min-h-[500px] relative rounded-2xl bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border border-slate-800 overflow-hidden p-4">
+            <div class="absolute top-4 left-4 z-10 glass-panel px-4 py-2 rounded-xl border border-slate-800">
+                <div class="text-xs font-semibold text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-sparkles text-amber-400"></i> Interactive Garden World
+                </div>
+                <p class="text-[11px] text-slate-400">Click on any blooming crystal gem to open its panel or launch directly.</p>
+            </div>
+            
+            <!-- Canvas Canvas Container -->
+            <canvas id="gardenCanvas" class="w-full h-[520px] rounded-xl cursor-pointer"></canvas>
+            
+            <div class="absolute bottom-4 right-4 z-10 flex gap-2">
+                <button onclick="reseedGarden()" class="px-3 py-1.5 rounded-lg glass-panel border border-slate-800 text-xs text-slate-300 hover:text-white hover:border-slate-700 flex items-center gap-1.5 transition-all">
+                    <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i> Rearrange Garden
+                </button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 mb-4 text-2xl">
+                <i class="fa-solid fa-gem"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-300 mb-1">No Gems Found</h3>
+            <p class="text-slate-500 text-sm max-w-sm mb-4">No Gemini Gems match your search query or filter. Try planting a new one!</p>
+            <button onclick="openAddGemModal()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all">
+                Plant New Gem
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Modal: Add / Edit Gem -->
+    <div id="gemModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden my-8 transform transition-all">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
+                <h3 id="modalTitle" class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-seedling text-emerald-400"></i> Plant New Gem
+                </h3>
+                <button onclick="closeGemModal()" class="text-slate-400 hover:text-white p-1 rounded-lg transition-all">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form -->
+            <form id="gemForm" onsubmit="saveGem(event)" class="p-6 space-y-4">
+                <input type="hidden" id="gemId">
+
+                <!-- Gem Name -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Gem Title / Persona Name *</label>
+                    <input type="text" id="gemTitle" required placeholder="e.g. Master Prompter & Creative Partner" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all">
+                </div>
+
+                <!-- Gem URL -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Google Gemini Gem Share Link *</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-link absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                        <input type="url" id="gemUrl" required placeholder="https://gemini.google.com/gem/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Category *</label>
+                        <select id="gemCategory" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition-all">
+                            <option value="Productivity">Productivity</option>
+                            <option value="Coding">Coding & Development</option>
+                            <option value="Creative">Creative Writing</option>
+                            <option value="Roleplay">Persona & Roleplay</option>
+                            <option value="Learning">Learning & Tutors</option>
+                            <option value="Utility">Utility & Tools</option>
+                        </select>
+                    </div>
+
+                    <!-- Gem Theme/Color -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Crystal Color Theme</label>
+                        <select id="gemColor" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition-all">
+                            <option value="sapphire">🔷 Sapphire (Blue)</option>
+                            <option value="emerald">🟢 Emerald (Green)</option>
+                            <option value="amethyst">🟣 Amethyst (Purple)</option>
+                            <option value="ruby">🔴 Ruby (Red)</option>
+                            <option value="amber">🟠 Amber (Orange)</option>
+                            <option value="topaz">💎 Topaz (Cyan)</option>
+                            <option value="rose">🌸 Rose Quartz (Pink)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Short Description -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Description / Tagline *</label>
+                    <input type="text" id="gemDescription" required placeholder="Brief description of what this Gem specializes in..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all">
+                </div>
+
+                <!-- System Instructions / Custom Prompt -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">System Prompt / Instructions Preview (Optional)</label>
+                    <textarea id="gemInstructions" rows="3" placeholder="Paste the system prompt instructions used to construct this Gem..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all resize-none"></textarea>
+                </div>
+
+                <!-- Sample Starter Triggers / Prompts -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Starter Prompts (Comma or line separated)</label>
+                    <input type="text" id="gemStarters" placeholder="e.g. Optimize this code snippet, Write a blog post outline" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all">
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Tags (Comma separated)</label>
+                    <input type="text" id="gemTags" placeholder="ai, assistant, generator, javascript" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all">
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                    <button type="button" onclick="closeGemModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl shadow-lg transition-all">
+                        Save Gem
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Gem Details & Inspector -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden my-8 transform transition-all">
+            <!-- Modal Header -->
+            <div id="detailHeaderBg" class="p-6 border-b border-slate-800 relative bg-gradient-to-r from-slate-900 to-purple-950">
+                <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg transition-all bg-slate-900/60 w-8 h-8 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                
+                <div class="flex items-start gap-4">
+                    <div id="detailIconBg" class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg shrink-0">
+                        <i id="detailIcon" class="fa-solid fa-gem text-white"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span id="detailCategory" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-purple-300 border border-slate-700">Category</span>
+                            <span id="detailFavBadge" class="text-amber-400 text-xs hidden"><i class="fa-solid fa-star"></i> Favorite</span>
+                        </div>
+                        <h2 id="detailTitle" class="text-xl font-bold text-white truncate">Gem Title</h2>
+                        <p id="detailDescription" class="text-xs text-slate-300 mt-1 leading-relaxed">Description goes here</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-6 space-y-5">
+                <!-- System Prompt / Instructions -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-code text-purple-400"></i> System Prompt & Instructions
+                    </h4>
+                    <div class="bg-slate-950 rounded-xl p-4 border border-slate-800/80 relative">
+                        <pre id="detailInstructions" class="text-xs text-slate-300 whitespace-pre-wrap font-mono leading-relaxed max-h-48 overflow-y-auto">No detailed prompt provided.</pre>
+                        <button onclick="copyDetailPrompt()" class="absolute top-3 right-3 text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg transition-all border border-slate-700 flex items-center gap-1">
+                            <i class="fa-solid fa-copy"></i> Copy Prompt
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Starter Prompts -->
+                <div id="detailStartersContainer">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-bolt text-amber-400"></i> Starter Triggers
+                    </h4>
+                    <div id="detailStartersList" class="flex flex-wrap gap-2">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Tags</h4>
+                    <div id="detailTagsList" class="flex flex-wrap gap-1.5">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between">
+                <button onclick="copyGemLinkFromDetail()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all border border-slate-700 flex items-center gap-1.5">
+                    <i class="fa-solid fa-copy text-slate-400"></i> Copy Share Link
+                </button>
+
+                <div class="flex items-center gap-2">
+                    <button id="detailEditBtn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all border border-slate-700">
+                        <i class="fa-solid fa-pen"></i> Edit
+                    </button>
+                    <a id="detailLaunchBtn" href="#" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold px-5 py-2 rounded-xl transition-all shadow-md shadow-purple-900/30 flex items-center gap-2">
+                        <span>Launch in Gemini</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 ease-out glass-panel px-4 py-3 rounded-xl border border-slate-700 shadow-2xl flex items-center gap-3">
+        <div id="toastIcon" class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div class="text-xs">
+            <p id="toastMessage" class="font-semibold text-white">Action successful!</p>
+        </div>
+    </div>
+
+    <script>
+        // Default Seed Data
+        const INITIAL_GEMS = [
+            {
+                id: 'gem-1',
+                title: 'The Human-Centered AI Gem',
+                url: 'https://gemini.google.com/gem/1LVHCHsPUufVl-gA3lmQkriEGQ0k4ltym?usp=sharing',
+                category: 'Learning',
+                color: 'amethyst',
+                description: 'Use this Gem to learn about the new Interdisciplinary Studies Human-Centered AI program in the College of Humanities & Earth and Social Sciences.',
+                instructions: 'You are an academic guide and advisor for the Interdisciplinary Studies Human-Centered AI (HCAI) program in the College of Humanities & Earth and Social Sciences (CHESS). Provide clear details on curriculum, interdisciplinary coursework, ethical AI perspectives, and career opportunities.',
+                starters: [
+                    'Tell me about the Human-Centered AI program',
+                    'What courses are in the Interdisciplinary Studies HCAI degree?',
+                    'How does CHESS integrate humanities with AI?'
+                ],
+                tags: ['human-centered-ai', 'chess', 'interdisciplinary', 'education', 'ai-ethics'],
+                favorite: true,
+                createdAt: Date.now()
+            },
+            {
+                id: 'gem-2',
+                title: 'Full-Stack Code Architect',
+                url: 'https://gemini.google.com',
+                category: 'Coding',
+                color: 'sapphire',
+                description: 'Expert senior software engineer specializing in clean code, design patterns, and debugging.',
+                instructions: 'You are a Senior Principal Software Engineer. Always provide clean, robust, well-commented single-file solutions with defensive error handling.',
+                starters: ['Refactor this code snippet', 'Design a scalable architecture', 'Debug performance issues'],
+                tags: ['coding', 'javascript', 'python', 'architecture'],
+                favorite: true,
+                createdAt: Date.now() - 100000
+            },
+            {
+                id: 'gem-3',
+                title: 'UI/UX Visual Craftsperson',
+                url: 'https://gemini.google.com',
+                category: 'Creative',
+                color: 'topaz',
+                description: 'Designs modern, accessible, dark-mode first UI concepts with rich Tailwind CSS design systems.',
+                instructions: 'Focus on modern typography, visual depth, glassmorphism, responsive grids, and delightful micro-interactions.',
+                starters: ['Design a dark mode dashboard', 'Create Tailwind color palette', 'Review component accessibility'],
+                tags: ['design', 'tailwind', 'ui-ux', 'css'],
+                favorite: false,
+                createdAt: Date.now() - 200000
+            },
+            {
+                id: 'gem-4',
+                title: 'Zen Study & Learning Tutor',
+                url: 'https://gemini.google.com',
+                category: 'Learning',
+                color: 'emerald',
+                description: 'Socratic educator that turns dense academic or technical subjects into intuitive analogies.',
+                instructions: 'Use the Feynman technique. Explain concepts using real-world metaphors, simple breakdowns, and progressive quiz questions.',
+                starters: ['Explain quantum computing simply', 'Quiz me on JavaScript async/await', 'Summarize key principles'],
+                tags: ['learning', 'feynman', 'study', 'education'],
+                favorite: false,
+                createdAt: Date.now() - 300000
+            }
+        ];
+
+        // Theme Palette Colors Map
+        const GEM_COLORS = {
+            sapphire: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-400', glow: '#3b82f6', badge: 'bg-blue-500/20 text-blue-300' },
+            emerald: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', glow: '#10b981', badge: 'bg-emerald-500/20 text-emerald-300' },
+            amethyst: { bg: 'bg-purple-500/10', border: 'border-purple-500/30', text: 'text-purple-400', glow: '#a855f7', badge: 'bg-purple-500/20 text-purple-300' },
+            ruby: { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-400', glow: '#ef4444', badge: 'bg-red-500/20 text-red-300' },
+            amber: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', glow: '#f59e0b', badge: 'bg-amber-500/20 text-amber-300' },
+            topaz: { bg: 'bg-cyan-500/10', border: 'border-cyan-500/30', text: 'text-cyan-400', glow: '#06b6d4', badge: 'bg-cyan-500/20 text-cyan-300' },
+            rose: { bg: 'bg-pink-500/10', border: 'border-pink-500/30', text: 'text-pink-400', glow: '#ec4899', badge: 'bg-pink-500/20 text-pink-300' }
+        };
+
+        // App State
+        let gems = [];
+        let activeCategory = 'All';
+        let searchQuery = '';
+        let currentView = 'grid';
+        let activeDetailGem = null;
+        let canvasAnimationId = null;
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            loadGems();
+            renderCategories();
+            renderGems();
+            updateStats();
+            initGardenCanvas();
+        });
+
+        function loadGems() {
+            const saved = localStorage.getItem('gem_garden_data');
+            if (saved) {
+                try {
+                    gems = JSON.parse(saved);
+                    // Ensure gem-1 updates to The Human-Centered AI Gem
+                    const index = gems.findIndex(g => g.id === 'gem-1' || g.url.includes('1LVHCHsPUufVl-gA3lmQkriEGQ0k4ltym'));
+                    if (index !== -1) {
+                        gems[index].title = 'The Human-Centered AI Gem';
+                        gems[index].description = 'Use this Gem to learn about the new Interdisciplinary Studies Human-Centered AI program in the College of Humanities & Earth and Social Sciences.';
+                        gems[index].instructions = 'You are an academic guide and advisor for the Interdisciplinary Studies Human-Centered AI (HCAI) program in the College of Humanities & Earth and Social Sciences (CHESS). Provide clear details on curriculum, interdisciplinary coursework, ethical AI perspectives, and career opportunities.';
+                        gems[index].starters = [
+                            'Tell me about the Human-Centered AI program',
+                            'What courses are in the Interdisciplinary Studies HCAI degree?',
+                            'How does CHESS integrate humanities with AI?'
+                        ];
+                        gems[index].tags = ['human-centered-ai', 'chess', 'interdisciplinary', 'education', 'ai-ethics'];
+                    }
+                } catch (e) {
+                    gems = [...INITIAL_GEMS];
+                }
+            } else {
+                gems = [...INITIAL_GEMS];
+                saveGems();
+            }
+        }
+
+        function saveGems() {
+            localStorage.setItem('gem_garden_data', JSON.stringify(gems));
+            updateStats();
+        }
+
+        function resetDefaultGems() {
+            gems = [...INITIAL_GEMS];
+            saveGems();
+            renderCategories();
+            renderGems();
+            showToast('Reset to default Gem Garden set!');
+            toggleMenu();
+        }
+
+        function updateStats() {
+            document.getElementById('statTotal').innerText = gems.length;
+            document.getElementById('statFavs').innerText = gems.filter(g => g.favorite).length;
+            const uniqueCat = new Set(gems.map(g => g.category));
+            document.getElementById('statCategories').innerText = uniqueCat.size;
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoryFilterContainer');
+            const categories = ['All', 'Favorites', ...new Set(gems.map(g => g.category))];
+            
+            container.innerHTML = categories.map(cat => {
+                const isActive = activeCategory === cat;
+                const activeStyle = isActive 
+                    ? 'bg-purple-600 text-white shadow-md shadow-purple-900/40 border-purple-500' 
+                    : 'bg-slate-900/80 text-slate-400 hover:text-white border-slate-800';
+                
+                const icon = cat === 'Favorites' ? '<i class="fa-solid fa-star text-amber-400"></i> ' : '';
+
+                return `
+                    <button onclick="setCategory('${cat}')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all shrink-0 flex items-center gap-1.5 ${activeStyle}">
+                        ${icon}${cat}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function setCategory(cat) {
+            activeCategory = cat;
+            renderCategories();
+            renderGems();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderGems();
+        }
+
+        function getFilteredGems() {
+            return gems.filter(gem => {
+                const matchesCategory = activeCategory === 'All' 
+                    ? true 
+                    : activeCategory === 'Favorites' 
+                        ? gem.favorite 
+                        : gem.category === activeCategory;
+
+                const matchesSearch = searchQuery === '' || 
+                    gem.title.toLowerCase().includes(searchQuery) ||
+                    gem.description.toLowerCase().includes(searchQuery) ||
+                    (gem.instructions && gem.instructions.toLowerCase().includes(searchQuery)) ||
+                    gem.tags.some(t => t.toLowerCase().includes(searchQuery));
+
+                return matchesCategory && matchesSearch;
+            });
+        }
+
+        function renderGems() {
+            const filtered = getFilteredGems();
+            const grid = document.getElementById('gridView');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            } else {
+                emptyState.classList.addClass && emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+            }
+
+            grid.innerHTML = filtered.map(gem => {
+                const colorTheme = GEM_COLORS[gem.color] || GEM_COLORS.amethyst;
+                const starIcon = gem.favorite ? 'fa-solid fa-star text-amber-400' : 'fa-regular fa-star text-slate-500 hover:text-amber-400';
+                
+                const starterPill = gem.starters && gem.starters.length > 0 
+                    ? `<div class="mt-3 text-[11px] bg-slate-950/80 border border-slate-800/80 rounded-lg p-2 text-slate-400 truncate flex items-center gap-1.5">
+                        <i class="fa-solid fa-terminal text-purple-400 text-[10px]"></i>
+                        <span class="truncate">"${gem.starters[0]}"</span>
+                       </div>`
+                    : '';
+
+                return `
+                    <div class="gem-card gem-card-${gem.color} glass-panel rounded-2xl p-5 flex flex-col justify-between group">
+                        <div>
+                            <!-- Card Header -->
+                            <div class="flex items-start justify-between gap-3 mb-3">
+                                <div class="w-11 h-11 rounded-xl ${colorTheme.bg} ${colorTheme.border} border flex items-center justify-center text-lg ${colorTheme.text} shadow-inner shrink-0 group-hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-gem"></i>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <button onclick="toggleFavorite('${gem.id}')" class="p-1.5 rounded-lg hover:bg-slate-800 transition-all text-sm" title="Toggle Favorite">
+                                        <i class="${starIcon}"></i>
+                                    </button>
+                                    <button onclick="openDetailModal('${gem.id}')" class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-all text-sm" title="View Details">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Category Badge & Title -->
+                            <div class="mb-2">
+                                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider ${colorTheme.badge}">
+                                    ${gem.category}
+                                </span>
+                            </div>
+                            <h3 class="text-base font-bold text-white group-hover:text-purple-300 transition-colors line-clamp-1 cursor-pointer" onclick="openDetailModal('${gem.id}')">
+                                ${escapeHtml(gem.title)}
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1.5 line-clamp-2 leading-relaxed">
+                                ${escapeHtml(gem.description)}
+                            </p>
+
+                            ${starterPill}
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                            <button onclick="copyGemLink('${gem.url}')" class="text-slate-400 hover:text-slate-200 text-xs font-medium px-2.5 py-1.5 rounded-lg hover:bg-slate-800 transition-all flex items-center gap-1.5 border border-transparent hover:border-slate-700">
+                                <i class="fa-solid fa-copy text-[11px]"></i> Copy Link
+                            </button>
+
+                            <a href="${gem.url}" target="_blank" rel="noopener noreferrer" class="bg-purple-600/20 hover:bg-purple-600 text-purple-300 hover:text-white border border-purple-500/30 text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-1.5 group/btn">
+                                <span>Launch</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] group-hover/btn:translate-x-0.5 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Also update Canvas if active
+            if (currentView === 'garden') {
+                drawGardenCanvas();
+            }
+        }
+
+        function switchView(view) {
+            currentView = view;
+            const gridView = document.getElementById('gridView');
+            const gardenView = document.getElementById('gardenView');
+            const gridBtn = document.getElementById('viewGridBtn');
+            const gardenBtn = document.getElementById('viewGardenBtn');
+
+            if (view === 'grid') {
+                gridView.classList.remove('hidden');
+                gardenView.classList.add('hidden');
+                gridBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-purple-600 text-white shadow";
+                gardenBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1.5 transition-all";
+            } else {
+                gridView.classList.add('hidden');
+                gardenView.classList.remove('hidden');
+                gardenBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-purple-600 text-white shadow";
+                gridBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1.5 transition-all";
+                resizeGardenCanvas();
+                drawGardenCanvas();
+            }
+        }
+
+        function toggleFavorite(id) {
+            const gem = gems.find(g => g.id === id);
+            if (gem) {
+                gem.favorite = !gem.favorite;
+                saveGems();
+                renderGems();
+                showToast(gem.favorite ? 'Added to favorites!' : 'Removed from favorites');
+            }
+        }
+
+        function openAddGemModal() {
+            document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-seedling text-emerald-400"></i> Plant New Gem';
+            document.getElementById('gemId').value = '';
+            document.getElementById('gemForm').reset();
+            document.getElementById('gemModal').classList.remove('hidden');
+        }
+
+        function editGem(id) {
+            closeDetailModal();
+            const gem = gems.find(g => g.id === id);
+            if (!gem) return;
+
+            document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square text-purple-400"></i> Edit Gem Persona';
+            document.getElementById('gemId').value = gem.id;
+            document.getElementById('gemTitle').value = gem.title;
+            document.getElementById('gemUrl').value = gem.url;
+            document.getElementById('gemCategory').value = gem.category;
+            document.getElementById('gemColor').value = gem.color;
+            document.getElementById('gemDescription').value = gem.description;
+            document.getElementById('gemInstructions').value = gem.instructions || '';
+            document.getElementById('gemStarters').value = (gem.starters || []).join(', ');
+            document.getElementById('gemTags').value = (gem.tags || []).join(', ');
+
+            document.getElementById('gemModal').classList.remove('hidden');
+        }
+
+        function closeGemModal() {
+            document.getElementById('gemModal').classList.add('hidden');
+        }
+
+        function saveGem(event) {
+            event.preventDefault();
+            const id = document.getElementById('gemId').value;
+            const title = document.getElementById('gemTitle').value.trim();
+            const url = document.getElementById('gemUrl').value.trim();
+            const category = document.getElementById('gemCategory').value;
+            const color = document.getElementById('gemColor').value;
+            const description = document.getElementById('gemDescription').value.trim();
+            const instructions = document.getElementById('gemInstructions').value.trim();
+            
+            const startersRaw = document.getElementById('gemStarters').value;
+            const starters = startersRaw ? startersRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+            const tagsRaw = document.getElementById('gemTags').value;
+            const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim().toLowerCase()).filter(Boolean) : [];
+
+            if (id) {
+                // Update existing
+                const index = gems.findIndex(g => g.id === id);
+                if (index !== -1) {
+                    gems[index] = {
+                        ...gems[index],
+                        title, url, category, color, description, instructions, starters, tags
+                    };
+                    showToast('Gem updated successfully!');
+                }
+            } else {
+                // Create new
+                const newGem = {
+                    id: 'gem-' + Date.now(),
+                    title, url, category, color, description, instructions, starters, tags,
+                    favorite: false,
+                    createdAt: Date.now()
+                };
+                gems.unshift(newGem);
+                showToast('New Gem planted in your garden!');
+            }
+
+            saveGems();
+            renderCategories();
+            renderGems();
+            closeGemModal();
+        }
+
+        function openDetailModal(id) {
+            const gem = gems.find(g => g.id === id);
+            if (!gem) return;
+
+            activeDetailGem = gem;
+            const theme = GEM_COLORS[gem.color] || GEM_COLORS.amethyst;
+
+            document.getElementById('detailTitle').innerText = gem.title;
+            document.getElementById('detailCategory').innerText = gem.category;
+            document.getElementById('detailCategory').className = `px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${theme.badge}`;
+            document.getElementById('detailDescription').innerText = gem.description;
+            
+            const favBadge = document.getElementById('detailFavBadge');
+            if (gem.favorite) {
+                favBadge.classList.remove('hidden');
+            } else {
+                favBadge.classList.add('hidden');
+            }
+
+            document.getElementById('detailIconBg').className = `w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg shrink-0 ${theme.bg} ${theme.border} border ${theme.text}`;
+            document.getElementById('detailInstructions').innerText = gem.instructions || 'No system prompt specified for this Gem.';
+
+            // Render Starters
+            const startersContainer = document.getElementById('detailStartersList');
+            if (gem.starters && gem.starters.length > 0) {
+                startersContainer.innerHTML = gem.starters.map(st => `
+                    <div onclick="copyText('${escapeHtml(st)}', 'Starter prompt copied!')" class="text-xs bg-slate-950 border border-slate-800 hover:border-purple-500/50 text-slate-300 px-3 py-1.5 rounded-lg cursor-pointer transition-all flex items-center gap-1.5 group">
+                        <i class="fa-regular fa-copy text-slate-500 group-hover:text-purple-400"></i>
+                        <span>"${escapeHtml(st)}"</span>
+                    </div>
+                `).join('');
+                document.getElementById('detailStartersContainer').classList.remove('hidden');
+            } else {
+                document.getElementById('detailStartersContainer').classList.add('hidden');
+            }
+
+            // Render Tags
+            const tagsContainer = document.getElementById('detailTagsList');
+            if (gem.tags && gem.tags.length > 0) {
+                tagsContainer.innerHTML = gem.tags.map(t => `
+                    <span class="text-[11px] bg-slate-800/60 text-slate-400 px-2.5 py-1 rounded-md border border-slate-700/60">#${escapeHtml(t)}</span>
+                `).join('');
+            } else {
+                tagsContainer.innerHTML = '<span class="text-xs text-slate-500">No tags.</span>';
+            }
+
+            // Action Buttons
+            document.getElementById('detailLaunchBtn').href = gem.url;
+            document.getElementById('detailEditBtn').onclick = () => editGem(gem.id);
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+            activeDetailGem = null;
+        }
+
+        function copyDetailPrompt() {
+            if (activeDetailGem && activeDetailGem.instructions) {
+                copyText(activeDetailGem.instructions, 'System prompt copied to clipboard!');
+            }
+        }
+
+        function copyGemLinkFromDetail() {
+            if (activeDetailGem) {
+                copyGemLink(activeDetailGem.url);
+            }
+        }
+
+        function copyGemLink(url) {
+            copyText(url, 'Gem Share link copied!');
+        }
+
+        function copyText(text, successMsg) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+            showToast(successMsg);
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gems, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `GemGarden_Backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast('Gem collection exported!');
+            toggleMenu();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        gems = imported;
+                        saveGems();
+                        renderCategories();
+                        renderGems();
+                        showToast('Gems imported successfully!');
+                    }
+                } catch (err) {
+                    showToast('Invalid JSON file format!');
+                }
+            };
+            reader.readAsText(file);
+            toggleMenu();
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            toastMsg.innerText = message;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2800);
+        }
+
+        function escapeHtml(str) {
+            return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        // -------------------------------------------------------------
+        // VIRTUAL GARDEN CANVAS RENDERING LOGIC
+        // -------------------------------------------------------------
+        let gardenNodes = [];
+        let canvas, ctx;
+
+        function initGardenCanvas() {
+            canvas = document.getElementById('gardenCanvas');
+            ctx = canvas.getContext('2d');
+
+            window.addEventListener('resize', () => {
+                if (currentView === 'garden') {
+                    resizeGardenCanvas();
+                    drawGardenCanvas();
+                }
+            });
+
+            canvas.addEventListener('click', handleCanvasClick);
+        }
+
+        function resizeGardenCanvas() {
+            if (!canvas) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width - 32;
+            canvas.height = 500;
+            generateGardenNodes();
+        }
+
+        function reseedGarden() {
+            generateGardenNodes();
+            drawGardenCanvas();
+            showToast('Garden rearranged!');
+        }
+
+        function generateGardenNodes() {
+            if (!canvas) return;
+            const filtered = getFilteredGems();
+            const width = canvas.width;
+            const height = canvas.height;
+
+            gardenNodes = filtered.map((gem, index) => {
+                const colorTheme = GEM_COLORS[gem.color] || GEM_COLORS.amethyst;
+                
+                // Position in grid/spiral pattern
+                const cols = Math.ceil(Math.sqrt(filtered.length * 1.5));
+                const col = index % cols;
+                const row = Math.floor(index / cols);
+
+                const paddingX = width / (cols + 1);
+                const paddingY = height / (Math.ceil(filtered.length / cols) + 1);
+
+                return {
+                    gem,
+                    x: paddingX * (col + 1) + (Math.random() * 20 - 10),
+                    y: paddingY * (row + 1) + (Math.random() * 20 - 10),
+                    radius: gem.favorite ? 24 : 18,
+                    glowColor: colorTheme.glow,
+                    pulse: Math.random() * Math.PI * 2,
+                    floatSpeed: 0.02 + Math.random() * 0.02
+                };
+            });
+        }
+
+        function drawGardenCanvas() {
+            if (!ctx || !canvas) return;
+
+            if (canvasAnimationId) cancelAnimationFrame(canvasAnimationId);
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw connecting constellation lines
+                ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < gardenNodes.length; i++) {
+                    for (let j = i + 1; j < gardenNodes.length; j++) {
+                        const dx = gardenNodes[i].x - gardenNodes[j].x;
+                        const dy = gardenNodes[i].y - gardenNodes[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 180) {
+                            ctx.beginPath();
+                            ctx.moveTo(gardenNodes[i].x, gardenNodes[i].y);
+                            ctx.lineTo(gardenNodes[j].x, gardenNodes[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Draw Crystal Flower Nodes
+                gardenNodes.forEach(node => {
+                    node.pulse += node.floatSpeed;
+                    const offsetY = Math.sin(node.pulse) * 4;
+                    const currentY = node.y + offsetY;
+
+                    // Glow Effect
+                    const gradient = ctx.createRadialGradient(node.x, currentY, 2, node.x, currentY, node.radius * 2);
+                    gradient.addColorStop(0, node.glowColor);
+                    gradient.addColorStop(1, 'transparent');
+
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(node.x, currentY, node.radius * 2.2, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Crystal Core
+                    ctx.fillStyle = node.glowColor;
+                    ctx.beginPath();
+                    // Draw Diamond Shape
+                    const r = node.radius;
+                    ctx.moveTo(node.x, currentY - r);
+                    ctx.lineTo(node.x + r * 0.8, currentY);
+                    ctx.lineTo(node.x, currentY + r);
+                    ctx.lineTo(node.x - r * 0.8, currentY);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // Inner Sparkle
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(node.x, currentY - 2, 3, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Label
+                    ctx.fillStyle = '#f8fafc';
+                    ctx.font = '600 11px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(node.gem.title, node.x, currentY + node.radius + 18);
+                });
+
+                if (currentView === 'garden') {
+                    canvasAnimationId = requestAnimationFrame(animate);
+                }
+            }
+
+            animate();
+        }
+
+        function handleCanvasClick(event) {
+            const rect = canvas.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const clickY = event.clientY - rect.top;
+
+            for (const node of gardenNodes) {
+                const dx = clickX - node.x;
+                const dy = clickY - node.y;
+                if (Math.sqrt(dx * dx + dy * dy) <= node.radius * 1.5) {
+                    openDetailModal(node.gem.id);
+                    break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
